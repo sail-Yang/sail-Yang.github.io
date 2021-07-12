@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2021/06/30/Hello%20World/</url>
-    <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>&emsp;&emsp;这是我第一次建站，折腾了段时间才把这个网站部署好，还有好多东西要改进。不过当看到自己的网站在chrome上加载出来的时候，有一种新世界的大门向我打开的感觉……<br>&emsp;&emsp;之所以我要建这么一个博客，主要是为了好玩……当然了，我也会在这上面记录一下自己学CS的笔记和思考，还有以后做项目的记录。总之，这里将作为一个记录和表达我杨某学习和想法的地方。<br>&emsp;&emsp;这个博客，可以说是我存在的一种方式吧。漫漫长路，希望我能开心快乐。</p>
-]]></content>
-      <categories>
-        <category>杂谈吹水</category>
-      </categories>
-      <tags>
-        <tag>ideas</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>上海之行</title>
     <url>/2021/07/11/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
     <content><![CDATA[<p> 8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
@@ -106,7 +94,20 @@
         <category>杂谈吹水</category>
       </categories>
       <tags>
-        <tag>-旅游 -会展</tag>
+        <tag>旅游</tag>
+        <tag>会展</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/06/30/Hello%20World/</url>
+    <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>&emsp;&emsp;这是我第一次建站，折腾了段时间才把这个网站部署好，还有好多东西要改进。不过当看到自己的网站在chrome上加载出来的时候，有一种新世界的大门向我打开的感觉……<br>&emsp;&emsp;之所以我要建这么一个博客，主要是为了好玩……当然了，我也会在这上面记录一下自己学CS的笔记和思考，还有以后做项目的记录。总之，这里将作为一个记录和表达我杨某学习和想法的地方。<br>&emsp;&emsp;这个博客，可以说是我存在的一种方式吧。漫漫长路，希望我能开心快乐。</p>
+]]></content>
+      <categories>
+        <category>杂谈吹水</category>
+      </categories>
+      <tags>
+        <tag>ideas</tag>
       </tags>
   </entry>
   <entry>
