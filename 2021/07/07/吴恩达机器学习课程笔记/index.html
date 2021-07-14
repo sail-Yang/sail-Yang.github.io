@@ -283,7 +283,6 @@
       
         <h2 id="监督学习和无监督学习"><a href="#监督学习和无监督学习" class="headerlink" title="监督学习和无监督学习"></a>监督学习和无监督学习</h2><p>在说什么是监督学习，什么是非监督学习之前，我们得先说说ML中的<strong>学习</strong>这一概念。<strong>学习</strong>其实可以这样理解：学生做了大量的题目来训练，老师改作业来告诉学生哪些是对的，哪些是错的，最后学生自己会学会解题方法，之后面对考试的题目，自己也能解答。</p>
 <span id="more"></span>
-
 <p>所谓的<font color=purple><strong>监督</strong></font>(supervised)=标签（label），是否有监督就是输入数据（input）是否有标签。有标签就是监督学习，无标签就是无监督学习。可以这样理解，有监督学习就是打了标签（有答案）的题目，无监督学习就是没答案的题目。</p>
 <p>下面来举个小例子来说明两者的区别：</p>
 <ul>
@@ -309,7 +308,8 @@
 <li><p><strong>regression</strong></p>
 <p>所谓的回归问题，就是估算连续值，比如说吴恩达给出的例子：</p>
 <p>我们给算法一个数据集，比如一系列房子的数据，给定数据中每个样本（不同的面积）的正确房价，然后运用算法，算出更多的答案，估算任意size房子的房价为多少：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707092627.png" alt="image-20210707092619710" style="zoom: 50%;" /></li>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707092627.png" alt="image-20210707092619710" style="zoom: 50%;" /></p>
+</li>
 <li><p><strong>classification</strong></p>
 <p>​    分类问题干的事，就是字面意思：分类。比如说我想让AI知道什么是猫什么是狗，一开始我们就将一些猫的图片和狗的图片（带标签）一起进行训练，学习模型不断捕捉这些图片与标签之间的联系进行自我完善和调整，然后我们再给一些不带标签的图片，让AI来猜一猜这些图片是猫还是狗。</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707093136.png" alt="image-20210707093136697"></p>
@@ -317,12 +317,10 @@
 </ul>
 <p>有监督学习的经典算法：支持向量机、线性判别、决策树、朴素贝叶斯</p>
 <h2 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h2><p>直观上来讲，unsupervised learning(无监督学习）就是不需要人的监督就可以学习，数据没有label，需要<strong>根据数据自身结构特性</strong>来将数据分类。它的训练集与监督学习的训练集的区别可以用下面这张图来说明：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707095215.png" alt="image-20210707095215131" style="zoom:67%;" />
-
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707095215.png" alt="image-20210707095215131" style="zoom:67%;" /></p>
 <h3 id="为什么要用无监督学习这种方式呢？"><a href="#为什么要用无监督学习这种方式呢？" class="headerlink" title="为什么要用无监督学习这种方式呢？"></a>为什么要用无监督学习这种方式呢？</h3><p>​    对于监督学习来说，我们已经知道分类标准，比如说把图像分成猫和狗；但是如果我们有一组数据集，但是没有明确的目的，我们不知道怎么区分，这个时候，怎么办？无监督学习就派上用场了，我们可以<strong>借助数据自身的结构来进行分类</strong>。</p>
 <p>我们在这来举个例子：登陆谷歌的news(news.google.com)，这个网站做了什么事情呢？google每天会搜集几十万条新闻，然后把他们相似类别的聚集在一块，组成不同主题的新闻，比如说下面看到的这样：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707100129.png" alt="image-20210707100129393" style="zoom: 50%;" />
-
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707100129.png" alt="image-20210707100129393" style="zoom: 50%;" /></p>
 <p>一个框就是一个主题的新闻，我拿数字标出的URL，就是不同的报道。这是怎么做到的呢？→无监督学习中的<strong>聚类算法</strong>（clustering）。几十万条新闻，我们总不能用监督学习的算法，一个个告诉机器，这个是什么，那个是什么吧，除此之外<strong>我都不知道要把他们分到哪一类别去</strong>。</p>
 <h3 id="鸡尾酒会算法"><a href="#鸡尾酒会算法" class="headerlink" title="鸡尾酒会算法"></a>鸡尾酒会算法</h3><p>我们来看一看吴恩达提到的无监督学习中一个很有意思的算法—<strong>鸡尾酒会算法</strong>。<strong>鸡尾酒会问题（</strong>cocktailparty problem）是在<strong>计算机语音识别领域</strong>的一个问题，当前语音识别技术已经可以以较高精度识别一个人所讲的话，但是<strong>当说话的人数为两人或者多人</strong>时，语音识别率就会极大的降低，这一难题被称为鸡尾酒会问题。</p>
 <p>举例来说，假如我在KTV唱歌，我唱歌的时候，某个人把我的天籁之音录下来了，这个录音里夹杂着我的声音和伴奏声音。现在我想把我唱的声音和伴奏的声音区分开来，分别播放，这就是鸡尾酒会问题。</p>
@@ -610,6 +608,8 @@
 
 
 
+
+  
 
   
 
