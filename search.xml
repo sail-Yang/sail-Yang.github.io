@@ -580,7 +580,8 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
 <p>getchar对于搜索字符的循环和跳过字符的循环是十分有用的，看一看下面这个利用getchar()跳过不定数量的空格字符的语句：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) == <span class="string">&#x27; &#x27;</span>) <span class="comment">/*skips blanks*/</span></span><br></pre></td></tr></table></figure>
 <p>当循环终止时，变量ch会包含getchar函数遇到的第一个非空白字符。</p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2>]]></content>
+<h2 id="结"><a href="#结" class="headerlink" title="结"></a>结</h2><p>未完待续。</p>
+]]></content>
       <categories>
         <category>CS</category>
         <category>编程语言</category>
