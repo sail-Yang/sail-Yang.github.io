@@ -277,42 +277,6 @@
       </tags>
   </entry>
   <entry>
-    <title>深入理解计算机系统导言、概论</title>
-    <url>/2021/07/15/%E5%9B%9B%E5%A4%A7%E9%87%91%E5%88%9A/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%A8%80%E3%80%81%E6%A6%82%E8%AE%BA/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200235.png" alt="image-20210715200235339"></p>
-<span id="more"></span>
-<h2 id="本书的主旨"><a href="#本书的主旨" class="headerlink" title="本书的主旨"></a>本书的主旨</h2><p>这本书可是个硬骨头😓，不过它的内容是我从小就想弄懂的。为此，我一定要搞懂里面的东西，也许一遍要看很长时间也要把它给看下来。</p>
-<p>这本书的主要目的是<font color=purple>解释所有计算机系统的本质概念，并展示这些概念是如何实实在在的影响程序的正确性、性能和实用性的。</font>这本书有个很大的特点就是从程序员的角度来写的而不是从构建者的角度来写的，那么所谓的<strong>程序员角度</strong>是什么意思呢？</p>
-<p>即<strong>讲述应用程序员如何能够利用系统知识来编写一个更好的程序</strong>。除此之外，<strong>学习一个计算机系统应该做些什么</strong>，是学习如何构建一个计算机系统的很好的出发点，所以对学习计算机系统的软硬件实现的人也是很有帮助的。</p>
-<p>总之，就是研究计算机系统这一系统是如何运作的。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><ol>
-<li>要求Linux系统，因为示例大部分是Linux上运行的C程序。</li>
-<li>对C和C++有一定的了解。</li>
-</ol>
-<h2 id="如何阅读此书？"><a href="#如何阅读此书？" class="headerlink" title="如何阅读此书？"></a>如何阅读此书？</h2><p>学习系统的唯一方法就是<strong>do，即在真正的系统上去解决具体的问题，或是编写和运行程序</strong>。（也就是实践）因此，会有许多的练习题与家庭作业题。学习这本书的方式就是去实践，做作业。</p>
-<p>额，除了书，我还会借助B站的两个视频集，会引用一些截图和讲解来作为我的笔记，下面是视频地址：</p>
-<ol>
-<li><a href="https://www.bilibili.com/video/BV1cD4y1D7uR">图解CSAPP</a></li>
-<li><a href="https://www.bilibili.com/video/BV1iW411d7hd">CMU CSAPP课程</a></li>
-</ol>
-<h2 id="本书框架"><a href="#本书框架" class="headerlink" title="本书框架"></a>本书框架</h2><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200707.png" alt="image-20210715200707045"></p>
-<p>这里我就借用大佬的视频里的框架了。全书分为四部分：第一章的计算机系统漫游，展示”Hello World”程序的一个生命周期，细节会在后面章节补充；第二部分（2~6）程序结构和执行；第三部分（7~9）在系统上运行程序；最后一部分进程间的交互与通信。</p>
-<hr>
-<p>以上就是导言和概论部分。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>四大金刚</category>
-        <category>OS</category>
-        <category>CSAPP</category>
-      </categories>
-      <tags>
-        <tag>四大金刚</tag>
-        <tag>os</tag>
-        <tag>CSAPP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>代价函数J</title>
     <url>/2021/07/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0J/</url>
     <content><![CDATA[<p>上篇简单介绍了机器学习中监督学习与非监督学习是什么，这一篇将具体介绍我们的第一个算法——linear regression（线性回归），虽然这是监督学习中的一个基础算法，而且还是一元的，但是之前做数学建模比赛时的学习过程告诉我，<strong>模型都是从简单到复杂的，我们必须从初等简单模型入手，再一步步增加复杂度</strong>，这是学习的基本思路。吴从房价预测这个实际问题入手，使用一元线性回归来解决这个问题，再本篇中通过构建这个模型，我们将学到两个主要知识点：</p>
@@ -993,6 +957,38 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
       <tags>
         <tag>CS</tag>
         <tag>DS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入理解计算机系统导言、概论</title>
+    <url>/2021/07/15/%E5%9B%9B%E5%A4%A7%E9%87%91%E5%88%9A/CSAPP/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%A8%80%E3%80%81%E6%A6%82%E8%AE%BA/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200235.png" alt="image-20210715200235339"></p>
+<span id="more"></span>
+<h2 id="本书的主旨"><a href="#本书的主旨" class="headerlink" title="本书的主旨"></a>本书的主旨</h2><p>这本书可是个硬骨头😓，不过它的内容是我从小就想弄懂的。为此，我一定要搞懂里面的东西，也许一遍要看很长时间也要把它给看下来。</p>
+<p>这本书的主要目的是<font color=purple>解释所有计算机系统的本质概念，并展示这些概念是如何实实在在的影响程序的正确性、性能和实用性的。</font>这本书有个很大的特点就是从程序员的角度来写的而不是从构建者的角度来写的，那么所谓的<strong>程序员角度</strong>是什么意思呢？</p>
+<p>即<strong>讲述应用程序员如何能够利用系统知识来编写一个更好的程序</strong>。除此之外，<strong>学习一个计算机系统应该做些什么</strong>，是学习如何构建一个计算机系统的很好的出发点，所以对学习计算机系统的软硬件实现的人也是很有帮助的。</p>
+<p>总之，就是研究计算机系统这一系统是如何运作的。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><ol>
+<li>要求Linux系统，因为示例大部分是Linux上运行的C程序。</li>
+<li>对C和C++有一定的了解。</li>
+</ol>
+<h2 id="如何阅读此书？"><a href="#如何阅读此书？" class="headerlink" title="如何阅读此书？"></a>如何阅读此书？</h2><p>我想的学习方法是这样的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716205620.png" alt="image-20210716205620739" style="zoom:67%;" /></p>
+<h2 id="本书框架"><a href="#本书框架" class="headerlink" title="本书框架"></a>本书框架</h2><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200707.png" alt="image-20210715200707045"></p>
+<p>这里我就借用大佬的视频里的框架了。全书分为四部分：第一章的计算机系统漫游，展示”Hello World”程序的一个生命周期，细节会在后面章节补充；第二部分（2~6）程序结构和执行；第三部分（7~9）在系统上运行程序；最后一部分进程间的交互与通信。</p>
+<hr>
+<p>以上就是导言和概论部分。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>四大金刚</category>
+        <category>OS</category>
+        <category>CSAPP</category>
+      </categories>
+      <tags>
+        <tag>四大金刚</tag>
+        <tag>os</tag>
+        <tag>CSAPP</tag>
       </tags>
   </entry>
 </search>
