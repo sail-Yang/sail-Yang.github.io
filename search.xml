@@ -839,4 +839,159 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
         <tag>达芬奇</tag>
       </tags>
   </entry>
+  <entry>
+    <title>数据结构与算法绪论</title>
+    <url>/2021/07/16/%E5%A4%A7%E8%AF%9D%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E7%BB%AA%E8%AE%BA/</url>
+    <content><![CDATA[<p> 听说DS很难学，我就先找了本趣味性的书《大话数据结构》来入门，之后在学得深入一点。在学这本书的途中，可以穿插一点深入的内容，比如看一看浙大的网课，做一做相对应的题目。由于资料来源比较广，不会局限于一本，所以我决定先不发布这部分到博客上，而是先做一个记录，到时候再整理。</p>
+<h3 id="作者建议"><a href="#作者建议" class="headerlink" title="作者建议"></a>作者建议</h3><ol>
+<li>阅读与实践相结合，用开发工具调试算法，了解算法的运行过程。</li>
+<li>阅读完每一章，要在理解的基础上记忆一些关键点。最佳的效果就是不看书也可以一点不错地默写出相关算法。</li>
+<li>每阅读完一章，一定要找点练习题做做。</li>
+<li>在之后的学习和开发过程中，尝试应用学习到的数据结构和算法知识，以达到精通的境界。</li>
+</ol>
+<p>当每次学步下去，想放弃的时候，就想想一句话：<strong>你数据结构怎么学的</strong>？</p>
+<h2 id="数据结构绪论"><a href="#数据结构绪论" class="headerlink" title="数据结构绪论"></a>数据结构绪论</h2><h3 id="基本概念和术语"><a href="#基本概念和术语" class="headerlink" title="基本概念和术语"></a>基本概念和术语</h3><p>数据结构由“数据”和“结构”组成，我们先来说一说数据是什么意思。</p>
+<h4 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h4><p>所谓<strong>数据</strong>，是<strong>描述客观事物的符号集合</strong>，它满足两个前提：<strong>可以输入到计算机中</strong>，并且<strong>能被计算机程序处理</strong>。数据不仅仅包括整形等数值类型，还包括字符及声音、图像、视频等非数值类型。</p>
+<h4 id="数据元素、数据项"><a href="#数据元素、数据项" class="headerlink" title="数据元素、数据项"></a>数据元素、数据项</h4><p><strong>数据元素</strong>，是组成数据的、有一定意义的<strong>基本单位</strong>，在计算机中通常被当作整体处理，也被称为记录。比如说动物类的数据元素是什么？牛马猪狗这些都是动物类的数据元素。</p>
+<p>而一个数据元素可以用若干个<strong>数据项</strong>组成，比如人这样的数据元素，可以有眼、耳、鼻、手、脚等数据项，也可以有姓名，年龄，性别等数据项，具体有哪些数据项，视具体情况而定。<font color=purple>数据项是数据不可分的最小单位，但是真正讨论问题时，数据元素才是主角。</font></p>
+<p>说完数据，我们再来看看数据结构中的结构是什么。</p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>结构就是<strong>各个组成部分相互搭配和排列的方式</strong>。在现实生活中，<strong>不同数据元素之间不是独立的，而是存在特定的关系</strong>，我们将这些关系称为<strong>结构</strong>。</p>
+<blockquote>
+<font size=4>所谓数据结构，是相互之间存在一种或多种特定关系的数据元素的集合。</font>
+
+</blockquote>
+<hr>
+<p>那么，这种特定关系是什么呢？</p>
+<h3 id="逻辑结构和物理结构"><a href="#逻辑结构和物理结构" class="headerlink" title="逻辑结构和物理结构"></a>逻辑结构和物理结构</h3><h4 id="逻辑结构"><a href="#逻辑结构" class="headerlink" title="逻辑结构"></a>逻辑结构</h4><p>逻辑结构：<font color=purple>是指数据对象中，数据元素之间的相互关系。</font>逻辑结构主要有以下四种：</p>
+<ol>
+<li><p>集合结构</p>
+<p>数据元素除了同属于一个集合外，没有其他关系。这种集合关系类似于数学中的集合：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150323.png" alt="image-20210715150323565" style="zoom:67%;" /></p>
+</li>
+<li><p>线性结构</p>
+<p>一对一的关系。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150355.png" alt="image-20210715150354933" style="zoom:80%;" /></p>
+</li>
+<li><p>树形结构</p>
+<p>一对多的关系。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150416.png" alt="image-20210715150416675" style="zoom:80%;" /></p>
+</li>
+<li><p>图形结构</p>
+<p>多对多的关系。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150441.png" alt="image-20210715150441452" style="zoom:80%;" /></p>
+</li>
+</ol>
+<p>逻辑结构是针对具体问题的，是<strong>为了解决某个问题在对问题理解的基础上，选择一个合适的数据结构表示数据元素之间的逻辑关系</strong>。</p>
+<h4 id="物理结构（存储结构）"><a href="#物理结构（存储结构）" class="headerlink" title="物理结构（存储结构）"></a>物理结构（存储结构）</h4><p>物理结构也叫存储结构，是指<strong>数据的逻辑结构在计算机中的存储形式</strong>。实际上就是<strong>如何把数据元素存储到计算机的存储器中</strong>。存储器主要是针对内存而言的，像硬盘、软盘、光盘等外部存储器的组织结构通常用文件结构来描述。</p>
+<p>数据的存储结构应该反映数据元素之间的逻辑关系，这是最为关键的，<strong>如何存储数据元素之间的逻辑关系</strong>，是实现物理结构的重点和难点。</p>
+<h4 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h4><p>把数据元素放在地址连续的存储单元里，其数据间的逻辑关系和物理关系是一致的。很好理解，就先排队一样，大家都占一席之地，谁也别想插队。</p>
+<h4 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h4><p>现实是不会像顺序存储结构这样想的这么简单和美好的，总会有人插队，也会有人要上厕所……卖你独自合约时常需要变化的结构，顺序存储是不科学的。现在如银行，餐厅都设置了排队系统，也就是每个人去了，先领一个号，等着叫号，叫到了去办理业务或者看病。在等待时，你爱干嘛就干嘛，只要及时回来就行，你需要关注的仅仅是前一个有没有被叫到，叫到了，下一个就是你，这就是链式存储结构。</p>
+<p>链式存储结构：把数据元素放到任意的存储单元里没这组存储单元可以是连续的，也可以是不连续的。数据元素的存储关系并不能反映其逻辑关系，因此<strong>需要用一个指针存放数据元素的地址</strong>，这样通过地址就饿可以找到相关联的数据元素的位置。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" /></p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>数据类型：一组性质相同的值的集合及定义在此集合上的一些操作的总称。</p>
+<p>我们可以想想<strong>当初设计计算机语言的人为什么要考虑到数据类型</strong>呢？</p>
+<p>我们知道住宅有不同的类型，为了满足不同人的需求，地产商推出了商品房，别墅，酒店，还有近几年的青年旅馆，民宿等等。<strong>不同的人有不同的需求</strong>，而数据结构也是这么一回事。计算机的内存不是无限大的，当我们计算6+7时，有必要开辟很大的适合小数是指字符运算的内存空间吗？显然没有必要。于是研究者们就考虑，<strong>要对数据进行分类，分出许多不同的数据类型</strong>。</p>
+<p>不同的计算机有不同的硬件系统，这就要求程序语言最终通过编译器或解释器转换成底层语言。可事实上，高绩语言的编程者不管最终程序运行在什么计算机上，他的目的是为了实现两个整型数字的运算，他才不关心整数在计算机内部是怎么表示的，这些操作是如何实现的，对高级语言开发者来说根本不重要。于是，我们就考虑不管什么样的计算机，什么计算机语言最终都会面临诸如整数运算、实数运算、字符运算等操作，我们可以考虑<strong>抽象出来</strong>。</p>
+<p>抽象是抽出问题的特征而忽略非本质的细节，是对具体事务的一个概括，这是一种思考问题的方式。我们对已有的数据类型进行抽象，就得到了抽象数据类型（ADT）。ADT不仅仅☞那些已有的数据类型，还可以是编程者自己定义的数据类型。</p>
+<p>事实上，抽象数据类型体现了程序设计中问题分解、抽象和信息隐藏的特性。ADT把实际问题中的问题分解为小规模且容易处理的问题，然后建立一个计算机能处理的数据类型，并把每个功能模块实现细节作为一个独立的单元，从而使具体实现过程隐藏起来。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">	数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">	操作1</span><br><span class="line">		初始条件</span><br><span class="line">		操作结果描述</span><br><span class="line">	操作2</span><br><span class="line">		…………</span><br><span class="line">	操作n</span><br><span class="line">		…………</span><br><span class="line">endADT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="算法绪论"><a href="#算法绪论" class="headerlink" title="算法绪论"></a>算法绪论</h2><h3 id="算法和数据结构的关系"><a href="#算法和数据结构的关系" class="headerlink" title="算法和数据结构的关系"></a>算法和数据结构的关系</h3><p>没了算法数据结构也能学，只不过算法会涉及数据结构的应用，在算法的学习中，反过来会加深对数据结构的理解。<strong>在数据结构的课程中，算法的出现是为了更好地理解数据结构，并不会详细谈及算法的方方面面，这也是本书的原则</strong>。</p>
+<h3 id="算法的神奇"><a href="#算法的神奇" class="headerlink" title="算法的神奇"></a>算法的神奇</h3><p>我们通过一个小例子来看看算法的神奇之处。</p>
+<p>如果我们现在要用计算机求1+2+3+4+……+100的值，也许我们马上就可以写出一个C代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);</span><br></pre></td></tr></table></figure>
+<p>这是一种算法，也是我们的第一直觉。当然，我们也知道更高效的方法，就是高斯想出来的方法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;</span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);</span><br></pre></td></tr></table></figure>
+<p>显然这种方法更高效，对比两种算法，我们就可以发现算法的神奇之处。</p>
+<h3 id="算法的定义以及特性"><a href="#算法的定义以及特性" class="headerlink" title="算法的定义以及特性"></a>算法的定义以及特性</h3><p>什么是算法？算法的定义是什么？</p>
+<blockquote>
+<p><strong>算法是特定问题求解步骤的描述，在计算机中表现为指令的有限序列，并且每条指令包含一个或多个操作。</strong></p>
+</blockquote>
+<p>既然是特定问题的求解步骤，并且从前面的例子也可以发现，是没有通用的算法的，就像没有包治百病的药，我们要”对症下药“。定义中的<strong>指令</strong>指的是能被人或机器等计算装置执行的”命令“。为了解决某一个问题，我们需要把指令表示成一定的操作序列，操作序列包括一组操作，每个操作完成特定的功能，这就是算法的定义。</p>
+<p>下面我们来说一说算法的五个特性：</p>
+<ol>
+<li><p>输入、输出（这是两个）</p>
+<p>算法一定要有输出但可以没有输入（比如hello world）,没有输出你要这个算法干什么？</p>
+</li>
+<li><p>有穷性</p>
+<p>算法在执行有限的步骤之后，<font color=purple>自动结束而不会出现无限循环</font>，<font color=green>并且每个步骤的在可接受的时间内完成。</font></p>
+</li>
+<li><p>确定性</p>
+<p>每个步骤都要被精确定义而无歧义，不能出现二义性。</p>
+</li>
+<li><p>可行性</p>
+<p>算法的每一步必须都是可行的，每一步都能通过执行有限次数完成，也就是上机能把程序运行出来，算出正确的结果。</p>
+</li>
+</ol>
+<h3 id="算法设计的要求"><a href="#算法设计的要求" class="headerlink" title="算法设计的要求"></a>算法设计的要求</h3><p>虽然算法没有标准答案，但还是有好的参考答案的，相对好的算法还是存在的。掌握好的算法，对我们解决问题很有帮助，否则前人的智慧我们不能利用，就得从头自己研究了。那什么才叫好的算法呢？</p>
+<ol>
+<li><p>正确性</p>
+<p>别看这简简单单三个字，也有四个层次：</p>
+<ol>
+<li>算法程序没有语法错误</li>
+<li>算法程序对于合法的输入数据能够产生满足要求的输出结果。（结果要对）</li>
+<li><strong>算法程序对于非法的输入数据能够得出满足规格说明的结果。</strong></li>
+<li>对于精心选择的，甚至刁难的测试数据都有满足结果的输出结果。</li>
+</ol>
+<p>这里说一下，对于标准4，我们不足以逐一验证所有的输入都能得到正确的结果。因此算法的正确性在大部分情况都不可能用程序来证明，而是用数学方法来证明。证明一个复杂算法在所有层次上都是对的，代价十分昂贵。所以一般情况下，我们把层次3作为一个算法是否正确的标准。</p>
+</li>
+<li><p>可读性</p>
+<p>晦涩难懂的代码难以调试和修改，不方便阅读，交流和理解。这是个很重要的标准。</p>
+</li>
+<li><p>健壮性</p>
+<p>当输入数据不合法时（比如输入年龄时输入一个负值），算法也能做相关处理，而不是产生莫名其妙的结果。</p>
+</li>
+<li><p>时间效率高和存储量低</p>
+<p>时间效率指的是算法的执行时间，执行时间短的算法效率高；存储量需求指的是算法在执行过程中需要的最大存储空间，包括内存和外部硬盘的存储空间。<strong>设计算法应尽量满足时间效率高和存储量低的需求</strong>。</p>
+<p>既然讲到时间效率的问题，那么我们该如何度量算法的时间效率呢？</p>
+<ul>
+<li><p>第一种最容易想到的就是”是骡子是马，拉出来遛遛。“也就是所谓的<strong>事后统计方法</strong>。这种方法主要通过设计好的测试和数据，利用计算机的计时功能，来计算算法的效率。很显然，这种算法是有大缺陷的：</p>
+<ol>
+<li>我们必须得先弄好程序，到时候跑出来发现这是给垃圾玩意，这不就白跑了吗？</li>
+<li>时间的比较依赖计算机硬件和软件等环境因素，有时候会掩盖算法本身的优劣。</li>
+<li>测试数据设计十分困难，有的算法对小数据效率高，有的是大数据集效率高，有多少数据来测试是很难判断的问题。</li>
+</ol>
+<p>正是这种种原因，导致事后统计方法不大莱斯，所以计算机前辈们设计了一种事前的分析估算方法。</p>
+</li>
+<li><p>第二种，事前估算分析，主要是依据统计方法进行估算。一个用高级编程语言在计算机上运行的时间主要取决于下面这些因素:</p>
+<ol>
+<li>算法采用的策略、方法。（这是根本）</li>
+<li>编译产生的代码质量。(软件的锅)</li>
+<li>问题的输入规模。</li>
+<li>机器执行指令的速度。（看硬件性能）</li>
+</ol>
+<p>抛开计算机硬件、软件的客观因素，我们发现一个程序运行的时间，依赖于<strong>算法的好坏</strong>和<strong>问题的输入规模（输入量的多少）</strong>。我们拿出之前高斯求和的两个算法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;			<span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<p>其实首尾都是一样的，我们只要看中间就行，孰优孰劣不言自明。我们可以发现，测定运行时间最可靠的方法就是<strong>计算对运行时间有消耗的基本操作的执行次数</strong>。<font color=purple>在分析程序的运行时间时，关键是把程序看作独立于程序设计语言的一种算法或者一系列步骤。</font></p>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code> 我们举个小例子：算法A的输入规模是4n+8，算法B的输入规模是$2n^2+1$。当n &lt;= 3时，A要差于B，但是n &gt; 3时，后面A的优势就越来越明显了，这里我们就引出一个函数渐进增长的例子：
+
+ &gt; 给定两个函数f(n)和g(n)，如果存在一个整数N，使得对于所有的n &gt; N，f(n)总是比g(n)大，那么，我们就说f(x)的增长渐进快于g(n)。
+
+ 比如上面的B就是增长渐进快于A。还有当我们算的时候：
+
+ - 加法常数不重要
+ - 与最高次相乘的常数不重要。
+ - 我们判断一个算法效率时，更应该关注主项的阶数（最高阶）。
+
+ 通过上面的分析，我们可以得出：**某个算法，随着n的增大，它会越来越优于另一个算法**。这就是事前估算方法的理论依据，**通过算法时间复杂度来估算算法时间效率**。
+</code></pre><h3 id="算法时间复杂度"><a href="#算法时间复杂度" class="headerlink" title="算法时间复杂度"></a>算法时间复杂度</h3><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181558.png" alt="image-20210716181558070" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181618.png" alt="image-20210716181618611" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181633.png" alt="image-20210716181633478" style="zoom:67%;" /></p>
+<p>时间复杂度这部分就不写了，这里☞<a href="https://blog.csdn.net/user11223344abc/article/details/81485842?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E7%AE%97%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">算法—时间复杂度</a>。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>四大金刚</category>
+        <category>数据结构和算法</category>
+        <category>《大话数据结构》</category>
+      </categories>
+      <tags>
+        <tag>CS</tag>
+        <tag>DS</tag>
+      </tags>
+  </entry>
 </search>
