@@ -447,6 +447,7 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
     <content><![CDATA[<p> 在上一篇中我们提到需要一种方法找到适合的参数使得代价函数最小，那么解决这个问题的一种比较好的方法就是<strong>梯度下降算法</strong>。</p>
 <h2 id="梯度学习算法问题描述"><a href="#梯度学习算法问题描述" class="headerlink" title="梯度学习算法问题描述"></a>梯度学习算法问题描述</h2><p>我们先给出问题的描述：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716152627.png" alt="image-20210716152620184" style="zoom: 50%;" /></p>
+<span id="more"></span>
 <p>注意这里的函数J是任意的，不一定是上文提到的代价函数，应用于线性回归模型中的梯度下降法我们会在本文末尾说到，我们先来谈一谈普遍的梯度下降法的原理。梯度下降法的过程已经在outline里提到了（这里为了叙述方便，只设了两参数，实际情况可能是许多参数）：</p>
 <ul>
 <li>我们先随机初始化$\theta_0、\ \theta_1$.</li>
