@@ -173,69 +173,6 @@
       </tags>
   </entry>
   <entry>
-    <title>监督与非监督学习</title>
-    <url>/2021/07/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h2 id="监督学习和无监督学习"><a href="#监督学习和无监督学习" class="headerlink" title="监督学习和无监督学习"></a>监督学习和无监督学习</h2><p>在说什么是监督学习，什么是非监督学习之前，我们得先说说ML中的<strong>学习</strong>这一概念。<strong>学习</strong>其实可以这样理解：学生做了大量的题目来训练，老师改作业来告诉学生哪些是对的，哪些是错的，最后学生自己会学会解题方法，之后面对考试的题目，自己也能解答。</p>
-<span id="more"></span>
-<p>所谓的<font color=purple><strong>监督</strong></font>(supervised)=标签（label），是否有监督就是输入数据（input）是否有标签。有标签就是监督学习，无标签就是无监督学习。可以这样理解，有监督学习就是打了标签（有答案）的题目，无监督学习就是没答案的题目。</p>
-<p>下面来举个小例子来说明两者的区别：</p>
-<ul>
-<li><p>有监督学习</p>
-<p>ask：1 X 1 + 1=？</p>
-<p>AI：= 1 ?</p>
-<p>ask：NO！= 2!Remember it!</p>
-<p>（AI 调整中）</p>
-<p>ask：1 X  1 + 1 =？</p>
-<p>AI： =2！</p>
-</li>
-<li><p>无监督学习</p>
-<p>ask: 1 X 1 + 1=?</p>
-<p>AI：= 1？</p>
-<p>ask:  3 X 4 + 8 = ?</p>
-<p>AI：=0？</p>
-<p>…………</p>
-<p>AI： 我发现了，数学题都是先乘法后加法！</p>
-</li>
-</ul>
-<h2 id="有监督学习"><a href="#有监督学习" class="headerlink" title="有监督学习"></a>有监督学习</h2><p>有监督学习的训练数据是<strong>有标签</strong>的，训练目标能够给新数据（text data）以正确的目标。监督学习一般包括<strong>回归（regression）</strong>和<strong>分类（classification）</strong>问题。</p>
-<ul>
-<li><p><strong>regression</strong></p>
-<p>所谓的回归问题，就是估算连续值，比如说吴恩达给出的例子：</p>
-<p>我们给算法一个数据集，比如一系列房子的数据，给定数据中每个样本（不同的面积）的正确房价，然后运用算法，算出更多的答案，估算任意size房子的房价为多少：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707092627.png" alt="image-20210707092619710" style="zoom: 50%;" /></p>
-</li>
-<li><p><strong>classification</strong></p>
-<p>​    分类问题干的事，就是字面意思：分类。比如说我想让AI知道什么是猫什么是狗，一开始我们就将一些猫的图片和狗的图片（带标签）一起进行训练，学习模型不断捕捉这些图片与标签之间的联系进行自我完善和调整，然后我们再给一些不带标签的图片，让AI来猜一猜这些图片是猫还是狗。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707093136.png" alt="image-20210707093136697"></p>
-</li>
-</ul>
-<p>有监督学习的经典算法：支持向量机、线性判别、决策树、朴素贝叶斯</p>
-<h2 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h2><p>直观上来讲，unsupervised learning(无监督学习）就是不需要人的监督就可以学习，数据没有label，需要<strong>根据数据自身结构特性</strong>来将数据分类。它的训练集与监督学习的训练集的区别可以用下面这张图来说明：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707095215.png" alt="image-20210707095215131" style="zoom:67%;" /></p>
-<h3 id="为什么要用无监督学习这种方式呢？"><a href="#为什么要用无监督学习这种方式呢？" class="headerlink" title="为什么要用无监督学习这种方式呢？"></a>为什么要用无监督学习这种方式呢？</h3><p>​    对于监督学习来说，我们已经知道分类标准，比如说把图像分成猫和狗；但是如果我们有一组数据集，但是没有明确的目的，我们不知道怎么区分，这个时候，怎么办？无监督学习就派上用场了，我们可以<strong>借助数据自身的结构来进行分类</strong>。</p>
-<p>我们在这来举个例子：登陆谷歌的news(news.google.com)，这个网站做了什么事情呢？google每天会搜集几十万条新闻，然后把他们相似类别的聚集在一块，组成不同主题的新闻，比如说下面看到的这样：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707100129.png" alt="image-20210707100129393" style="zoom: 50%;" /></p>
-<p>一个框就是一个主题的新闻，我拿数字标出的URL，就是不同的报道。这是怎么做到的呢？→无监督学习中的<strong>聚类算法</strong>（clustering）。几十万条新闻，我们总不能用监督学习的算法，一个个告诉机器，这个是什么，那个是什么吧，除此之外<strong>我都不知道要把他们分到哪一类别去</strong>。</p>
-<h3 id="鸡尾酒会算法"><a href="#鸡尾酒会算法" class="headerlink" title="鸡尾酒会算法"></a>鸡尾酒会算法</h3><p>我们来看一看吴恩达提到的无监督学习中一个很有意思的算法—<strong>鸡尾酒会算法</strong>。<strong>鸡尾酒会问题（</strong>cocktailparty problem）是在<strong>计算机语音识别领域</strong>的一个问题，当前语音识别技术已经可以以较高精度识别一个人所讲的话，但是<strong>当说话的人数为两人或者多人</strong>时，语音识别率就会极大的降低，这一难题被称为鸡尾酒会问题。</p>
-<p>举例来说，假如我在KTV唱歌，我唱歌的时候，某个人把我的天籁之音录下来了，这个录音里夹杂着我的声音和伴奏声音。现在我想把我唱的声音和伴奏的声音区分开来，分别播放，这就是鸡尾酒会问题。</p>
-<p>该问题描述的是<strong>给定混合信号，如何分离出同时说话的每个人的独立信号</strong>。当有N个信号源时，通常假设观察信号也有N个（例如N个麦克风或者录音机）。该假设意味着混合矩阵是个方阵，即J = D，其中D是输入数据的维数，J是系统模型的维数。这个问题常用到的方法是<strong>盲信号分离算法</strong>。（这里不详细说这算法了，我现在也不会，参考资料如下：）</p>
-<blockquote>
-<p><a href="https://zh.wikipedia.org/wiki/%E7%9B%B2%E4%BF%A1%E5%8F%B7%E5%88%86%E7%A6%BB">维基百科—盲信号分离</a></p>
-<p><a href="https://www.docin.com/p-126816392.html?docfrom=rrela">语音信号的盲分离算法研究</a></p>
-</blockquote>
-<p>我觉得这个效果对于我这个初学者来说还是很amazing的，想听听实际效果，可以去看吴恩达机器学习课程无监督学习那个视频里的示例，真的很好玩。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>ML</category>
-        <category>吴恩达机器学习课程笔记</category>
-      </categories>
-      <tags>
-        <tag>CS</tag>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>代价函数J</title>
     <url>/2021/07/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0J/</url>
     <content><![CDATA[<p>上篇简单介绍了机器学习中监督学习与非监督学习是什么，这一篇将具体介绍我们的第一个算法——linear regression（线性回归），虽然这是监督学习中的一个基础算法，而且还是一元的，但是之前做数学建模比赛时的学习过程告诉我，<strong>模型都是从简单到复杂的，我们必须从初等简单模型入手，再一步步增加复杂度</strong>，这是学习的基本思路。吴从房价预测这个实际问题入手，使用一元线性回归来解决这个问题，再本篇中通过构建这个模型，我们将学到两个主要知识点：</p>
@@ -302,15 +239,66 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2021/06/30/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/Hello%20World/</url>
-    <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>&emsp;&emsp;这是我第一次建站，折腾了段时间才把这个网站部署好，还有好多东西要改进。不过当看到自己的网站在chrome上加载出来的时候，有一种新世界的大门向我打开的感觉……<br>&emsp;&emsp;之所以我要建这么一个博客，主要是为了好玩……当然了，我也会在这上面记录一下自己学CS的笔记和思考，还有以后做项目的记录。总之，这里将作为一个记录和表达我杨某学习和想法的地方。<br>&emsp;&emsp;这个博客，可以说是我存在的一种方式吧。漫漫长路，希望我能开心快乐。</p>
+    <title>监督与非监督学习</title>
+    <url>/2021/07/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="监督学习和无监督学习"><a href="#监督学习和无监督学习" class="headerlink" title="监督学习和无监督学习"></a>监督学习和无监督学习</h2><p>在说什么是监督学习，什么是非监督学习之前，我们得先说说ML中的<strong>学习</strong>这一概念。<strong>学习</strong>其实可以这样理解：学生做了大量的题目来训练，老师改作业来告诉学生哪些是对的，哪些是错的，最后学生自己会学会解题方法，之后面对考试的题目，自己也能解答。</p>
+<span id="more"></span>
+<p>所谓的<font color=purple><strong>监督</strong></font>(supervised)=标签（label），是否有监督就是输入数据（input）是否有标签。有标签就是监督学习，无标签就是无监督学习。可以这样理解，有监督学习就是打了标签（有答案）的题目，无监督学习就是没答案的题目。</p>
+<p>下面来举个小例子来说明两者的区别：</p>
+<ul>
+<li><p>有监督学习</p>
+<p>ask：1 X 1 + 1=？</p>
+<p>AI：= 1 ?</p>
+<p>ask：NO！= 2!Remember it!</p>
+<p>（AI 调整中）</p>
+<p>ask：1 X  1 + 1 =？</p>
+<p>AI： =2！</p>
+</li>
+<li><p>无监督学习</p>
+<p>ask: 1 X 1 + 1=?</p>
+<p>AI：= 1？</p>
+<p>ask:  3 X 4 + 8 = ?</p>
+<p>AI：=0？</p>
+<p>…………</p>
+<p>AI： 我发现了，数学题都是先乘法后加法！</p>
+</li>
+</ul>
+<h2 id="有监督学习"><a href="#有监督学习" class="headerlink" title="有监督学习"></a>有监督学习</h2><p>有监督学习的训练数据是<strong>有标签</strong>的，训练目标能够给新数据（text data）以正确的目标。监督学习一般包括<strong>回归（regression）</strong>和<strong>分类（classification）</strong>问题。</p>
+<ul>
+<li><p><strong>regression</strong></p>
+<p>所谓的回归问题，就是估算连续值，比如说吴恩达给出的例子：</p>
+<p>我们给算法一个数据集，比如一系列房子的数据，给定数据中每个样本（不同的面积）的正确房价，然后运用算法，算出更多的答案，估算任意size房子的房价为多少：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707092627.png" alt="image-20210707092619710" style="zoom: 50%;" /></p>
+</li>
+<li><p><strong>classification</strong></p>
+<p>​    分类问题干的事，就是字面意思：分类。比如说我想让AI知道什么是猫什么是狗，一开始我们就将一些猫的图片和狗的图片（带标签）一起进行训练，学习模型不断捕捉这些图片与标签之间的联系进行自我完善和调整，然后我们再给一些不带标签的图片，让AI来猜一猜这些图片是猫还是狗。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707093136.png" alt="image-20210707093136697"></p>
+</li>
+</ul>
+<p>有监督学习的经典算法：支持向量机、线性判别、决策树、朴素贝叶斯</p>
+<h2 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h2><p>直观上来讲，unsupervised learning(无监督学习）就是不需要人的监督就可以学习，数据没有label，需要<strong>根据数据自身结构特性</strong>来将数据分类。它的训练集与监督学习的训练集的区别可以用下面这张图来说明：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707095215.png" alt="image-20210707095215131" style="zoom:67%;" /></p>
+<h3 id="为什么要用无监督学习这种方式呢？"><a href="#为什么要用无监督学习这种方式呢？" class="headerlink" title="为什么要用无监督学习这种方式呢？"></a>为什么要用无监督学习这种方式呢？</h3><p>​    对于监督学习来说，我们已经知道分类标准，比如说把图像分成猫和狗；但是如果我们有一组数据集，但是没有明确的目的，我们不知道怎么区分，这个时候，怎么办？无监督学习就派上用场了，我们可以<strong>借助数据自身的结构来进行分类</strong>。</p>
+<p>我们在这来举个例子：登陆谷歌的news(news.google.com)，这个网站做了什么事情呢？google每天会搜集几十万条新闻，然后把他们相似类别的聚集在一块，组成不同主题的新闻，比如说下面看到的这样：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707100129.png" alt="image-20210707100129393" style="zoom: 50%;" /></p>
+<p>一个框就是一个主题的新闻，我拿数字标出的URL，就是不同的报道。这是怎么做到的呢？→无监督学习中的<strong>聚类算法</strong>（clustering）。几十万条新闻，我们总不能用监督学习的算法，一个个告诉机器，这个是什么，那个是什么吧，除此之外<strong>我都不知道要把他们分到哪一类别去</strong>。</p>
+<h3 id="鸡尾酒会算法"><a href="#鸡尾酒会算法" class="headerlink" title="鸡尾酒会算法"></a>鸡尾酒会算法</h3><p>我们来看一看吴恩达提到的无监督学习中一个很有意思的算法—<strong>鸡尾酒会算法</strong>。<strong>鸡尾酒会问题（</strong>cocktailparty problem）是在<strong>计算机语音识别领域</strong>的一个问题，当前语音识别技术已经可以以较高精度识别一个人所讲的话，但是<strong>当说话的人数为两人或者多人</strong>时，语音识别率就会极大的降低，这一难题被称为鸡尾酒会问题。</p>
+<p>举例来说，假如我在KTV唱歌，我唱歌的时候，某个人把我的天籁之音录下来了，这个录音里夹杂着我的声音和伴奏声音。现在我想把我唱的声音和伴奏的声音区分开来，分别播放，这就是鸡尾酒会问题。</p>
+<p>该问题描述的是<strong>给定混合信号，如何分离出同时说话的每个人的独立信号</strong>。当有N个信号源时，通常假设观察信号也有N个（例如N个麦克风或者录音机）。该假设意味着混合矩阵是个方阵，即J = D，其中D是输入数据的维数，J是系统模型的维数。这个问题常用到的方法是<strong>盲信号分离算法</strong>。（这里不详细说这算法了，我现在也不会，参考资料如下：）</p>
+<blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E7%9B%B2%E4%BF%A1%E5%8F%B7%E5%88%86%E7%A6%BB">维基百科—盲信号分离</a></p>
+<p><a href="https://www.docin.com/p-126816392.html?docfrom=rrela">语音信号的盲分离算法研究</a></p>
+</blockquote>
+<p>我觉得这个效果对于我这个初学者来说还是很amazing的，想听听实际效果，可以去看吴恩达机器学习课程无监督学习那个视频里的示例，真的很好玩。</p>
 ]]></content>
       <categories>
-        <category>杂谈吹水</category>
+        <category>CS</category>
+        <category>ML</category>
+        <category>吴恩达机器学习课程笔记</category>
       </categories>
       <tags>
-        <tag>ideas</tag>
+        <tag>CS</tag>
+        <tag>ML</tag>
       </tags>
   </entry>
   <entry>
@@ -369,6 +357,88 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
         <tag>ML</tag>
         <tag>regression</tag>
         <tag>梯度下降</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/06/30/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/Hello%20World/</url>
+    <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>&emsp;&emsp;这是我第一次建站，折腾了段时间才把这个网站部署好，还有好多东西要改进。不过当看到自己的网站在chrome上加载出来的时候，有一种新世界的大门向我打开的感觉……<br>&emsp;&emsp;之所以我要建这么一个博客，主要是为了好玩……当然了，我也会在这上面记录一下自己学CS的笔记和思考，还有以后做项目的记录。总之，这里将作为一个记录和表达我杨某学习和想法的地方。<br>&emsp;&emsp;这个博客，可以说是我存在的一种方式吧。漫漫长路，希望我能开心快乐。</p>
+]]></content>
+      <categories>
+        <category>杂谈吹水</category>
+      </categories>
+      <tags>
+        <tag>ideas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>上海之行</title>
+    <url>/2021/07/11/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
+    <content><![CDATA[<p> 8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125320.png" alt="image-20210711125319996" style="zoom: 67%;" /></p>
+<span id="more"></span>
+<p>我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711121722.png" alt="image-20210711121714205"></p>
+<p>😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122613.jpg" alt="waic展1" style="zoom: 67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122641.jpg" alt="waic展2" style="zoom: 50%;" /></p>
+<p>额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,poni.ai，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123403.png" alt="image-20210711123402389" style="zoom:50%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123438.png" alt="image-20210711123438317" style="zoom: 67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123509.png" alt="image-20210711123509184" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123544.png" alt="image-20210711123544385" style="zoom: 67%;" /></p>
+<p>这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082011.png" alt="image-20210714082002960"></p>
+<p> 虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
+<h4 id="上海历史博物馆"><a href="#上海历史博物馆" class="headerlink" title="上海历史博物馆"></a>上海历史博物馆</h4><p>这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125429.png" alt="image-20210711125428826" style="zoom:67%;" /></p>
+<p>《中国共产党宣言》，这个是真迹。这是中国共产党的源头了。</p>
+<p><img src="C:\Users\Maze\Pictures\IMG_20210709_104218.jpg" alt="IMG_20210709_104218" style="zoom:10%;" /></p>
+<p>我看这个徽章挺有意思，就给它拍下来了。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125706.png" alt="image-20210711125705386" style="zoom: 50%;" /></p>
+<p>老蒋和毛大大在重庆会议上拍的合照，这个时候，两人心里都在想着什么呢？</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125816.png" alt="image-20210711125815779" style="zoom:67%;" /></p>
+<p>好家伙，还有这个。</p>
+<h4 id="武康路，愚园路"><a href="#武康路，愚园路" class="headerlink" title="武康路，愚园路"></a>武康路，愚园路</h4><p>我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
+<h4 id="上海博物馆"><a href="#上海博物馆" class="headerlink" title="上海博物馆"></a>上海博物馆</h4><p>额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082110.png" alt="image-20210714082110471"></p>
+<p>这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711233913.png" alt="image-20210711233912475" style="zoom:50%;" /></p>
+<p>这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234050.png" alt="image-20210711234049822" style="zoom:50%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234132.png" alt="image-20210711234131764" style="zoom:50%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234152.png" alt="image-20210711234151949" style="zoom:50%;" /></p>
+<p>还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：<br><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234304.png" alt="image-20210711234303508" style="zoom:50%;" /></p>
+<p>这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234349.png" alt="image-20210711234348837" style="zoom:67%;" /></p>
+<p>这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234537.png" alt="image-20210711234536757" style="zoom:50%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234552.png" alt="image-20210711234551826" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234618.png" alt="image-20210711234617641" style="zoom:67%;" /></p>
+<p>这个馆里有很多精美的陶瓷制品，我最喜欢的花纹就是最后一张这种裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234753.png" alt="image-20210711234752559" style="zoom:50%;" /></p>
+<p>这种颜色也是我很喜欢的。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234826.png" alt="image-20210711234825706" style="zoom:67%;" /></p>
+<p>这个简直神了。。。</p>
+<p>剩下的就不贴上来了，总的来说上博之旅还是很满意的。</p>
+<h4 id="外滩，南京东路"><a href="#外滩，南京东路" class="headerlink" title="外滩，南京东路"></a>外滩，南京东路</h4><p>来上海，除了老洋房，当然要看看其繁华的一面，当仁不让的当然是外滩，陆家嘴这一带。刚出地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235248.png" alt="image-20210711235248113" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235314.png" alt="image-20210711235314082" style="zoom:67%;" /></p>
+<p>再来看看黄浦江对面的陆家嘴，浦东最繁华的地方：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235457.png" alt="image-20210711235457234"></p>
+<h4 id="WAIC论坛"><a href="#WAIC论坛" class="headerlink" title="WAIC论坛"></a>WAIC论坛</h4><p>额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000357.png" alt="image-20210712000357612"></p>
+<p>还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000558.png" alt="image-20210712000558320" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000617.png" alt="image-20210712000617839" style="zoom:67%;" /></p>
+<p>就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
+]]></content>
+      <categories>
+        <category>杂谈吹水</category>
+      </categories>
+      <tags>
+        <tag>旅游</tag>
+        <tag>会展</tag>
       </tags>
   </entry>
   <entry>
@@ -448,73 +518,90 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
       </tags>
   </entry>
   <entry>
-    <title>上海之行</title>
-    <url>/2021/07/11/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
-    <content><![CDATA[<p> 8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125320.png" alt="image-20210711125319996" style="zoom: 67%;" /></p>
+    <title>十大原理之整体性六大原理</title>
+    <url>/2021/07/17/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h3 id="人们如何相互影响"><a href="#人们如何相互影响" class="headerlink" title="人们如何相互影响"></a>人们如何相互影响</h3><p>前四个原理讨论了个人如何做出决策。在我们的人生旅途中，我们的许多决策不仅影响我们自己，而且还会影响其他人。以下三个原理是关于人们如何相互交易的。</p>
 <span id="more"></span>
-<p>我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711121722.png" alt="image-20210711121714205"></p>
-<p>😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122613.jpg" alt="waic展1" style="zoom: 67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122641.jpg" alt="waic展2" style="zoom: 50%;" /></p>
-<p>额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,poni.ai，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123403.png" alt="image-20210711123402389" style="zoom:50%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123438.png" alt="image-20210711123438317" style="zoom: 67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123509.png" alt="image-20210711123509184" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123544.png" alt="image-20210711123544385" style="zoom: 67%;" /></p>
-<p>这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082011.png" alt="image-20210714082002960"></p>
-<p> 虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
-<h4 id="上海历史博物馆"><a href="#上海历史博物馆" class="headerlink" title="上海历史博物馆"></a>上海历史博物馆</h4><p>这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125429.png" alt="image-20210711125428826" style="zoom:67%;" /></p>
-<p>《中国共产党宣言》，这个是真迹。这是中国共产党的源头了。</p>
-<p><img src="C:\Users\Maze\Pictures\IMG_20210709_104218.jpg" alt="IMG_20210709_104218" style="zoom:10%;" /></p>
-<p>我看这个徽章挺有意思，就给它拍下来了。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125706.png" alt="image-20210711125705386" style="zoom: 50%;" /></p>
-<p>老蒋和毛大大在重庆会议上拍的合照，这个时候，两人心里都在想着什么呢？</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125816.png" alt="image-20210711125815779" style="zoom:67%;" /></p>
-<p>好家伙，还有这个。</p>
-<h4 id="武康路，愚园路"><a href="#武康路，愚园路" class="headerlink" title="武康路，愚园路"></a>武康路，愚园路</h4><p>我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
-<h4 id="上海博物馆"><a href="#上海博物馆" class="headerlink" title="上海博物馆"></a>上海博物馆</h4><p>额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082110.png" alt="image-20210714082110471"></p>
-<p>这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711233913.png" alt="image-20210711233912475" style="zoom:50%;" /></p>
-<p>这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234050.png" alt="image-20210711234049822" style="zoom:50%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234132.png" alt="image-20210711234131764" style="zoom:50%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234152.png" alt="image-20210711234151949" style="zoom:50%;" /></p>
-<p>还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：<br><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234304.png" alt="image-20210711234303508" style="zoom:50%;" /></p>
-<p>这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234349.png" alt="image-20210711234348837" style="zoom:67%;" /></p>
-<p>这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234537.png" alt="image-20210711234536757" style="zoom:50%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234552.png" alt="image-20210711234551826" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234618.png" alt="image-20210711234617641" style="zoom:67%;" /></p>
-<p>这个馆里有很多精美的陶瓷制品，我最喜欢的花纹就是最后一张这种裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234753.png" alt="image-20210711234752559" style="zoom:50%;" /></p>
-<p>这种颜色也是我很喜欢的。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234826.png" alt="image-20210711234825706" style="zoom:67%;" /></p>
-<p>这个简直神了。。。</p>
-<p>剩下的就不贴上来了，总的来说上博之旅还是很满意的。</p>
-<h4 id="外滩，南京东路"><a href="#外滩，南京东路" class="headerlink" title="外滩，南京东路"></a>外滩，南京东路</h4><p>来上海，除了老洋房，当然要看看其繁华的一面，当仁不让的当然是外滩，陆家嘴这一带。刚出地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235248.png" alt="image-20210711235248113" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235314.png" alt="image-20210711235314082" style="zoom:67%;" /></p>
-<p>再来看看黄浦江对面的陆家嘴，浦东最繁华的地方：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235457.png" alt="image-20210711235457234"></p>
-<h4 id="WAIC论坛"><a href="#WAIC论坛" class="headerlink" title="WAIC论坛"></a>WAIC论坛</h4><p>额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000357.png" alt="image-20210712000357612"></p>
-<p>还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000558.png" alt="image-20210712000558320" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000617.png" alt="image-20210712000617839" style="zoom:67%;" /></p>
-<p>就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
+<h4 id="五、贸易可以使每个人的状况都变得更好"><a href="#五、贸易可以使每个人的状况都变得更好" class="headerlink" title="五、贸易可以使每个人的状况都变得更好"></a>五、贸易可以使每个人的状况都变得更好</h4><p>我们先考虑贸易如何影响家庭。当家庭中的某个成员找工作时，她要与也在找工作的其他家庭的成员竞争。各个家庭在购物时也会相互竞争，因为每个家庭都想以最低的价格购买最好的东西。从某种意义上说，<strong>经济中每个家庭都在与所有其他家庭相竞争</strong>。</p>
+<p>尽管有这种竞争，但把你的家庭与所有其他家庭隔绝开来并不会使你的家庭过得更好。如果真的隔绝开来的话，你的家庭就必须自己种粮食、自己做衣服、自己盖房子。显然，你的家庭在与其他家庭的贸易中受益良多。<font color=purple>贸易使每个人都可以专门从事自己最擅长的活动，</font>无论它是耕种、做衣服还是盖房子。通过与其他人贸易，<strong>人们可以以较低的成本获得各种各样的物品与服务</strong>。</p>
+<p>国家和家庭一样，也能从相互贸易中获益。贸易使各国可以专门从事自己最擅长的活动，并享有种类更多的物品与服务。</p>
+<hr>
+<h4 id="六、市场通常是组织经济活动的一种好方法"><a href="#六、市场通常是组织经济活动的一种好方法" class="headerlink" title="六、市场通常是组织经济活动的一种好方法"></a>六、市场通常是组织经济活动的一种好方法</h4><p>苏联和上世纪我国建国初期都是实行中央计划经济体制的，显然最后的效果不大好。因为中央计划经济国家运行的<strong>前提假设</strong>是，<u>政府官员能够最佳地配置经济中的稀缺资源</u>。这些中央计划者决定，生产什么物品与服务、生产多少，以及谁生产和消费这些物品与服务。支撑中央计划的理论是，<font color=purple>只有政府才能以促进整个社会经济福利的方式组织经济活动。</font></p>
+<p>现在我国是计划经济和市场经济相结合。在市场经济中，<strong>价格和利己引导着企业和家庭进行决策</strong>。可以看到，市场经济是成功的，但这种成功就像亚当斯密所说的“看不见的手”一样是个谜。在市场经济中，没有一个人追求整个社会的经济福利，但是市场经济在促进总体经济福利的方式组织经济活动方面非常成功。</p>
+<p>关于这个问题，亚当斯密有一些经典的观点：</p>
+<ul>
+<li>价格会自发调整，指引这些单个买者和卖者达到某种结果，该结果在大多数情况下会实现整个社会福利的最大化。</li>
+<li>当政府阻止价格根据供求状况自发调整时，它就限制了看不见的手对组成经济的千百万家庭和企业的决策进行协调的能力。这可以解释为什么中央计划经济是失败的，因为它把“看不见的手”给绑起来了。</li>
+<li>经济参与者<strong>受利己心所驱动</strong>，而市场上这只看不见的手<strong>指引这种利己心去促进总体的经济福利</strong>。</li>
+</ul>
+<hr>
+<h4 id="七、政府有时可以改善市场结果"><a href="#七、政府有时可以改善市场结果" class="headerlink" title="七、政府有时可以改善市场结果"></a>七、政府有时可以改善市场结果</h4><p>我们国家既有计划经济也有市场经济，两者是并存的。那么为什么需要计划经济，也就是政府干预经济呢？学习经济学的目的之一是<strong>提高我们对政府政策的适当作用与范围的认识</strong>。</p>
+<p>以下是两个主要原因：</p>
+<ol>
+<li><p>只有在政府实施规则并维持对市场经济至关重要的制度时，“看不见的手”才能施展其魔力。什么意思呢？</p>
+<p>​        我问你，假如你是一个农民，你种了许多蔬菜，然后拿到集市上去卖，结果还没开始卖，就直接被人抢走了。你是一脸问号（？？？），这个时候，你还想种蔬菜了吗？反正都会被抢走，我也去抢吧，要不然谁给我饭吃？这样，市场经济还能起作用吗？</p>
+<p>​        这就需要政府实施<strong>产权</strong>的制度（我理解为主持公道），目的是让人们有<strong>控制自己手中稀缺资源，维护自己权利的能力</strong>。我们依靠政府的警察和法庭获得自己生产物品的所有权，而“看不见的手”依靠我们维护自己权利的能力。</p>
+</li>
+<li><p>“看不见的手”是强有力的，但并不是无所不能的。</p>
+<p>政府干预经济的目的只有两个：促进效率（把蛋糕做大）或促进平等（主持分蛋糕）。我们先来看看第一个：</p>
+<ul>
+<li>尽管市场经济可以自己<strong>有效配置资源</strong>，以使经济蛋糕最大化，但也有失灵的时候。（经济学家称之为市场失灵）这里说两个原因：<ul>
+<li>一是可能因为<strong>外部性</strong>，指的是一个人的行为对旁观者福利的影响。最经典的例子就是污染的问题，工厂产生了污染，对附近居民的健康造成了有害影响，市场本身是不会把成本考虑在内的。</li>
+<li>二是可能因为<strong>市场势力</strong>，指单个人或公司（或某个小群体）不适当地影响市场价格的能力。我觉得就是<strong>巨无霸垄断</strong>，会对市场造成不好的影响。</li>
+</ul>
+</li>
+<li>即使“看不见的手”带来了有效率的产出，它也不能消除经济福利上巨大的不对称。市场经济根据人们生产其他人愿意购买的东西的能力来给予其报酬。这个很好理解。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="整体经济如何运行"><a href="#整体经济如何运行" class="headerlink" title="整体经济如何运行"></a>整体经济如何运行</h3><p>我们从讨论个人如何做出决策开始，然后考察人们如何相互影响。所有这些决策和相互影响共同组成了“经济”。最后三个原理涉及整体经济的运行。</p>
+<h4 id="八、一国的生活水平取决于它生产物品与服务的能力"><a href="#八、一国的生活水平取决于它生产物品与服务的能力" class="headerlink" title="八、一国的生活水平取决于它生产物品与服务的能力"></a>八、一国的生活水平取决于它生产物品与服务的能力</h4><p>用什么来解释各国之间和不同时期<strong>生活水平</strong>的巨大差别呢？</p>
+<p>各国<strong>生产率（productivity）</strong>的差别——即每一单位劳动投入所生产的物品与服务数量的差别。决定一个国家人民生活水平的最关键因素，不是什么和它国竞争，也不是政府提高什么最低工资标准，而是这个国家的生产率是多少。</p>
+<p>生产率与生活水平之间的关系对于公共政策也有深远的含义。在考虑任何一项政策如何影响生活水平时，关键问题是这项政策如何影响我们生产物品与服务的能力。为了提高生活水平，决策者需要通过让工人受到良好的教育、拥有生产物品与服务需要的工具以及获取最好的技术来提高生产率。</p>
+<h4 id="九、当政府发行了过多货币时，物价会上升"><a href="#九、当政府发行了过多货币时，物价会上升" class="headerlink" title="九、当政府发行了过多货币时，物价会上升"></a>九、当政府发行了过多货币时，物价会上升</h4><p>所谓的物价上升→通货膨胀。由于高通货膨胀会让社会付出各种成本，所以世界各国的经济政策制定者都把保持低通货膨胀作为目标之一。</p>
+<p>是什么引起了通货膨胀？</p>
+<p>在大多数严重或持续的通货膨胀情况下，罪魁祸首是货币量的增长。当一国政府发行了大量本国货币时，货币的价值就下降了。在20世纪20年代初的德国，当物价平均每月上升3倍时，货币量每月也增加了3倍。美国的情况虽然没有这么严重，但从美国的经济史中也可以得出类似的结论：20世纪70年代的高通货膨胀与货币量的迅速增长是相关的，而近年来经历的低通货膨胀与货币量的缓慢增长也是相关的。</p>
+<h4 id="十、社会面临通货膨胀与失业之间的短期权衡取舍"><a href="#十、社会面临通货膨胀与失业之间的短期权衡取舍" class="headerlink" title="十、社会面临通货膨胀与失业之间的短期权衡取舍"></a>十、社会面临通货膨胀与失业之间的短期权衡取舍</h4><p>不解释了，累了。</p>
+<hr>
+<p>在下面的学习中，要始终牢记这十大原理：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717144413.png" alt="image-20210717144411615" style="zoom:50%;" /></p>
 ]]></content>
       <categories>
-        <category>杂谈吹水</category>
+        <category>经济学</category>
+        <category>《经济学原理》—曼昆</category>
       </categories>
       <tags>
-        <tag>旅游</tag>
-        <tag>会展</tag>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习经济学的理由以及方法</title>
+    <url>/2021/07/15/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%AD%A6%E4%B9%A0%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E7%90%86%E7%94%B1%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="理由"><a href="#理由" class="headerlink" title="理由"></a>理由</h2><p>额，作为一个专业与经济学毫不相关的大学生，我为什么想学点经济学，并把经济学的入门书籍曼昆的《经济学原理》列到暑假学习计划之中呢？究其原因，是想以后方便搞钱😏。咳咳，开个玩笑，怎么可能，我可是一个淡泊名利的人🙄。真正的原因是：</p>
+<span id="more"></span>
+<ol>
+<li><p>它有助于帮助我理解我所生活的这个世界。因为“<strong>经济学是一门研究人类一般生活事务的学问</strong>。”</p>
+</li>
+<li><p>它将使我更精明地参与经济，在日常生活中，要做出许多经济决策。学习经济学会使我从一个新角度去思考如何最好地做出这些决策。学习经济学本身不会使你富有，但它将提供一些有助于你努力致富的工具。</p>
+</li>
+<li><p>它将使我更好地理解经济政策的潜力与局限性。</p>
+</li>
+<li><p>方便搞钱（这个不是曼昆说的）</p>
+<p>​                                                                                                                                                                                                                                                                ——曼昆</p>
+</li>
+</ol>
+<p>总之，我了解经济学的主要目的是<strong>使用经济学的工具去指导我进行更好地决策，破除一些常见误区</strong>。看了知乎老铁的建议，熟读曼昆的《经济学原理》差不多就行了。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>​    额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
+<p>就下面这个工作流：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715180428.png" alt="image-20210715180428340" style="zoom: 67%;" /></p>
+]]></content>
+      <categories>
+        <category>经济学</category>
+        <category>《经济学原理》—曼昆</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
       </tags>
   </entry>
   <entry>
@@ -630,64 +717,6 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
       </tags>
   </entry>
   <entry>
-    <title>十大原理之整体性六大原理</title>
-    <url>/2021/07/17/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<h3 id="人们如何相互影响"><a href="#人们如何相互影响" class="headerlink" title="人们如何相互影响"></a>人们如何相互影响</h3><p>前四个原理讨论了个人如何做出决策。在我们的人生旅途中，我们的许多决策不仅影响我们自己，而且还会影响其他人。以下三个原理是关于人们如何相互交易的。</p>
-<span id="more"></span>
-<h4 id="五、贸易可以使每个人的状况都变得更好"><a href="#五、贸易可以使每个人的状况都变得更好" class="headerlink" title="五、贸易可以使每个人的状况都变得更好"></a>五、贸易可以使每个人的状况都变得更好</h4><p>我们先考虑贸易如何影响家庭。当家庭中的某个成员找工作时，她要与也在找工作的其他家庭的成员竞争。各个家庭在购物时也会相互竞争，因为每个家庭都想以最低的价格购买最好的东西。从某种意义上说，<strong>经济中每个家庭都在与所有其他家庭相竞争</strong>。</p>
-<p>尽管有这种竞争，但把你的家庭与所有其他家庭隔绝开来并不会使你的家庭过得更好。如果真的隔绝开来的话，你的家庭就必须自己种粮食、自己做衣服、自己盖房子。显然，你的家庭在与其他家庭的贸易中受益良多。<font color=purple>贸易使每个人都可以专门从事自己最擅长的活动，</font>无论它是耕种、做衣服还是盖房子。通过与其他人贸易，<strong>人们可以以较低的成本获得各种各样的物品与服务</strong>。</p>
-<p>国家和家庭一样，也能从相互贸易中获益。贸易使各国可以专门从事自己最擅长的活动，并享有种类更多的物品与服务。</p>
-<hr>
-<h4 id="六、市场通常是组织经济活动的一种好方法"><a href="#六、市场通常是组织经济活动的一种好方法" class="headerlink" title="六、市场通常是组织经济活动的一种好方法"></a>六、市场通常是组织经济活动的一种好方法</h4><p>苏联和上世纪我国建国初期都是实行中央计划经济体制的，显然最后的效果不大好。因为中央计划经济国家运行的<strong>前提假设</strong>是，<u>政府官员能够最佳地配置经济中的稀缺资源</u>。这些中央计划者决定，生产什么物品与服务、生产多少，以及谁生产和消费这些物品与服务。支撑中央计划的理论是，<font color=purple>只有政府才能以促进整个社会经济福利的方式组织经济活动。</font></p>
-<p>现在我国是计划经济和市场经济相结合。在市场经济中，<strong>价格和利己引导着企业和家庭进行决策</strong>。可以看到，市场经济是成功的，但这种成功就像亚当斯密所说的“看不见的手”一样是个谜。在市场经济中，没有一个人追求整个社会的经济福利，但是市场经济在促进总体经济福利的方式组织经济活动方面非常成功。</p>
-<p>关于这个问题，亚当斯密有一些经典的观点：</p>
-<ul>
-<li>价格会自发调整，指引这些单个买者和卖者达到某种结果，该结果在大多数情况下会实现整个社会福利的最大化。</li>
-<li>当政府阻止价格根据供求状况自发调整时，它就限制了看不见的手对组成经济的千百万家庭和企业的决策进行协调的能力。这可以解释为什么中央计划经济是失败的，因为它把“看不见的手”给绑起来了。</li>
-<li>经济参与者<strong>受利己心所驱动</strong>，而市场上这只看不见的手<strong>指引这种利己心去促进总体的经济福利</strong>。</li>
-</ul>
-<hr>
-<h4 id="七、政府有时可以改善市场结果"><a href="#七、政府有时可以改善市场结果" class="headerlink" title="七、政府有时可以改善市场结果"></a>七、政府有时可以改善市场结果</h4><p>我们国家既有计划经济也有市场经济，两者是并存的。那么为什么需要计划经济，也就是政府干预经济呢？学习经济学的目的之一是<strong>提高我们对政府政策的适当作用与范围的认识</strong>。</p>
-<p>以下是两个主要原因：</p>
-<ol>
-<li><p>只有在政府实施规则并维持对市场经济至关重要的制度时，“看不见的手”才能施展其魔力。什么意思呢？</p>
-<p>​        我问你，假如你是一个农民，你种了许多蔬菜，然后拿到集市上去卖，结果还没开始卖，就直接被人抢走了。你是一脸问号（？？？），这个时候，你还想种蔬菜了吗？反正都会被抢走，我也去抢吧，要不然谁给我饭吃？这样，市场经济还能起作用吗？</p>
-<p>​        这就需要政府实施<strong>产权</strong>的制度（我理解为主持公道），目的是让人们有<strong>控制自己手中稀缺资源，维护自己权利的能力</strong>。我们依靠政府的警察和法庭获得自己生产物品的所有权，而“看不见的手”依靠我们维护自己权利的能力。</p>
-</li>
-<li><p>“看不见的手”是强有力的，但并不是无所不能的。</p>
-<p>政府干预经济的目的只有两个：促进效率（把蛋糕做大）或促进平等（主持分蛋糕）。我们先来看看第一个：</p>
-<ul>
-<li>尽管市场经济可以自己<strong>有效配置资源</strong>，以使经济蛋糕最大化，但也有失灵的时候。（经济学家称之为市场失灵）这里说两个原因：<ul>
-<li>一是可能因为<strong>外部性</strong>，指的是一个人的行为对旁观者福利的影响。最经典的例子就是污染的问题，工厂产生了污染，对附近居民的健康造成了有害影响，市场本身是不会把成本考虑在内的。</li>
-<li>二是可能因为<strong>市场势力</strong>，指单个人或公司（或某个小群体）不适当地影响市场价格的能力。我觉得就是<strong>巨无霸垄断</strong>，会对市场造成不好的影响。</li>
-</ul>
-</li>
-<li>即使“看不见的手”带来了有效率的产出，它也不能消除经济福利上巨大的不对称。市场经济根据人们生产其他人愿意购买的东西的能力来给予其报酬。这个很好理解。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="整体经济如何运行"><a href="#整体经济如何运行" class="headerlink" title="整体经济如何运行"></a>整体经济如何运行</h3><p>我们从讨论个人如何做出决策开始，然后考察人们如何相互影响。所有这些决策和相互影响共同组成了“经济”。最后三个原理涉及整体经济的运行。</p>
-<h4 id="八、一国的生活水平取决于它生产物品与服务的能力"><a href="#八、一国的生活水平取决于它生产物品与服务的能力" class="headerlink" title="八、一国的生活水平取决于它生产物品与服务的能力"></a>八、一国的生活水平取决于它生产物品与服务的能力</h4><p>用什么来解释各国之间和不同时期<strong>生活水平</strong>的巨大差别呢？</p>
-<p>各国<strong>生产率（productivity）</strong>的差别——即每一单位劳动投入所生产的物品与服务数量的差别。决定一个国家人民生活水平的最关键因素，不是什么和它国竞争，也不是政府提高什么最低工资标准，而是这个国家的生产率是多少。</p>
-<p>生产率与生活水平之间的关系对于公共政策也有深远的含义。在考虑任何一项政策如何影响生活水平时，关键问题是这项政策如何影响我们生产物品与服务的能力。为了提高生活水平，决策者需要通过让工人受到良好的教育、拥有生产物品与服务需要的工具以及获取最好的技术来提高生产率。</p>
-<h4 id="九、当政府发行了过多货币时，物价会上升"><a href="#九、当政府发行了过多货币时，物价会上升" class="headerlink" title="九、当政府发行了过多货币时，物价会上升"></a>九、当政府发行了过多货币时，物价会上升</h4><p>所谓的物价上升→通货膨胀。由于高通货膨胀会让社会付出各种成本，所以世界各国的经济政策制定者都把保持低通货膨胀作为目标之一。</p>
-<p>是什么引起了通货膨胀？</p>
-<p>在大多数严重或持续的通货膨胀情况下，罪魁祸首是货币量的增长。当一国政府发行了大量本国货币时，货币的价值就下降了。在20世纪20年代初的德国，当物价平均每月上升3倍时，货币量每月也增加了3倍。美国的情况虽然没有这么严重，但从美国的经济史中也可以得出类似的结论：20世纪70年代的高通货膨胀与货币量的迅速增长是相关的，而近年来经历的低通货膨胀与货币量的缓慢增长也是相关的。</p>
-<h4 id="十、社会面临通货膨胀与失业之间的短期权衡取舍"><a href="#十、社会面临通货膨胀与失业之间的短期权衡取舍" class="headerlink" title="十、社会面临通货膨胀与失业之间的短期权衡取舍"></a>十、社会面临通货膨胀与失业之间的短期权衡取舍</h4><p>不解释了，累了。</p>
-<hr>
-<p>在下面的学习中，要始终牢记这十大原理：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717144413.png" alt="image-20210717144411615" style="zoom:50%;" /></p>
-]]></content>
-      <categories>
-        <category>经济学</category>
-        <category>《经济学原理》—曼昆</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>计算机逻辑的历史</title>
     <url>/2021/07/01/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%BB%E8%BE%91%E7%9A%84%E5%8E%86%E5%8F%B2/</url>
     <content><![CDATA[<p>&emsp;&emsp;这篇阅读记录是对《逻辑的引擎》一书的选抄，这本书主要讲述了计算机逻辑的源头，虽然只是科普类的书籍，但我还是感到有点枯燥。所以权把这本书的选抄当作这一思路的简要框架，当日后想看了，再顺着这个框架看一看也不错。</p>
@@ -730,35 +759,6 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
         <tag>CS</tag>
         <tag>阅读记录</tag>
         <tag>计算机逻辑</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>学习经济学的理由以及方法</title>
-    <url>/2021/07/15/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%AD%A6%E4%B9%A0%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E7%90%86%E7%94%B1%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h2 id="理由"><a href="#理由" class="headerlink" title="理由"></a>理由</h2><p>额，作为一个专业与经济学毫不相关的大学生，我为什么想学点经济学，并把经济学的入门书籍曼昆的《经济学原理》列到暑假学习计划之中呢？究其原因，是想以后方便搞钱😏。咳咳，开个玩笑，怎么可能，我可是一个淡泊名利的人🙄。真正的原因是：</p>
-<span id="more"></span>
-<ol>
-<li><p>它有助于帮助我理解我所生活的这个世界。因为“<strong>经济学是一门研究人类一般生活事务的学问</strong>。”</p>
-</li>
-<li><p>它将使我更精明地参与经济，在日常生活中，要做出许多经济决策。学习经济学会使我从一个新角度去思考如何最好地做出这些决策。学习经济学本身不会使你富有，但它将提供一些有助于你努力致富的工具。</p>
-</li>
-<li><p>它将使我更好地理解经济政策的潜力与局限性。</p>
-</li>
-<li><p>方便搞钱（这个不是曼昆说的）</p>
-<p>​                                                                                                                                                                                                                                                                ——曼昆</p>
-</li>
-</ol>
-<p>总之，我了解经济学的主要目的是<strong>使用经济学的工具去指导我进行更好地决策，破除一些常见误区</strong>。看了知乎老铁的建议，熟读曼昆的《经济学原理》差不多就行了。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>​    额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
-<p>就下面这个工作流：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715180428.png" alt="image-20210715180428340" style="zoom: 67%;" /></p>
-]]></content>
-      <categories>
-        <category>经济学</category>
-        <category>《经济学原理》—曼昆</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
       </tags>
   </entry>
   <entry>
