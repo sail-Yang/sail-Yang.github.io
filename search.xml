@@ -17,158 +17,358 @@
       </tags>
   </entry>
   <entry>
-    <title>C语言注意点复习</title>
-    <url>/2021/07/14/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9%E5%A4%8D%E4%B9%A0/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我是大一下学期开始系统学习C语言的，学到指针左右由于要期末考试了所以暂时放一放，最近又想把这个C基础的知识快点学完，但之前的内容会有些许遗忘，所以索性乘着每天学习计划开始之前，今天把之前的内容复习一下。之前做的课后习题都在github上，复习也方便，我会记录一些注意点和规范，以及常见的写法，还有问与答中部分问答。（我是跟着《C语言现代程序设计现代方法》学的）</p>
+    <title>数据结构与算法绪论</title>
+    <url>/2021/07/16/%E5%A4%A7%E8%AF%9D%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E7%BB%AA%E8%AE%BA/</url>
+    <content><![CDATA[<p> 听说DS很难学，我就先找了本趣味性的书《大话数据结构》来入门，之后在学得深入一点。在学这本书的途中，可以穿插一点深入的内容，比如看一看浙大的网课，做一做相对应的题目。由于资料来源比较广，不会局限于一本，所以我决定先不发布这部分到博客上，而是先做一个记录，到时候再整理。</p>
 <span id="more"></span>
-<h2 id="概论"><a href="#概论" class="headerlink" title="概论"></a>概论</h2><ul>
-<li><p><a href="https://zh.wikipedia.org/wiki/GCC">什么是GCC—Wiki</a></p>
-</li>
-<li><p><a href="https://www.cnblogs.com/QG-whz/p/5456720.html">Linux编译工具入门—gcc</a></p>
-</li>
-</ul>
-<h2 id="printf、scanf（输入-输出章节前置）"><a href="#printf、scanf（输入-输出章节前置）" class="headerlink" title="printf、scanf（输入\输出章节前置）"></a>printf、scanf（输入\输出章节前置）</h2><p>首先要知道printf函数是用来显示格式串的，并且在该串的指定位置插入可能的值（通过转换说明：%+）。</p>
-<ul>
-<li><p>转换说明：%m.pX 。</p>
-<ul>
-<li><strong>m→最小字段宽度</strong>。若要显示的字符数&lt;m，则会这样：%4d→🐕123（右对齐）；如果是大于，会自动扩展为需要的尺寸，而不会丢失数字。</li>
-<li><strong>p→精度</strong>，精度p依赖于<strong>转换说明符X</strong>的选择。<ul>
-<li>d,十进制形式的整数。p指明待显示数字的最少位数。65用%.3f输出→065。</li>
-<li>f,定点十进制形式的浮点数。p指明小数点后应出现的数字的位数。45.8用%.4f输出→45.8000。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>转义序列</p>
-<p>没什么好讲的</p>
-</li>
-</ul>
-<p>以上是printf函数的，下面再来稍微看一看scanf函数（<strong>模式匹配</strong>）：</p>
-<ul>
-<li><p>scanf函数<strong>在寻找数的起始位置时，会忽略空白字符</strong>(including 空格、水平和垂直制表符、换页符和换行符)，所以我们可以把数字分散到几行输入。考虑下下面所示的scanf函数工作过程：</p>
-<ol>
-<li><p>假设用户录入三行输入：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714172121.png" alt="image-20210714172042445"></p>
-</li>
-<li><p>scanf函数会把它们看成下面这样的一个连续的字符流(🐕表示空格，🐱表示换行符)：</p>
-<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
-</li>
-<li><p>我们用×表示次项被跳过，√表示次项被读入为输入项的一部分：</p>
-<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
-<p>  × × √ ×√√√×  ×  ×√√×  ×  ×  ×√√√√√√</p>
-<p>注意到，最后一个换行符🐱没有被读进去，<strong>这个换行符将是下一次scanf函数调用的第一个字符</strong>。（之后scanf放到循环里时要注意这个问题）</p>
-</li>
-<li><p>scanf函数用来识别整数或浮点数的规则是：</p>
-<ol>
-<li>读入整数时，scanf函数首先寻找正负号，然后读取数字直到读到一个非数字时才停止</li>
-<li>读入浮点数时，scanf函数会先找一个正负号，随后是一串数字（可能会有小数点），再后是一个指数（可选）。</li>
+<h3 id="作者建议"><a href="#作者建议" class="headerlink" title="作者建议"></a>作者建议</h3><ol>
+<li>阅读与实践相结合，用开发工具调试算法，了解算法的运行过程。</li>
+<li>阅读完每一章，要在理解的基础上记忆一些关键点。最佳的效果就是不看书也可以一点不错地默写出相关算法。</li>
+<li>每阅读完一章，一定要找点练习题做做。</li>
+<li>在之后的学习和开发过程中，尝试应用学习到的数据结构和算法知识，以达到精通的境界。</li>
 </ol>
-<font color=purple>当遇到一个**不可能属于当前项**的字符时，它**会把此字符原封不动地放回去**（放到缓冲区），留给扫描下一个输入或者下一次调用scanf的时候再次读入。</font>
-</li>
-</ol>
-</li>
-<li><p>scanf处理格式串中的普通字符</p>
-<p>​    当scanf遇到非空白字符时，会把它与下一个输入字符进行比较。若<strong>两者相匹配，那么scanf函数会放弃输入字符而继续处理格式串</strong>；如果<strong>不匹配，那么scanf会把不匹配的字符放回输入中，然后异常退出</strong>，而不进一步读取和处理。举个例子：</p>
-<p>​    假设格式串是“%d/%d”，若输入是”🐕5/🐕96”（🐕是空格），那么scanf的工作流是：</p>
-<p>​    跳过第一个🐕，把%d与5匹配 → 把/与/匹配 → 在寻找下一个整数时跳过一个🐕，把%d与96匹配。</p>
-</li>
-</ul>
+<p>当每次学步下去，想放弃的时候，就想想一句话：<strong>你数据结构怎么学的</strong>？</p>
+<h2 id="数据结构绪论"><a href="#数据结构绪论" class="headerlink" title="数据结构绪论"></a>数据结构绪论</h2><h3 id="基本概念和术语"><a href="#基本概念和术语" class="headerlink" title="基本概念和术语"></a>基本概念和术语</h3><p>数据结构由“数据”和“结构”组成，我们先来说一说数据是什么意思。</p>
+<h4 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h4><p>所谓<strong>数据</strong>，是<strong>描述客观事物的符号集合</strong>，它满足两个前提：<strong>可以输入到计算机中</strong>，并且<strong>能被计算机程序处理</strong>。数据不仅仅包括整形等数值类型，还包括字符及声音、图像、视频等非数值类型。</p>
+<h4 id="数据元素、数据项"><a href="#数据元素、数据项" class="headerlink" title="数据元素、数据项"></a>数据元素、数据项</h4><p><strong>数据元素</strong>，是组成数据的、有一定意义的<strong>基本单位</strong>，在计算机中通常被当作整体处理，也被称为记录。比如说动物类的数据元素是什么？牛马猪狗这些都是动物类的数据元素。</p>
+<p>而一个数据元素可以用若干个<strong>数据项</strong>组成，比如人这样的数据元素，可以有眼、耳、鼻、手、脚等数据项，也可以有姓名，年龄，性别等数据项，具体有哪些数据项，视具体情况而定。<font color=purple>数据项是数据不可分的最小单位，但是真正讨论问题时，数据元素才是主角。</font></p>
+<p>说完数据，我们再来看看数据结构中的结构是什么。</p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>结构就是<strong>各个组成部分相互搭配和排列的方式</strong>。在现实生活中，<strong>不同数据元素之间不是独立的，而是存在特定的关系</strong>，我们将这些关系称为<strong>结构</strong>。</p>
+<blockquote>
+<font size=4>所谓数据结构，是相互之间存在一种或多种特定关系的数据元素的集合。</font>
+
+</blockquote>
 <hr>
+<p>那么，这种特定关系是什么呢？</p>
+<h3 id="逻辑结构和物理结构"><a href="#逻辑结构和物理结构" class="headerlink" title="逻辑结构和物理结构"></a>逻辑结构和物理结构</h3><h4 id="逻辑结构"><a href="#逻辑结构" class="headerlink" title="逻辑结构"></a>逻辑结构</h4><p>逻辑结构：<font color=purple>是指数据对象中，数据元素之间的相互关系。</font>逻辑结构主要有以下四种：</p>
 <ol>
-<li><p>如何显示字符”%”？</p>
-<p>printf(“10%%”)→10%</p>
+<li><p>集合结构</p>
+<p>数据元素除了同属于一个集合外，没有其他关系。这种集合关系类似于数学中的集合：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150323.png" alt="image-20210715150323565" style="zoom:67%;" /></p>
+</li>
+<li><p>线性结构</p>
+<p>一对一的关系。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150355.png" alt="image-20210715150354933" style="zoom:80%;" /></p>
+</li>
+<li><p>树形结构</p>
+<p>一对多的关系。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150416.png" alt="image-20210715150416675" style="zoom:80%;" /></p>
+</li>
+<li><p>图形结构</p>
+<p>多对多的关系。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150441.png" alt="image-20210715150441452" style="zoom:80%;" /></p>
 </li>
 </ol>
-<h2 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h2><p>这个就列举几个简单的课后习题吧</p>
-<h3 id="数字倒序"><a href="#数字倒序" class="headerlink" title="数字倒序"></a>数字倒序</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> x,y,z,data;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data); </span><br><span class="line">	x = data/<span class="number">100</span>;</span><br><span class="line">	y = (data<span class="number">-100</span>*x)/<span class="number">10</span>;</span><br><span class="line">	z = data<span class="number">-100</span>*x<span class="number">-10</span>*y;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> re_data;</span><br><span class="line">	re_data = z*<span class="number">100</span>+y*<span class="number">10</span>+x;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %d&quot;</span>,re_data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i1,i2,i3;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%1d%1d%1d&quot;</span>,&amp;i1,&amp;i2,&amp;i3);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %1d%1d%1d&quot;</span>,i3,i2,i1);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="十进制→八进制（不用函数）"><a href="#十进制→八进制（不用函数）" class="headerlink" title="十进制→八进制（不用函数）"></a>十进制→八进制（不用函数）</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a number between 1 and 32767:&quot;</span>);</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> a,b,c,d,e;</span><br><span class="line">	e = data % <span class="number">8</span>;</span><br><span class="line">	d = (data / <span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	c = (data / <span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	b = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	a = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;In octal,your number is:%1d%1d%1d%1d%1d\n&quot;</span>,a,b,c,d,e);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;the true number is %o&quot;</span>,data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="选择、循环语句"><a href="#选择、循环语句" class="headerlink" title="选择、循环语句"></a>选择、循环语句</h2><ol>
-<li><p>switch语句的分支别忘了加break，没有break会默认执行下一个case。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714182008.png" alt="image-20210714182008671" style="zoom: 80%;" /></p>
-</li>
-<li><p>do循环与while循环本质上是一样的，只不过前者在对于至少需要执行一次的循环来说十分方便。</p>
-</li>
-<li><p>注意i&lt;=n和i&lt;n循环次数上的差异。</p>
-</li>
-<li><p>break可以跳出循环，当嵌套循环时使用break，只能跳出一层循环；break是刚好把程序控制在循环体末尾之后，而continue是刚好控制在循环体末尾之前</p>
-<h2 id="字符（字符串章节前置）"><a href="#字符（字符串章节前置）" class="headerlink" title="字符（字符串章节前置）"></a>字符（字符串章节前置）</h2></li>
-</ol>
-<ul>
-<li><p><strong>C语言把字符当作小整数进行处理</strong>。在ASCII码中，字符可以看成是0~127的整数。字符’a’的值是97，’A’的值是65，’0’的值为48……在C语言中字符常量实际上是Int类型而不是char类型。当计算中出现字符时，C语言只是使用它对应的整数值，可以像比较数那样对字符进行比较，比如说下面这两个例子：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714185611.png" alt="image-20210714185611148" style="zoom:67%;" /></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用if语句将小写字母转化为大写字母(不用toupper函数)</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">&#x27;a&#x27;</span> &lt;= ch &amp;&amp; ch &lt;= <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">	ch = ch - <span class="string">&#x27;a&#x27;</span> + <span class="string">&#x27;A&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="字符处理函数"><a href="#字符处理函数" class="headerlink" title="字符处理函数"></a>字符处理函数</h3><h4 id="scanf和printf读写字符"><a href="#scanf和printf读写字符" class="headerlink" title="scanf和printf读写字符"></a>scanf和printf读写字符</h4><p>重点讲讲scanf读入字符的问题。在读入字符前，scanf不会跳过空白字符。如果下一个未读字符是空格，那么返回后的变量将包含空格。为了强制scanf函数在读入字符前跳过空白字符，我们可以这么写：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot; %c&quot;</span>,&amp;ch)</span><br></pre></td></tr></table></figure>
-<p>因为scanf通常情况下不会跳过空白字符，所以它很容易检查到输入行的结尾：检查刚读入的字符是否为换行符。例如，下面的字符将读入并且忽略掉当前初入行中剩下的所有字符：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>,&amp;ch);</span><br><span class="line">&#125; <span class="keyword">while</span>(ch !=。 <span class="string">&#x27;\n&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>下一次调用scanf时会读入下一输入行中的第一个字符。</p>
-<h4 id="getchar和putchar读写字符"><a href="#getchar和putchar读写字符" class="headerlink" title="getchar和putchar读写字符"></a>getchar和putchar读写字符</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) ！= <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
-<p>这个循环读入一个字符，把它存储在变量ch中，然后测试变量是不是\n。其实我们并不需要ch，下面引入一个C语言惯用法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (getchar() ！= <span class="string">&#x27;\n&#x27;</span>) <span class="comment">/*skips rest of line*/</span></span><br></pre></td></tr></table></figure>
-<p>getchar对于搜索字符的循环和跳过字符的循环是十分有用的，看一看下面这个利用getchar()跳过不定数量的空格字符的语句：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) == <span class="string">&#x27; &#x27;</span>) <span class="comment">/*skips blanks*/</span></span><br></pre></td></tr></table></figure>
-<p>当循环终止时，变量ch会包含getchar函数遇到的第一个非空白字符。</p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>惯用法</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;N; i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i])</span><br><span class="line">	sum += a[i];</span><br></pre></td></tr></table></figure>
-<h3 id="用sizeof计算数组长度"><a href="#用sizeof计算数组长度" class="headerlink" title="用sizeof计算数组长度"></a>用sizeof计算数组长度</h3><p>如果数组有10个整数，那么sizeof(a)通常为40(假定每个整数为4个字节)。我们可以用sizeof来计算数组元素的大小：sizeof(a)/sizeof(a[0])，当需要数组长度时，游戏额程序员采用上述表达式。如果使用这种方法，以后数组长度变了也不用变。所以会有下面这样的循环：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;(<span class="keyword">int</span>)(<span class="keyword">sizeof</span>(a)/<span class="keyword">sizeof</span>(a[<span class="number">0</span>]));i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>为什么要加一个强制类型转换呢？（int）</p>
-<p>主要是因为一些编译器不加会报错，因为变量i的类型可能是int型（有符号整型）而sizeof返回的类型为size_t(一种无符号整型)，把有符号整型和无符号整型相比较是很危险的，尽管在本例中做没什么大问题（因为i和sizeof(a)/sizeof(a[0])都是非负值）。所以要进行强制转换。这样写有点麻烦，我们可以用宏：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZE ((int) (sizeof(a)/sizeof(a[0])))</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>;i&lt; SIZE;i++)</span><br><span class="line">    a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>更好的方法在后面会讲到，到时候回来补。</p>
-<h3 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h3><p>这一章的练习题还蛮好玩的，我贴一些。</p>
-<h4 id="8-1修改示例，显示重复的数字"><a href="#8-1修改示例，显示重复的数字" class="headerlink" title="8.1修改示例，显示重复的数字"></a>8.1修改示例，显示重复的数字</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Checks numbers for repeated digits */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span>   <span class="comment">/* C99 only */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">bool</span> digit_seen[<span class="number">10</span>] = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line">  <span class="keyword">int</span> digit,i, a[<span class="number">10</span>];</span><br><span class="line">  <span class="keyword">long</span> n;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Enter a number: &quot;</span>);</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">&quot;%ld&quot;</span>, &amp;n);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">      a[i] = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;                 <span class="comment">// 将重复的一位数筛选出来，并将其赋值给元素为二位数的数组。</span></span><br><span class="line">    digit = n % <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">if</span> (digit_seen[digit])</span><br><span class="line">        a[digit] = digit;</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        digit_seen[digit] = <span class="literal">true</span>;</span><br><span class="line">    n /= <span class="number">10</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Repeated digit(s): &quot;</span>);   <span class="comment">// 将一位数筛选出来。</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">      <span class="keyword">if</span> (a[i] != <span class="number">10</span>)   <span class="comment">//这markdown不知道为什么总把！=显示成≠</span></span><br><span class="line">          <span class="built_in">printf</span>(<span class="string">&quot;%2d&quot;</span>, a[i]);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="8-9随机步法"><a href="#8-9随机步法" class="headerlink" title="8.9随机步法"></a>8.9随机步法</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">不贴了，可以去我的仓库里看，代码贴多了，好像就加载不出来了。</span><br></pre></td></tr></table></figure>
-<h4 id="8-17幻方"><a href="#8-17幻方" class="headerlink" title="8.17幻方"></a>8.17幻方</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n,i,j,x,y;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This program creates a magic square of a specified size.\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The size must be an odd number between 1 and 99.\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter size of magic square:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> m = (n<span class="number">-1</span>)/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">int</span> a[n][n];</span><br><span class="line">	<span class="keyword">bool</span> b[n][n];</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			b[i][j]=<span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			a[i][j]=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	x = <span class="number">0</span>;</span><br><span class="line">	y = m;</span><br><span class="line">	<span class="comment">/*把1放到0行的中间*/</span></span><br><span class="line">	a[<span class="number">0</span>][m]=<span class="number">1</span>;</span><br><span class="line">	b[<span class="number">0</span>][m]=<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/*放数字*/</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">2</span>;i&lt;=(n*n);i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(x==<span class="number">0</span>&amp;&amp;y!=n<span class="number">-1</span>)&#123;</span><br><span class="line">			x = n<span class="number">-1</span>;</span><br><span class="line">			y = y+<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = <span class="number">1</span>;</span><br><span class="line">				y = y<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;	</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(x==<span class="number">0</span>&amp;&amp;y==n<span class="number">-1</span>)&#123;</span><br><span class="line">			x = n<span class="number">-1</span>;</span><br><span class="line">			y = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = <span class="number">1</span>;</span><br><span class="line">				y = n<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(x!=<span class="number">0</span>&amp;&amp;y==n<span class="number">-1</span>)&#123;</span><br><span class="line">			x = x<span class="number">-1</span>;</span><br><span class="line">			y = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = x<span class="number">-1</span>;</span><br><span class="line">				y = n<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			x = x<span class="number">-1</span>;</span><br><span class="line">			y = y+<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = x+<span class="number">2</span>;</span><br><span class="line">				y = y<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/*output*/</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;\t%d&quot;</span>,a[i][j]);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-<h2 id="函数以及程序结构"><a href="#函数以及程序结构" class="headerlink" title="函数以及程序结构"></a>函数以及程序结构</h2><h3 id="在调用前注意进行函数声明"><a href="#在调用前注意进行函数声明" class="headerlink" title="在调用前注意进行函数声明"></a>在调用前注意进行函数声明</h3><p>我们首先来看看，如果没有函数声明，并且函数放到main函数后面，会发生什么？假设我们有一个sum函数：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214357.png" alt="image-20210715214357520" style="zoom: 67%;" /></p>
-<p>​    我们可以发现，<strong>之所以会产生错误，是因为返回类型，形式参数等类型不匹配</strong>。</p>
-<p>​    前面提到了<strong>默认实际参数提升</strong>，我们来看看什么是默认实际参数提升：<strong>如果编译器在调用前没遇到函数原型。编译器会执行默认的实际参数提升</strong>：</p>
+<p>逻辑结构是针对具体问题的，是<strong>为了解决某个问题在对问题理解的基础上，选择一个合适的数据结构表示数据元素之间的逻辑关系</strong>。</p>
+<h4 id="物理结构（存储结构）"><a href="#物理结构（存储结构）" class="headerlink" title="物理结构（存储结构）"></a>物理结构（存储结构）</h4><p>物理结构也叫存储结构，是指<strong>数据的逻辑结构在计算机中的存储形式</strong>。实际上就是<strong>如何把数据元素存储到计算机的存储器中</strong>。存储器主要是针对内存而言的，像硬盘、软盘、光盘等外部存储器的组织结构通常用文件结构来描述。</p>
+<p>数据的存储结构应该反映数据元素之间的逻辑关系，这是最为关键的，<strong>如何存储数据元素之间的逻辑关系</strong>，是实现物理结构的重点和难点。</p>
+<h4 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h4><p>把数据元素放在地址连续的存储单元里，其数据间的逻辑关系和物理关系是一致的。很好理解，就先排队一样，大家都占一席之地，谁也别想插队。</p>
+<h4 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h4><p>现实是不会像顺序存储结构这样想的这么简单和美好的，总会有人插队，也会有人要上厕所……卖你独自合约时常需要变化的结构，顺序存储是不科学的。现在如银行，餐厅都设置了排队系统，也就是每个人去了，先领一个号，等着叫号，叫到了去办理业务或者看病。在等待时，你爱干嘛就干嘛，只要及时回来就行，你需要关注的仅仅是前一个有没有被叫到，叫到了，下一个就是你，这就是链式存储结构。</p>
+<p>链式存储结构：把数据元素放到任意的存储单元里没这组存储单元可以是连续的，也可以是不连续的。数据元素的存储关系并不能反映其逻辑关系，因此<strong>需要用一个指针存放数据元素的地址</strong>，这样通过地址就饿可以找到相关联的数据元素的位置。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" /></p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>数据类型：一组性质相同的值的集合及定义在此集合上的一些操作的总称。</p>
+<p>我们可以想想<strong>当初设计计算机语言的人为什么要考虑到数据类型</strong>呢？</p>
+<p>我们知道住宅有不同的类型，为了满足不同人的需求，地产商推出了商品房，别墅，酒店，还有近几年的青年旅馆，民宿等等。<strong>不同的人有不同的需求</strong>，而数据结构也是这么一回事。计算机的内存不是无限大的，当我们计算6+7时，有必要开辟很大的适合小数是指字符运算的内存空间吗？显然没有必要。于是研究者们就考虑，<strong>要对数据进行分类，分出许多不同的数据类型</strong>。</p>
+<p>不同的计算机有不同的硬件系统，这就要求程序语言最终通过编译器或解释器转换成底层语言。可事实上，高绩语言的编程者不管最终程序运行在什么计算机上，他的目的是为了实现两个整型数字的运算，他才不关心整数在计算机内部是怎么表示的，这些操作是如何实现的，对高级语言开发者来说根本不重要。于是，我们就考虑不管什么样的计算机，什么计算机语言最终都会面临诸如整数运算、实数运算、字符运算等操作，我们可以考虑<strong>抽象出来</strong>。</p>
+<p>抽象是抽出问题的特征而忽略非本质的细节，是对具体事务的一个概括，这是一种思考问题的方式。我们对已有的数据类型进行抽象，就得到了抽象数据类型（ADT）。ADT不仅仅☞那些已有的数据类型，还可以是编程者自己定义的数据类型。</p>
+<p>事实上，抽象数据类型体现了程序设计中问题分解、抽象和信息隐藏的特性。ADT把实际问题中的问题分解为小规模且容易处理的问题，然后建立一个计算机能处理的数据类型，并把每个功能模块实现细节作为一个独立的单元，从而使具体实现过程隐藏起来。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">	数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">	操作1</span><br><span class="line">		初始条件</span><br><span class="line">		操作结果描述</span><br><span class="line">	操作2</span><br><span class="line">		…………</span><br><span class="line">	操作n</span><br><span class="line">		…………</span><br><span class="line">endADT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="算法绪论"><a href="#算法绪论" class="headerlink" title="算法绪论"></a>算法绪论</h2><h3 id="算法和数据结构的关系"><a href="#算法和数据结构的关系" class="headerlink" title="算法和数据结构的关系"></a>算法和数据结构的关系</h3><p>没了算法数据结构也能学，只不过算法会涉及数据结构的应用，在算法的学习中，反过来会加深对数据结构的理解。<strong>在数据结构的课程中，算法的出现是为了更好地理解数据结构，并不会详细谈及算法的方方面面，这也是本书的原则</strong>。</p>
+<h3 id="算法的神奇"><a href="#算法的神奇" class="headerlink" title="算法的神奇"></a>算法的神奇</h3><p>我们通过一个小例子来看看算法的神奇之处。</p>
+<p>如果我们现在要用计算机求1+2+3+4+……+100的值，也许我们马上就可以写出一个C代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);</span><br></pre></td></tr></table></figure>
+<p>这是一种算法，也是我们的第一直觉。当然，我们也知道更高效的方法，就是高斯想出来的方法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;</span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);</span><br></pre></td></tr></table></figure>
+<p>显然这种方法更高效，对比两种算法，我们就可以发现算法的神奇之处。</p>
+<h3 id="算法的定义以及特性"><a href="#算法的定义以及特性" class="headerlink" title="算法的定义以及特性"></a>算法的定义以及特性</h3><p>什么是算法？算法的定义是什么？</p>
+<blockquote>
+<p><strong>算法是特定问题求解步骤的描述，在计算机中表现为指令的有限序列，并且每条指令包含一个或多个操作。</strong></p>
+</blockquote>
+<p>既然是特定问题的求解步骤，并且从前面的例子也可以发现，是没有通用的算法的，就像没有包治百病的药，我们要”对症下药“。定义中的<strong>指令</strong>指的是能被人或机器等计算装置执行的”命令“。为了解决某一个问题，我们需要把指令表示成一定的操作序列，操作序列包括一组操作，每个操作完成特定的功能，这就是算法的定义。</p>
+<p>下面我们来说一说算法的五个特性：</p>
 <ol>
-<li><ul>
-<li>float的实际参数→double型</li>
-</ul>
+<li><p>输入、输出（这是两个）</p>
+<p>算法一定要有输出但可以没有输入（比如hello world）,没有输出你要这个算法干什么？</p>
 </li>
-<li><ul>
-<li>char类型和short类型的实际参数→int类型</li>
+<li><p>有穷性</p>
+<p>算法在执行有限的步骤之后，<font color=purple>自动结束而不会出现无限循环</font>，<font color=green>并且每个步骤的在可接受的时间内完成。</font></p>
+</li>
+<li><p>确定性</p>
+<p>每个步骤都要被精确定义而无歧义，不能出现二义性。</p>
+</li>
+<li><p>可行性</p>
+<p>算法的每一步必须都是可行的，每一步都能通过执行有限次数完成，也就是上机能把程序运行出来，算出正确的结果。</p>
+</li>
+</ol>
+<h3 id="算法设计的要求"><a href="#算法设计的要求" class="headerlink" title="算法设计的要求"></a>算法设计的要求</h3><p>虽然算法没有标准答案，但还是有好的参考答案的，相对好的算法还是存在的。掌握好的算法，对我们解决问题很有帮助，否则前人的智慧我们不能利用，就得从头自己研究了。那什么才叫好的算法呢？</p>
+<ol>
+<li><p>正确性</p>
+<p>别看这简简单单三个字，也有四个层次：</p>
+<ol>
+<li>算法程序没有语法错误</li>
+<li>算法程序对于合法的输入数据能够产生满足要求的输出结果。（结果要对）</li>
+<li><strong>算法程序对于非法的输入数据能够得出满足规格说明的结果。</strong></li>
+<li>对于精心选择的，甚至刁难的测试数据都有满足结果的输出结果。</li>
+</ol>
+<p>这里说一下，对于标准4，我们不足以逐一验证所有的输入都能得到正确的结果。因此算法的正确性在大部分情况都不可能用程序来证明，而是用数学方法来证明。证明一个复杂算法在所有层次上都是对的，代价十分昂贵。所以一般情况下，我们把层次3作为一个算法是否正确的标准。</p>
+</li>
+<li><p>可读性</p>
+<p>晦涩难懂的代码难以调试和修改，不方便阅读，交流和理解。这是个很重要的标准。</p>
+</li>
+<li><p>健壮性</p>
+<p>当输入数据不合法时（比如输入年龄时输入一个负值），算法也能做相关处理，而不是产生莫名其妙的结果。</p>
+</li>
+<li><p>时间效率高和存储量低</p>
+<p>时间效率指的是算法的执行时间，执行时间短的算法效率高；存储量需求指的是算法在执行过程中需要的最大存储空间，包括内存和外部硬盘的存储空间。<strong>设计算法应尽量满足时间效率高和存储量低的需求</strong>。</p>
+<p>既然讲到时间效率的问题，那么我们该如何度量算法的时间效率呢？</p>
+<ul>
+<li><p>第一种最容易想到的就是”是骡子是马，拉出来遛遛。“也就是所谓的<strong>事后统计方法</strong>。这种方法主要通过设计好的测试和数据，利用计算机的计时功能，来计算算法的效率。很显然，这种算法是有大缺陷的：</p>
+<ol>
+<li>我们必须得先弄好程序，到时候跑出来发现这是给垃圾玩意，这不就白跑了吗？</li>
+<li>时间的比较依赖计算机硬件和软件等环境因素，有时候会掩盖算法本身的优劣。</li>
+<li>测试数据设计十分困难，有的算法对小数据效率高，有的是大数据集效率高，有多少数据来测试是很难判断的问题。</li>
+</ol>
+<p>正是这种种原因，导致事后统计方法不大莱斯，所以计算机前辈们设计了一种事前的分析估算方法。</p>
+</li>
+<li><p>第二种，事前估算分析，主要是依据统计方法进行估算。一个用高级编程语言在计算机上运行的时间主要取决于下面这些因素:</p>
+<ol>
+<li>算法采用的策略、方法。（这是根本）</li>
+<li>编译产生的代码质量。(软件的锅)</li>
+<li>问题的输入规模。</li>
+<li>机器执行指令的速度。（看硬件性能）</li>
+</ol>
+<p>抛开计算机硬件、软件的客观因素，我们发现一个程序运行的时间，依赖于<strong>算法的好坏</strong>和<strong>问题的输入规模（输入量的多少）</strong>。我们拿出之前高斯求和的两个算法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;			<span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<p>其实首尾都是一样的，我们只要看中间就行，孰优孰劣不言自明。我们可以发现，测定运行时间最可靠的方法就是<strong>计算对运行时间有消耗的基本操作的执行次数</strong>。<font color=purple>在分析程序的运行时间时，关键是把程序看作独立于程序设计语言的一种算法或者一系列步骤。</font></p>
+</li>
 </ul>
 </li>
 </ol>
-<p>​     这就是默认实际参数提升。</p>
-<h3 id="递归与循环"><a href="#递归与循环" class="headerlink" title="递归与循环"></a>递归与循环</h3><p>首先来简短说一下各概念的定义：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214750.png" alt="image.png" style="zoom:67%;" /></p>
-<p>重点来说一下递归和循环。简单归纳一下递归的特征：<strong>递归</strong>因为是调用自身，所以代码简洁，也易于理解，但是因为函数调用过多，会占据太多空间和时间，效率不高，会造成<strong>栈溢出</strong>。</p>
-<p>函数调用它自身，使代码变得那么简洁。递归这种算法的底层思想就是<strong>分治法：</strong>把一个大问题分解成小问题，再把小问题分解成更小的问题，<strong>每层问题的差别仅仅在于数据的规模</strong>；既然我们要像套娃一样不断细分，那么一定要有一个停止套娃的条件，这就是<strong>递归停止的条件，必不可少</strong>。</p>
-<p><a href="https://blog.csdn.net/CSDN_SUSAN/article/details/100275406?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E9%80%92%E5%BD%92%E4%B9%8B%E7%BE%8E&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-7-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">☞递归详细内容</a>。</p>
-<h3 id="局部变量与全局变量"><a href="#局部变量与全局变量" class="headerlink" title="局部变量与全局变量"></a>局部变量与全局变量</h3><p>这是编写多个函数时应注意的问题。这两者的主要区别在于两个特征：</p>
-<ul>
-<li><ul>
-<li><strong>存储期限</strong>：变量存储单元存在期内程序执行的部分。<ul>
-<li>局部变量是<strong>自动存储期限</strong>，在包含该变量的函数被调用时，局部变量的存储单元自动分配，函数返回时收回。因此，局部变量的函数返回时，局部变量的值无法保留；</li>
-<li>全局变量是<strong>静态存储期限</strong>，值将有就保留下来。</li>
-</ul>
-</li>
-<li><p>​    如果想把局部变量的值保留下来，<strong>可以使用static</strong>，就可以<strong>把自动存储期限变成静态存储期限</strong>。    </p>
-</li>
-<li><p>```c<br>static int i</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- - **作用域**，变量的作用域是可以引进该变量的程序文本的部分。局部变量是**块作用域**，就是从函数声明到函数体的末尾；**全局变量是文件作用域**，到文件末尾。</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">&lt;font color=purple&gt;使用外部变量，要保证它有意义。想什么循环要用的i，用作局部变量。&lt;/font&gt;</span><br><span class="line"></span><br><span class="line">###  练习题</span><br><span class="line"></span><br><span class="line">####  快速排序算法</span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line">/*快速排序算法*/ </span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">#define N 10</span><br><span class="line"></span><br><span class="line">void quicksort(int a[],int low,int high);</span><br><span class="line">int split(int a[],int low,int high);</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">	int a[N],i;</span><br><span class="line">	</span><br><span class="line">	/*读入一个数组*/</span><br><span class="line">	printf(&quot;Enter %d numbers to be sorted: &quot;,N);</span><br><span class="line">	for (i=0;i&lt;N;i++)</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;a[i]); </span><br><span class="line">	</span><br><span class="line">	quicksort(a,0,N-1);</span><br><span class="line">	printf(&quot;In sorted order:&quot;);</span><br><span class="line">	for (i=0;i&lt;N;i++)</span><br><span class="line">		printf(&quot;%d &quot;,a[i]);</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line">	</span><br><span class="line">	return 0;</span><br><span class="line"> &#125; </span><br><span class="line"> </span><br><span class="line"> void quicksort (int a[],int low,int high)</span><br><span class="line"> &#123;</span><br><span class="line"> 	int middle;</span><br><span class="line"> 	</span><br><span class="line"> 	if (low &gt;= high) return;</span><br><span class="line"> 	middle = split(a,low,high);</span><br><span class="line"> 	quicksort(a,low,middle-1);</span><br><span class="line"> 	quicksort(a,middle+1,high);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> int split(int a[],int low, int high)</span><br><span class="line"> &#123;</span><br><span class="line"> 	int part_element = a[low];</span><br><span class="line">	 </span><br><span class="line">	for (;;)&#123;</span><br><span class="line">		while (low &lt; high &amp;&amp; part_element &lt;= a[high])</span><br><span class="line">			high--;</span><br><span class="line">		if (low&gt;=high) break;</span><br><span class="line">		a[low++] = a[high];</span><br><span class="line">		</span><br><span class="line">		while (low &lt; high &amp;&amp; a[low] &lt;= part_element)</span><br><span class="line">			low++;</span><br><span class="line">		if (low &gt;= high) break;</span><br><span class="line">		a[high--] = a[low];</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	a[high] = part_element;</span><br><span class="line">	return high;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="字符模拟七段显示器"><a href="#字符模拟七段显示器" class="headerlink" title="字符模拟七段显示器"></a>字符模拟七段显示器</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_DIGITS 10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 记录所有数字的输出形式信息</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> segments[<span class="number">10</span>][<span class="number">9</span>] = &#123;&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> digits[<span class="number">3</span>][MAX_DIGITS*<span class="number">4</span>];</span><br><span class="line"><span class="keyword">int</span> i,j=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">process_digits</span><span class="params">(<span class="keyword">int</span> digit[], <span class="keyword">int</span> position)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> num;</span><br><span class="line">    <span class="keyword">int</span> digit[<span class="number">9</span>];</span><br><span class="line">    <span class="keyword">int</span> position = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Enter a number: &quot;</span>);</span><br><span class="line"></span><br><span class="line">    clear_digits_array();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((num = getchar()) != <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">47</span> &lt; num &amp;&amp; num &lt; <span class="number">58</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">9</span>; i++)</span><br><span class="line">                digit[i] = segments[num<span class="number">-48</span>][i]; <span class="comment">// 将数组segments中单个数字的信息保存数组digit中</span></span><br><span class="line"></span><br><span class="line">            process_digits(digit, position);</span><br><span class="line">            position++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    print_digits_array();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; MAX_DIGITS * <span class="number">4</span>; j++)</span><br><span class="line">            digits[i][j] = <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">process_digits</span><span class="params">(<span class="keyword">int</span> digit[], <span class="keyword">int</span> position)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> _digit[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;_&#x27;</span>, <span class="string">&#x27; &#x27;</span>&#125;, &#123;<span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, <span class="string">&#x27;|&#x27;</span>&#125;, &#123;<span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, <span class="string">&#x27;|&#x27;</span>&#125;&#125;; <span class="comment">// 将字符8的输出形式保存在数组_digit中。</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)             <span class="comment">// 将digit中记录的数值信息，输入至_digit中</span></span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">3</span>; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (digit[j+i*<span class="number">3</span>] == <span class="number">0</span>)</span><br><span class="line">                _digit[i][j] = <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">            digits[i][j+position*<span class="number">4</span>] = _digit[i][j]; </span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; MAX_DIGITS * <span class="number">4</span>; j++)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, digits[i][j]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h5 id=""><a href="#" class="headerlink" title=" "></a> </h5>]]></content>
+<pre><code> 我们举个小例子：算法A的输入规模是4n+8，算法B的输入规模是$2n^2+1$。当n &lt;= 3时，A要差于B，但是n &gt; 3时，后面A的优势就越来越明显了，这里我们就引出一个函数渐进增长的例子：
+
+ &gt; 给定两个函数f(n)和g(n)，如果存在一个整数N，使得对于所有的n &gt; N，f(n)总是比g(n)大，那么，我们就说f(x)的增长渐进快于g(n)。
+
+ 比如上面的B就是增长渐进快于A。还有当我们算的时候：
+
+ - 加法常数不重要
+ - 与最高次相乘的常数不重要。
+ - 我们判断一个算法效率时，更应该关注主项的阶数（最高阶）。
+
+ 通过上面的分析，我们可以得出：**某个算法，随着n的增大，它会越来越优于另一个算法**。这就是事前估算方法的理论依据，**通过算法时间复杂度来估算算法时间效率**。
+</code></pre><h3 id="算法时间复杂度"><a href="#算法时间复杂度" class="headerlink" title="算法时间复杂度"></a>算法时间复杂度</h3><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181558.png" alt="image-20210716181558070" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181618.png" alt="image-20210716181618611" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181633.png" alt="image-20210716181633478" style="zoom:67%;" /></p>
+<p>时间复杂度这部分就不写了，这里☞<a href="https://blog.csdn.net/user11223344abc/article/details/81485842?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E7%AE%97%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">算法—时间复杂度</a>。</p>
+]]></content>
       <categories>
         <category>CS</category>
-        <category>编程语言</category>
-        <category>C</category>
+        <category>四大金刚</category>
+        <category>数据结构和算法</category>
+        <category>《大话数据结构》</category>
       </categories>
       <tags>
-        <tag>C语言</tag>
-        <tag>基础知识</tag>
+        <tag>CS</tag>
+        <tag>DS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>监督与非监督学习</title>
+    <url>/2021/07/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="监督学习和无监督学习"><a href="#监督学习和无监督学习" class="headerlink" title="监督学习和无监督学习"></a>监督学习和无监督学习</h2><p>在说什么是监督学习，什么是非监督学习之前，我们得先说说ML中的<strong>学习</strong>这一概念。<strong>学习</strong>其实可以这样理解：学生做了大量的题目来训练，老师改作业来告诉学生哪些是对的，哪些是错的，最后学生自己会学会解题方法，之后面对考试的题目，自己也能解答。</p>
+<span id="more"></span>
+<p>所谓的<font color=purple><strong>监督</strong></font>(supervised)=标签（label），是否有监督就是输入数据（input）是否有标签。有标签就是监督学习，无标签就是无监督学习。可以这样理解，有监督学习就是打了标签（有答案）的题目，无监督学习就是没答案的题目。</p>
+<p>下面来举个小例子来说明两者的区别：</p>
+<ul>
+<li><p>有监督学习</p>
+<p>ask：1 X 1 + 1=？</p>
+<p>AI：= 1 ?</p>
+<p>ask：NO！= 2!Remember it!</p>
+<p>（AI 调整中）</p>
+<p>ask：1 X  1 + 1 =？</p>
+<p>AI： =2！</p>
+</li>
+<li><p>无监督学习</p>
+<p>ask: 1 X 1 + 1=?</p>
+<p>AI：= 1？</p>
+<p>ask:  3 X 4 + 8 = ?</p>
+<p>AI：=0？</p>
+<p>…………</p>
+<p>AI： 我发现了，数学题都是先乘法后加法！</p>
+</li>
+</ul>
+<h2 id="有监督学习"><a href="#有监督学习" class="headerlink" title="有监督学习"></a>有监督学习</h2><p>有监督学习的训练数据是<strong>有标签</strong>的，训练目标能够给新数据（text data）以正确的目标。监督学习一般包括<strong>回归（regression）</strong>和<strong>分类（classification）</strong>问题。</p>
+<ul>
+<li><p><strong>regression</strong></p>
+<p>所谓的回归问题，就是估算连续值，比如说吴恩达给出的例子：</p>
+<p>我们给算法一个数据集，比如一系列房子的数据，给定数据中每个样本（不同的面积）的正确房价，然后运用算法，算出更多的答案，估算任意size房子的房价为多少：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707092627.png" alt="image-20210707092619710" style="zoom: 50%;" /></p>
+</li>
+<li><p><strong>classification</strong></p>
+<p>​    分类问题干的事，就是字面意思：分类。比如说我想让AI知道什么是猫什么是狗，一开始我们就将一些猫的图片和狗的图片（带标签）一起进行训练，学习模型不断捕捉这些图片与标签之间的联系进行自我完善和调整，然后我们再给一些不带标签的图片，让AI来猜一猜这些图片是猫还是狗。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707093136.png" alt="image-20210707093136697"></p>
+</li>
+</ul>
+<p>有监督学习的经典算法：支持向量机、线性判别、决策树、朴素贝叶斯</p>
+<h2 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h2><p>直观上来讲，unsupervised learning(无监督学习）就是不需要人的监督就可以学习，数据没有label，需要<strong>根据数据自身结构特性</strong>来将数据分类。它的训练集与监督学习的训练集的区别可以用下面这张图来说明：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707095215.png" alt="image-20210707095215131" style="zoom:67%;" /></p>
+<h3 id="为什么要用无监督学习这种方式呢？"><a href="#为什么要用无监督学习这种方式呢？" class="headerlink" title="为什么要用无监督学习这种方式呢？"></a>为什么要用无监督学习这种方式呢？</h3><p>​    对于监督学习来说，我们已经知道分类标准，比如说把图像分成猫和狗；但是如果我们有一组数据集，但是没有明确的目的，我们不知道怎么区分，这个时候，怎么办？无监督学习就派上用场了，我们可以<strong>借助数据自身的结构来进行分类</strong>。</p>
+<p>我们在这来举个例子：登陆谷歌的news(news.google.com)，这个网站做了什么事情呢？google每天会搜集几十万条新闻，然后把他们相似类别的聚集在一块，组成不同主题的新闻，比如说下面看到的这样：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707100129.png" alt="image-20210707100129393" style="zoom: 50%;" /></p>
+<p>一个框就是一个主题的新闻，我拿数字标出的URL，就是不同的报道。这是怎么做到的呢？→无监督学习中的<strong>聚类算法</strong>（clustering）。几十万条新闻，我们总不能用监督学习的算法，一个个告诉机器，这个是什么，那个是什么吧，除此之外<strong>我都不知道要把他们分到哪一类别去</strong>。</p>
+<h3 id="鸡尾酒会算法"><a href="#鸡尾酒会算法" class="headerlink" title="鸡尾酒会算法"></a>鸡尾酒会算法</h3><p>我们来看一看吴恩达提到的无监督学习中一个很有意思的算法—<strong>鸡尾酒会算法</strong>。<strong>鸡尾酒会问题（</strong>cocktailparty problem）是在<strong>计算机语音识别领域</strong>的一个问题，当前语音识别技术已经可以以较高精度识别一个人所讲的话，但是<strong>当说话的人数为两人或者多人</strong>时，语音识别率就会极大的降低，这一难题被称为鸡尾酒会问题。</p>
+<p>举例来说，假如我在KTV唱歌，我唱歌的时候，某个人把我的天籁之音录下来了，这个录音里夹杂着我的声音和伴奏声音。现在我想把我唱的声音和伴奏的声音区分开来，分别播放，这就是鸡尾酒会问题。</p>
+<p>该问题描述的是<strong>给定混合信号，如何分离出同时说话的每个人的独立信号</strong>。当有N个信号源时，通常假设观察信号也有N个（例如N个麦克风或者录音机）。该假设意味着混合矩阵是个方阵，即J = D，其中D是输入数据的维数，J是系统模型的维数。这个问题常用到的方法是<strong>盲信号分离算法</strong>。（这里不详细说这算法了，我现在也不会，参考资料如下：）</p>
+<blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E7%9B%B2%E4%BF%A1%E5%8F%B7%E5%88%86%E7%A6%BB">维基百科—盲信号分离</a></p>
+<p><a href="https://www.docin.com/p-126816392.html?docfrom=rrela">语音信号的盲分离算法研究</a></p>
+</blockquote>
+<p>我觉得这个效果对于我这个初学者来说还是很amazing的，想听听实际效果，可以去看吴恩达机器学习课程无监督学习那个视频里的示例，真的很好玩。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>ML</category>
+        <category>吴恩达机器学习课程笔记</category>
+      </categories>
+      <tags>
+        <tag>CS</tag>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>代价函数J</title>
+    <url>/2021/07/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0J/</url>
+    <content><![CDATA[<p>上篇简单介绍了机器学习中监督学习与非监督学习是什么，这一篇将具体介绍我们的第一个算法——linear regression（线性回归），虽然这是监督学习中的一个基础算法，而且还是一元的，但是之前做数学建模比赛时的学习过程告诉我，<strong>模型都是从简单到复杂的，我们必须从初等简单模型入手，再一步步增加复杂度</strong>，这是学习的基本思路。吴从房价预测这个实际问题入手，使用一元线性回归来解决这个问题，再本篇中通过构建这个模型，我们将学到两个主要知识点：</p>
+<ol>
+<li>模型的描述</li>
+<li><font color=purple>代价函数</font>
+
+</li>
+</ol>
+<p>下面让我们开始：</p>
+<span id="more"></span>
+<h2 id="模型的描述"><a href="#模型的描述" class="headerlink" title="模型的描述"></a>模型的描述</h2><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715110851.png" alt="image-20210715110843378"></p>
+<p>这是给出的具体实际问题，要求我们预测任意size的房子的价格，我们可以看到可以用监督学习中的线性回归来解答这个问题，因为线性回归可以<strong>估算连续值</strong>。下面我们来尝试描述这个模型：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715111123.png" alt="image-20210715111123578"></p>
+<p>notation下面就是我们要定义的一些符号，包括：</p>
+<ol>
+<li>m指的是样本数量，比如题目中一共提供了47个样本数量，那么m = 47</li>
+<li>$x^{(i)}$指的是第i个样本的输入（features）；$y^{(i)}$同理，指的是第i个样本的输出。而($x^{(i)},y^{(i)}$)指的就是第i个样本。</li>
+</ol>
+<p>接下来，我们来看看监督学习是如何工作的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715111817.png" alt="image-20210715111817445"></p>
+<p>我们把训练集输入到学习算法中，学习算法会得到一个h函数（hypothesis,假设函数），我们输入x，就会得出一个估计值。这就是监督学习的工作方法，那么这个<strong>h假设函数</strong>我们该如何表示呢？</p>
+<p>很简单，因为是一元线性回归模型，它的假设函数就是：</p>
+<script type="math/tex; mode=display">
+h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$θ_0,θ_1$被称为参数</strong>。</p>
+<p>这就是对这个线性回归模型的符号描述，虽然看上去很简单，因为这是个基础模型。但背后的思想是，把一个实际问题转化为数学模型的第一步就是<strong>用数学符号来表示模型</strong>。下面我将看看如何得出参数，从而确定假设函数h(x)。</p>
+<h2 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h2><p>从上文可知h(x)由两个参数$θ_1,\theta_0$确定，那么接下来的任务就是选择两个合适的参数。</p>
+<p>我们选取不同的参数，其结果的不同是显而易见的：<br><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715112633.png" alt="image-20210715112633315"></p>
+<p>那么我们如何去选取拟合效果最好的参数呢？</p>
+<h3 id="不考虑-theta-0"><a href="#不考虑-theta-0" class="headerlink" title="不考虑$\theta_0$"></a>不考虑$\theta_0$</h3><p>为了更好地理解这一过程，我们先让$\theta_0=0$，随后再考虑$\theta_0$。这样目前我们的假设函数$h(x)=\theta_1x$。显然，我现在要做的事<strong>就是让每一个h($x^{(i)}$)的输出y都能和样本实际价格$y^{(i)}$最接近</strong>。我们很自然的就可以想到用<strong>平方差和</strong>来表示这一过程：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715113232.png" alt="image-20210715113232242"></p>
+<p>这就是我们简化过的平方误差代价函数，其中前面要<strong>加个$\frac{1}{2}$的原因是方便求导</strong>。而当我们取j($\theta_1$)的最小值时，我们就可以得出最合适的参数$\theta_1$，即：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715113558.png" alt="image-20210715113558726" style="zoom:80%;" /></p>
+<hr>
+<p>下面为了更好地理解这一过程，我们可以对比一下h(x)和J($\theta_1$)这两个函数：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715113948.png" alt="image-20210715113948552" style="zoom:67%;" /></p>
+<p>我们可以看到h(x)的自变量是x（房子的size），输出是房子价格；而J($\theta_1$)的自变量是$\theta_1$。我们给定如图的训练集（图中的<font color=red>×</font>），现在假设$\theta_1$=1，那么我们可以得到h(x)的图像为：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114437.png" alt="image-20210715114437499" style="zoom:67%;" /></p>
+<p>我们再来看一看J($\theta_1$)的值：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114632.png" alt="image-20210715114632019" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114700.png" alt="image-20210715114700046" style="zoom: 80%;" /></p>
+<p>这是$\theta_1=1$的值，此时J =0，说明拟合效果很好。同理，<strong>我们取不同的$\theta_1$，我们就可以得到不同的J（$\theta_1$），就可以画出J（$\theta_1$）的图像</strong>（右边）：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114914.png" alt="image-20210715114914047"></p>
+<p>最后我们就可以看到min值了，接下来，我们将考虑$\theta_0$的值了。</p>
+<h3 id="考虑-theta-0"><a href="#考虑-theta-0" class="headerlink" title="考虑$\theta_0$"></a>考虑$\theta_0$</h3><p>先来看看我们的模型描述：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115415.png" alt="image-20210715115415627"></p>
+<p>在上面简化的J函数中，我们得到的图像是一个碗状图形，考虑$\theta_0$后我们的J函数图形仍然是一个碗装，只不过是三维的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115613.png" alt="image-20210715115613436"  /></p>
+<p>但我们不会在这张图中看，而是把它转换成<strong>等高线图</strong>：（同弧的值相等）</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115816.png" alt="image-20210715115816258" style="zoom:80%;" /></p>
+<p>等高线图最中间的那个点毫无疑问拟合程度最好，我们取一个<strong>近似最小值</strong>的点，它的拟合效果还不错：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115941.png" alt="image-20210715115940788" style="zoom:67%;" /></p>
+<h3 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h3><p>我们其实可以注意到一个问题，我们最后是手动找最适合的参数的，我们真正需要的是一个高效的算法，能够自己寻找到最佳解，而这种方法将会在下一节讲到。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>ML</category>
+        <category>吴恩达机器学习课程笔记</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>regression</tag>
+        <tag>代价函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/06/30/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/Hello%20World/</url>
+    <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>&emsp;&emsp;这是我第一次建站，折腾了段时间才把这个网站部署好，还有好多东西要改进。不过当看到自己的网站在chrome上加载出来的时候，有一种新世界的大门向我打开的感觉……<br>&emsp;&emsp;之所以我要建这么一个博客，主要是为了好玩……当然了，我也会在这上面记录一下自己学CS的笔记和思考，还有以后做项目的记录。总之，这里将作为一个记录和表达我杨某学习和想法的地方。<br>&emsp;&emsp;这个博客，可以说是我存在的一种方式吧。漫漫长路，希望我能开心快乐。</p>
+]]></content>
+      <categories>
+        <category>杂谈吹水</category>
+      </categories>
+      <tags>
+        <tag>ideas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>梯度下降算法</title>
+    <url>/2021/07/16/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</url>
+    <content><![CDATA[<p> 在上一篇中我们提到需要一种方法找到适合的参数使得代价函数最小，那么解决这个问题的一种比较好的方法就是<strong>梯度下降算法</strong>。</p>
+<h2 id="梯度学习算法问题描述"><a href="#梯度学习算法问题描述" class="headerlink" title="梯度学习算法问题描述"></a>梯度学习算法问题描述</h2><p>我们先给出问题的描述：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716152627.png" alt="image-20210716152620184" style="zoom: 50%;" /></p>
+<span id="more"></span>
+<p>注意这里的函数J是任意的，不一定是上文提到的代价函数，应用于线性回归模型中的梯度下降法我们会在本文末尾说到，我们先来谈一谈普遍的梯度下降法的原理。梯度下降法的过程已经在outline里提到了（这里为了叙述方便，只设了两参数，实际情况可能是许多参数）：</p>
+<ul>
+<li>我们先随机初始化$\theta_0、\ \theta_1$.</li>
+<li>然后不断更新两个参数的值，直到我们找到函数J的最小值。</li>
+</ul>
+<p>那么到底是怎么做到的呢？</p>
+<h2 id="梯度学习算法"><a href="#梯度学习算法" class="headerlink" title="梯度学习算法"></a>梯度学习算法</h2><p>其实这个过程很简单，就是下山：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716153501.png" alt="image-20210716153501368" style="zoom:67%;" /></p>
+<p>假设我们初始化在圈起来的点，那么这个时候我们朝哪个方向下山最快？当然是<strong>下降梯度最大</strong>的方向，确定后我们就下降<strong>一点</strong>，循环往复，我们就能找到<strong>局部最低点</strong>。注意加粗的三个关键词，就是梯度下降算法的重点。我们在这里稍微提一下梯度学习的一大特点，就是局部最优解（第三个加粗关键词），很明显选取不同的初始点，最后会下降到不同的局部最优解。</p>
+<p>下面我们贴出梯度下降算法的数学式子：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716153817.png" alt="image-20210716153817313" style="zoom:50%;" /></p>
+<p>首先注意以下几点：</p>
+<ul>
+<li><p>两个符号：”:=“是编程中的赋值符号”=”，而不是数学中的等于”=”；”$\alpha$“指的是学习率，也就是你下山的步子迈的有多大。上面说的关键词”<strong>一点</strong>“就是学习率的意思。</p>
+</li>
+<li><p>simultaneous: 同时update两个参数，而不是像下面这样，下面这样的式子就是另外一种算法了，两者有细微的差别：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716154331.png" alt="image-20210716154253942" style="zoom: 67%;" /></p>
+</li>
+</ul>
+<p>其实现在已经懂这个式子的意思了，因为已经学过微积分了；但是看下面这些一元的图，感觉会更直观一点：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716154736.png" alt="image-20210716154735863" style="zoom:67%;" /></p>
+<p>这就是梯度下降的含义，无需过多解释。这里有一个问题，为什么我们保持学习率不变，也能找到局部最优解？</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716155116.png" alt="image-20210716155116038" style="zoom:67%;" /></p>
+<p>观察这张图，当我们越接近局部最优解；导数的绝对值会越来越小，最终可能会是0，这就是为什么我们保持学习率不变，也能梯度下降的原因。</p>
+<h3 id="学习率的问题"><a href="#学习率的问题" class="headerlink" title="学习率的问题"></a>学习率的问题</h3><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716154853.png" alt="image-20210716154853078" style="zoom:67%;" /></p>
+<p>学习率太小就会造成上面这张图的问题，更新地太慢；如果学习率太大，就会像下面这张图一样。具体如何调学习率的大小，我现在还不知道……</p>
+<h2 id="实际应用梯度下降法到线性回归模型"><a href="#实际应用梯度下降法到线性回归模型" class="headerlink" title="实际应用梯度下降法到线性回归模型"></a>实际应用梯度下降法到线性回归模型</h2><p>首先总结一下我们前面学到的东西：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716155433.png" alt="image-20210716155433459"></p>
+<p>我们的目标是找到使j($\theta_1,\theta_0$)最小的两个参数$\theta_0，\theta_1$。</p>
+<p>既然有了这些式子我们只要把右边的式子代到左边的梯度下降算法式子里，就能得出我们的线性回归模型（用多元微积分算）：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716160255.png" alt="image-20210716160255292" style="zoom:80%;" /></p>
+<p>我们前面提到过<strong>局部最优解</strong>的问题，不过在线性回归中<strong>我们没有必要考虑这个问题</strong>，因为线性回归中，图像画出来是这样的一个函数图像（专业点叫凸函数）：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716160451.png" alt="image-20210716160450988"></p>
+<p>可以直观地看到没有句部最优解，只有全局最优解，所以我们在线性回归中不用考虑这个问题。最后我们就可以得到这么一个过程：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716160710.png" alt="image-20210716160710833" style="zoom:80%;" /></p>
+<h3 id="batch-梯度下降算法"><a href="#batch-梯度下降算法" class="headerlink" title="batch 梯度下降算法"></a>batch 梯度下降算法</h3><p>我们刚才用到的梯度下降算法被称作：batch梯度下降。什么意思呢？注意它的式子：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716161034.png" alt="image-20210716161034475" style="zoom:67%;" /></p>
+<p>每次梯度下降我们都会遍历整个training data，而有些其它梯度下降算法是遍历training data的子集，这里暂且不提。这就是我们学习的第一个机器学习算法。</p>
+<p>下面一章吴将会用<strong>线性代数中的正规方程组方法</strong>来求解代价函数J的最小值。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>ML</category>
+        <category>吴恩达机器学习课程笔记</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>regression</tag>
+        <tag>梯度下降</tag>
       </tags>
   </entry>
   <entry>
@@ -245,234 +445,6 @@
       </categories>
       <tags>
         <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>学习经济学的理由以及方法</title>
-    <url>/2021/07/15/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%AD%A6%E4%B9%A0%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E7%90%86%E7%94%B1%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h2 id="理由"><a href="#理由" class="headerlink" title="理由"></a>理由</h2><p>额，作为一个专业与经济学毫不相关的大学生，我为什么想学点经济学，并把经济学的入门书籍曼昆的《经济学原理》列到暑假学习计划之中呢？究其原因，是想以后方便搞钱😏。咳咳，开个玩笑，怎么可能，我可是一个淡泊名利的人🙄。真正的原因是：</p>
-<span id="more"></span>
-<ol>
-<li><p>它有助于帮助我理解我所生活的这个世界。因为“<strong>经济学是一门研究人类一般生活事务的学问</strong>。”</p>
-</li>
-<li><p>它将使我更精明地参与经济，在日常生活中，要做出许多经济决策。学习经济学会使我从一个新角度去思考如何最好地做出这些决策。学习经济学本身不会使你富有，但它将提供一些有助于你努力致富的工具。</p>
-</li>
-<li><p>它将使我更好地理解经济政策的潜力与局限性。</p>
-</li>
-<li><p>方便搞钱（这个不是曼昆说的）</p>
-<p>​                                                                                                                                                                                                                                                                ——曼昆</p>
-</li>
-</ol>
-<p>总之，我了解经济学的主要目的是<strong>使用经济学的工具去指导我进行更好地决策，破除一些常见误区</strong>。看了知乎老铁的建议，熟读曼昆的《经济学原理》差不多就行了。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>​    额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
-<p>就下面这个工作流：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715180428.png" alt="image-20210715180428340" style="zoom: 67%;" /></p>
-]]></content>
-      <categories>
-        <category>经济学</category>
-        <category>《经济学原理》—曼昆</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>代价函数J</title>
-    <url>/2021/07/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0J/</url>
-    <content><![CDATA[<p>上篇简单介绍了机器学习中监督学习与非监督学习是什么，这一篇将具体介绍我们的第一个算法——linear regression（线性回归），虽然这是监督学习中的一个基础算法，而且还是一元的，但是之前做数学建模比赛时的学习过程告诉我，<strong>模型都是从简单到复杂的，我们必须从初等简单模型入手，再一步步增加复杂度</strong>，这是学习的基本思路。吴从房价预测这个实际问题入手，使用一元线性回归来解决这个问题，再本篇中通过构建这个模型，我们将学到两个主要知识点：</p>
-<ol>
-<li>模型的描述</li>
-<li><font color=purple>代价函数</font>
-
-</li>
-</ol>
-<p>下面让我们开始：</p>
-<span id="more"></span>
-<h2 id="模型的描述"><a href="#模型的描述" class="headerlink" title="模型的描述"></a>模型的描述</h2><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715110851.png" alt="image-20210715110843378"></p>
-<p>这是给出的具体实际问题，要求我们预测任意size的房子的价格，我们可以看到可以用监督学习中的线性回归来解答这个问题，因为线性回归可以<strong>估算连续值</strong>。下面我们来尝试描述这个模型：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715111123.png" alt="image-20210715111123578"></p>
-<p>notation下面就是我们要定义的一些符号，包括：</p>
-<ol>
-<li>m指的是样本数量，比如题目中一共提供了47个样本数量，那么m = 47</li>
-<li>$x^{(i)}$指的是第i个样本的输入（features）；$y^{(i)}$同理，指的是第i个样本的输出。而($x^{(i)},y^{(i)}$)指的就是第i个样本。</li>
-</ol>
-<p>接下来，我们来看看监督学习是如何工作的：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715111817.png" alt="image-20210715111817445"></p>
-<p>我们把训练集输入到学习算法中，学习算法会得到一个h函数（hypothesis,假设函数），我们输入x，就会得出一个估计值。这就是监督学习的工作方法，那么这个<strong>h假设函数</strong>我们该如何表示呢？</p>
-<p>很简单，因为是一元线性回归模型，它的假设函数就是：</p>
-<script type="math/tex; mode=display">
-h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$θ_0,θ_1$被称为参数</strong>。</p>
-<p>这就是对这个线性回归模型的符号描述，虽然看上去很简单，因为这是个基础模型。但背后的思想是，把一个实际问题转化为数学模型的第一步就是<strong>用数学符号来表示模型</strong>。下面我将看看如何得出参数，从而确定假设函数h(x)。</p>
-<h2 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h2><p>从上文可知h(x)由两个参数$θ_1,\theta_0$确定，那么接下来的任务就是选择两个合适的参数。</p>
-<p>我们选取不同的参数，其结果的不同是显而易见的：<br><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715112633.png" alt="image-20210715112633315"></p>
-<p>那么我们如何去选取拟合效果最好的参数呢？</p>
-<h3 id="不考虑-theta-0"><a href="#不考虑-theta-0" class="headerlink" title="不考虑$\theta_0$"></a>不考虑$\theta_0$</h3><p>为了更好地理解这一过程，我们先让$\theta_0=0$，随后再考虑$\theta_0$。这样目前我们的假设函数$h(x)=\theta_1x$。显然，我现在要做的事<strong>就是让每一个h($x^{(i)}$)的输出y都能和样本实际价格$y^{(i)}$最接近</strong>。我们很自然的就可以想到用<strong>平方差和</strong>来表示这一过程：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715113232.png" alt="image-20210715113232242"></p>
-<p>这就是我们简化过的平方误差代价函数，其中前面要<strong>加个$\frac{1}{2}$的原因是方便求导</strong>。而当我们取j($\theta_1$)的最小值时，我们就可以得出最合适的参数$\theta_1$，即：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715113558.png" alt="image-20210715113558726" style="zoom:80%;" /></p>
-<hr>
-<p>下面为了更好地理解这一过程，我们可以对比一下h(x)和J($\theta_1$)这两个函数：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715113948.png" alt="image-20210715113948552" style="zoom:67%;" /></p>
-<p>我们可以看到h(x)的自变量是x（房子的size），输出是房子价格；而J($\theta_1$)的自变量是$\theta_1$。我们给定如图的训练集（图中的<font color=red>×</font>），现在假设$\theta_1$=1，那么我们可以得到h(x)的图像为：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114437.png" alt="image-20210715114437499" style="zoom:67%;" /></p>
-<p>我们再来看一看J($\theta_1$)的值：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114632.png" alt="image-20210715114632019" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114700.png" alt="image-20210715114700046" style="zoom: 80%;" /></p>
-<p>这是$\theta_1=1$的值，此时J =0，说明拟合效果很好。同理，<strong>我们取不同的$\theta_1$，我们就可以得到不同的J（$\theta_1$），就可以画出J（$\theta_1$）的图像</strong>（右边）：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715114914.png" alt="image-20210715114914047"></p>
-<p>最后我们就可以看到min值了，接下来，我们将考虑$\theta_0$的值了。</p>
-<h3 id="考虑-theta-0"><a href="#考虑-theta-0" class="headerlink" title="考虑$\theta_0$"></a>考虑$\theta_0$</h3><p>先来看看我们的模型描述：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115415.png" alt="image-20210715115415627"></p>
-<p>在上面简化的J函数中，我们得到的图像是一个碗状图形，考虑$\theta_0$后我们的J函数图形仍然是一个碗装，只不过是三维的：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115613.png" alt="image-20210715115613436"  /></p>
-<p>但我们不会在这张图中看，而是把它转换成<strong>等高线图</strong>：（同弧的值相等）</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115816.png" alt="image-20210715115816258" style="zoom:80%;" /></p>
-<p>等高线图最中间的那个点毫无疑问拟合程度最好，我们取一个<strong>近似最小值</strong>的点，它的拟合效果还不错：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715115941.png" alt="image-20210715115940788" style="zoom:67%;" /></p>
-<h3 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h3><p>我们其实可以注意到一个问题，我们最后是手动找最适合的参数的，我们真正需要的是一个高效的算法，能够自己寻找到最佳解，而这种方法将会在下一节讲到。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>ML</category>
-        <category>吴恩达机器学习课程笔记</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>regression</tag>
-        <tag>代价函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>监督与非监督学习</title>
-    <url>/2021/07/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h2 id="监督学习和无监督学习"><a href="#监督学习和无监督学习" class="headerlink" title="监督学习和无监督学习"></a>监督学习和无监督学习</h2><p>在说什么是监督学习，什么是非监督学习之前，我们得先说说ML中的<strong>学习</strong>这一概念。<strong>学习</strong>其实可以这样理解：学生做了大量的题目来训练，老师改作业来告诉学生哪些是对的，哪些是错的，最后学生自己会学会解题方法，之后面对考试的题目，自己也能解答。</p>
-<span id="more"></span>
-<p>所谓的<font color=purple><strong>监督</strong></font>(supervised)=标签（label），是否有监督就是输入数据（input）是否有标签。有标签就是监督学习，无标签就是无监督学习。可以这样理解，有监督学习就是打了标签（有答案）的题目，无监督学习就是没答案的题目。</p>
-<p>下面来举个小例子来说明两者的区别：</p>
-<ul>
-<li><p>有监督学习</p>
-<p>ask：1 X 1 + 1=？</p>
-<p>AI：= 1 ?</p>
-<p>ask：NO！= 2!Remember it!</p>
-<p>（AI 调整中）</p>
-<p>ask：1 X  1 + 1 =？</p>
-<p>AI： =2！</p>
-</li>
-<li><p>无监督学习</p>
-<p>ask: 1 X 1 + 1=?</p>
-<p>AI：= 1？</p>
-<p>ask:  3 X 4 + 8 = ?</p>
-<p>AI：=0？</p>
-<p>…………</p>
-<p>AI： 我发现了，数学题都是先乘法后加法！</p>
-</li>
-</ul>
-<h2 id="有监督学习"><a href="#有监督学习" class="headerlink" title="有监督学习"></a>有监督学习</h2><p>有监督学习的训练数据是<strong>有标签</strong>的，训练目标能够给新数据（text data）以正确的目标。监督学习一般包括<strong>回归（regression）</strong>和<strong>分类（classification）</strong>问题。</p>
-<ul>
-<li><p><strong>regression</strong></p>
-<p>所谓的回归问题，就是估算连续值，比如说吴恩达给出的例子：</p>
-<p>我们给算法一个数据集，比如一系列房子的数据，给定数据中每个样本（不同的面积）的正确房价，然后运用算法，算出更多的答案，估算任意size房子的房价为多少：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707092627.png" alt="image-20210707092619710" style="zoom: 50%;" /></p>
-</li>
-<li><p><strong>classification</strong></p>
-<p>​    分类问题干的事，就是字面意思：分类。比如说我想让AI知道什么是猫什么是狗，一开始我们就将一些猫的图片和狗的图片（带标签）一起进行训练，学习模型不断捕捉这些图片与标签之间的联系进行自我完善和调整，然后我们再给一些不带标签的图片，让AI来猜一猜这些图片是猫还是狗。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707093136.png" alt="image-20210707093136697"></p>
-</li>
-</ul>
-<p>有监督学习的经典算法：支持向量机、线性判别、决策树、朴素贝叶斯</p>
-<h2 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h2><p>直观上来讲，unsupervised learning(无监督学习）就是不需要人的监督就可以学习，数据没有label，需要<strong>根据数据自身结构特性</strong>来将数据分类。它的训练集与监督学习的训练集的区别可以用下面这张图来说明：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707095215.png" alt="image-20210707095215131" style="zoom:67%;" /></p>
-<h3 id="为什么要用无监督学习这种方式呢？"><a href="#为什么要用无监督学习这种方式呢？" class="headerlink" title="为什么要用无监督学习这种方式呢？"></a>为什么要用无监督学习这种方式呢？</h3><p>​    对于监督学习来说，我们已经知道分类标准，比如说把图像分成猫和狗；但是如果我们有一组数据集，但是没有明确的目的，我们不知道怎么区分，这个时候，怎么办？无监督学习就派上用场了，我们可以<strong>借助数据自身的结构来进行分类</strong>。</p>
-<p>我们在这来举个例子：登陆谷歌的news(news.google.com)，这个网站做了什么事情呢？google每天会搜集几十万条新闻，然后把他们相似类别的聚集在一块，组成不同主题的新闻，比如说下面看到的这样：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210707100129.png" alt="image-20210707100129393" style="zoom: 50%;" /></p>
-<p>一个框就是一个主题的新闻，我拿数字标出的URL，就是不同的报道。这是怎么做到的呢？→无监督学习中的<strong>聚类算法</strong>（clustering）。几十万条新闻，我们总不能用监督学习的算法，一个个告诉机器，这个是什么，那个是什么吧，除此之外<strong>我都不知道要把他们分到哪一类别去</strong>。</p>
-<h3 id="鸡尾酒会算法"><a href="#鸡尾酒会算法" class="headerlink" title="鸡尾酒会算法"></a>鸡尾酒会算法</h3><p>我们来看一看吴恩达提到的无监督学习中一个很有意思的算法—<strong>鸡尾酒会算法</strong>。<strong>鸡尾酒会问题（</strong>cocktailparty problem）是在<strong>计算机语音识别领域</strong>的一个问题，当前语音识别技术已经可以以较高精度识别一个人所讲的话，但是<strong>当说话的人数为两人或者多人</strong>时，语音识别率就会极大的降低，这一难题被称为鸡尾酒会问题。</p>
-<p>举例来说，假如我在KTV唱歌，我唱歌的时候，某个人把我的天籁之音录下来了，这个录音里夹杂着我的声音和伴奏声音。现在我想把我唱的声音和伴奏的声音区分开来，分别播放，这就是鸡尾酒会问题。</p>
-<p>该问题描述的是<strong>给定混合信号，如何分离出同时说话的每个人的独立信号</strong>。当有N个信号源时，通常假设观察信号也有N个（例如N个麦克风或者录音机）。该假设意味着混合矩阵是个方阵，即J = D，其中D是输入数据的维数，J是系统模型的维数。这个问题常用到的方法是<strong>盲信号分离算法</strong>。（这里不详细说这算法了，我现在也不会，参考资料如下：）</p>
-<blockquote>
-<p><a href="https://zh.wikipedia.org/wiki/%E7%9B%B2%E4%BF%A1%E5%8F%B7%E5%88%86%E7%A6%BB">维基百科—盲信号分离</a></p>
-<p><a href="https://www.docin.com/p-126816392.html?docfrom=rrela">语音信号的盲分离算法研究</a></p>
-</blockquote>
-<p>我觉得这个效果对于我这个初学者来说还是很amazing的，想听听实际效果，可以去看吴恩达机器学习课程无监督学习那个视频里的示例，真的很好玩。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>ML</category>
-        <category>吴恩达机器学习课程笔记</category>
-      </categories>
-      <tags>
-        <tag>CS</tag>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>梯度下降算法</title>
-    <url>/2021/07/16/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</url>
-    <content><![CDATA[<p> 在上一篇中我们提到需要一种方法找到适合的参数使得代价函数最小，那么解决这个问题的一种比较好的方法就是<strong>梯度下降算法</strong>。</p>
-<h2 id="梯度学习算法问题描述"><a href="#梯度学习算法问题描述" class="headerlink" title="梯度学习算法问题描述"></a>梯度学习算法问题描述</h2><p>我们先给出问题的描述：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716152627.png" alt="image-20210716152620184" style="zoom: 50%;" /></p>
-<span id="more"></span>
-<p>注意这里的函数J是任意的，不一定是上文提到的代价函数，应用于线性回归模型中的梯度下降法我们会在本文末尾说到，我们先来谈一谈普遍的梯度下降法的原理。梯度下降法的过程已经在outline里提到了（这里为了叙述方便，只设了两参数，实际情况可能是许多参数）：</p>
-<ul>
-<li>我们先随机初始化$\theta_0、\ \theta_1$.</li>
-<li>然后不断更新两个参数的值，直到我们找到函数J的最小值。</li>
-</ul>
-<p>那么到底是怎么做到的呢？</p>
-<h2 id="梯度学习算法"><a href="#梯度学习算法" class="headerlink" title="梯度学习算法"></a>梯度学习算法</h2><p>其实这个过程很简单，就是下山：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716153501.png" alt="image-20210716153501368" style="zoom:67%;" /></p>
-<p>假设我们初始化在圈起来的点，那么这个时候我们朝哪个方向下山最快？当然是<strong>下降梯度最大</strong>的方向，确定后我们就下降<strong>一点</strong>，循环往复，我们就能找到<strong>局部最低点</strong>。注意加粗的三个关键词，就是梯度下降算法的重点。我们在这里稍微提一下梯度学习的一大特点，就是局部最优解（第三个加粗关键词），很明显选取不同的初始点，最后会下降到不同的局部最优解。</p>
-<p>下面我们贴出梯度下降算法的数学式子：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716153817.png" alt="image-20210716153817313" style="zoom:50%;" /></p>
-<p>首先注意以下几点：</p>
-<ul>
-<li><p>两个符号：”:=“是编程中的赋值符号”=”，而不是数学中的等于”=”；”$\alpha$“指的是学习率，也就是你下山的步子迈的有多大。上面说的关键词”<strong>一点</strong>“就是学习率的意思。</p>
-</li>
-<li><p>simultaneous: 同时update两个参数，而不是像下面这样，下面这样的式子就是另外一种算法了，两者有细微的差别：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716154331.png" alt="image-20210716154253942" style="zoom: 67%;" /></p>
-</li>
-</ul>
-<p>其实现在已经懂这个式子的意思了，因为已经学过微积分了；但是看下面这些一元的图，感觉会更直观一点：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716154736.png" alt="image-20210716154735863" style="zoom:67%;" /></p>
-<p>这就是梯度下降的含义，无需过多解释。这里有一个问题，为什么我们保持学习率不变，也能找到局部最优解？</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716155116.png" alt="image-20210716155116038" style="zoom:67%;" /></p>
-<p>观察这张图，当我们越接近局部最优解；导数的绝对值会越来越小，最终可能会是0，这就是为什么我们保持学习率不变，也能梯度下降的原因。</p>
-<h3 id="学习率的问题"><a href="#学习率的问题" class="headerlink" title="学习率的问题"></a>学习率的问题</h3><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716154853.png" alt="image-20210716154853078" style="zoom:67%;" /></p>
-<p>学习率太小就会造成上面这张图的问题，更新地太慢；如果学习率太大，就会像下面这张图一样。具体如何调学习率的大小，我现在还不知道……</p>
-<h2 id="实际应用梯度下降法到线性回归模型"><a href="#实际应用梯度下降法到线性回归模型" class="headerlink" title="实际应用梯度下降法到线性回归模型"></a>实际应用梯度下降法到线性回归模型</h2><p>首先总结一下我们前面学到的东西：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716155433.png" alt="image-20210716155433459"></p>
-<p>我们的目标是找到使j($\theta_1,\theta_0$)最小的两个参数$\theta_0，\theta_1$。</p>
-<p>既然有了这些式子我们只要把右边的式子代到左边的梯度下降算法式子里，就能得出我们的线性回归模型（用多元微积分算）：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716160255.png" alt="image-20210716160255292" style="zoom:80%;" /></p>
-<p>我们前面提到过<strong>局部最优解</strong>的问题，不过在线性回归中<strong>我们没有必要考虑这个问题</strong>，因为线性回归中，图像画出来是这样的一个函数图像（专业点叫凸函数）：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716160451.png" alt="image-20210716160450988"></p>
-<p>可以直观地看到没有句部最优解，只有全局最优解，所以我们在线性回归中不用考虑这个问题。最后我们就可以得到这么一个过程：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716160710.png" alt="image-20210716160710833" style="zoom:80%;" /></p>
-<h3 id="batch-梯度下降算法"><a href="#batch-梯度下降算法" class="headerlink" title="batch 梯度下降算法"></a>batch 梯度下降算法</h3><p>我们刚才用到的梯度下降算法被称作：batch梯度下降。什么意思呢？注意它的式子：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716161034.png" alt="image-20210716161034475" style="zoom:67%;" /></p>
-<p>每次梯度下降我们都会遍历整个training data，而有些其它梯度下降算法是遍历training data的子集，这里暂且不提。这就是我们学习的第一个机器学习算法。</p>
-<p>下面一章吴将会用<strong>线性代数中的正规方程组方法</strong>来求解代价函数J的最小值。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>ML</category>
-        <category>吴恩达机器学习课程笔记</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>regression</tag>
-        <tag>梯度下降</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2021/06/30/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/Hello%20World/</url>
-    <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>&emsp;&emsp;这是我第一次建站，折腾了段时间才把这个网站部署好，还有好多东西要改进。不过当看到自己的网站在chrome上加载出来的时候，有一种新世界的大门向我打开的感觉……<br>&emsp;&emsp;之所以我要建这么一个博客，主要是为了好玩……当然了，我也会在这上面记录一下自己学CS的笔记和思考，还有以后做项目的记录。总之，这里将作为一个记录和表达我杨某学习和想法的地方。<br>&emsp;&emsp;这个博客，可以说是我存在的一种方式吧。漫漫长路，希望我能开心快乐。</p>
-]]></content>
-      <categories>
-        <category>杂谈吹水</category>
-      </categories>
-      <tags>
-        <tag>ideas</tag>
       </tags>
   </entry>
   <entry>
@@ -658,6 +630,64 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
       </tags>
   </entry>
   <entry>
+    <title>十大原理之整体形六大原理</title>
+    <url>/2021/07/17/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h3 id="人们如何相互影响"><a href="#人们如何相互影响" class="headerlink" title="人们如何相互影响"></a>人们如何相互影响</h3><p>前四个原理讨论了个人如何做出决策。在我们的人生旅途中，我们的许多决策不仅影响我们自己，而且还会影响其他人。以下三个原理是关于人们如何相互交易的。</p>
+<span id="more"></span>
+<h4 id="五、贸易可以使每个人的状况都变得更好"><a href="#五、贸易可以使每个人的状况都变得更好" class="headerlink" title="五、贸易可以使每个人的状况都变得更好"></a>五、贸易可以使每个人的状况都变得更好</h4><p>我们先考虑贸易如何影响家庭。当家庭中的某个成员找工作时，她要与也在找工作的其他家庭的成员竞争。各个家庭在购物时也会相互竞争，因为每个家庭都想以最低的价格购买最好的东西。从某种意义上说，<strong>经济中每个家庭都在与所有其他家庭相竞争</strong>。</p>
+<p>尽管有这种竞争，但把你的家庭与所有其他家庭隔绝开来并不会使你的家庭过得更好。如果真的隔绝开来的话，你的家庭就必须自己种粮食、自己做衣服、自己盖房子。显然，你的家庭在与其他家庭的贸易中受益良多。<font color=purple>贸易使每个人都可以专门从事自己最擅长的活动，</font>无论它是耕种、做衣服还是盖房子。通过与其他人贸易，<strong>人们可以以较低的成本获得各种各样的物品与服务</strong>。</p>
+<p>国家和家庭一样，也能从相互贸易中获益。贸易使各国可以专门从事自己最擅长的活动，并享有种类更多的物品与服务。</p>
+<hr>
+<h4 id="六、市场通常是组织经济活动的一种好方法"><a href="#六、市场通常是组织经济活动的一种好方法" class="headerlink" title="六、市场通常是组织经济活动的一种好方法"></a>六、市场通常是组织经济活动的一种好方法</h4><p>苏联和上世纪我国建国初期都是实行中央计划经济体制的，显然最后的效果不大好。因为中央计划经济国家运行的<strong>前提假设</strong>是，<u>政府官员能够最佳地配置经济中的稀缺资源</u>。这些中央计划者决定，生产什么物品与服务、生产多少，以及谁生产和消费这些物品与服务。支撑中央计划的理论是，<font color=purple>只有政府才能以促进整个社会经济福利的方式组织经济活动。</font></p>
+<p>现在我国是计划经济和市场经济相结合。在市场经济中，<strong>价格和利己引导着企业和家庭进行决策</strong>。可以看到，市场经济是成功的，但这种成功就像亚当斯密所说的“看不见的手”一样是个谜。在市场经济中，没有一个人追求整个社会的经济福利，但是市场经济在促进总体经济福利的方式组织经济活动方面非常成功。</p>
+<p>关于这个问题，亚当斯密有一些经典的观点：</p>
+<ul>
+<li>价格会自发调整，指引这些单个买者和卖者达到某种结果，该结果在大多数情况下会实现整个社会福利的最大化。</li>
+<li>当政府阻止价格根据供求状况自发调整时，它就限制了看不见的手对组成经济的千百万家庭和企业的决策进行协调的能力。这可以解释为什么中央计划经济是失败的，因为它把“看不见的手”给绑起来了。</li>
+<li>经济参与者<strong>受利己心所驱动</strong>，而市场上这只看不见的手<strong>指引这种利己心去促进总体的经济福利</strong>。</li>
+</ul>
+<hr>
+<h4 id="七、政府有时可以改善市场结果"><a href="#七、政府有时可以改善市场结果" class="headerlink" title="七、政府有时可以改善市场结果"></a>七、政府有时可以改善市场结果</h4><p>我们国家既有计划经济也有市场经济，两者是并存的。那么为什么需要计划经济，也就是政府干预经济呢？学习经济学的目的之一是<strong>提高我们对政府政策的适当作用与范围的认识</strong>。</p>
+<p>以下是两个主要原因：</p>
+<ol>
+<li><p>只有在政府实施规则并维持对市场经济至关重要的制度时，“看不见的手”才能施展其魔力。什么意思呢？</p>
+<p>​        我问你，假如你是一个农民，你种了许多蔬菜，然后拿到集市上去卖，结果还没开始卖，就直接被人抢走了。你是一脸问号（？？？），这个时候，你还想种蔬菜了吗？反正都会被抢走，我也去抢吧，要不然谁给我饭吃？这样，市场经济还能起作用吗？</p>
+<p>​        这就需要政府实施<strong>产权</strong>的制度（我理解为主持公道），目的是让人们有<strong>控制自己手中稀缺资源，维护自己权利的能力</strong>。我们依靠政府的警察和法庭获得自己生产物品的所有权，而“看不见的手”依靠我们维护自己权利的能力。</p>
+</li>
+<li><p>“看不见的手”是强有力的，但并不是无所不能的。</p>
+<p>政府干预经济的目的只有两个：促进效率（把蛋糕做大）或促进平等（主持分蛋糕）。我们先来看看第一个：</p>
+<ul>
+<li>尽管市场经济可以自己<strong>有效配置资源</strong>，以使经济蛋糕最大化，但也有失灵的时候。（经济学家称之为市场失灵）这里说两个原因：<ul>
+<li>一是可能因为<strong>外部性</strong>，指的是一个人的行为对旁观者福利的影响。最经典的例子就是污染的问题，工厂产生了污染，对附近居民的健康造成了有害影响，市场本身是不会把成本考虑在内的。</li>
+<li>二是可能因为<strong>市场势力</strong>，指单个人或公司（或某个小群体）不适当地影响市场价格的能力。我觉得就是<strong>巨无霸垄断</strong>，会对市场造成不好的影响。</li>
+</ul>
+</li>
+<li>即使“看不见的手”带来了有效率的产出，它也不能消除经济福利上巨大的不对称。市场经济根据人们生产其他人愿意购买的东西的能力来给予其报酬。这个很好理解。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="整体经济如何运行"><a href="#整体经济如何运行" class="headerlink" title="整体经济如何运行"></a>整体经济如何运行</h3><p>我们从讨论个人如何做出决策开始，然后考察人们如何相互影响。所有这些决策和相互影响共同组成了“经济”。最后三个原理涉及整体经济的运行。</p>
+<h4 id="八、一国的生活水平取决于它生产物品与服务的能力"><a href="#八、一国的生活水平取决于它生产物品与服务的能力" class="headerlink" title="八、一国的生活水平取决于它生产物品与服务的能力"></a>八、一国的生活水平取决于它生产物品与服务的能力</h4><p>用什么来解释各国之间和不同时期<strong>生活水平</strong>的巨大差别呢？</p>
+<p>各国<strong>生产率（productivity）</strong>的差别——即每一单位劳动投入所生产的物品与服务数量的差别。决定一个国家人民生活水平的最关键因素，不是什么和它国竞争，也不是政府提高什么最低工资标准，而是这个国家的生产率是多少。</p>
+<p>生产率与生活水平之间的关系对于公共政策也有深远的含义。在考虑任何一项政策如何影响生活水平时，关键问题是这项政策如何影响我们生产物品与服务的能力。为了提高生活水平，决策者需要通过让工人受到良好的教育、拥有生产物品与服务需要的工具以及获取最好的技术来提高生产率。</p>
+<h4 id="九、当政府发行了过多货币时，物价会上升"><a href="#九、当政府发行了过多货币时，物价会上升" class="headerlink" title="九、当政府发行了过多货币时，物价会上升"></a>九、当政府发行了过多货币时，物价会上升</h4><p>所谓的物价上升→通货膨胀。由于高通货膨胀会让社会付出各种成本，所以世界各国的经济政策制定者都把保持低通货膨胀作为目标之一。</p>
+<p>是什么引起了通货膨胀？</p>
+<p>在大多数严重或持续的通货膨胀情况下，罪魁祸首是货币量的增长。当一国政府发行了大量本国货币时，货币的价值就下降了。在20世纪20年代初的德国，当物价平均每月上升3倍时，货币量每月也增加了3倍。美国的情况虽然没有这么严重，但从美国的经济史中也可以得出类似的结论：20世纪70年代的高通货膨胀与货币量的迅速增长是相关的，而近年来经历的低通货膨胀与货币量的缓慢增长也是相关的。</p>
+<h4 id="十、社会面临通货膨胀与失业之间的短期权衡取舍"><a href="#十、社会面临通货膨胀与失业之间的短期权衡取舍" class="headerlink" title="十、社会面临通货膨胀与失业之间的短期权衡取舍"></a>十、社会面临通货膨胀与失业之间的短期权衡取舍</h4><p>不解释了，累了。</p>
+<hr>
+<p>在下面的学习中，要始终牢记这十大原理：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717144413.png" alt="image-20210717144411615" style="zoom:50%;" /></p>
+]]></content>
+      <categories>
+        <category>经济学</category>
+        <category>《经济学原理》—曼昆</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>计算机逻辑的历史</title>
     <url>/2021/07/01/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%BB%E8%BE%91%E7%9A%84%E5%8E%86%E5%8F%B2/</url>
     <content><![CDATA[<p>&emsp;&emsp;这篇阅读记录是对《逻辑的引擎》一书的选抄，这本书主要讲述了计算机逻辑的源头，虽然只是科普类的书籍，但我还是感到有点枯燥。所以权把这本书的选抄当作这一思路的简要框架，当日后想看了，再顺着这个框架看一看也不错。</p>
@@ -700,6 +730,222 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
         <tag>CS</tag>
         <tag>阅读记录</tag>
         <tag>计算机逻辑</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习经济学的理由以及方法</title>
+    <url>/2021/07/15/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%AD%A6%E4%B9%A0%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E7%90%86%E7%94%B1%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="理由"><a href="#理由" class="headerlink" title="理由"></a>理由</h2><p>额，作为一个专业与经济学毫不相关的大学生，我为什么想学点经济学，并把经济学的入门书籍曼昆的《经济学原理》列到暑假学习计划之中呢？究其原因，是想以后方便搞钱😏。咳咳，开个玩笑，怎么可能，我可是一个淡泊名利的人🙄。真正的原因是：</p>
+<span id="more"></span>
+<ol>
+<li><p>它有助于帮助我理解我所生活的这个世界。因为“<strong>经济学是一门研究人类一般生活事务的学问</strong>。”</p>
+</li>
+<li><p>它将使我更精明地参与经济，在日常生活中，要做出许多经济决策。学习经济学会使我从一个新角度去思考如何最好地做出这些决策。学习经济学本身不会使你富有，但它将提供一些有助于你努力致富的工具。</p>
+</li>
+<li><p>它将使我更好地理解经济政策的潜力与局限性。</p>
+</li>
+<li><p>方便搞钱（这个不是曼昆说的）</p>
+<p>​                                                                                                                                                                                                                                                                ——曼昆</p>
+</li>
+</ol>
+<p>总之，我了解经济学的主要目的是<strong>使用经济学的工具去指导我进行更好地决策，破除一些常见误区</strong>。看了知乎老铁的建议，熟读曼昆的《经济学原理》差不多就行了。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>​    额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
+<p>就下面这个工作流：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715180428.png" alt="image-20210715180428340" style="zoom: 67%;" /></p>
+]]></content>
+      <categories>
+        <category>经济学</category>
+        <category>《经济学原理》—曼昆</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入理解计算机系统导言、概论</title>
+    <url>/2021/07/15/%E5%9B%9B%E5%A4%A7%E9%87%91%E5%88%9A/CSAPP/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%A8%80%E3%80%81%E6%A6%82%E8%AE%BA/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200235.png" alt="image-20210715200235339"></p>
+<span id="more"></span>
+<h2 id="本书的主旨"><a href="#本书的主旨" class="headerlink" title="本书的主旨"></a>本书的主旨</h2><p>这本书可是个硬骨头😓，不过它的内容是我从小就想弄懂的。为此，我一定要搞懂里面的东西，也许一遍要看很长时间也要把它给看下来。</p>
+<p>这本书的主要目的是<font color=purple>解释所有计算机系统的本质概念，并展示这些概念是如何实实在在的影响程序的正确性、性能和实用性的。</font>这本书有个很大的特点就是从程序员的角度来写的而不是从构建者的角度来写的，那么所谓的<strong>程序员角度</strong>是什么意思呢？</p>
+<p>即<strong>讲述应用程序员如何能够利用系统知识来编写一个更好的程序</strong>。除此之外，<strong>学习一个计算机系统应该做些什么</strong>，是学习如何构建一个计算机系统的很好的出发点，所以对学习计算机系统的软硬件实现的人也是很有帮助的。</p>
+<p>总之，就是研究计算机系统这一系统是如何运作的。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><ol>
+<li>要求Linux系统，因为示例大部分是Linux上运行的C程序。</li>
+<li>对C和C++有一定的了解。</li>
+</ol>
+<h2 id="如何阅读此书？"><a href="#如何阅读此书？" class="headerlink" title="如何阅读此书？"></a>如何阅读此书？</h2><p>我想的学习方法是这样的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716205620.png" alt="image-20210716205620739" style="zoom:67%;" /></p>
+<h2 id="本书框架"><a href="#本书框架" class="headerlink" title="本书框架"></a>本书框架</h2><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200707.png" alt="image-20210715200707045"></p>
+<p>这里我就借用大佬的视频里的框架了。全书分为四部分：第一章的计算机系统漫游，展示”Hello World”程序的一个生命周期，细节会在后面章节补充；第二部分（2~6）程序结构和执行；第三部分（7~9）在系统上运行程序；最后一部分进程间的交互与通信。</p>
+<hr>
+<p>以上就是导言和概论部分。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>四大金刚</category>
+        <category>OS</category>
+        <category>CSAPP</category>
+      </categories>
+      <tags>
+        <tag>四大金刚</tag>
+        <tag>os</tag>
+        <tag>CSAPP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言注意点复习</title>
+    <url>/2021/07/14/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我是大一下学期开始系统学习C语言的，学到指针左右由于要期末考试了所以暂时放一放，最近又想把这个C基础的知识快点学完，但之前的内容会有些许遗忘，所以索性乘着每天学习计划开始之前，今天把之前的内容复习一下。之前做的课后习题都在github上，复习也方便，我会记录一些注意点和规范，以及常见的写法，还有问与答中部分问答。（我是跟着《C语言现代程序设计现代方法》学的）</p>
+<span id="more"></span>
+<h2 id="概论"><a href="#概论" class="headerlink" title="概论"></a>概论</h2><ul>
+<li><p><a href="https://zh.wikipedia.org/wiki/GCC">什么是GCC—Wiki</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/QG-whz/p/5456720.html">Linux编译工具入门—gcc</a></p>
+</li>
+</ul>
+<h2 id="printf、scanf（输入-输出章节前置）"><a href="#printf、scanf（输入-输出章节前置）" class="headerlink" title="printf、scanf（输入\输出章节前置）"></a>printf、scanf（输入\输出章节前置）</h2><p>首先要知道printf函数是用来显示格式串的，并且在该串的指定位置插入可能的值（通过转换说明：%+）。</p>
+<ul>
+<li><p>转换说明：%m.pX 。</p>
+<ul>
+<li><strong>m→最小字段宽度</strong>。若要显示的字符数&lt;m，则会这样：%4d→🐕123（右对齐）；如果是大于，会自动扩展为需要的尺寸，而不会丢失数字。</li>
+<li><strong>p→精度</strong>，精度p依赖于<strong>转换说明符X</strong>的选择。<ul>
+<li>d,十进制形式的整数。p指明待显示数字的最少位数。65用%.3f输出→065。</li>
+<li>f,定点十进制形式的浮点数。p指明小数点后应出现的数字的位数。45.8用%.4f输出→45.8000。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>转义序列</p>
+<p>没什么好讲的</p>
+</li>
+</ul>
+<p>以上是printf函数的，下面再来稍微看一看scanf函数（<strong>模式匹配</strong>）：</p>
+<ul>
+<li><p>scanf函数<strong>在寻找数的起始位置时，会忽略空白字符</strong>(including 空格、水平和垂直制表符、换页符和换行符)，所以我们可以把数字分散到几行输入。考虑下下面所示的scanf函数工作过程：</p>
+<ol>
+<li><p>假设用户录入三行输入：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714172121.png" alt="image-20210714172042445"></p>
+</li>
+<li><p>scanf函数会把它们看成下面这样的一个连续的字符流(🐕表示空格，🐱表示换行符)：</p>
+<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
+</li>
+<li><p>我们用×表示次项被跳过，√表示次项被读入为输入项的一部分：</p>
+<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
+<p>  × × √ ×√√√×  ×  ×√√×  ×  ×  ×√√√√√√</p>
+<p>注意到，最后一个换行符🐱没有被读进去，<strong>这个换行符将是下一次scanf函数调用的第一个字符</strong>。（之后scanf放到循环里时要注意这个问题）</p>
+</li>
+<li><p>scanf函数用来识别整数或浮点数的规则是：</p>
+<ol>
+<li>读入整数时，scanf函数首先寻找正负号，然后读取数字直到读到一个非数字时才停止</li>
+<li>读入浮点数时，scanf函数会先找一个正负号，随后是一串数字（可能会有小数点），再后是一个指数（可选）。</li>
+</ol>
+<font color=purple>当遇到一个**不可能属于当前项**的字符时，它**会把此字符原封不动地放回去**（放到缓冲区），留给扫描下一个输入或者下一次调用scanf的时候再次读入。</font>
+</li>
+</ol>
+</li>
+<li><p>scanf处理格式串中的普通字符</p>
+<p>​    当scanf遇到非空白字符时，会把它与下一个输入字符进行比较。若<strong>两者相匹配，那么scanf函数会放弃输入字符而继续处理格式串</strong>；如果<strong>不匹配，那么scanf会把不匹配的字符放回输入中，然后异常退出</strong>，而不进一步读取和处理。举个例子：</p>
+<p>​    假设格式串是“%d/%d”，若输入是”🐕5/🐕96”（🐕是空格），那么scanf的工作流是：</p>
+<p>​    跳过第一个🐕，把%d与5匹配 → 把/与/匹配 → 在寻找下一个整数时跳过一个🐕，把%d与96匹配。</p>
+</li>
+</ul>
+<hr>
+<ol>
+<li><p>如何显示字符”%”？</p>
+<p>printf(“10%%”)→10%</p>
+</li>
+</ol>
+<h2 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h2><p>这个就列举几个简单的课后习题吧</p>
+<h3 id="数字倒序"><a href="#数字倒序" class="headerlink" title="数字倒序"></a>数字倒序</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> x,y,z,data;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data); </span><br><span class="line">	x = data/<span class="number">100</span>;</span><br><span class="line">	y = (data<span class="number">-100</span>*x)/<span class="number">10</span>;</span><br><span class="line">	z = data<span class="number">-100</span>*x<span class="number">-10</span>*y;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> re_data;</span><br><span class="line">	re_data = z*<span class="number">100</span>+y*<span class="number">10</span>+x;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %d&quot;</span>,re_data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i1,i2,i3;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%1d%1d%1d&quot;</span>,&amp;i1,&amp;i2,&amp;i3);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %1d%1d%1d&quot;</span>,i3,i2,i1);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="十进制→八进制（不用函数）"><a href="#十进制→八进制（不用函数）" class="headerlink" title="十进制→八进制（不用函数）"></a>十进制→八进制（不用函数）</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a number between 1 and 32767:&quot;</span>);</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> a,b,c,d,e;</span><br><span class="line">	e = data % <span class="number">8</span>;</span><br><span class="line">	d = (data / <span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	c = (data / <span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	b = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	a = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;In octal,your number is:%1d%1d%1d%1d%1d\n&quot;</span>,a,b,c,d,e);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;the true number is %o&quot;</span>,data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="选择、循环语句"><a href="#选择、循环语句" class="headerlink" title="选择、循环语句"></a>选择、循环语句</h2><ol>
+<li><p>switch语句的分支别忘了加break，没有break会默认执行下一个case。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714182008.png" alt="image-20210714182008671" style="zoom: 80%;" /></p>
+</li>
+<li><p>do循环与while循环本质上是一样的，只不过前者在对于至少需要执行一次的循环来说十分方便。</p>
+</li>
+<li><p>注意i&lt;=n和i&lt;n循环次数上的差异。</p>
+</li>
+<li><p>break可以跳出循环，当嵌套循环时使用break，只能跳出一层循环；break是刚好把程序控制在循环体末尾之后，而continue是刚好控制在循环体末尾之前</p>
+<h2 id="字符（字符串章节前置）"><a href="#字符（字符串章节前置）" class="headerlink" title="字符（字符串章节前置）"></a>字符（字符串章节前置）</h2></li>
+</ol>
+<ul>
+<li><p><strong>C语言把字符当作小整数进行处理</strong>。在ASCII码中，字符可以看成是0~127的整数。字符’a’的值是97，’A’的值是65，’0’的值为48……在C语言中字符常量实际上是Int类型而不是char类型。当计算中出现字符时，C语言只是使用它对应的整数值，可以像比较数那样对字符进行比较，比如说下面这两个例子：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714185611.png" alt="image-20210714185611148" style="zoom:67%;" /></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用if语句将小写字母转化为大写字母(不用toupper函数)</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">&#x27;a&#x27;</span> &lt;= ch &amp;&amp; ch &lt;= <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">	ch = ch - <span class="string">&#x27;a&#x27;</span> + <span class="string">&#x27;A&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="字符处理函数"><a href="#字符处理函数" class="headerlink" title="字符处理函数"></a>字符处理函数</h3><h4 id="scanf和printf读写字符"><a href="#scanf和printf读写字符" class="headerlink" title="scanf和printf读写字符"></a>scanf和printf读写字符</h4><p>重点讲讲scanf读入字符的问题。在读入字符前，scanf不会跳过空白字符。如果下一个未读字符是空格，那么返回后的变量将包含空格。为了强制scanf函数在读入字符前跳过空白字符，我们可以这么写：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot; %c&quot;</span>,&amp;ch)</span><br></pre></td></tr></table></figure>
+<p>因为scanf通常情况下不会跳过空白字符，所以它很容易检查到输入行的结尾：检查刚读入的字符是否为换行符。例如，下面的字符将读入并且忽略掉当前初入行中剩下的所有字符：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>,&amp;ch);</span><br><span class="line">&#125; <span class="keyword">while</span>(ch !=。 <span class="string">&#x27;\n&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>下一次调用scanf时会读入下一输入行中的第一个字符。</p>
+<h4 id="getchar和putchar读写字符"><a href="#getchar和putchar读写字符" class="headerlink" title="getchar和putchar读写字符"></a>getchar和putchar读写字符</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) ！= <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<p>这个循环读入一个字符，把它存储在变量ch中，然后测试变量是不是\n。其实我们并不需要ch，下面引入一个C语言惯用法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (getchar() ！= <span class="string">&#x27;\n&#x27;</span>) <span class="comment">/*skips rest of line*/</span></span><br></pre></td></tr></table></figure>
+<p>getchar对于搜索字符的循环和跳过字符的循环是十分有用的，看一看下面这个利用getchar()跳过不定数量的空格字符的语句：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) == <span class="string">&#x27; &#x27;</span>) <span class="comment">/*skips blanks*/</span></span><br></pre></td></tr></table></figure>
+<p>当循环终止时，变量ch会包含getchar函数遇到的第一个非空白字符。</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>惯用法</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;N; i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i])</span><br><span class="line">	sum += a[i];</span><br></pre></td></tr></table></figure>
+<h3 id="用sizeof计算数组长度"><a href="#用sizeof计算数组长度" class="headerlink" title="用sizeof计算数组长度"></a>用sizeof计算数组长度</h3><p>如果数组有10个整数，那么sizeof(a)通常为40(假定每个整数为4个字节)。我们可以用sizeof来计算数组元素的大小：sizeof(a)/sizeof(a[0])，当需要数组长度时，游戏额程序员采用上述表达式。如果使用这种方法，以后数组长度变了也不用变。所以会有下面这样的循环：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;(<span class="keyword">int</span>)(<span class="keyword">sizeof</span>(a)/<span class="keyword">sizeof</span>(a[<span class="number">0</span>]));i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>为什么要加一个强制类型转换呢？（int）</p>
+<p>主要是因为一些编译器不加会报错，因为变量i的类型可能是int型（有符号整型）而sizeof返回的类型为size_t(一种无符号整型)，把有符号整型和无符号整型相比较是很危险的，尽管在本例中做没什么大问题（因为i和sizeof(a)/sizeof(a[0])都是非负值）。所以要进行强制转换。这样写有点麻烦，我们可以用宏：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZE ((int) (sizeof(a)/sizeof(a[0])))</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>;i&lt; SIZE;i++)</span><br><span class="line">    a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>更好的方法在后面会讲到，到时候回来补。</p>
+<h3 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h3><p>这一章的练习题还蛮好玩的，我贴一些。</p>
+<h4 id="8-1修改示例，显示重复的数字"><a href="#8-1修改示例，显示重复的数字" class="headerlink" title="8.1修改示例，显示重复的数字"></a>8.1修改示例，显示重复的数字</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Checks numbers for repeated digits */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span>   <span class="comment">/* C99 only */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">bool</span> digit_seen[<span class="number">10</span>] = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line">  <span class="keyword">int</span> digit,i, a[<span class="number">10</span>];</span><br><span class="line">  <span class="keyword">long</span> n;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Enter a number: &quot;</span>);</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">&quot;%ld&quot;</span>, &amp;n);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">      a[i] = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;                 <span class="comment">// 将重复的一位数筛选出来，并将其赋值给元素为二位数的数组。</span></span><br><span class="line">    digit = n % <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">if</span> (digit_seen[digit])</span><br><span class="line">        a[digit] = digit;</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        digit_seen[digit] = <span class="literal">true</span>;</span><br><span class="line">    n /= <span class="number">10</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Repeated digit(s): &quot;</span>);   <span class="comment">// 将一位数筛选出来。</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">      <span class="keyword">if</span> (a[i] != <span class="number">10</span>)   <span class="comment">//这markdown不知道为什么总把！=显示成≠</span></span><br><span class="line">          <span class="built_in">printf</span>(<span class="string">&quot;%2d&quot;</span>, a[i]);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="8-9随机步法"><a href="#8-9随机步法" class="headerlink" title="8.9随机步法"></a>8.9随机步法</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">不贴了，可以去我的仓库里看，代码贴多了，好像就加载不出来了。</span><br></pre></td></tr></table></figure>
+<h4 id="8-17幻方"><a href="#8-17幻方" class="headerlink" title="8.17幻方"></a>8.17幻方</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n,i,j,x,y;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This program creates a magic square of a specified size.\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The size must be an odd number between 1 and 99.\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter size of magic square:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> m = (n<span class="number">-1</span>)/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">int</span> a[n][n];</span><br><span class="line">	<span class="keyword">bool</span> b[n][n];</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			b[i][j]=<span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			a[i][j]=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	x = <span class="number">0</span>;</span><br><span class="line">	y = m;</span><br><span class="line">	<span class="comment">/*把1放到0行的中间*/</span></span><br><span class="line">	a[<span class="number">0</span>][m]=<span class="number">1</span>;</span><br><span class="line">	b[<span class="number">0</span>][m]=<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/*放数字*/</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">2</span>;i&lt;=(n*n);i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(x==<span class="number">0</span>&amp;&amp;y!=n<span class="number">-1</span>)&#123;</span><br><span class="line">			x = n<span class="number">-1</span>;</span><br><span class="line">			y = y+<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = <span class="number">1</span>;</span><br><span class="line">				y = y<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;	</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(x==<span class="number">0</span>&amp;&amp;y==n<span class="number">-1</span>)&#123;</span><br><span class="line">			x = n<span class="number">-1</span>;</span><br><span class="line">			y = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = <span class="number">1</span>;</span><br><span class="line">				y = n<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(x!=<span class="number">0</span>&amp;&amp;y==n<span class="number">-1</span>)&#123;</span><br><span class="line">			x = x<span class="number">-1</span>;</span><br><span class="line">			y = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = x<span class="number">-1</span>;</span><br><span class="line">				y = n<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			x = x<span class="number">-1</span>;</span><br><span class="line">			y = y+<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(b[x][y]==<span class="number">1</span>)&#123;</span><br><span class="line">				x = x+<span class="number">2</span>;</span><br><span class="line">				y = y<span class="number">-1</span>;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				a[x][y]=i;</span><br><span class="line">				b[x][y]=<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/*output*/</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;\t%d&quot;</span>,a[i][j]);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h2 id="函数以及程序结构"><a href="#函数以及程序结构" class="headerlink" title="函数以及程序结构"></a>函数以及程序结构</h2><h3 id="在调用前注意进行函数声明"><a href="#在调用前注意进行函数声明" class="headerlink" title="在调用前注意进行函数声明"></a>在调用前注意进行函数声明</h3><p>我们首先来看看，如果没有函数声明，并且函数放到main函数后面，会发生什么？假设我们有一个sum函数：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214357.png" alt="image-20210715214357520" style="zoom: 67%;" /></p>
+<p>​    我们可以发现，<strong>之所以会产生错误，是因为返回类型，形式参数等类型不匹配</strong>。</p>
+<p>​    前面提到了<strong>默认实际参数提升</strong>，我们来看看什么是默认实际参数提升：<strong>如果编译器在调用前没遇到函数原型。编译器会执行默认的实际参数提升</strong>：</p>
+<ol>
+<li><ul>
+<li>float的实际参数→double型</li>
+</ul>
+</li>
+<li><ul>
+<li>char类型和short类型的实际参数→int类型</li>
+</ul>
+</li>
+</ol>
+<p>​     这就是默认实际参数提升。</p>
+<h3 id="递归与循环"><a href="#递归与循环" class="headerlink" title="递归与循环"></a>递归与循环</h3><p>首先来简短说一下各概念的定义：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214750.png" alt="image.png" style="zoom:67%;" /></p>
+<p>重点来说一下递归和循环。简单归纳一下递归的特征：<strong>递归</strong>因为是调用自身，所以代码简洁，也易于理解，但是因为函数调用过多，会占据太多空间和时间，效率不高，会造成<strong>栈溢出</strong>。</p>
+<p>函数调用它自身，使代码变得那么简洁。递归这种算法的底层思想就是<strong>分治法：</strong>把一个大问题分解成小问题，再把小问题分解成更小的问题，<strong>每层问题的差别仅仅在于数据的规模</strong>；既然我们要像套娃一样不断细分，那么一定要有一个停止套娃的条件，这就是<strong>递归停止的条件，必不可少</strong>。</p>
+<p><a href="https://blog.csdn.net/CSDN_SUSAN/article/details/100275406?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E9%80%92%E5%BD%92%E4%B9%8B%E7%BE%8E&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-7-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">☞递归详细内容</a>。</p>
+<h3 id="局部变量与全局变量"><a href="#局部变量与全局变量" class="headerlink" title="局部变量与全局变量"></a>局部变量与全局变量</h3><p>这是编写多个函数时应注意的问题。这两者的主要区别在于两个特征：</p>
+<ul>
+<li><ul>
+<li><strong>存储期限</strong>：变量存储单元存在期内程序执行的部分。<ul>
+<li>局部变量是<strong>自动存储期限</strong>，在包含该变量的函数被调用时，局部变量的存储单元自动分配，函数返回时收回。因此，局部变量的函数返回时，局部变量的值无法保留；</li>
+<li>全局变量是<strong>静态存储期限</strong>，值将有就保留下来。</li>
+</ul>
+</li>
+<li><p>​    如果想把局部变量的值保留下来，<strong>可以使用static</strong>，就可以<strong>把自动存储期限变成静态存储期限</strong>。    </p>
+</li>
+<li><p>```c<br>static int i</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- - **作用域**，变量的作用域是可以引进该变量的程序文本的部分。局部变量是**块作用域**，就是从函数声明到函数体的末尾；**全局变量是文件作用域**，到文件末尾。</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">&lt;font color=purple&gt;使用外部变量，要保证它有意义。想什么循环要用的i，用作局部变量。&lt;/font&gt;</span><br><span class="line"></span><br><span class="line">###  练习题</span><br><span class="line"></span><br><span class="line">####  快速排序算法</span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line">/*快速排序算法*/ </span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">#define N 10</span><br><span class="line"></span><br><span class="line">void quicksort(int a[],int low,int high);</span><br><span class="line">int split(int a[],int low,int high);</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">	int a[N],i;</span><br><span class="line">	</span><br><span class="line">	/*读入一个数组*/</span><br><span class="line">	printf(&quot;Enter %d numbers to be sorted: &quot;,N);</span><br><span class="line">	for (i=0;i&lt;N;i++)</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;a[i]); </span><br><span class="line">	</span><br><span class="line">	quicksort(a,0,N-1);</span><br><span class="line">	printf(&quot;In sorted order:&quot;);</span><br><span class="line">	for (i=0;i&lt;N;i++)</span><br><span class="line">		printf(&quot;%d &quot;,a[i]);</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line">	</span><br><span class="line">	return 0;</span><br><span class="line"> &#125; </span><br><span class="line"> </span><br><span class="line"> void quicksort (int a[],int low,int high)</span><br><span class="line"> &#123;</span><br><span class="line"> 	int middle;</span><br><span class="line"> 	</span><br><span class="line"> 	if (low &gt;= high) return;</span><br><span class="line"> 	middle = split(a,low,high);</span><br><span class="line"> 	quicksort(a,low,middle-1);</span><br><span class="line"> 	quicksort(a,middle+1,high);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> int split(int a[],int low, int high)</span><br><span class="line"> &#123;</span><br><span class="line"> 	int part_element = a[low];</span><br><span class="line">	 </span><br><span class="line">	for (;;)&#123;</span><br><span class="line">		while (low &lt; high &amp;&amp; part_element &lt;= a[high])</span><br><span class="line">			high--;</span><br><span class="line">		if (low&gt;=high) break;</span><br><span class="line">		a[low++] = a[high];</span><br><span class="line">		</span><br><span class="line">		while (low &lt; high &amp;&amp; a[low] &lt;= part_element)</span><br><span class="line">			low++;</span><br><span class="line">		if (low &gt;= high) break;</span><br><span class="line">		a[high--] = a[low];</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	a[high] = part_element;</span><br><span class="line">	return high;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="字符模拟七段显示器"><a href="#字符模拟七段显示器" class="headerlink" title="字符模拟七段显示器"></a>字符模拟七段显示器</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_DIGITS 10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 记录所有数字的输出形式信息</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> segments[<span class="number">10</span>][<span class="number">9</span>] = &#123;&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> digits[<span class="number">3</span>][MAX_DIGITS*<span class="number">4</span>];</span><br><span class="line"><span class="keyword">int</span> i,j=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">process_digits</span><span class="params">(<span class="keyword">int</span> digit[], <span class="keyword">int</span> position)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> num;</span><br><span class="line">    <span class="keyword">int</span> digit[<span class="number">9</span>];</span><br><span class="line">    <span class="keyword">int</span> position = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Enter a number: &quot;</span>);</span><br><span class="line"></span><br><span class="line">    clear_digits_array();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((num = getchar()) != <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">47</span> &lt; num &amp;&amp; num &lt; <span class="number">58</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">9</span>; i++)</span><br><span class="line">                digit[i] = segments[num<span class="number">-48</span>][i]; <span class="comment">// 将数组segments中单个数字的信息保存数组digit中</span></span><br><span class="line"></span><br><span class="line">            process_digits(digit, position);</span><br><span class="line">            position++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    print_digits_array();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; MAX_DIGITS * <span class="number">4</span>; j++)</span><br><span class="line">            digits[i][j] = <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">process_digits</span><span class="params">(<span class="keyword">int</span> digit[], <span class="keyword">int</span> position)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> _digit[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;_&#x27;</span>, <span class="string">&#x27; &#x27;</span>&#125;, &#123;<span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, <span class="string">&#x27;|&#x27;</span>&#125;, &#123;<span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, <span class="string">&#x27;|&#x27;</span>&#125;&#125;; <span class="comment">// 将字符8的输出形式保存在数组_digit中。</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)             <span class="comment">// 将digit中记录的数值信息，输入至_digit中</span></span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">3</span>; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (digit[j+i*<span class="number">3</span>] == <span class="number">0</span>)</span><br><span class="line">                _digit[i][j] = <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">            digits[i][j+position*<span class="number">4</span>] = _digit[i][j]; </span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_digits_array</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; MAX_DIGITS * <span class="number">4</span>; j++)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, digits[i][j]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id=""><a href="#" class="headerlink" title=" "></a> </h5>]]></content>
+      <categories>
+        <category>CS</category>
+        <category>编程语言</category>
+        <category>C</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
       </tags>
   </entry>
   <entry>
@@ -801,252 +1047,6 @@ h_θ(x)=θ_0+θ_1x（也可以缩写成h(x)=……）</script><p>其中<strong>$
       <tags>
         <tag>阅读记录</tag>
         <tag>达芬奇</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法绪论</title>
-    <url>/2021/07/16/%E5%A4%A7%E8%AF%9D%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E7%BB%AA%E8%AE%BA/</url>
-    <content><![CDATA[<p> 听说DS很难学，我就先找了本趣味性的书《大话数据结构》来入门，之后在学得深入一点。在学这本书的途中，可以穿插一点深入的内容，比如看一看浙大的网课，做一做相对应的题目。由于资料来源比较广，不会局限于一本，所以我决定先不发布这部分到博客上，而是先做一个记录，到时候再整理。</p>
-<span id="more"></span>
-<h3 id="作者建议"><a href="#作者建议" class="headerlink" title="作者建议"></a>作者建议</h3><ol>
-<li>阅读与实践相结合，用开发工具调试算法，了解算法的运行过程。</li>
-<li>阅读完每一章，要在理解的基础上记忆一些关键点。最佳的效果就是不看书也可以一点不错地默写出相关算法。</li>
-<li>每阅读完一章，一定要找点练习题做做。</li>
-<li>在之后的学习和开发过程中，尝试应用学习到的数据结构和算法知识，以达到精通的境界。</li>
-</ol>
-<p>当每次学步下去，想放弃的时候，就想想一句话：<strong>你数据结构怎么学的</strong>？</p>
-<h2 id="数据结构绪论"><a href="#数据结构绪论" class="headerlink" title="数据结构绪论"></a>数据结构绪论</h2><h3 id="基本概念和术语"><a href="#基本概念和术语" class="headerlink" title="基本概念和术语"></a>基本概念和术语</h3><p>数据结构由“数据”和“结构”组成，我们先来说一说数据是什么意思。</p>
-<h4 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h4><p>所谓<strong>数据</strong>，是<strong>描述客观事物的符号集合</strong>，它满足两个前提：<strong>可以输入到计算机中</strong>，并且<strong>能被计算机程序处理</strong>。数据不仅仅包括整形等数值类型，还包括字符及声音、图像、视频等非数值类型。</p>
-<h4 id="数据元素、数据项"><a href="#数据元素、数据项" class="headerlink" title="数据元素、数据项"></a>数据元素、数据项</h4><p><strong>数据元素</strong>，是组成数据的、有一定意义的<strong>基本单位</strong>，在计算机中通常被当作整体处理，也被称为记录。比如说动物类的数据元素是什么？牛马猪狗这些都是动物类的数据元素。</p>
-<p>而一个数据元素可以用若干个<strong>数据项</strong>组成，比如人这样的数据元素，可以有眼、耳、鼻、手、脚等数据项，也可以有姓名，年龄，性别等数据项，具体有哪些数据项，视具体情况而定。<font color=purple>数据项是数据不可分的最小单位，但是真正讨论问题时，数据元素才是主角。</font></p>
-<p>说完数据，我们再来看看数据结构中的结构是什么。</p>
-<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>结构就是<strong>各个组成部分相互搭配和排列的方式</strong>。在现实生活中，<strong>不同数据元素之间不是独立的，而是存在特定的关系</strong>，我们将这些关系称为<strong>结构</strong>。</p>
-<blockquote>
-<font size=4>所谓数据结构，是相互之间存在一种或多种特定关系的数据元素的集合。</font>
-
-</blockquote>
-<hr>
-<p>那么，这种特定关系是什么呢？</p>
-<h3 id="逻辑结构和物理结构"><a href="#逻辑结构和物理结构" class="headerlink" title="逻辑结构和物理结构"></a>逻辑结构和物理结构</h3><h4 id="逻辑结构"><a href="#逻辑结构" class="headerlink" title="逻辑结构"></a>逻辑结构</h4><p>逻辑结构：<font color=purple>是指数据对象中，数据元素之间的相互关系。</font>逻辑结构主要有以下四种：</p>
-<ol>
-<li><p>集合结构</p>
-<p>数据元素除了同属于一个集合外，没有其他关系。这种集合关系类似于数学中的集合：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150323.png" alt="image-20210715150323565" style="zoom:67%;" /></p>
-</li>
-<li><p>线性结构</p>
-<p>一对一的关系。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150355.png" alt="image-20210715150354933" style="zoom:80%;" /></p>
-</li>
-<li><p>树形结构</p>
-<p>一对多的关系。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150416.png" alt="image-20210715150416675" style="zoom:80%;" /></p>
-</li>
-<li><p>图形结构</p>
-<p>多对多的关系。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715150441.png" alt="image-20210715150441452" style="zoom:80%;" /></p>
-</li>
-</ol>
-<p>逻辑结构是针对具体问题的，是<strong>为了解决某个问题在对问题理解的基础上，选择一个合适的数据结构表示数据元素之间的逻辑关系</strong>。</p>
-<h4 id="物理结构（存储结构）"><a href="#物理结构（存储结构）" class="headerlink" title="物理结构（存储结构）"></a>物理结构（存储结构）</h4><p>物理结构也叫存储结构，是指<strong>数据的逻辑结构在计算机中的存储形式</strong>。实际上就是<strong>如何把数据元素存储到计算机的存储器中</strong>。存储器主要是针对内存而言的，像硬盘、软盘、光盘等外部存储器的组织结构通常用文件结构来描述。</p>
-<p>数据的存储结构应该反映数据元素之间的逻辑关系，这是最为关键的，<strong>如何存储数据元素之间的逻辑关系</strong>，是实现物理结构的重点和难点。</p>
-<h4 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h4><p>把数据元素放在地址连续的存储单元里，其数据间的逻辑关系和物理关系是一致的。很好理解，就先排队一样，大家都占一席之地，谁也别想插队。</p>
-<h4 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h4><p>现实是不会像顺序存储结构这样想的这么简单和美好的，总会有人插队，也会有人要上厕所……卖你独自合约时常需要变化的结构，顺序存储是不科学的。现在如银行，餐厅都设置了排队系统，也就是每个人去了，先领一个号，等着叫号，叫到了去办理业务或者看病。在等待时，你爱干嘛就干嘛，只要及时回来就行，你需要关注的仅仅是前一个有没有被叫到，叫到了，下一个就是你，这就是链式存储结构。</p>
-<p>链式存储结构：把数据元素放到任意的存储单元里没这组存储单元可以是连续的，也可以是不连续的。数据元素的存储关系并不能反映其逻辑关系，因此<strong>需要用一个指针存放数据元素的地址</strong>，这样通过地址就饿可以找到相关联的数据元素的位置。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" /></p>
-<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>数据类型：一组性质相同的值的集合及定义在此集合上的一些操作的总称。</p>
-<p>我们可以想想<strong>当初设计计算机语言的人为什么要考虑到数据类型</strong>呢？</p>
-<p>我们知道住宅有不同的类型，为了满足不同人的需求，地产商推出了商品房，别墅，酒店，还有近几年的青年旅馆，民宿等等。<strong>不同的人有不同的需求</strong>，而数据结构也是这么一回事。计算机的内存不是无限大的，当我们计算6+7时，有必要开辟很大的适合小数是指字符运算的内存空间吗？显然没有必要。于是研究者们就考虑，<strong>要对数据进行分类，分出许多不同的数据类型</strong>。</p>
-<p>不同的计算机有不同的硬件系统，这就要求程序语言最终通过编译器或解释器转换成底层语言。可事实上，高绩语言的编程者不管最终程序运行在什么计算机上，他的目的是为了实现两个整型数字的运算，他才不关心整数在计算机内部是怎么表示的，这些操作是如何实现的，对高级语言开发者来说根本不重要。于是，我们就考虑不管什么样的计算机，什么计算机语言最终都会面临诸如整数运算、实数运算、字符运算等操作，我们可以考虑<strong>抽象出来</strong>。</p>
-<p>抽象是抽出问题的特征而忽略非本质的细节，是对具体事务的一个概括，这是一种思考问题的方式。我们对已有的数据类型进行抽象，就得到了抽象数据类型（ADT）。ADT不仅仅☞那些已有的数据类型，还可以是编程者自己定义的数据类型。</p>
-<p>事实上，抽象数据类型体现了程序设计中问题分解、抽象和信息隐藏的特性。ADT把实际问题中的问题分解为小规模且容易处理的问题，然后建立一个计算机能处理的数据类型，并把每个功能模块实现细节作为一个独立的单元，从而使具体实现过程隐藏起来。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">	数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">	操作1</span><br><span class="line">		初始条件</span><br><span class="line">		操作结果描述</span><br><span class="line">	操作2</span><br><span class="line">		…………</span><br><span class="line">	操作n</span><br><span class="line">		…………</span><br><span class="line">endADT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="算法绪论"><a href="#算法绪论" class="headerlink" title="算法绪论"></a>算法绪论</h2><h3 id="算法和数据结构的关系"><a href="#算法和数据结构的关系" class="headerlink" title="算法和数据结构的关系"></a>算法和数据结构的关系</h3><p>没了算法数据结构也能学，只不过算法会涉及数据结构的应用，在算法的学习中，反过来会加深对数据结构的理解。<strong>在数据结构的课程中，算法的出现是为了更好地理解数据结构，并不会详细谈及算法的方方面面，这也是本书的原则</strong>。</p>
-<h3 id="算法的神奇"><a href="#算法的神奇" class="headerlink" title="算法的神奇"></a>算法的神奇</h3><p>我们通过一个小例子来看看算法的神奇之处。</p>
-<p>如果我们现在要用计算机求1+2+3+4+……+100的值，也许我们马上就可以写出一个C代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);</span><br></pre></td></tr></table></figure>
-<p>这是一种算法，也是我们的第一直觉。当然，我们也知道更高效的方法，就是高斯想出来的方法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;</span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);</span><br></pre></td></tr></table></figure>
-<p>显然这种方法更高效，对比两种算法，我们就可以发现算法的神奇之处。</p>
-<h3 id="算法的定义以及特性"><a href="#算法的定义以及特性" class="headerlink" title="算法的定义以及特性"></a>算法的定义以及特性</h3><p>什么是算法？算法的定义是什么？</p>
-<blockquote>
-<p><strong>算法是特定问题求解步骤的描述，在计算机中表现为指令的有限序列，并且每条指令包含一个或多个操作。</strong></p>
-</blockquote>
-<p>既然是特定问题的求解步骤，并且从前面的例子也可以发现，是没有通用的算法的，就像没有包治百病的药，我们要”对症下药“。定义中的<strong>指令</strong>指的是能被人或机器等计算装置执行的”命令“。为了解决某一个问题，我们需要把指令表示成一定的操作序列，操作序列包括一组操作，每个操作完成特定的功能，这就是算法的定义。</p>
-<p>下面我们来说一说算法的五个特性：</p>
-<ol>
-<li><p>输入、输出（这是两个）</p>
-<p>算法一定要有输出但可以没有输入（比如hello world）,没有输出你要这个算法干什么？</p>
-</li>
-<li><p>有穷性</p>
-<p>算法在执行有限的步骤之后，<font color=purple>自动结束而不会出现无限循环</font>，<font color=green>并且每个步骤的在可接受的时间内完成。</font></p>
-</li>
-<li><p>确定性</p>
-<p>每个步骤都要被精确定义而无歧义，不能出现二义性。</p>
-</li>
-<li><p>可行性</p>
-<p>算法的每一步必须都是可行的，每一步都能通过执行有限次数完成，也就是上机能把程序运行出来，算出正确的结果。</p>
-</li>
-</ol>
-<h3 id="算法设计的要求"><a href="#算法设计的要求" class="headerlink" title="算法设计的要求"></a>算法设计的要求</h3><p>虽然算法没有标准答案，但还是有好的参考答案的，相对好的算法还是存在的。掌握好的算法，对我们解决问题很有帮助，否则前人的智慧我们不能利用，就得从头自己研究了。那什么才叫好的算法呢？</p>
-<ol>
-<li><p>正确性</p>
-<p>别看这简简单单三个字，也有四个层次：</p>
-<ol>
-<li>算法程序没有语法错误</li>
-<li>算法程序对于合法的输入数据能够产生满足要求的输出结果。（结果要对）</li>
-<li><strong>算法程序对于非法的输入数据能够得出满足规格说明的结果。</strong></li>
-<li>对于精心选择的，甚至刁难的测试数据都有满足结果的输出结果。</li>
-</ol>
-<p>这里说一下，对于标准4，我们不足以逐一验证所有的输入都能得到正确的结果。因此算法的正确性在大部分情况都不可能用程序来证明，而是用数学方法来证明。证明一个复杂算法在所有层次上都是对的，代价十分昂贵。所以一般情况下，我们把层次3作为一个算法是否正确的标准。</p>
-</li>
-<li><p>可读性</p>
-<p>晦涩难懂的代码难以调试和修改，不方便阅读，交流和理解。这是个很重要的标准。</p>
-</li>
-<li><p>健壮性</p>
-<p>当输入数据不合法时（比如输入年龄时输入一个负值），算法也能做相关处理，而不是产生莫名其妙的结果。</p>
-</li>
-<li><p>时间效率高和存储量低</p>
-<p>时间效率指的是算法的执行时间，执行时间短的算法效率高；存储量需求指的是算法在执行过程中需要的最大存储空间，包括内存和外部硬盘的存储空间。<strong>设计算法应尽量满足时间效率高和存储量低的需求</strong>。</p>
-<p>既然讲到时间效率的问题，那么我们该如何度量算法的时间效率呢？</p>
-<ul>
-<li><p>第一种最容易想到的就是”是骡子是马，拉出来遛遛。“也就是所谓的<strong>事后统计方法</strong>。这种方法主要通过设计好的测试和数据，利用计算机的计时功能，来计算算法的效率。很显然，这种算法是有大缺陷的：</p>
-<ol>
-<li>我们必须得先弄好程序，到时候跑出来发现这是给垃圾玩意，这不就白跑了吗？</li>
-<li>时间的比较依赖计算机硬件和软件等环境因素，有时候会掩盖算法本身的优劣。</li>
-<li>测试数据设计十分困难，有的算法对小数据效率高，有的是大数据集效率高，有多少数据来测试是很难判断的问题。</li>
-</ol>
-<p>正是这种种原因，导致事后统计方法不大莱斯，所以计算机前辈们设计了一种事前的分析估算方法。</p>
-</li>
-<li><p>第二种，事前估算分析，主要是依据统计方法进行估算。一个用高级编程语言在计算机上运行的时间主要取决于下面这些因素:</p>
-<ol>
-<li>算法采用的策略、方法。（这是根本）</li>
-<li>编译产生的代码质量。(软件的锅)</li>
-<li>问题的输入规模。</li>
-<li>机器执行指令的速度。（看硬件性能）</li>
-</ol>
-<p>抛开计算机硬件、软件的客观因素，我们发现一个程序运行的时间，依赖于<strong>算法的好坏</strong>和<strong>问题的输入规模（输入量的多少）</strong>。我们拿出之前高斯求和的两个算法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;			<span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
-<p>其实首尾都是一样的，我们只要看中间就行，孰优孰劣不言自明。我们可以发现，测定运行时间最可靠的方法就是<strong>计算对运行时间有消耗的基本操作的执行次数</strong>。<font color=purple>在分析程序的运行时间时，关键是把程序看作独立于程序设计语言的一种算法或者一系列步骤。</font></p>
-</li>
-</ul>
-</li>
-</ol>
-<pre><code> 我们举个小例子：算法A的输入规模是4n+8，算法B的输入规模是$2n^2+1$。当n &lt;= 3时，A要差于B，但是n &gt; 3时，后面A的优势就越来越明显了，这里我们就引出一个函数渐进增长的例子：
-
- &gt; 给定两个函数f(n)和g(n)，如果存在一个整数N，使得对于所有的n &gt; N，f(n)总是比g(n)大，那么，我们就说f(x)的增长渐进快于g(n)。
-
- 比如上面的B就是增长渐进快于A。还有当我们算的时候：
-
- - 加法常数不重要
- - 与最高次相乘的常数不重要。
- - 我们判断一个算法效率时，更应该关注主项的阶数（最高阶）。
-
- 通过上面的分析，我们可以得出：**某个算法，随着n的增大，它会越来越优于另一个算法**。这就是事前估算方法的理论依据，**通过算法时间复杂度来估算算法时间效率**。
-</code></pre><h3 id="算法时间复杂度"><a href="#算法时间复杂度" class="headerlink" title="算法时间复杂度"></a>算法时间复杂度</h3><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181558.png" alt="image-20210716181558070" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181618.png" alt="image-20210716181618611" style="zoom:67%;" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181633.png" alt="image-20210716181633478" style="zoom:67%;" /></p>
-<p>时间复杂度这部分就不写了，这里☞<a href="https://blog.csdn.net/user11223344abc/article/details/81485842?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E7%AE%97%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">算法—时间复杂度</a>。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>四大金刚</category>
-        <category>数据结构和算法</category>
-        <category>《大话数据结构》</category>
-      </categories>
-      <tags>
-        <tag>CS</tag>
-        <tag>DS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深入理解计算机系统导言、概论</title>
-    <url>/2021/07/15/%E5%9B%9B%E5%A4%A7%E9%87%91%E5%88%9A/CSAPP/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%A8%80%E3%80%81%E6%A6%82%E8%AE%BA/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200235.png" alt="image-20210715200235339"></p>
-<span id="more"></span>
-<h2 id="本书的主旨"><a href="#本书的主旨" class="headerlink" title="本书的主旨"></a>本书的主旨</h2><p>这本书可是个硬骨头😓，不过它的内容是我从小就想弄懂的。为此，我一定要搞懂里面的东西，也许一遍要看很长时间也要把它给看下来。</p>
-<p>这本书的主要目的是<font color=purple>解释所有计算机系统的本质概念，并展示这些概念是如何实实在在的影响程序的正确性、性能和实用性的。</font>这本书有个很大的特点就是从程序员的角度来写的而不是从构建者的角度来写的，那么所谓的<strong>程序员角度</strong>是什么意思呢？</p>
-<p>即<strong>讲述应用程序员如何能够利用系统知识来编写一个更好的程序</strong>。除此之外，<strong>学习一个计算机系统应该做些什么</strong>，是学习如何构建一个计算机系统的很好的出发点，所以对学习计算机系统的软硬件实现的人也是很有帮助的。</p>
-<p>总之，就是研究计算机系统这一系统是如何运作的。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><ol>
-<li>要求Linux系统，因为示例大部分是Linux上运行的C程序。</li>
-<li>对C和C++有一定的了解。</li>
-</ol>
-<h2 id="如何阅读此书？"><a href="#如何阅读此书？" class="headerlink" title="如何阅读此书？"></a>如何阅读此书？</h2><p>我想的学习方法是这样的：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716205620.png" alt="image-20210716205620739" style="zoom:67%;" /></p>
-<h2 id="本书框架"><a href="#本书框架" class="headerlink" title="本书框架"></a>本书框架</h2><p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200707.png" alt="image-20210715200707045"></p>
-<p>这里我就借用大佬的视频里的框架了。全书分为四部分：第一章的计算机系统漫游，展示”Hello World”程序的一个生命周期，细节会在后面章节补充；第二部分（2~6）程序结构和执行；第三部分（7~9）在系统上运行程序；最后一部分进程间的交互与通信。</p>
-<hr>
-<p>以上就是导言和概论部分。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>四大金刚</category>
-        <category>OS</category>
-        <category>CSAPP</category>
-      </categories>
-      <tags>
-        <tag>四大金刚</tag>
-        <tag>os</tag>
-        <tag>CSAPP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>十大原理之整体形六大原理</title>
-    <url>/2021/07/17/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<h3 id="人们如何相互影响"><a href="#人们如何相互影响" class="headerlink" title="人们如何相互影响"></a>人们如何相互影响</h3><p>前四个原理讨论了个人如何做出决策。在我们的人生旅途中，我们的许多决策不仅影响我们自己，而且还会影响其他人。以下三个原理是关于人们如何相互交易的。</p>
-<span id="more"></span>
-<h4 id="五、贸易可以使每个人的状况都变得更好"><a href="#五、贸易可以使每个人的状况都变得更好" class="headerlink" title="五、贸易可以使每个人的状况都变得更好"></a>五、贸易可以使每个人的状况都变得更好</h4><p>我们先考虑贸易如何影响家庭。当家庭中的某个成员找工作时，她要与也在找工作的其他家庭的成员竞争。各个家庭在购物时也会相互竞争，因为每个家庭都想以最低的价格购买最好的东西。从某种意义上说，<strong>经济中每个家庭都在与所有其他家庭相竞争</strong>。</p>
-<p>尽管有这种竞争，但把你的家庭与所有其他家庭隔绝开来并不会使你的家庭过得更好。如果真的隔绝开来的话，你的家庭就必须自己种粮食、自己做衣服、自己盖房子。显然，你的家庭在与其他家庭的贸易中受益良多。<font color=purple>贸易使每个人都可以专门从事自己最擅长的活动，</font>无论它是耕种、做衣服还是盖房子。通过与其他人贸易，<strong>人们可以以较低的成本获得各种各样的物品与服务</strong>。</p>
-<p>国家和家庭一样，也能从相互贸易中获益。贸易使各国可以专门从事自己最擅长的活动，并享有种类更多的物品与服务。</p>
-<hr>
-<h4 id="六、市场通常是组织经济活动的一种好方法"><a href="#六、市场通常是组织经济活动的一种好方法" class="headerlink" title="六、市场通常是组织经济活动的一种好方法"></a>六、市场通常是组织经济活动的一种好方法</h4><p>苏联和上世纪我国建国初期都是实行中央计划经济体制的，显然最后的效果不大好。因为中央计划经济国家运行的<strong>前提假设</strong>是，<u>政府官员能够最佳地配置经济中的稀缺资源</u>。这些中央计划者决定，生产什么物品与服务、生产多少，以及谁生产和消费这些物品与服务。支撑中央计划的理论是，<font color=purple>只有政府才能以促进整个社会经济福利的方式组织经济活动。</font></p>
-<p>现在我国是计划经济和市场经济相结合。在市场经济中，<strong>价格和利己引导着企业和家庭进行决策</strong>。可以看到，市场经济是成功的，但这种成功就像亚当斯密所说的“看不见的手”一样是个谜。在市场经济中，没有一个人追求整个社会的经济福利，但是市场经济在促进总体经济福利的方式组织经济活动方面非常成功。</p>
-<p>关于这个问题，亚当斯密有一些经典的观点：</p>
-<ul>
-<li>价格会自发调整，指引这些单个买者和卖者达到某种结果，该结果在大多数情况下会实现整个社会福利的最大化。</li>
-<li>当政府阻止价格根据供求状况自发调整时，它就限制了看不见的手对组成经济的千百万家庭和企业的决策进行协调的能力。这可以解释为什么中央计划经济是失败的，因为它把“看不见的手”给绑起来了。</li>
-<li>经济参与者<strong>受利己心所驱动</strong>，而市场上这只看不见的手<strong>指引这种利己心去促进总体的经济福利</strong>。</li>
-</ul>
-<hr>
-<h4 id="七、政府有时可以改善市场结果"><a href="#七、政府有时可以改善市场结果" class="headerlink" title="七、政府有时可以改善市场结果"></a>七、政府有时可以改善市场结果</h4><p>我们国家既有计划经济也有市场经济，两者是并存的。那么为什么需要计划经济，也就是政府干预经济呢？学习经济学的目的之一是<strong>提高我们对政府政策的适当作用与范围的认识</strong>。</p>
-<p>以下是两个主要原因：</p>
-<ol>
-<li><p>只有在政府实施规则并维持对市场经济至关重要的制度时，“看不见的手”才能施展其魔力。什么意思呢？</p>
-<p>​        我问你，假如你是一个农民，你种了许多蔬菜，然后拿到集市上去卖，结果还没开始卖，就直接被人抢走了。你是一脸问号（？？？），这个时候，你还想种蔬菜了吗？反正都会被抢走，我也去抢吧，要不然谁给我饭吃？这样，市场经济还能起作用吗？</p>
-<p>​        这就需要政府实施<strong>产权</strong>的制度（我理解为主持公道），目的是让人们有<strong>控制自己手中稀缺资源，维护自己权利的能力</strong>。我们依靠政府的警察和法庭获得自己生产物品的所有权，而“看不见的手”依靠我们维护自己权利的能力。</p>
-</li>
-<li><p>“看不见的手”是强有力的，但并不是无所不能的。</p>
-<p>政府干预经济的目的只有两个：促进效率（把蛋糕做大）或促进平等（主持分蛋糕）。我们先来看看第一个：</p>
-<ul>
-<li>尽管市场经济可以自己<strong>有效配置资源</strong>，以使经济蛋糕最大化，但也有失灵的时候。（经济学家称之为市场失灵）这里说两个原因：<ul>
-<li>一是可能因为<strong>外部性</strong>，指的是一个人的行为对旁观者福利的影响。最经典的例子就是污染的问题，工厂产生了污染，对附近居民的健康造成了有害影响，市场本身是不会把成本考虑在内的。</li>
-<li>二是可能因为<strong>市场势力</strong>，指单个人或公司（或某个小群体）不适当地影响市场价格的能力。我觉得就是<strong>巨无霸垄断</strong>，会对市场造成不好的影响。</li>
-</ul>
-</li>
-<li>即使“看不见的手”带来了有效率的产出，它也不能消除经济福利上巨大的不对称。市场经济根据人们生产其他人愿意购买的东西的能力来给予其报酬。这个很好理解。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="整体经济如何运行"><a href="#整体经济如何运行" class="headerlink" title="整体经济如何运行"></a>整体经济如何运行</h3><p>我们从讨论个人如何做出决策开始，然后考察人们如何相互影响。所有这些决策和相互影响共同组成了“经济”。最后三个原理涉及整体经济的运行。</p>
-<h4 id="八、一国的生活水平取决于它生产物品与服务的能力"><a href="#八、一国的生活水平取决于它生产物品与服务的能力" class="headerlink" title="八、一国的生活水平取决于它生产物品与服务的能力"></a>八、一国的生活水平取决于它生产物品与服务的能力</h4><p>用什么来解释各国之间和不同时期<strong>生活水平</strong>的巨大差别呢？</p>
-<p>各国<strong>生产率（productivity）</strong>的差别——即每一单位劳动投入所生产的物品与服务数量的差别。决定一个国家人民生活水平的最关键因素，不是什么和它国竞争，也不是政府提高什么最低工资标准，而是这个国家的生产率是多少。</p>
-<p>生产率与生活水平之间的关系对于公共政策也有深远的含义。在考虑任何一项政策如何影响生活水平时，关键问题是这项政策如何影响我们生产物品与服务的能力。为了提高生活水平，决策者需要通过让工人受到良好的教育、拥有生产物品与服务需要的工具以及获取最好的技术来提高生产率。</p>
-<h4 id="九、当政府发行了过多货币时，物价会上升"><a href="#九、当政府发行了过多货币时，物价会上升" class="headerlink" title="九、当政府发行了过多货币时，物价会上升"></a>九、当政府发行了过多货币时，物价会上升</h4><p>所谓的物价上升→通货膨胀。由于高通货膨胀会让社会付出各种成本，所以世界各国的经济政策制定者都把保持低通货膨胀作为目标之一。</p>
-<p>是什么引起了通货膨胀？</p>
-<p>在大多数严重或持续的通货膨胀情况下，罪魁祸首是货币量的增长。当一国政府发行了大量本国货币时，货币的价值就下降了。在20世纪20年代初的德国，当物价平均每月上升3倍时，货币量每月也增加了3倍。美国的情况虽然没有这么严重，但从美国的经济史中也可以得出类似的结论：20世纪70年代的高通货膨胀与货币量的迅速增长是相关的，而近年来经历的低通货膨胀与货币量的缓慢增长也是相关的。</p>
-<h4 id="十、社会面临通货膨胀与失业之间的短期权衡取舍"><a href="#十、社会面临通货膨胀与失业之间的短期权衡取舍" class="headerlink" title="十、社会面临通货膨胀与失业之间的短期权衡取舍"></a>十、社会面临通货膨胀与失业之间的短期权衡取舍</h4><p>不解释了，累了。</p>
-<hr>
-<p>在下面的学习中，要始终牢记这十大原理：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717144413.png" alt="image-20210717144411615" style="zoom:50%;" /></p>
-]]></content>
-      <categories>
-        <category>经济学</category>
-        <category>《经济学原理》—曼昆</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
       </tags>
   </entry>
 </search>
