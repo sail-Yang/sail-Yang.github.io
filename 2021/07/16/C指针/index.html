@@ -21,12 +21,12 @@
     var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="指针基础知识机器级上指针表示的内容现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的地址，就像我们的学号一样，用来和其它内存区别。 可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.">
+  <meta name="description" content="指针基础知识  机器级上指针表示的内容 现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的地址，就像我们的学号一样，用来和其它内存区别。 可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C指针基础和指针的数组应用">
 <meta property="og:url" content="https://progsail.com/2021/07/16/C%E6%8C%87%E9%92%88/index.html">
 <meta property="og:site_name" content="sail Yang&#39;s Blog">
-<meta property="og:description" content="指针基础知识机器级上指针表示的内容现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的地址，就像我们的学号一样，用来和其它内存区别。 可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.">
+<meta property="og:description" content="指针基础知识  机器级上指针表示的内容 现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的地址，就像我们的学号一样，用来和其它内存区别。 可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png">
 <meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png">
@@ -289,100 +289,129 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="指针基础知识"><a href="#指针基础知识" class="headerlink" title="指针基础知识"></a>指针基础知识</h1><h2 id="机器级上指针表示的内容"><a href="#机器级上指针表示的内容" class="headerlink" title="机器级上指针表示的内容"></a>机器级上指针表示的内容</h2><p>现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的<strong>地址</strong>，就像我们的学号一样，用来和其它内存区别。</p>
+        <h1 id="指针基础知识"><a class="markdownIt-Anchor" href="#指针基础知识"></a> 指针基础知识</h1>
+<h2 id="机器级上指针表示的内容"><a class="markdownIt-Anchor" href="#机器级上指针表示的内容"></a> 机器级上指针表示的内容</h2>
+<p>现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的<strong>地址</strong>，就像我们的学号一样，用来和其它内存区别。</p>
 <p>可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png" alt="image-20210717090004435" style="zoom:67%;" /></p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png" alt="image-20210717090004435" style="zoom:67%;" />
 <span id="more"></span>
-<p>我们虽然用数表示内存地址，但是地址的取值范围是不同于整数的范围的，所以<u>一定不能用普通整型变量来存储地址</u>。但是，可以用<font color=purple>特殊的指针变量来存储地址。</font>这就是指针的出处。<strong>指针就是地址，而指针变量就是存储地址的变量。</strong>我们可以用下面这种方式来表示，指针变量p存储变量i的地址：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png" alt="image-20210717091538267" style="zoom:80%;" /></p>
-<h2 id="指针变量的声明"><a href="#指针变量的声明" class="headerlink" title="指针变量的声明"></a>指针变量的声明</h2><p>常见的指针声明形式：</p>
+<p>我们虽然用数表示内存地址，但是地址的取值范围是不同于整数的范围的，所以<u>一定不能用普通整型变量来存储地址</u>。但是，可以用<font color=purple>特殊的指针变量来存储地址。</font>这就是指针的出处。**指针就是地址，而指针变量就是存储地址的变量。**我们可以用下面这种方式来表示，指针变量p存储变量i的地址：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png" alt="image-20210717091538267" style="zoom:80%;" />
+<h2 id="指针变量的声明"><a class="markdownIt-Anchor" href="#指针变量的声明"></a> 指针变量的声明</h2>
+<p>常见的指针声明形式：</p>
 <ol>
 <li>int p 这是一个普通的整型变量；int *p 首先从p开始，先与*结合，说明p是一个指针，然后再与int结合，说明指针的类型为Int型，所以p（指针变量名，不是*p）是一个返回整型数据的指针。</li>
-<li>int p[3]说明p是一个由整型数据组成的数组；int <em>p[3] p先与[3]结合，因为[]优先级&gt;\</em>，说明p是一个数组，然后再与*结合，说明数组里的元素都是指针，然后再与int 结合，说明指针指向的是对象是整型的，所以p是一个由返回整型数据的指针组成的数组。</li>
+<li>int p[3]说明p是一个由整型数据组成的数组；int *p[3] p先与[3]结合，因为[]优先级&gt;*，说明p是一个数组，然后再与*结合，说明数组里的元素都是指针，然后再与int 结合，说明指针指向的是对象是整型的，所以p是一个由返回整型数据的指针组成的数组。</li>
 <li>int (*p)[3] p先与*结合，说明p是一个指针，再与[3]结合，说明指针指向一个数组，再与Int结合，说明p指向一个由整型数据组成的数组。</li>
 <li>int **p 指向指针的指针。</li>
 <li>int p(int) p是一个函数，返回整型数据；int (*p)(int)，p是一个指向有一个整型参数且返回类型为整型的函数的指针。</li>
 </ol>
-<h2 id="指针的四方面"><a href="#指针的四方面" class="headerlink" title="指针的四方面"></a>指针的四方面</h2><p>指针有四个方面的内容需要搞清楚：</p>
-<h3 id="指针的类型"><a href="#指针的类型" class="headerlink" title="指针的类型"></a>指针的类型</h3><p>从语法角度，我们只要把指针名字去掉，剩下的就是指针的类型（比如上面都把p去掉）。</p>
-<h3 id="指针所指向的类型"><a href="#指针所指向的类型" class="headerlink" title="指针所指向的类型"></a>指针所指向的类型</h3><p>当通过指针来访问指针所指向的内存区时，指针所指向的类型决定了编译器将把那片内存区里的内容当做什么来看待。从语法看，去除名字和名字左边的*就行。</p>
+<h2 id="指针的四方面"><a class="markdownIt-Anchor" href="#指针的四方面"></a> 指针的四方面</h2>
+<p>指针有四个方面的内容需要搞清楚：</p>
+<h3 id="指针的类型"><a class="markdownIt-Anchor" href="#指针的类型"></a> 指针的类型</h3>
+<p>从语法角度，我们只要把指针名字去掉，剩下的就是指针的类型（比如上面都把p去掉）。</p>
+<h3 id="指针所指向的类型"><a class="markdownIt-Anchor" href="#指针所指向的类型"></a> 指针所指向的类型</h3>
+<p>当通过指针来访问指针所指向的内存区时，指针所指向的类型决定了编译器将把那片内存区里的内容当做什么来看待。从语法看，去除名字和名字左边的*就行。</p>
 <p>一定要注意<font color=purple>指针所指向的类型</font>和<font color=green>指针的类型</font>的区别。</p>
-<h3 id="指针的值—地址"><a href="#指针的值—地址" class="headerlink" title="指针的值—地址"></a>指针的值—地址</h3><p>指针的值时指针变量存储的数值，这个数值将被编译器当作一个地址，而不是一个一般的数值。</p>
+<h3 id="指针的值地址"><a class="markdownIt-Anchor" href="#指针的值地址"></a> 指针的值—地址</h3>
+<p>指针的值时指针变量存储的数值，这个数值将被编译器当作一个地址，而不是一个一般的数值。</p>
 <p>前面也说了，变量i的地址用首地址来表示，<strong>我们说一个指针的值是XX，就相当于说该指针指向了以XX为首地址的一片内存区域</strong>。</p>
-<h3 id="指针本身所占据的内存区"><a href="#指针本身所占据的内存区" class="headerlink" title="指针本身所占据的内存区"></a>指针本身所占据的内存区</h3><p>用sizeof就可以测一下指针本身所占的内存了。</p>
-<hr>
+<h3 id="指针本身所占据的内存区"><a class="markdownIt-Anchor" href="#指针本身所占据的内存区"></a> 指针本身所占据的内存区</h3>
+<p>用sizeof就可以测一下指针本身所占的内存了。</p>
+<hr />
 <p>每当遇到一个指针，就问问自己这个指针的这四方面分别是什么，想的多了也就分的清了。</p>
-<h2 id="取地址运算符和间接寻址运算符"><a href="#取地址运算符和间接寻址运算符" class="headerlink" title="取地址运算符和间接寻址运算符"></a>取地址运算符和间接寻址运算符</h2><ul>
-<li><p>为了找到变量的地址，可以使用取地址运算符&amp;。举个例子，若x是一个变量，&amp;x就是x在内存中的地址。</p>
+<h2 id="取地址运算符和间接寻址运算符"><a class="markdownIt-Anchor" href="#取地址运算符和间接寻址运算符"></a> 取地址运算符和间接寻址运算符</h2>
+<ul>
+<li>
+<p>为了找到变量的地址，可以使用取地址运算符&amp;。举个例子，若x是一个变量，&amp;x就是x在内存中的地址。</p>
 </li>
-<li><p>为了获得指针所指向对象的访问，可以使用*（间接寻址运算符）。如果p是指针，*p表示p当前所指向的对象。</p>
+<li>
+<p>为了获得指针所指向对象的访问，可以使用*（间接寻址运算符）。如果p是指针，*p表示p当前所指向的对象。</p>
 <p>&amp;与*是一对逆运算。</p>
 </li>
 </ul>
-<h3 id="指针初始化"><a href="#指针初始化" class="headerlink" title="指针初始化"></a>指针初始化</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i,p = &amp;i;</span><br></pre></td></tr></table></figure>
+<h3 id="指针初始化"><a class="markdownIt-Anchor" href="#指针初始化"></a> 指针初始化</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i,p = &amp;i;</span><br></pre></td></tr></table></figure>
 <p>这就是指针初始化的一种方法。</p>
-<h3 id="间接寻址"><a href="#间接寻址" class="headerlink" title="间接寻址"></a>间接寻址</h3><p>一旦指针初始化了，即指针指向了对象，我们就可以用间接寻址来访问存储在对象中的内容。例如：</p>
+<h3 id="间接寻址"><a class="markdownIt-Anchor" href="#间接寻址"></a> 间接寻址</h3>
+<p>一旦指针初始化了，即指针指向了对象，我们就可以用间接寻址来访问存储在对象中的内容。例如：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,*p);</span><br></pre></td></tr></table></figure>
 <p>其实只要p指向i，*p就是i的别名，两者共生死（一块变动）。</p>
-<hr>
-<h2 id="指针的算术运算"><a href="#指针的算术运算" class="headerlink" title="指针的算术运算"></a>指针的算术运算</h2><h3 id="加减法"><a href="#加减法" class="headerlink" title="加减法"></a>加减法</h3><p>指针可以加上或减去一个整数。指针的这种运算的意义和通常的数值的加减运算的意义是不一样的，它是以单元为单位。例如：</p>
+<hr />
+<h2 id="指针的算术运算"><a class="markdownIt-Anchor" href="#指针的算术运算"></a> 指针的算术运算</h2>
+<h3 id="加减法"><a class="markdownIt-Anchor" href="#加减法"></a> 加减法</h3>
+<p>指针可以加上或减去一个整数。指针的这种运算的意义和通常的数值的加减运算的意义是不一样的，它是以单元为单位。例如：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> a[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> *ptr=(<span class="keyword">int</span> *)a;		<span class="comment">//强制类型转换并不会改变a 的类型</span></span><br><span class="line">ptr++;</span><br></pre></td></tr></table></figure>
-<p>在上例中，指针ptr 的类型是int<em>,它指向的类型是int，它被初始化为指向整型变量a。接下来的第3句中，<em>*指针ptr被加了1，编译器是这样处理的</em></em>：</p>
+<p>在上例中，指针ptr 的类型是int*,它指向的类型是int，它被初始化为指向整型变量a。接下来的第3句中，<strong>指针ptr被加了1，编译器是这样处理的</strong>：</p>
 <p>它把指针ptr 的值加上了<strong>sizeof(int)</strong>，在64 位程序中，是被加上了8，因为在64 位程序中，int 占 8 个字节。由于地址是用字节做单位的，故ptr 所指向的地址由原来的变量a 的地址向高地址方向增加了8个字节。由于char 类型的长度是一个字节，所以，原来ptr 是指向数组a 的第0 号单元开始的8个字节，此时指向了数组a 中从第8号单元开始的8个字节。</p>
-<h3 id="指针赋值"><a href="#指针赋值" class="headerlink" title="指针赋值"></a>指针赋值</h3><p>C语言允许使用赋值运算符进行指针的赋值，前提是两者具有相同的指针类型。</p>
+<h3 id="指针赋值"><a class="markdownIt-Anchor" href="#指针赋值"></a> 指针赋值</h3>
+<p>C语言允许使用赋值运算符进行指针的赋值，前提是两者具有相同的指针类型。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i,j,*p,*q;</span><br><span class="line">p = &amp;i; <span class="comment">//把i的地址复制给指针p</span></span><br><span class="line">q = p;	<span class="comment">//把p的地址复制给q,效果是q指向了p所指向的地方</span></span><br></pre></td></tr></table></figure>
 <p>那么经过上面几个步骤，就变成了这样;</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717100202.png" alt="image-20210717100202148" style="zoom: 50%;" /></p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717100202.png" alt="image-20210717100202148" style="zoom: 50%;" />
 <p>很显然，*p,*q,i就是共患难的兄弟了，一个变，其它两个都变。</p>
 <p>除此之外，我们还要注意p=q和*p = *q的区别，注意一下就好。</p>
-<hr>
+<hr />
 <p>以上就是指针的基础知识了，下面讲一些指针的应用，有低级应用也有高级应用。</p>
-<h1 id="指针的应用"><a href="#指针的应用" class="headerlink" title="指针的应用"></a>指针的应用</h1><h2 id="指针在数组的应用"><a href="#指针在数组的应用" class="headerlink" title="指针在数组的应用"></a>指针在数组的应用</h2><p>我们先对指针进行初使化：</p>
+<h1 id="指针的应用"><a class="markdownIt-Anchor" href="#指针的应用"></a> 指针的应用</h1>
+<h2 id="指针在数组的应用"><a class="markdownIt-Anchor" href="#指针在数组的应用"></a> 指针在数组的应用</h2>
+<p>我们先对指针进行初使化：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>],*p;</span><br><span class="line">p = &amp;a[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
-<h3 id="数组上的算术运算"><a href="#数组上的算术运算" class="headerlink" title="数组上的算术运算"></a>数组上的算术运算</h3><p>现在我们让指针p指向a[0]，可以访问a[0]的值。下面让我们看下指针在数组上的算术运算。</p>
+<h3 id="数组上的算术运算"><a class="markdownIt-Anchor" href="#数组上的算术运算"></a> 数组上的算术运算</h3>
+<p>现在我们让指针p指向a[0]，可以访问a[0]的值。下面让我们看下指针在数组上的算术运算。</p>
 <ul>
-<li><p>指针加减整数</p>
+<li>
+<p>指针加减整数</p>
 <p>如果p指向数组元素a[i]，p+j就指向数组元素a[i+j]。用图表示可能更清晰一点：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717103039.png" alt="image-20210717103039643" style="zoom: 50%;" /></p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717103039.png" alt="image-20210717103039643" style="zoom: 50%;" />
 <p>减法也是一个道理</p>
 </li>
-<li><p>两个指针相减</p>
+<li>
+<p>两个指针相减</p>
 <p>当两个指针相减时，结果为两个指针的距离。因此，如果p指向a[i],q指向a[j]，那么q - p就是 a[j-i]。</p>
 </li>
 </ul>
-<h3 id="运算符和-运算符的组合"><a href="#运算符和-运算符的组合" class="headerlink" title="*运算符和++运算符的组合"></a>*运算符和++运算符的组合</h3><p>这是一种习惯，其中以*p++最常见，它在循环中很是方便，对数组a求和时，我们可以把下面这个程序：</p>
+<h3 id="运算符和运算符的组合"><a class="markdownIt-Anchor" href="#运算符和运算符的组合"></a> *运算符和++运算符的组合</h3>
+<p>这是一种习惯，其中以*p++最常见，它在循环中很是方便，对数组a求和时，我们可以把下面这个程序：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[N];p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
 <p>改写成：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p = &amp;a[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">while</span> (p &lt; &amp;a[N])</span><br><span class="line">	sum += *p++</span><br></pre></td></tr></table></figure>
-<h3 id="用数组名作为指针"><a href="#用数组名作为指针" class="headerlink" title="用数组名作为指针"></a>用数组名作为指针</h3><p>数组本身就是一个地址，而指针可以直接操作地址，所以指针可以用数组的方式来表示。</p>
+<h3 id="用数组名作为指针"><a class="markdownIt-Anchor" href="#用数组名作为指针"></a> 用数组名作为指针</h3>
+<p>数组本身就是一个地址，而指针可以直接操作地址，所以指针可以用数组的方式来表示。</p>
 <p><strong>我们可以把数组名作为指向数组第一个元素的指针</strong>，这种关系简化了指针的算术运算，而且使数组和指针更加通用。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line">*a = <span class="number">7</span>		<span class="comment">//把7赋值给a[0]</span></span><br><span class="line">*(a+<span class="number">1</span>) = <span class="number">8</span>	<span class="comment">//把8赋值给a[1]</span></span><br></pre></td></tr></table></figure>
 <p>通常情况下，(a+i)就等于 &amp;a[i]，*（a+i)等于a[i]。这一事实，使得循环更加容易：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a;p &lt; a+N;p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
 <p>这是惯用法。</p>
-<hr>
-<h3 id="指针和多维数组"><a href="#指针和多维数组" class="headerlink" title="指针和多维数组"></a>指针和多维数组</h3><h3 id="多维数组的存储"><a href="#多维数组的存储" class="headerlink" title="多维数组的存储"></a>多维数组的存储</h3><p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
+<hr />
+<h3 id="指针和多维数组"><a class="markdownIt-Anchor" href="#指针和多维数组"></a> 指针和多维数组</h3>
+<h3 id="多维数组的存储"><a class="markdownIt-Anchor" href="#多维数组的存储"></a> 多维数组的存储</h3>
+<p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
 <p>根据定义我们的多维数组是长这样的：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" /></p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" />
 <p>但实际上，其底层还是个一维数组:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091441.png" alt="image-20210718091441467" style="zoom:80%;" /></p>
-<h3 id="将二维数组初始化为0"><a href="#将二维数组初始化为0" class="headerlink" title="将二维数组初始化为0"></a>将二维数组初始化为0</h3><p>思考下面这段代码：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091441.png" alt="image-20210718091441467" style="zoom:80%;" />
+<h3 id="将二维数组初始化为0"><a class="markdownIt-Anchor" href="#将二维数组初始化为0"></a> 将二维数组初始化为0</h3>
+<p>思考下面这段代码：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>][<span class="number">0</span>];p&lt;=&amp;a[NUM_ROWS<span class="number">-1</span>][NUM_COLS<span class="number">-1</span>];p++)</span><br><span class="line">    *p = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 <p>我们来看一看这个过程：p开始时指向a[0][0]，随后对p连续自增可以使指针p指向a[0][1],a[0][2],a[0][3]……当p到达a[0][NUM_ROWS-1]时，再次对p自增将使它指向a[1][0],后面就重复之前的过程，直到p越过a[NUM_ROWS-1][NUM_COLS-1]，程序停止。</p>
-<h3 id="处理多维数组的行"><a href="#处理多维数组的行" class="headerlink" title="处理多维数组的行"></a>处理多维数组的行</h3><p>处理多维数组一行的元素该怎么做？</p>
+<h3 id="处理多维数组的行"><a class="markdownIt-Anchor" href="#处理多维数组的行"></a> 处理多维数组的行</h3>
+<p>处理多维数组一行的元素该怎么做？</p>
 <p>我们还是用指针变量，为了处理第i行，我们要先对p进行初始化：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p = a[i] <span class="comment">//这里为什么不用p = &amp;a[i][0]呢？</span></span><br></pre></td></tr></table></figure>
-<p>因为两者实际上是等价的。a[i]等价于<em>(a+i)，所以&amp;a[i][0]等同于&amp;（\</em>a[i]+0),后者等价于&amp;(*a[i])，而&amp;又与*等价，所以&amp;a[i][0]实际生等价于a[i]。</p>
+<p>因为两者实际上是等价的。a[i]等价于*(a+i)，所以&amp;a[i][0]等同于&amp;（*a[i]+0),后者等价于&amp;(*a[i])，而&amp;又与*等价，所以&amp;a[i][0]实际生等价于a[i]。</p>
 <p>我们就可以用这种简化来初始化第i行的数据为0：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a[i];p&lt;a[i]+NUMS_COLS;p++)</span><br><span class="line">	*p = <span class="number">0</span>; </span><br></pre></td></tr></table></figure>
-<h3 id="处理多维数组的列"><a href="#处理多维数组的列" class="headerlink" title="处理多维数组的列"></a>处理多维数组的列</h3><p>处理列就没有行那么轻松了，因为数组是按行来存储的，而不是列。<u>对于清空数组的第i列</u>，我们可以这么写：</p>
+<h3 id="处理多维数组的列"><a class="markdownIt-Anchor" href="#处理多维数组的列"></a> 处理多维数组的列</h3>
+<p>处理列就没有行那么轻松了，因为数组是按行来存储的，而不是列。<u>对于清空数组的第i列</u>，我们可以这么写：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[NUM_ROWS];p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 <p>我们来看一看运行过程：</p>
-<p>首先看看指针的声明，这个指针的类型是int(<em>)[],也就是<strong>指向一个数组的指针，而不是指针数组</strong>。表达式p++，把p移向了数组a的下一行开始的位置（+1实际上加了sizeof([NUMS_COLS])），(\</em>p)[i]选中了该行第i列的位置。</p>
-<h3 id="用多维数组名作为指针"><a href="#用多维数组名作为指针" class="headerlink" title="用多维数组名作为指针"></a>用多维数组名作为指针</h3><p>道理和一维是一样的，只不过要注意：</p>
+<p>首先看看指针的声明，这个指针的类型是int(*)[],也就是<strong>指向一个数组的指针，而不是指针数组</strong>。表达式p++，把p移向了数组a的下一行开始的位置（+1实际上加了sizeof([NUMS_COLS])），(*p)[i]选中了该行第i列的位置。</p>
+<h3 id="用多维数组名作为指针"><a class="markdownIt-Anchor" href="#用多维数组名作为指针"></a> 用多维数组名作为指针</h3>
+<p>道理和一维是一样的，只不过要注意：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS];</span><br></pre></td></tr></table></figure>
-<p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (<em>)[NUM_COLS]。<em>*这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</em></em>。</p>
+<p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (*)[NUM_COLS]。<strong>这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</strong>。</p>
 <p>这样我们就可以简化上面的循环了，比如说我现在想把数组第i列清零：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 
@@ -470,7 +499,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text">指针基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E7%BA%A7%E4%B8%8A%E6%8C%87%E9%92%88%E8%A1%A8%E7%A4%BA%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-text">机器级上指针表示的内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="nav-text">指针变量的声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%9B%9B%E6%96%B9%E9%9D%A2"><span class="nav-text">指针的四方面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-text">指针的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E6%89%80%E6%8C%87%E5%90%91%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-text">指针所指向的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%80%BC%E2%80%94%E5%9C%B0%E5%9D%80"><span class="nav-text">指针的值—地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E6%9C%AC%E8%BA%AB%E6%89%80%E5%8D%A0%E6%8D%AE%E7%9A%84%E5%86%85%E5%AD%98%E5%8C%BA"><span class="nav-text">指针本身所占据的内存区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E5%9C%B0%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">取地址运算符和间接寻址运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">指针初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80"><span class="nav-text">间接寻址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="nav-text">指针的算术运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%87%8F%E6%B3%95"><span class="nav-text">加减法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E8%B5%8B%E5%80%BC"><span class="nav-text">指针赋值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">指针的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%9C%A8%E6%95%B0%E7%BB%84%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">指针在数组的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8A%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="nav-text">数组上的算术运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C-%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%BB%84%E5%90%88"><span class="nav-text">*运算符和++运算符的组合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E4%B8%BA%E6%8C%87%E9%92%88"><span class="nav-text">用数组名作为指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-text">指针和多维数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-text">多维数组的存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BA0"><span class="nav-text">将二维数组初始化为0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E8%A1%8C"><span class="nav-text">处理多维数组的行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%97"><span class="nav-text">处理多维数组的列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E4%B8%BA%E6%8C%87%E9%92%88"><span class="nav-text">用多维数组名作为指针</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text"> 指针基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E7%BA%A7%E4%B8%8A%E6%8C%87%E9%92%88%E8%A1%A8%E7%A4%BA%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-text"> 机器级上指针表示的内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="nav-text"> 指针变量的声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%9B%9B%E6%96%B9%E9%9D%A2"><span class="nav-text"> 指针的四方面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-text"> 指针的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E6%89%80%E6%8C%87%E5%90%91%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-text"> 指针所指向的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%80%BC%E5%9C%B0%E5%9D%80"><span class="nav-text"> 指针的值—地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E6%9C%AC%E8%BA%AB%E6%89%80%E5%8D%A0%E6%8D%AE%E7%9A%84%E5%86%85%E5%AD%98%E5%8C%BA"><span class="nav-text"> 指针本身所占据的内存区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E5%9C%B0%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text"> 取地址运算符和间接寻址运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text"> 指针初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80"><span class="nav-text"> 间接寻址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="nav-text"> 指针的算术运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%87%8F%E6%B3%95"><span class="nav-text"> 加减法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E8%B5%8B%E5%80%BC"><span class="nav-text"> 指针赋值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text"> 指针的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%9C%A8%E6%95%B0%E7%BB%84%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text"> 指针在数组的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8A%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="nav-text"> 数组上的算术运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%BB%84%E5%90%88"><span class="nav-text"> *运算符和++运算符的组合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E4%B8%BA%E6%8C%87%E9%92%88"><span class="nav-text"> 用数组名作为指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-text"> 指针和多维数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-text"> 多维数组的存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BA0"><span class="nav-text"> 将二维数组初始化为0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E8%A1%8C"><span class="nav-text"> 处理多维数组的行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%97"><span class="nav-text"> 处理多维数组的列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E4%B8%BA%E6%8C%87%E9%92%88"><span class="nav-text"> 用多维数组名作为指针</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -667,58 +696,8 @@
 
   
       
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css">
 
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
