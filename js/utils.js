@@ -237,7 +237,7 @@ NexT.utils = {
       link.addEventListener('click', event => {
         event.preventDefault();
         var target = document.getElementById(event.currentTarget.getAttribute('href').replace('#', ''));
-        if(obj.getBoundingClientRect()){
+        if (target.getBoundingClientRect()){
           var offset = target.getBoundingClientRect().top + window.scrollY;
         }
         window.anime({
