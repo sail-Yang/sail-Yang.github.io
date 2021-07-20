@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Ma Shan Zheng:300,300italic,400,400italic,700,700italic|ZCOOL XiaoWei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="字符串包括字符串常量（常常被称为字符串字面量）和字符串变量，两者的差别就是一个常量和一个变量的区别。字符串我们一般都拿&quot;&quot;(双引号)框起来，而字符我们都拿’’(单引号)框起来，两者有什么区别呢？字符数组和字符串是一回事吗？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串">
+<meta property="og:url" content="https://progsail.com/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/index.html">
+<meta property="og:site_name" content="sail Yang&#39;s Blog">
+<meta property="og:description" content="字符串包括字符串常量（常常被称为字符串字面量）和字符串变量，两者的差别就是一个常量和一个变量的区别。字符串我们一般都拿&quot;&quot;(双引号)框起来，而字符我们都拿’’(单引号)框起来，两者有什么区别呢？字符数组和字符串是一回事吗？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719174318.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719175231.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180329.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180534.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182851.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182935.png">
+<meta property="article:published_time" content="2021-07-19T09:15:33.000Z">
+<meta property="article:modified_time" content="2021-07-20T02:16:09.517Z">
+<meta property="article:author" content="sail Yang">
+<meta property="article:tag" content="C语言">
+<meta property="article:tag" content="基础知识">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719174318.png">
+
+<link rel="canonical" href="https://progsail.com/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>字符串 | sail Yang's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b39039cf0480fc7ace0048fd5a806193";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sail Yang's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="sail Yang">
+      <meta itemprop="description" content="企者不立，跨者不行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sail Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符串
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-19 17:15:33" itemprop="dateCreated datePublished" datetime="2021-07-19T17:15:33+08:00">2021-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-20 10:16:09" itemprop="dateModified" datetime="2021-07-20T10:16:09+08:00">2021-07-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS/" itemprop="url" rel="index"><span itemprop="name">CS</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>字符串包括字符串常量（常常被称为<strong>字符串字面量</strong>）和字符串变量，两者的差别就是一个常量和一个变量的区别。字符串我们一般都拿&quot;&quot;(双引号)框起来，而字符我们都拿’’(单引号)框起来，<strong>两者有什么区别呢？字符数组和字符串是一回事吗？</strong></p>
+<span id="more"></span>
+<h2 id="字符串的存储"><a class="markdownIt-Anchor" href="#字符串的存储"></a> 字符串的存储</h2>
+<p>从本质上来讲，C会把字符串作为字符数组来处理，但是<font color=purple>当编译器遇到长度为n的字符串字面量时，会给它分配长度为n+1的内存空间。</font>这是为什么？</p>
+<p>因为，<strong>存储字符串常量需要在字符的末尾多存储一个&quot;\0&quot;（空字符，注意和零字符&quot;0&quot;的ASCII码不一样），\0空字符用于标记字符串的末尾</strong>。</p>
+<p>这一特点，就导致C程序员声明一个字符串变量使时使用下面这种惯用法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STR_LEN 80</span></span><br><span class="line"><span class="keyword">char</span> str[STR_LEN+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+<p>我们声明用于存放字符串的字符数组时，必须预留一个位置给&quot;\0&quot;，存放的字符数量范围是从“\0”到长度为STR_LEN的字符串。上面这种声明方法就是为了强调字符串这一特点，这也是字符串和字符数组的区别。</p>
+<hr />
+<p>既然字符串会被看作是字符数组，那么其实<strong>它就是个char*类型的指针</strong>。思考下面这个程序的输出就知道了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *p;</span><br><span class="line">p = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,*p);		<span class="comment">//会输出多少？</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,<span class="string">&quot;abc&quot;</span>[<span class="number">2</span>]); <span class="comment">//又会输出多少?</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719174318.png" alt="image-20210719174309999" /></p>
+<p><font color=green>那么，单个字符的字符串常量和字符常量是一回事吗？</font></p>
+<p>当然不是一回事，字符串常量&quot;a&quot;是用一个指针来表示的，这个指针指向存放&quot;a&quot;的内存单元(后面跟着\0)；而字符常量’a’是整数表示的(比如ASCII码)：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719175231.png" alt="image-20210719175230996" style="zoom:67%;" />
+<hr />
+<h2 id="字符串变量的一系列操作"><a class="markdownIt-Anchor" href="#字符串变量的一系列操作"></a> 字符串变量的一系列操作</h2>
+<h3 id="初始化字符串变量"><a class="markdownIt-Anchor" href="#初始化字符串变量"></a> 初始化字符串变量</h3>
+<p>初始化时，<strong>一定要确保数组的长度&gt;初始化式的长度</strong>。否则，编译器讲忽略空字符，这将使得数组不能用作字符串：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
+<p>此时：（没有\0,不能算是字符串)</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180329.png" alt="image-20210719180328938" style="zoom:67%;" />
+<p>如果数组长度&gt;初始化长度呢? → 用\0字符填充</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">8</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180534.png" alt="image-20210719180533975" style="zoom:67%;" />
+<h3 id="字符串的读写"><a class="markdownIt-Anchor" href="#字符串的读写"></a> 字符串的读写</h3>
+<p>我们想想读字符串会遇到什么困难？ → <strong>输入的字符串可能比它的容器长……</strong> 我们一般使用scanf 或者gets函数读字符串；用printf函数和puts函数写字符串。</p>
+<h4 id="写"><a class="markdownIt-Anchor" href="#写"></a> 写</h4>
+<p>printf用%s,推荐使用puts()</p>
+<h4 id="读"><a class="markdownIt-Anchor" href="#读"></a> 读</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,str) <span class="comment">//不用加&amp; ， str是数组名，编译器把它传递给函数时，会把它当作指针。</span></span><br></pre></td></tr></table></figure>
+<p>但是要注意scanf的特点:(顺便复习一下)</p>
+<ul>
+<li>用scanf读字符串你永远不会看到空白字符，也就是空格，scanf跳过第一个空白字符，读入字符直到遇到下一个空白字符为止。</li>
+<li>遇到什么\n,\t也会停止读</li>
+</ul>
+<p>我们可以用gets函数，道理和scanf是一样的，把字符一个个读到空数组中，然后在末尾存一个\0。但是：</p>
+<ul>
+<li>gets不会在开始的时候跳过空白字符。</li>
+<li>get直接读到\n。</li>
+</ul>
+<p>下面来个例子:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182851.png" alt="image-20210719182851689" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182935.png" alt="image-20210719182935383" /></p>
+<p>不过还是不能解决之前提到的问题，gets函数天生不安全，<strong>fgets函数</strong>会更好（我还没学，学到回来补）。</p>
+<h4 id="一次一个字符的读"><a class="markdownIt-Anchor" href="#一次一个字符的读"></a> 一次一个字符的读</h4>
+<p>很显然，我们需要一个更灵活的输入函数，那么在设计之前，我们得先考虑下列问：</p>
+<ul>
+<li>开始之前，要跳空格吗？</li>
+<li>什么字符用来停止读入？</li>
+<li>如果太长了，该怎么办？是忽略额外的字符还是留给下一次输入？</li>
+</ul>
+<p>如果我们想要的是不跳过第一个空白，在第一个换行符处停止，并且忽略额外字符，我们就可以用下面这个函数：（str是存储的数组，n是读入字符的最大数量）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read_line</span><span class="params">(<span class="keyword">char</span> str[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ch,i = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ((ch = getchar())! = <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> (i&lt;n)</span><br><span class="line">            str[i++] = ch;</span><br><span class="line">    str[i] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//末尾加一个\0,别忘了</span></span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意ch的类型是int，因为getchar返回的就是这一类型。</p>
+<h3 id="访问字符串中的字符"><a class="markdownIt-Anchor" href="#访问字符串中的字符"></a> 访问字符串中的字符</h3>
+<p>当然可以用下标，但我们更愿意用指针。</p>
+<p>来看看下面这个统计字符串中空格数量的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">count_spaces</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count =<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(;*s! = <span class="string">&#x27;\0&#x27;</span>;s++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (*s == <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看这个const char *s，const并没有阻止函数对s的改变，它阻止了函数对s所指向的字符的修改。并且，因为s是传递给count_spaces的副本，所以对s的自增操作，也不会影响原来的指针s。(形参都是值传递，即是<strong>传递指针本身的地址</strong>，☞<a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/74.html">指针作为参数</a>)</p>
+<hr />
+<h2 id="字符串库"><a class="markdownIt-Anchor" href="#字符串库"></a> 字符串库</h2>
+<p>由于C语言没有其它语言那么&quot;年轻&quot;，年起人习以为常的用运算符操作字符串，对于老年人C语言来说是不行滴。<strong>在C语言中字符串就是数组，对字符串的操作就是对数组的操作</strong>。C语言库为了方便，提供了大量对字符串操作的函数。☞&lt;string.h&gt;</p>
+<p>注意&lt;string.h&gt;中：</p>
+<ul>
+<li>声明每个函数都至少要一个字符串作为实参，声明为char *类型，使得实参可以是字符数组，char*类型的变量或者字符串字面量。但是，<strong>没有声明为const的字符串形参可能会在调用函数后导致改变，所以字符串常量不应该被作为字符串常量</strong>。</li>
+</ul>
+<hr />
+<h3 id="strcpy-strcnpy"><a class="markdownIt-Anchor" href="#strcpy-strcnpy"></a> strcpy、strcnpy</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">strcpy</span>(<span class="keyword">char</span> *s1,<span class="keyword">const</span> <span class="keyword">char</span> *s2)	<span class="comment">//将s2指向的字符串中的字符复制到s1指向的数组，遇到s2中第一个\0停止</span></span><br><span class="line"><span class="comment">/*更安全用法*/</span></span><br><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1));<span class="comment">//第三个参数用于限制所复制的字符数</span></span><br></pre></td></tr></table></figure>
+<p>但是如果str2还是大于str1，还是不太安全，因为没有\0，所以<strong>strcnpy比较安全的做法</strong>是下面这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>);</span><br><span class="line">str1(<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>) = <span class="string">&#x27;\0&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>这样确保str1以空字符结束。</p>
+<h3 id="strlen"><a class="markdownIt-Anchor" href="#strlen"></a> strlen</h3>
+<p>就是算字符串长度的，它的声明是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span> <span class="params">(cont <span class="keyword">char</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>strlen返回字符串s第一个空字符之前的<strong>字符数</strong>，不包括空字符。</p>
+<h3 id="strcat-strncat"><a class="markdownIt-Anchor" href="#strcat-strncat"></a> strcat、strncat</h3>
+<p>cat就是拼接，strcat的声明如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>就是把str2的内容接到str1的末尾，并且返回字符串str1。</p>
+<p>同样的道理，也存在strncat:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cahr *<span class="title">strncat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">char</span> *str2,<span class="keyword">sizeof</span>(str1)-<span class="keyword">sizeof</span>(str2<span class="number">-1</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="strcmp"><a class="markdownIt-Anchor" href="#strcmp"></a> strcmp</h3>
+<p>用于比较两个字符，根据小于、等于或大于，返回一个&lt;0,0,&gt;0的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br></pre></td></tr></table></figure>
+<p>只要满足下面两个条件之一，计算str1 &lt; str2：</p>
+<ul>
+<li>前i个字符相等，但第i个字符str1 &lt; str2，比如“abcd”&lt;“abch”</li>
+<li>str1比str2短</li>
+</ul>
+<hr />
+<h2 id="用字符串惯用法简化strlenstrcat函数"><a class="markdownIt-Anchor" href="#用字符串惯用法简化strlenstrcat函数"></a> 用字符串惯用法简化strlen,strcat函数</h2>
+<h3 id="搜索字符串的结尾"><a class="markdownIt-Anchor" href="#搜索字符串的结尾"></a> 搜索字符串的结尾</h3>
+<p>我们来看看strlen函数是怎么实现的？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n;</span><br><span class="line">    <span class="keyword">for</span>(n = <span class="number">0</span>; *s != <span class="string">&#x27;\0&#x27;</span>; s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是搜索一个字符串的结尾，用一个变量跟踪字符串的长度。那么我们可以做哪些简化呢？</p>
+<ul>
+<li>把n=0的初始化放到n的声明中。</li>
+<li>*s!=’\0’其实等价于*s!=0,因为空字符的整数值就是0；然后*s!=0其实又可以直接写成*s ，两者都在*s不为0时为真。</li>
+<li>那么我们可以把*s与自增操作合并起来，变成*s++。</li>
+<li>把for换成while循环</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上面这些操作虽然精简了代码但是运行速度并没有提高,下面这种写法运行速度更快：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> *p = s;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        s++;</span><br><span class="line">    <span class="keyword">return</span> s-p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方法，跳过定位空字符的位置，然后用空字符的地址减去字符串第一个字符的位置。运行速度就提升了，至于为什么，因为少了n的自增操作。</p>
+<p>这样我们就引出了两种<strong>搜索字符串结尾的空字符</strong>的惯用法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//最终s指向了空字符</span></span><br><span class="line"><span class="keyword">while</span> (*s) </span><br><span class="line">	s++;</span><br><span class="line"><span class="comment">//最终s指向空字符后面一个位置</span></span><br><span class="line"><span class="keyword">while</span> (*s++)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<h3 id="复制字符串"><a class="markdownIt-Anchor" href="#复制字符串"></a> 复制字符串</h3>
+<p>下面先看一个有点冗长的strcat的写法:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*s2)&#123;</span><br><span class="line">        *p = *s2;</span><br><span class="line">        p++;</span><br><span class="line">        s2++;</span><br><span class="line">    &#125;</span><br><span class="line">    *p = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实核心思想就两步:</p>
+<ul>
+<li>确定s1末尾空字符的位置，使指针p指向它。</li>
+<li>把字符串s2中的字符逐个复制到p所指向的位置。</li>
+</ul>
+<p>我们可以改成下面这种精简后的strcat函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>strcat的核心就是<strong>字符串复制惯用法</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">	;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="字符串数组"><a class="markdownIt-Anchor" href="#字符串数组"></a> 字符串数组</h2>
+<p>我们需要的是<strong>参差不齐的字符串数组</strong>，而不是方方正正的数组。（这样会浪费太多空间）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char *names[] = &#123;&quot;Yang&quot;,&quot;Zhu&quot;,&quot;Li&quot;,&quot;Cai&quot;,&quot;Zhang&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是数组names的元素全是指针，每个指针指向一个字符串，这就减少了空间的浪费.如果我们想在数组中搜寻以字母C开头的字符串，可以使用下面的循环:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">	<span class="keyword">if</span>(names\[i][<span class="number">0</span>]=<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s begins with C\n&quot;</span>,names[i]);</span><br></pre></td></tr></table></figure>
+<p>​</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C%E8%AF%AD%E8%A8%80/" rel="tag"># C语言</a>
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="tag"># 基础知识</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/17/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/" rel="prev" title="十大原理之整体性六大原理">
+      <i class="fa fa-chevron-left"></i> 十大原理之整体性六大原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/19/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/" rel="next" title="经济学的方法论">
+      经济学的方法论 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-text"> 字符串的存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E9%87%8F%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E6%93%8D%E4%BD%9C"><span class="nav-text"> 字符串变量的一系列操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E9%87%8F"><span class="nav-text"> 初始化字符串变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%AF%BB%E5%86%99"><span class="nav-text"> 字符串的读写</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99"><span class="nav-text"> 写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB"><span class="nav-text"> 读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%9A%84%E8%AF%BB"><span class="nav-text"> 一次一个字符的读</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="nav-text"> 访问字符串中的字符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BA%93"><span class="nav-text"> 字符串库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#strcpy-strcnpy"><span class="nav-text"> strcpy、strcnpy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strlen"><span class="nav-text"> strlen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strcat-strncat"><span class="nav-text"> strcat、strncat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strcmp"><span class="nav-text"> strcmp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%83%AF%E7%94%A8%E6%B3%95%E7%AE%80%E5%8C%96strlenstrcat%E5%87%BD%E6%95%B0"><span class="nav-text"> 用字符串惯用法简化strlen,strcat函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E7%BB%93%E5%B0%BE"><span class="nav-text"> 搜索字符串的结尾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text"> 复制字符串</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84"><span class="nav-text"> 字符串数组</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="sail Yang"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">sail Yang</p>
+  <div class="site-description" itemprop="description">企者不立，跨者不行</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sail-Yang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sail-Yang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1186599081@qq.com" title="E-Mail → mailto:1186599081@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-block">
+        <div class="links-of-blogroll-title">
+          <!-- modify icon to fire by szw -->
+          <i class="fa fa-history fa-" aria-hidden="true"></i>
+          近期文章
+        </div>
+        <ul class="links-of-blogroll-list">
+          
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+        </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sail Yang</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'ACXvwk7p217craOCxA2G4PjX-MdYXbMMI',
+      appKey     : 'lBCQXXu3bCQ5MocqBE0V6rHa',
+      placeholder: "请举手发言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"moblie":{"show":true}});</script></body>
+</html>

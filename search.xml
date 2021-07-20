@@ -1514,4 +1514,148 @@
         <tag>达芬奇</tag>
       </tags>
   </entry>
+  <entry>
+    <title>字符串</title>
+    <url>/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<p>字符串包括字符串常量（常常被称为<strong>字符串字面量</strong>）和字符串变量，两者的差别就是一个常量和一个变量的区别。字符串我们一般都拿&quot;&quot;(双引号)框起来，而字符我们都拿’’(单引号)框起来，<strong>两者有什么区别呢？字符数组和字符串是一回事吗？</strong></p>
+<span id="more"></span>
+<h2 id="字符串的存储"><a class="markdownIt-Anchor" href="#字符串的存储"></a> 字符串的存储</h2>
+<p>从本质上来讲，C会把字符串作为字符数组来处理，但是<font color=purple>当编译器遇到长度为n的字符串字面量时，会给它分配长度为n+1的内存空间。</font>这是为什么？</p>
+<p>因为，<strong>存储字符串常量需要在字符的末尾多存储一个&quot;\0&quot;（空字符，注意和零字符&quot;0&quot;的ASCII码不一样），\0空字符用于标记字符串的末尾</strong>。</p>
+<p>这一特点，就导致C程序员声明一个字符串变量使时使用下面这种惯用法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STR_LEN 80</span></span><br><span class="line"><span class="keyword">char</span> str[STR_LEN+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+<p>我们声明用于存放字符串的字符数组时，必须预留一个位置给&quot;\0&quot;，存放的字符数量范围是从“\0”到长度为STR_LEN的字符串。上面这种声明方法就是为了强调字符串这一特点，这也是字符串和字符数组的区别。</p>
+<hr />
+<p>既然字符串会被看作是字符数组，那么其实<strong>它就是个char*类型的指针</strong>。思考下面这个程序的输出就知道了：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *p;</span><br><span class="line">p = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,*p);		<span class="comment">//会输出多少？</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,<span class="string">&quot;abc&quot;</span>[<span class="number">2</span>]); <span class="comment">//又会输出多少?</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719174318.png" alt="image-20210719174309999" /></p>
+<p><font color=green>那么，单个字符的字符串常量和字符常量是一回事吗？</font></p>
+<p>当然不是一回事，字符串常量&quot;a&quot;是用一个指针来表示的，这个指针指向存放&quot;a&quot;的内存单元(后面跟着\0)；而字符常量’a’是整数表示的(比如ASCII码)：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719175231.png" alt="image-20210719175230996" style="zoom:67%;" />
+<hr />
+<h2 id="字符串变量的一系列操作"><a class="markdownIt-Anchor" href="#字符串变量的一系列操作"></a> 字符串变量的一系列操作</h2>
+<h3 id="初始化字符串变量"><a class="markdownIt-Anchor" href="#初始化字符串变量"></a> 初始化字符串变量</h3>
+<p>初始化时，<strong>一定要确保数组的长度&gt;初始化式的长度</strong>。否则，编译器讲忽略空字符，这将使得数组不能用作字符串：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
+<p>此时：（没有\0,不能算是字符串)</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180329.png" alt="image-20210719180328938" style="zoom:67%;" />
+<p>如果数组长度&gt;初始化长度呢? → 用\0字符填充</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">8</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180534.png" alt="image-20210719180533975" style="zoom:67%;" />
+<h3 id="字符串的读写"><a class="markdownIt-Anchor" href="#字符串的读写"></a> 字符串的读写</h3>
+<p>我们想想读字符串会遇到什么困难？ → <strong>输入的字符串可能比它的容器长……</strong> 我们一般使用scanf 或者gets函数读字符串；用printf函数和puts函数写字符串。</p>
+<h4 id="写"><a class="markdownIt-Anchor" href="#写"></a> 写</h4>
+<p>printf用%s,推荐使用puts()</p>
+<h4 id="读"><a class="markdownIt-Anchor" href="#读"></a> 读</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,str) <span class="comment">//不用加&amp; ， str是数组名，编译器把它传递给函数时，会把它当作指针。</span></span><br></pre></td></tr></table></figure>
+<p>但是要注意scanf的特点:(顺便复习一下)</p>
+<ul>
+<li>用scanf读字符串你永远不会看到空白字符，也就是空格，scanf跳过第一个空白字符，读入字符直到遇到下一个空白字符为止。</li>
+<li>遇到什么\n,\t也会停止读</li>
+</ul>
+<p>我们可以用gets函数，道理和scanf是一样的，把字符一个个读到空数组中，然后在末尾存一个\0。但是：</p>
+<ul>
+<li>gets不会在开始的时候跳过空白字符。</li>
+<li>get直接读到\n。</li>
+</ul>
+<p>下面来个例子:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182851.png" alt="image-20210719182851689" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182935.png" alt="image-20210719182935383" /></p>
+<p>不过还是不能解决之前提到的问题，gets函数天生不安全，<strong>fgets函数</strong>会更好（我还没学，学到回来补）。</p>
+<h4 id="一次一个字符的读"><a class="markdownIt-Anchor" href="#一次一个字符的读"></a> 一次一个字符的读</h4>
+<p>很显然，我们需要一个更灵活的输入函数，那么在设计之前，我们得先考虑下列问：</p>
+<ul>
+<li>开始之前，要跳空格吗？</li>
+<li>什么字符用来停止读入？</li>
+<li>如果太长了，该怎么办？是忽略额外的字符还是留给下一次输入？</li>
+</ul>
+<p>如果我们想要的是不跳过第一个空白，在第一个换行符处停止，并且忽略额外字符，我们就可以用下面这个函数：（str是存储的数组，n是读入字符的最大数量）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read_line</span><span class="params">(<span class="keyword">char</span> str[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ch,i = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ((ch = getchar())! = <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> (i&lt;n)</span><br><span class="line">            str[i++] = ch;</span><br><span class="line">    str[i] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//末尾加一个\0,别忘了</span></span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意ch的类型是int，因为getchar返回的就是这一类型。</p>
+<h3 id="访问字符串中的字符"><a class="markdownIt-Anchor" href="#访问字符串中的字符"></a> 访问字符串中的字符</h3>
+<p>当然可以用下标，但我们更愿意用指针。</p>
+<p>来看看下面这个统计字符串中空格数量的函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">count_spaces</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count =<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(;*s! = <span class="string">&#x27;\0&#x27;</span>;s++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (*s == <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看这个const char *s，const并没有阻止函数对s的改变，它阻止了函数对s所指向的字符的修改。并且，因为s是传递给count_spaces的副本，所以对s的自增操作，也不会影响原来的指针s。(形参都是值传递，即是<strong>传递指针本身的地址</strong>，☞<a href="http://c.biancheng.net/cpp/html/74.html">指针作为参数</a>)</p>
+<hr />
+<h2 id="字符串库"><a class="markdownIt-Anchor" href="#字符串库"></a> 字符串库</h2>
+<p>由于C语言没有其它语言那么&quot;年轻&quot;，年起人习以为常的用运算符操作字符串，对于老年人C语言来说是不行滴。<strong>在C语言中字符串就是数组，对字符串的操作就是对数组的操作</strong>。C语言库为了方便，提供了大量对字符串操作的函数。☞&lt;string.h&gt;</p>
+<p>注意&lt;string.h&gt;中：</p>
+<ul>
+<li>声明每个函数都至少要一个字符串作为实参，声明为char *类型，使得实参可以是字符数组，char*类型的变量或者字符串字面量。但是，<strong>没有声明为const的字符串形参可能会在调用函数后导致改变，所以字符串常量不应该被作为字符串常量</strong>。</li>
+</ul>
+<hr />
+<h3 id="strcpy-strcnpy"><a class="markdownIt-Anchor" href="#strcpy-strcnpy"></a> strcpy、strcnpy</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">strcpy</span>(<span class="keyword">char</span> *s1,<span class="keyword">const</span> <span class="keyword">char</span> *s2)	<span class="comment">//将s2指向的字符串中的字符复制到s1指向的数组，遇到s2中第一个\0停止</span></span><br><span class="line"><span class="comment">/*更安全用法*/</span></span><br><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1));<span class="comment">//第三个参数用于限制所复制的字符数</span></span><br></pre></td></tr></table></figure>
+<p>但是如果str2还是大于str1，还是不太安全，因为没有\0，所以<strong>strcnpy比较安全的做法</strong>是下面这样：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>);</span><br><span class="line">str1(<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>) = <span class="string">&#x27;\0&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>这样确保str1以空字符结束。</p>
+<h3 id="strlen"><a class="markdownIt-Anchor" href="#strlen"></a> strlen</h3>
+<p>就是算字符串长度的，它的声明是：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span> <span class="params">(cont <span class="keyword">char</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>strlen返回字符串s第一个空字符之前的<strong>字符数</strong>，不包括空字符。</p>
+<h3 id="strcat-strncat"><a class="markdownIt-Anchor" href="#strcat-strncat"></a> strcat、strncat</h3>
+<p>cat就是拼接，strcat的声明如下:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>就是把str2的内容接到str1的末尾，并且返回字符串str1。</p>
+<p>同样的道理，也存在strncat:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">cahr *<span class="title">strncat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">char</span> *str2,<span class="keyword">sizeof</span>(str1)-<span class="keyword">sizeof</span>(str2<span class="number">-1</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="strcmp"><a class="markdownIt-Anchor" href="#strcmp"></a> strcmp</h3>
+<p>用于比较两个字符，根据小于、等于或大于，返回一个&lt;0,0,&gt;0的值。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br></pre></td></tr></table></figure>
+<p>只要满足下面两个条件之一，计算str1 &lt; str2：</p>
+<ul>
+<li>前i个字符相等，但第i个字符str1 &lt; str2，比如“abcd”&lt;“abch”</li>
+<li>str1比str2短</li>
+</ul>
+<hr />
+<h2 id="用字符串惯用法简化strlenstrcat函数"><a class="markdownIt-Anchor" href="#用字符串惯用法简化strlenstrcat函数"></a> 用字符串惯用法简化strlen,strcat函数</h2>
+<h3 id="搜索字符串的结尾"><a class="markdownIt-Anchor" href="#搜索字符串的结尾"></a> 搜索字符串的结尾</h3>
+<p>我们来看看strlen函数是怎么实现的？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n;</span><br><span class="line">    <span class="keyword">for</span>(n = <span class="number">0</span>; *s != <span class="string">&#x27;\0&#x27;</span>; s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是搜索一个字符串的结尾，用一个变量跟踪字符串的长度。那么我们可以做哪些简化呢？</p>
+<ul>
+<li>把n=0的初始化放到n的声明中。</li>
+<li>*s!=’\0’其实等价于*s!=0,因为空字符的整数值就是0；然后*s!=0其实又可以直接写成*s ，两者都在*s不为0时为真。</li>
+<li>那么我们可以把*s与自增操作合并起来，变成*s++。</li>
+<li>把for换成while循环</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上面这些操作虽然精简了代码但是运行速度并没有提高,下面这种写法运行速度更快：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> *p = s;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        s++;</span><br><span class="line">    <span class="keyword">return</span> s-p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方法，跳过定位空字符的位置，然后用空字符的地址减去字符串第一个字符的位置。运行速度就提升了，至于为什么，因为少了n的自增操作。</p>
+<p>这样我们就引出了两种<strong>搜索字符串结尾的空字符</strong>的惯用法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//最终s指向了空字符</span></span><br><span class="line"><span class="keyword">while</span> (*s) </span><br><span class="line">	s++;</span><br><span class="line"><span class="comment">//最终s指向空字符后面一个位置</span></span><br><span class="line"><span class="keyword">while</span> (*s++)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<h3 id="复制字符串"><a class="markdownIt-Anchor" href="#复制字符串"></a> 复制字符串</h3>
+<p>下面先看一个有点冗长的strcat的写法:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*s2)&#123;</span><br><span class="line">        *p = *s2;</span><br><span class="line">        p++;</span><br><span class="line">        s2++;</span><br><span class="line">    &#125;</span><br><span class="line">    *p = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实核心思想就两步:</p>
+<ul>
+<li>确定s1末尾空字符的位置，使指针p指向它。</li>
+<li>把字符串s2中的字符逐个复制到p所指向的位置。</li>
+</ul>
+<p>我们可以改成下面这种精简后的strcat函数:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>strcat的核心就是<strong>字符串复制惯用法</strong>：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">	;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="字符串数组"><a class="markdownIt-Anchor" href="#字符串数组"></a> 字符串数组</h2>
+<p>我们需要的是<strong>参差不齐的字符串数组</strong>，而不是方方正正的数组。（这样会浪费太多空间）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *names[] = &#123;&quot;Yang&quot;,&quot;Zhu&quot;,&quot;Li&quot;,&quot;Cai&quot;,&quot;Zhang&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是数组names的元素全是指针，每个指针指向一个字符串，这就减少了空间的浪费.如果我们想在数组中搜寻以字母C开头的字符串，可以使用下面的循环:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">	<span class="keyword">if</span>(names\[i][<span class="number">0</span>]=<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s begins with C\n&quot;</span>,names[i]);</span><br></pre></td></tr></table></figure>
+<p>​</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>编程语言</category>
+        <category>C</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
+      </tags>
+  </entry>
 </search>
