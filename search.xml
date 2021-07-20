@@ -1,145 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C指针基础和指针的数组应用</title>
-    <url>/2021/07/16/C%E6%8C%87%E9%92%88/</url>
-    <content><![CDATA[<h1 id="指针基础知识"><a class="markdownIt-Anchor" href="#指针基础知识"></a> 指针基础知识</h1>
-<h2 id="机器级上指针表示的内容"><a class="markdownIt-Anchor" href="#机器级上指针表示的内容"></a> 机器级上指针表示的内容</h2>
-<p>现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的<strong>地址</strong>，就像我们的学号一样，用来和其它内存区别。</p>
-<p>可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png" alt="image-20210717090004435" style="zoom:67%;" />
-<span id="more"></span>
-<p>我们虽然用数表示内存地址，但是地址的取值范围是不同于整数的范围的，所以<u>一定不能用普通整型变量来存储地址</u>。但是，可以用<font color=purple>特殊的指针变量来存储地址。</font>这就是指针的出处。**指针就是地址，而指针变量就是存储地址的变量。**我们可以用下面这种方式来表示，指针变量p存储变量i的地址：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png" alt="image-20210717091538267" style="zoom:80%;" />
-<h2 id="指针变量的声明"><a class="markdownIt-Anchor" href="#指针变量的声明"></a> 指针变量的声明</h2>
-<p>常见的指针声明形式：</p>
-<ol>
-<li>int p 这是一个普通的整型变量；int *p 首先从p开始，先与*结合，说明p是一个指针，然后再与int结合，说明指针的类型为Int型，所以p（指针变量名，不是*p）是一个返回整型数据的指针。</li>
-<li>int p[3]说明p是一个由整型数据组成的数组；int *p[3] p先与[3]结合，因为[]优先级&gt;*，说明p是一个数组，然后再与*结合，说明数组里的元素都是指针，然后再与int 结合，说明指针指向的是对象是整型的，所以p是一个由返回整型数据的指针组成的数组。</li>
-<li>int (*p)[3] p先与*结合，说明p是一个指针，再与[3]结合，说明指针指向一个数组，再与Int结合，说明p指向一个由整型数据组成的数组。</li>
-<li>int **p 指向指针的指针。</li>
-<li>int p(int) p是一个函数，返回整型数据；int (*p)(int)，p是一个指向有一个整型参数且返回类型为整型的函数的指针。</li>
-</ol>
-<h2 id="指针的四方面"><a class="markdownIt-Anchor" href="#指针的四方面"></a> 指针的四方面</h2>
-<p>指针有四个方面的内容需要搞清楚：</p>
-<h3 id="指针的类型"><a class="markdownIt-Anchor" href="#指针的类型"></a> 指针的类型</h3>
-<p>从语法角度，我们只要把指针名字去掉，剩下的就是指针的类型（比如上面都把p去掉）。</p>
-<h3 id="指针所指向的类型"><a class="markdownIt-Anchor" href="#指针所指向的类型"></a> 指针所指向的类型</h3>
-<p>当通过指针来访问指针所指向的内存区时，指针所指向的类型决定了编译器将把那片内存区里的内容当做什么来看待。从语法看，去除名字和名字左边的*就行。</p>
-<p>一定要注意<font color=purple>指针所指向的类型</font>和<font color=green>指针的类型</font>的区别。</p>
-<h3 id="指针的值地址"><a class="markdownIt-Anchor" href="#指针的值地址"></a> 指针的值—地址</h3>
-<p>指针的值时指针变量存储的数值，这个数值将被编译器当作一个地址，而不是一个一般的数值。</p>
-<p>前面也说了，变量i的地址用首地址来表示，<strong>我们说一个指针的值是XX，就相当于说该指针指向了以XX为首地址的一片内存区域</strong>。</p>
-<h3 id="指针本身所占据的内存区"><a class="markdownIt-Anchor" href="#指针本身所占据的内存区"></a> 指针本身所占据的内存区</h3>
-<p>用sizeof就可以测一下指针本身所占的内存了。</p>
-<hr />
-<p>每当遇到一个指针，就问问自己这个指针的这四方面分别是什么，想的多了也就分的清了。</p>
-<h2 id="取地址运算符和间接寻址运算符"><a class="markdownIt-Anchor" href="#取地址运算符和间接寻址运算符"></a> 取地址运算符和间接寻址运算符</h2>
-<ul>
-<li>
-<p>为了找到变量的地址，可以使用取地址运算符&amp;。举个例子，若x是一个变量，&amp;x就是x在内存中的地址。</p>
-</li>
-<li>
-<p>为了获得指针所指向对象的访问，可以使用*（间接寻址运算符）。如果p是指针，*p表示p当前所指向的对象。</p>
-<p>&amp;与*是一对逆运算。</p>
-</li>
-</ul>
-<h3 id="指针初始化"><a class="markdownIt-Anchor" href="#指针初始化"></a> 指针初始化</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,p = &amp;i;</span><br></pre></td></tr></table></figure>
-<p>这就是指针初始化的一种方法。</p>
-<h3 id="间接寻址"><a class="markdownIt-Anchor" href="#间接寻址"></a> 间接寻址</h3>
-<p>一旦指针初始化了，即指针指向了对象，我们就可以用间接寻址来访问存储在对象中的内容。例如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,*p);</span><br></pre></td></tr></table></figure>
-<p>其实只要p指向i，*p就是i的别名，两者共生死（一块变动）。</p>
-<hr />
-<h2 id="指针的算术运算"><a class="markdownIt-Anchor" href="#指针的算术运算"></a> 指针的算术运算</h2>
-<h3 id="加减法"><a class="markdownIt-Anchor" href="#加减法"></a> 加减法</h3>
-<p>指针可以加上或减去一个整数。指针的这种运算的意义和通常的数值的加减运算的意义是不一样的，它是以单元为单位。例如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> a[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> *ptr=(<span class="keyword">int</span> *)a;		<span class="comment">//强制类型转换并不会改变a 的类型</span></span><br><span class="line">ptr++;</span><br></pre></td></tr></table></figure>
-<p>在上例中，指针ptr 的类型是int*,它指向的类型是int，它被初始化为指向整型变量a。接下来的第3句中，<strong>指针ptr被加了1，编译器是这样处理的</strong>：</p>
-<p>它把指针ptr 的值加上了<strong>sizeof(int)</strong>，在64 位程序中，是被加上了8，因为在64 位程序中，int 占 8 个字节。由于地址是用字节做单位的，故ptr 所指向的地址由原来的变量a 的地址向高地址方向增加了8个字节。由于char 类型的长度是一个字节，所以，原来ptr 是指向数组a 的第0 号单元开始的8个字节，此时指向了数组a 中从第8号单元开始的8个字节。</p>
-<h3 id="指针赋值"><a class="markdownIt-Anchor" href="#指针赋值"></a> 指针赋值</h3>
-<p>C语言允许使用赋值运算符进行指针的赋值，前提是两者具有相同的指针类型。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,j,*p,*q;</span><br><span class="line">p = &amp;i; <span class="comment">//把i的地址复制给指针p</span></span><br><span class="line">q = p;	<span class="comment">//把p的地址复制给q,效果是q指向了p所指向的地方</span></span><br></pre></td></tr></table></figure>
-<p>那么经过上面几个步骤，就变成了这样;</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717100202.png" alt="image-20210717100202148" style="zoom: 50%;" />
-<p>很显然，*p,*q,i就是共患难的兄弟了，一个变，其它两个都变。</p>
-<p>除此之外，我们还要注意p=q和*p = *q的区别，注意一下就好。</p>
-<hr />
-<p>以上就是指针的基础知识了，下面讲一些指针的应用，有低级应用也有高级应用。</p>
-<h1 id="指针的应用"><a class="markdownIt-Anchor" href="#指针的应用"></a> 指针的应用</h1>
-<h2 id="指针在数组的应用"><a class="markdownIt-Anchor" href="#指针在数组的应用"></a> 指针在数组的应用</h2>
-<p>我们先对指针进行初使化：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>],*p;</span><br><span class="line">p = &amp;a[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
-<h3 id="数组上的算术运算"><a class="markdownIt-Anchor" href="#数组上的算术运算"></a> 数组上的算术运算</h3>
-<p>现在我们让指针p指向a[0]，可以访问a[0]的值。下面让我们看下指针在数组上的算术运算。</p>
-<ul>
-<li>
-<p>指针加减整数</p>
-<p>如果p指向数组元素a[i]，p+j就指向数组元素a[i+j]。用图表示可能更清晰一点：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717103039.png" alt="image-20210717103039643" style="zoom: 50%;" />
-<p>减法也是一个道理</p>
-</li>
-<li>
-<p>两个指针相减</p>
-<p>当两个指针相减时，结果为两个指针的距离。因此，如果p指向a[i],q指向a[j]，那么q - p就是 a[j-i]。</p>
-</li>
-</ul>
-<h3 id="运算符和运算符的组合"><a class="markdownIt-Anchor" href="#运算符和运算符的组合"></a> *运算符和++运算符的组合</h3>
-<p>这是一种习惯，其中以*p++最常见，它在循环中很是方便，对数组a求和时，我们可以把下面这个程序：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[N];p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
-<p>改写成：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = &amp;a[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">while</span> (p &lt; &amp;a[N])</span><br><span class="line">	sum += *p++</span><br></pre></td></tr></table></figure>
-<h3 id="用数组名作为指针"><a class="markdownIt-Anchor" href="#用数组名作为指针"></a> 用数组名作为指针</h3>
-<p>数组本身就是一个地址，而指针可以直接操作地址，所以指针可以用数组的方式来表示。</p>
-<p><strong>我们可以把数组名作为指向数组第一个元素的指针</strong>，这种关系简化了指针的算术运算，而且使数组和指针更加通用。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line">*a = <span class="number">7</span>		<span class="comment">//把7赋值给a[0]</span></span><br><span class="line">*(a+<span class="number">1</span>) = <span class="number">8</span>	<span class="comment">//把8赋值给a[1]</span></span><br></pre></td></tr></table></figure>
-<p>通常情况下，(a+i)就等于 &amp;a[i]，*（a+i)等于a[i]。这一事实，使得循环更加容易：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a;p &lt; a+N;p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
-<p>这是惯用法。</p>
-<hr />
-<h3 id="指针和多维数组"><a class="markdownIt-Anchor" href="#指针和多维数组"></a> 指针和多维数组</h3>
-<h3 id="多维数组的存储"><a class="markdownIt-Anchor" href="#多维数组的存储"></a> 多维数组的存储</h3>
-<p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
-<p>根据定义我们的多维数组是长这样的：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" />
-<p>但实际上，其底层还是个一维数组:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091441.png" alt="image-20210718091441467" style="zoom:80%;" />
-<h3 id="将二维数组初始化为0"><a class="markdownIt-Anchor" href="#将二维数组初始化为0"></a> 将二维数组初始化为0</h3>
-<p>思考下面这段代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>][<span class="number">0</span>];p&lt;=&amp;a[NUM_ROWS<span class="number">-1</span>][NUM_COLS<span class="number">-1</span>];p++)</span><br><span class="line">    *p = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>我们来看一看这个过程：p开始时指向a[0][0]，随后对p连续自增可以使指针p指向a[0][1],a[0][2],a[0][3]……当p到达a[0][NUM_ROWS-1]时，再次对p自增将使它指向a[1][0],后面就重复之前的过程，直到p越过a[NUM_ROWS-1][NUM_COLS-1]，程序停止。</p>
-<h3 id="处理多维数组的行"><a class="markdownIt-Anchor" href="#处理多维数组的行"></a> 处理多维数组的行</h3>
-<p>处理多维数组一行的元素该怎么做？</p>
-<p>我们还是用指针变量，为了处理第i行，我们要先对p进行初始化：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = a[i] <span class="comment">//这里为什么不用p = &amp;a[i][0]呢？</span></span><br></pre></td></tr></table></figure>
-<p>因为两者实际上是等价的。a[i]等价于*(a+i)，所以&amp;a[i][0]等同于&amp;（*a[i]+0),后者等价于&amp;(*a[i])，而&amp;又与*等价，所以&amp;a[i][0]实际生等价于a[i]。</p>
-<p>我们就可以用这种简化来初始化第i行的数据为0：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a[i];p&lt;a[i]+NUMS_COLS;p++)</span><br><span class="line">	*p = <span class="number">0</span>; </span><br></pre></td></tr></table></figure>
-<h3 id="处理多维数组的列"><a class="markdownIt-Anchor" href="#处理多维数组的列"></a> 处理多维数组的列</h3>
-<p>处理列就没有行那么轻松了，因为数组是按行来存储的，而不是列。<u>对于清空数组的第i列</u>，我们可以这么写：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[NUM_ROWS];p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>我们来看一看运行过程：</p>
-<p>首先看看指针的声明，这个指针的类型是int(*)[],也就是<strong>指向一个数组的指针，而不是指针数组</strong>。表达式p++，把p移向了数组a的下一行开始的位置（+1实际上加了sizeof([NUMS_COLS])），(*p)[i]选中了该行第i列的位置。</p>
-<h3 id="用多维数组名作为指针"><a class="markdownIt-Anchor" href="#用多维数组名作为指针"></a> 用多维数组名作为指针</h3>
-<p>道理和一维是一样的，只不过要注意：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS];</span><br></pre></td></tr></table></figure>
-<p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (*)[NUM_COLS]。<strong>这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</strong>。</p>
-<p>这样我们就可以简化上面的循环了，比如说我现在想把数组第i列清零：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>编程语言</category>
-        <category>C</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-        <tag>基础知识</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言注意点复习</title>
     <url>/2021/07/14/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9%E5%A4%8D%E4%B9%A0/</url>
     <content><![CDATA[<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
@@ -344,6 +205,145 @@
       </tags>
   </entry>
   <entry>
+    <title>C指针基础和指针的数组应用</title>
+    <url>/2021/07/16/C%E6%8C%87%E9%92%88/</url>
+    <content><![CDATA[<h1 id="指针基础知识"><a class="markdownIt-Anchor" href="#指针基础知识"></a> 指针基础知识</h1>
+<h2 id="机器级上指针表示的内容"><a class="markdownIt-Anchor" href="#机器级上指针表示的内容"></a> 机器级上指针表示的内容</h2>
+<p>现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的<strong>地址</strong>，就像我们的学号一样，用来和其它内存区别。</p>
+<p>可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png" alt="image-20210717090004435" style="zoom:67%;" />
+<span id="more"></span>
+<p>我们虽然用数表示内存地址，但是地址的取值范围是不同于整数的范围的，所以<u>一定不能用普通整型变量来存储地址</u>。但是，可以用<font color=purple>特殊的指针变量来存储地址。</font>这就是指针的出处。**指针就是地址，而指针变量就是存储地址的变量。**我们可以用下面这种方式来表示，指针变量p存储变量i的地址：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png" alt="image-20210717091538267" style="zoom:80%;" />
+<h2 id="指针变量的声明"><a class="markdownIt-Anchor" href="#指针变量的声明"></a> 指针变量的声明</h2>
+<p>常见的指针声明形式：</p>
+<ol>
+<li>int p 这是一个普通的整型变量；int *p 首先从p开始，先与*结合，说明p是一个指针，然后再与int结合，说明指针的类型为Int型，所以p（指针变量名，不是*p）是一个返回整型数据的指针。</li>
+<li>int p[3]说明p是一个由整型数据组成的数组；int *p[3] p先与[3]结合，因为[]优先级&gt;*，说明p是一个数组，然后再与*结合，说明数组里的元素都是指针，然后再与int 结合，说明指针指向的是对象是整型的，所以p是一个由返回整型数据的指针组成的数组。</li>
+<li>int (*p)[3] p先与*结合，说明p是一个指针，再与[3]结合，说明指针指向一个数组，再与Int结合，说明p指向一个由整型数据组成的数组。</li>
+<li>int **p 指向指针的指针。</li>
+<li>int p(int) p是一个函数，返回整型数据；int (*p)(int)，p是一个指向有一个整型参数且返回类型为整型的函数的指针。</li>
+</ol>
+<h2 id="指针的四方面"><a class="markdownIt-Anchor" href="#指针的四方面"></a> 指针的四方面</h2>
+<p>指针有四个方面的内容需要搞清楚：</p>
+<h3 id="指针的类型"><a class="markdownIt-Anchor" href="#指针的类型"></a> 指针的类型</h3>
+<p>从语法角度，我们只要把指针名字去掉，剩下的就是指针的类型（比如上面都把p去掉）。</p>
+<h3 id="指针所指向的类型"><a class="markdownIt-Anchor" href="#指针所指向的类型"></a> 指针所指向的类型</h3>
+<p>当通过指针来访问指针所指向的内存区时，指针所指向的类型决定了编译器将把那片内存区里的内容当做什么来看待。从语法看，去除名字和名字左边的*就行。</p>
+<p>一定要注意<font color=purple>指针所指向的类型</font>和<font color=green>指针的类型</font>的区别。</p>
+<h3 id="指针的值地址"><a class="markdownIt-Anchor" href="#指针的值地址"></a> 指针的值—地址</h3>
+<p>指针的值时指针变量存储的数值，这个数值将被编译器当作一个地址，而不是一个一般的数值。</p>
+<p>前面也说了，变量i的地址用首地址来表示，<strong>我们说一个指针的值是XX，就相当于说该指针指向了以XX为首地址的一片内存区域</strong>。</p>
+<h3 id="指针本身所占据的内存区"><a class="markdownIt-Anchor" href="#指针本身所占据的内存区"></a> 指针本身所占据的内存区</h3>
+<p>用sizeof就可以测一下指针本身所占的内存了。</p>
+<hr />
+<p>每当遇到一个指针，就问问自己这个指针的这四方面分别是什么，想的多了也就分的清了。</p>
+<h2 id="取地址运算符和间接寻址运算符"><a class="markdownIt-Anchor" href="#取地址运算符和间接寻址运算符"></a> 取地址运算符和间接寻址运算符</h2>
+<ul>
+<li>
+<p>为了找到变量的地址，可以使用取地址运算符&amp;。举个例子，若x是一个变量，&amp;x就是x在内存中的地址。</p>
+</li>
+<li>
+<p>为了获得指针所指向对象的访问，可以使用*（间接寻址运算符）。如果p是指针，*p表示p当前所指向的对象。</p>
+<p>&amp;与*是一对逆运算。</p>
+</li>
+</ul>
+<h3 id="指针初始化"><a class="markdownIt-Anchor" href="#指针初始化"></a> 指针初始化</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,p = &amp;i;</span><br></pre></td></tr></table></figure>
+<p>这就是指针初始化的一种方法。</p>
+<h3 id="间接寻址"><a class="markdownIt-Anchor" href="#间接寻址"></a> 间接寻址</h3>
+<p>一旦指针初始化了，即指针指向了对象，我们就可以用间接寻址来访问存储在对象中的内容。例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,*p);</span><br></pre></td></tr></table></figure>
+<p>其实只要p指向i，*p就是i的别名，两者共生死（一块变动）。</p>
+<hr />
+<h2 id="指针的算术运算"><a class="markdownIt-Anchor" href="#指针的算术运算"></a> 指针的算术运算</h2>
+<h3 id="加减法"><a class="markdownIt-Anchor" href="#加减法"></a> 加减法</h3>
+<p>指针可以加上或减去一个整数。指针的这种运算的意义和通常的数值的加减运算的意义是不一样的，它是以单元为单位。例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> a[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> *ptr=(<span class="keyword">int</span> *)a;		<span class="comment">//强制类型转换并不会改变a 的类型</span></span><br><span class="line">ptr++;</span><br></pre></td></tr></table></figure>
+<p>在上例中，指针ptr 的类型是int*,它指向的类型是int，它被初始化为指向整型变量a。接下来的第3句中，<strong>指针ptr被加了1，编译器是这样处理的</strong>：</p>
+<p>它把指针ptr 的值加上了<strong>sizeof(int)</strong>，在64 位程序中，是被加上了8，因为在64 位程序中，int 占 8 个字节。由于地址是用字节做单位的，故ptr 所指向的地址由原来的变量a 的地址向高地址方向增加了8个字节。由于char 类型的长度是一个字节，所以，原来ptr 是指向数组a 的第0 号单元开始的8个字节，此时指向了数组a 中从第8号单元开始的8个字节。</p>
+<h3 id="指针赋值"><a class="markdownIt-Anchor" href="#指针赋值"></a> 指针赋值</h3>
+<p>C语言允许使用赋值运算符进行指针的赋值，前提是两者具有相同的指针类型。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,j,*p,*q;</span><br><span class="line">p = &amp;i; <span class="comment">//把i的地址复制给指针p</span></span><br><span class="line">q = p;	<span class="comment">//把p的地址复制给q,效果是q指向了p所指向的地方</span></span><br></pre></td></tr></table></figure>
+<p>那么经过上面几个步骤，就变成了这样;</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717100202.png" alt="image-20210717100202148" style="zoom: 50%;" />
+<p>很显然，*p,*q,i就是共患难的兄弟了，一个变，其它两个都变。</p>
+<p>除此之外，我们还要注意p=q和*p = *q的区别，注意一下就好。</p>
+<hr />
+<p>以上就是指针的基础知识了，下面讲一些指针的应用，有低级应用也有高级应用。</p>
+<h1 id="指针的应用"><a class="markdownIt-Anchor" href="#指针的应用"></a> 指针的应用</h1>
+<h2 id="指针在数组的应用"><a class="markdownIt-Anchor" href="#指针在数组的应用"></a> 指针在数组的应用</h2>
+<p>我们先对指针进行初使化：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>],*p;</span><br><span class="line">p = &amp;a[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<h3 id="数组上的算术运算"><a class="markdownIt-Anchor" href="#数组上的算术运算"></a> 数组上的算术运算</h3>
+<p>现在我们让指针p指向a[0]，可以访问a[0]的值。下面让我们看下指针在数组上的算术运算。</p>
+<ul>
+<li>
+<p>指针加减整数</p>
+<p>如果p指向数组元素a[i]，p+j就指向数组元素a[i+j]。用图表示可能更清晰一点：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717103039.png" alt="image-20210717103039643" style="zoom: 50%;" />
+<p>减法也是一个道理</p>
+</li>
+<li>
+<p>两个指针相减</p>
+<p>当两个指针相减时，结果为两个指针的距离。因此，如果p指向a[i],q指向a[j]，那么q - p就是 a[j-i]。</p>
+</li>
+</ul>
+<h3 id="运算符和运算符的组合"><a class="markdownIt-Anchor" href="#运算符和运算符的组合"></a> *运算符和++运算符的组合</h3>
+<p>这是一种习惯，其中以*p++最常见，它在循环中很是方便，对数组a求和时，我们可以把下面这个程序：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[N];p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
+<p>改写成：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = &amp;a[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">while</span> (p &lt; &amp;a[N])</span><br><span class="line">	sum += *p++</span><br></pre></td></tr></table></figure>
+<h3 id="用数组名作为指针"><a class="markdownIt-Anchor" href="#用数组名作为指针"></a> 用数组名作为指针</h3>
+<p>数组本身就是一个地址，而指针可以直接操作地址，所以指针可以用数组的方式来表示。</p>
+<p><strong>我们可以把数组名作为指向数组第一个元素的指针</strong>，这种关系简化了指针的算术运算，而且使数组和指针更加通用。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line">*a = <span class="number">7</span>		<span class="comment">//把7赋值给a[0]</span></span><br><span class="line">*(a+<span class="number">1</span>) = <span class="number">8</span>	<span class="comment">//把8赋值给a[1]</span></span><br></pre></td></tr></table></figure>
+<p>通常情况下，(a+i)就等于 &amp;a[i]，*（a+i)等于a[i]。这一事实，使得循环更加容易：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a;p &lt; a+N;p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
+<p>这是惯用法。</p>
+<hr />
+<h3 id="指针和多维数组"><a class="markdownIt-Anchor" href="#指针和多维数组"></a> 指针和多维数组</h3>
+<h3 id="多维数组的存储"><a class="markdownIt-Anchor" href="#多维数组的存储"></a> 多维数组的存储</h3>
+<p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
+<p>根据定义我们的多维数组是长这样的：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" />
+<p>但实际上，其底层还是个一维数组:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091441.png" alt="image-20210718091441467" style="zoom:80%;" />
+<h3 id="将二维数组初始化为0"><a class="markdownIt-Anchor" href="#将二维数组初始化为0"></a> 将二维数组初始化为0</h3>
+<p>思考下面这段代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>][<span class="number">0</span>];p&lt;=&amp;a[NUM_ROWS<span class="number">-1</span>][NUM_COLS<span class="number">-1</span>];p++)</span><br><span class="line">    *p = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看这个过程：p开始时指向a[0][0]，随后对p连续自增可以使指针p指向a[0][1],a[0][2],a[0][3]……当p到达a[0][NUM_ROWS-1]时，再次对p自增将使它指向a[1][0],后面就重复之前的过程，直到p越过a[NUM_ROWS-1][NUM_COLS-1]，程序停止。</p>
+<h3 id="处理多维数组的行"><a class="markdownIt-Anchor" href="#处理多维数组的行"></a> 处理多维数组的行</h3>
+<p>处理多维数组一行的元素该怎么做？</p>
+<p>我们还是用指针变量，为了处理第i行，我们要先对p进行初始化：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = a[i] <span class="comment">//这里为什么不用p = &amp;a[i][0]呢？</span></span><br></pre></td></tr></table></figure>
+<p>因为两者实际上是等价的。a[i]等价于*(a+i)，所以&amp;a[i][0]等同于&amp;（*a[i]+0),后者等价于&amp;(*a[i])，而&amp;又与*等价，所以&amp;a[i][0]实际生等价于a[i]。</p>
+<p>我们就可以用这种简化来初始化第i行的数据为0：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a[i];p&lt;a[i]+NUMS_COLS;p++)</span><br><span class="line">	*p = <span class="number">0</span>; </span><br></pre></td></tr></table></figure>
+<h3 id="处理多维数组的列"><a class="markdownIt-Anchor" href="#处理多维数组的列"></a> 处理多维数组的列</h3>
+<p>处理列就没有行那么轻松了，因为数组是按行来存储的，而不是列。<u>对于清空数组的第i列</u>，我们可以这么写：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[NUM_ROWS];p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看运行过程：</p>
+<p>首先看看指针的声明，这个指针的类型是int(*)[],也就是<strong>指向一个数组的指针，而不是指针数组</strong>。表达式p++，把p移向了数组a的下一行开始的位置（+1实际上加了sizeof([NUMS_COLS])），(*p)[i]选中了该行第i列的位置。</p>
+<h3 id="用多维数组名作为指针"><a class="markdownIt-Anchor" href="#用多维数组名作为指针"></a> 用多维数组名作为指针</h3>
+<p>道理和一维是一样的，只不过要注意：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS];</span><br></pre></td></tr></table></figure>
+<p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (*)[NUM_COLS]。<strong>这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</strong>。</p>
+<p>这样我们就可以简化上面的循环了，比如说我现在想把数组第i列清零：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>编程语言</category>
+        <category>C</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git基本命令汇总</title>
     <url>/2021/07/14/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</url>
     <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg" alt="Git基本操作" /></p>
@@ -362,6 +362,84 @@
         <tag>git</tag>
         <tag>基本命令汇总</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>经济学的方法论</title>
+    <url>/2021/07/19/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
+    <content><![CDATA[<p>本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719230645.png" alt="image-20210719230645371" style="zoom:67%;" />
+<span id="more"></span>
+<h2 id="研究时科学家"><a class="markdownIt-Anchor" href="#研究时科学家"></a> 研究时—科学家</h2>
+<p>emmm,作者说经济学家其实和物理学家，生物学家的方法论差不多，研究在保证客观性的前提下，按照：观察 → 提出假设 → 搜集data → 分析data → 证明或否定假设，所以说经济学家是一种科学。作者接下来解释了<strong>为什么说经济学是一种科学</strong>：</p>
+<blockquote>
+<p>科学的本质是科学方法——冷静地建立并检验有关世界如何运行的各种理论。这种研究方法适用于研究一国经济，就像适用于研究地心引力或生物进化一样。正如阿尔伯特·爱因斯坦（Albert Einstein）曾经指出的：“所有科学不过是日常思考的不断完善而已。”</p>
+</blockquote>
+<p>为了进一步说明，作者选了点上面说的科学的方法论的流程，说了说经济学的特色：</p>
+<h3 id="观察提出假设"><a class="markdownIt-Anchor" href="#观察提出假设"></a> 观察，提出假设</h3>
+<p>经济学家会观察经济现象，这个不用多说。特别的是，物理学家想观察，获得数据，做做实验就好了；可是<strong>经济学家想进行实验几乎是不可能的</strong>。比如研究通货膨胀的经济学家绝不会被允许仅仅为了获得有用的数据而操控一国的货币政策。</p>
+<p>为此，经济学家<strong>只能求助于历史提供的实验</strong>。例如，当中东战争中断了原油运输时，全世界石油价格飞涨。对石油和石油产品的消费者来说，这个事件降低了他们的生活水平；对经济决策者来说，这个事件提出了如何做出最佳应对的难题。但对经济科学家来说，它提供了<u>研究一种重要的自然资源对世界经济影响的机会</u>。</p>
+<p>这就是为什么经济学家十分关注历史事件的原因。</p>
+<h3 id="建立模型"><a class="markdownIt-Anchor" href="#建立模型"></a> 建立模型</h3>
+<p>其实参加过数学建模比赛的uu就知道，题目中会有一道经济学相关的题目，也就是让你建立一个经济学模型来解决一个经济学问题。这个建模的过程和数学建模的过程是很像的。</p>
+<ul>
+<li>首先提出假设，去掉一些不重要的细节，建立一个初步的模型。</li>
+<li>再不断增加<strong>必要的</strong>复杂度。（注意，这是个由浅入深的过程）</li>
+<li>最后建立一个<strong>合适的</strong>模型。（针对不同的问题而言）</li>
+</ul>
+<p>经济由从事许多活动——购买、销售、工作、雇佣、制造等——的千百万人所组成。为了理解经济的运行方式，我们必须找到某种方法来<strong>简化</strong>我们对所有这些活动的思考。换句话说，我们需要一个模型从总体上来解释经济是如何组织起来的，并说明经济的参与者如何相互交易。</p>
+<p>然后作者列举了两个经济学的经典模型：</p>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/95971285">循环流量图</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E5%8F%AF%E8%83%BD%E6%80%A7%E6%9B%B2%E7%BA%BF">生产可能性边界—简单的数学经济模型</a>,我觉得可以这么理解：总共50块钱，你是买汽水喝还是买辣条，多买辣条一点你就少喝点汽水。想想这个模型和前面讲到的十大原理中哪些原理有关系？</li>
+</ol>
+<h3 id="研究领域宏观和微观"><a class="markdownIt-Anchor" href="#研究领域宏观和微观"></a> 研究领域：宏观和微观</h3>
+<p>经济学的研究和其它科学一样，是分为不同层次的，传统意义上划分为两个大方向：</p>
+<ul>
+<li>
+<p>微观经济学（microeconomics）：研究家庭和企业如何做出决策，以及它们如何在特定市场上相互交易。</p>
+<p>一个微观经济学家可能研究租金控制对上海住房的影响、外国竞争对我国汽车行业的影响，或者接受义务教育对工人收入的影响。</p>
+</li>
+<li>
+<p>宏观经济学（macroeconomics）：研究整体经济现象。</p>
+<p>一个宏观经济学家可能研究政府借债的影响、经济中失业率随时间推移的变动，或者提高一国生活水平的不同政策。</p>
+</li>
+</ul>
+<p>微观经济学和宏观经济学是密切相关的。由于整体经济的变动产生于千百万个人的决策，所以，不考虑相关的微观经济决策而要去理解宏观经济的发展是不可能的。例如，宏观经济学家可能研究个人所得税的减少对整个物品与服务生产的影响。但是为了分析这个问题，他必须考虑所得税减少会如何影响家庭把多少钱用于购买物品与服务的决策。</p>
+<p>尽管微观经济学与宏观经济学之间存在固有的联系，但这两个领域仍然是不同的。由于它们强调不同的问题，且每个领域都有自己的一套模型，所以通常在不同的课程中讲授。</p>
+<hr />
+<h2 id="政策顾问"><a class="markdownIt-Anchor" href="#政策顾问"></a> 政策顾问</h2>
+<p>这经济乃民生之本，经济学家可不能躲进小楼成一统啊，研究那么多，总得告诉别人怎么做吧。</p>
+<p>当经济学家试图去<font color=purple><strong>解释世界时</strong>，他们是<strong>科学家</strong></font>；当经济学家试图去<font color=green><strong>帮助改善世界</strong>时，他们是<strong>政策顾问。</strong></font></p>
+<p>这句话很重要，两种不同的身份，语言是不一样的，你拿做研究时的术语去告诉不是学经济学的人怎么做，不是对牛弹琴吗？对此经济学规定了两套不同的术语（这是我没想到的😥）：实证表述与规范表述。额，怎么说呢，具体内容去查资料就有了，我就作为一个小白来说一说这俩玩意啥意思啊？</p>
+<ul>
+<li>实证表述就是靠证据说话，去<strong>解释</strong>一个经济系统是怎么运作的，是站在科学家的角度上（严谨）。</li>
+<li>规范表述不仅仅要涉及事实，还要考虑到社会、国家的方方面面。毕竟确定什么是好政策或什么是坏政策不仅仅是一个科学问题，它还涉及我们对伦理、宗教和政治哲学的看法，是一种<strong>指导性的语言</strong>，是站在顾问的角度上。</li>
+</ul>
+<p>在学习经济学时，要<strong>记住实证表述与规范表述的区别</strong>，因为这有助于你将精力集中在手头的任务上。</p>
+<p>经济学的许多内容是实证的：它仅仅在努力解释世界如何运行。但那些运用经济学的经济学家们通常有规范的目的：他们想知道如何改善经济。当你听到经济学家做出规范表述时，你就可以知道，他们此时已经是站在政策顾问的立场上，而不是站在科学家的立场上了。</p>
+<hr />
+<h3 id="经济学家的影响"><a class="markdownIt-Anchor" href="#经济学家的影响"></a> 经济学家的影响</h3>
+<p>经济学家对政策的影响超出了他们作为顾问的作用：他们的研究和著作经常间接地影响政策。经济学家约翰·梅纳德·凯恩斯（John Maynard Keynes）提出了这种看法：</p>
+<blockquote>
+<p>经济学家和政治哲学家的思想，无论正确与否，实际上都要比一般所想象的更有力量。事实上，这个世界就是由它们统治的。那些自认为能够免于受经济学家思想影响的实干家往往是某些已故经济学家的俘虏。那些当权狂人信奉的其实也不过是若干年前某些末流文人狂妄思想的零碎而已。</p>
+</blockquote>
+<p>虽然这些文字写于1935年，但至今仍然正确。实际上，现在正影响公共政策的“末流文人”往往是凯恩斯本人。</p>
+<p>经济学家的建议很重要，也有许多的领袖愿意听经济学家的建议。</p>
+<p>但是，<strong>经济学家的建议总是不被采纳</strong>……这个为什么也很好理解，都说了，经济学家的研究是建立在假设之上的，是抽象的模型，虽来源于现实但是脱离于现实，因此<strong>实际上的经济政策制定和经济学研究是两码事</strong>。</p>
+<hr />
+<h2 id="经济学家经常意见不一"><a class="markdownIt-Anchor" href="#经济学家经常意见不一"></a> 经济学家经常意见不一</h2>
+<p>萧伯纳曾经这样嘲讽道：</p>
+<blockquote>
+<p>如果让所有的经济学家围坐在一起，他们不会达成任何一个共识。</p>
+</blockquote>
+<p>至于为什么，我不想写了。</p>
+<h2 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h2>
+<p>以上其实就是绪论部分的结束，下面的章节就是经济学的干货了。在开始之前，作者引用了下面这段话：</p>
+<blockquote>
+<p>经济学研究似乎并不需要任何极高的特殊天赋。与更高深的哲学或纯科学相比，经济学难道不是……一门极其容易的学科吗？它是一门容易的学科，但这个学科中很少有人能出类拔萃！对这个悖论的解释也许在于杰出的经济学家应该具有罕见的各种天赋的组合。在某种程度上，他应该是数学家、历史学家、政治家和哲学家。他必须了解符号并用文字将其表达出来。他必须根据一般性来深入思考特殊性，并在思绪奔放的同时触及抽象与具体。他必须根据过去、着眼未来而研究现在。他必须考虑到人性或人的制度的每一部分。他必须同时保持坚定而客观的情绪，要像艺术家一样超然而不流俗，但有时又要像政治家一样脚踏实地。</p>
+</blockquote>
+<p>这无疑是一个高标准。但通过实践，我们将会越来越习惯于像经济学家一样思考。（好家伙，还整个交叉学科😳）</p>
+]]></content>
   </entry>
   <entry>
     <title>数据结构与算法绪论</title>
@@ -622,139 +700,6 @@
       </tags>
   </entry>
   <entry>
-    <title>数学之美</title>
-    <url>/2021/07/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%A6%E4%B9%8B%E7%BE%8E/</url>
-    <content><![CDATA[<h1 id="从规则到统计"><a class="markdownIt-Anchor" href="#从规则到统计"></a> 从规则到统计</h1>
-<h2 id="信息的载体"><a class="markdownIt-Anchor" href="#信息的载体"></a> 信息的载体</h2>
-<p>第一章的内容和《code》里的内容有重复，就不详细写了，主要记录一点有趣的东西。</p>
-<h3 id="翻译"><a class="markdownIt-Anchor" href="#翻译"></a> 翻译</h3>
-<p>如今各种翻译软件司空见惯，但是我们有没有想过<strong>为什么一种语言承载的信息翻译成另一种语言还能传递大体相同的信息呢？</strong></p>
-<p>其实这样的事实已经告诉我们：翻译之所以能达成，是因为不同的文字系统在记录信息的能力上是等价的，文字只是信息的载体，而非信息本身。</p>
-<span id="more"></span>
-<h3 id="罗塞塔石碑"><a class="markdownIt-Anchor" href="#罗塞塔石碑"></a> 罗塞塔石碑</h3>
-<p>罗塞塔石碑上用三种文字记录了古埃及的信息，为研究古埃及社会提供了珍贵的史料。那么在吴军老师看来，罗塞塔石碑带来的启示是什么呢？</p>
-<ol>
-<li>**信息的冗余是信息安全的保障。**从这个石碑上我们就看一看到用多种文字记录信息的好处，即使一种文字失传，我们仍可以用其它两种文字解读信息，这就是信息冗余的好处。</li>
-<li><strong>语言的数据（语料），尤其是双语或多语的对照语料对翻译至关重要。</strong></li>
-</ol>
-<h3 id="词与语法"><a class="markdownIt-Anchor" href="#词与语法"></a> 词与语法</h3>
-<p>我们都知道语言有两个基本要素：词和语法。词是有限且封闭的集合，可以具备完备的解码规则；语法是无限且开放的集合，但是总有语法覆盖不到的地方。前者我们称“基于语料”,后者我们称&quot;基于规则&quot;。经过漫长的发展和实践，在两者的碰撞中，前者取得了胜利。</p>
-<p>以上就是第一章值得记录的地方，第一章引出了以下主题：</p>
-<ol>
-<li>通信的原理和信息传播的模型</li>
-<li>（信源）编码和最短编码</li>
-<li>解码的规则，语法</li>
-<li>聚类</li>
-<li>校验位</li>
-<li>双语对照文本，语料库和机器翻译</li>
-<li>多义性和利用上下文消除歧义性</li>
-</ol>
-<h2 id="从规则到统计-2"><a class="markdownIt-Anchor" href="#从规则到统计-2"></a> 从规则到统计</h2>
-<p>在接下来的篇章开始之前，作者提出了NLP最基本的两个问题：</p>
-<ul>
-<li>
-<p>计算机能否处理自然语言？</p>
-</li>
-<li>
-<p>如果能，它处理自然语言的方法是否和人类一样？</p>
-</li>
-</ul>
-<h3 id="nlp的历史简介"><a class="markdownIt-Anchor" href="#nlp的历史简介"></a> NLP的历史简介</h3>
-<p>NLP的源头要追溯到1950年Alan Turing发表的论文**《计算的机器和智能》**，这篇论文没有提出什么研究的方法，而是提出了一种检验机器是否有智能的方法，没错就是Turing Test。Turing留下来了一个问题，而非答案，一般认为自然语言的机器处理就是从这个时候开始的。</p>
-<p>在接下来的70多年中，NLP走过了两个阶段：</p>
-<p>在1950到1980这段时期，科学家们在走弯路，那时的普遍认识是<strong>用电脑去模拟人脑</strong>，基于规则语法去做NLP；而这段时期以后，另一种方法发展了起来，这就是<strong>基于数学模型和统计来NLP</strong>。这种方法在今天已经完全取代了第一种方法，并得到了大范围的应用。</p>
-<h3 id="规则"><a class="markdownIt-Anchor" href="#规则"></a> 规则</h3>
-<p>早期的学术界是这么认为AI和自然语言处理的：要让机器完成翻译或者语音识别这样只有人类能做的事情，就必须先让计算机<strong>理解语言</strong>，而做到这一点就必须让机器和我们人类一样有真正的智能。为什么会有这样的认识？因为人类就是这么做的，对于人类来讲，一个能把英语转换成汉语的人，这两种语言一定掌握的很好，这就是<strong>直觉的作用</strong>。后来的人把这一派称为&quot;鸟飞派&quot;。</p>
-<p>鸟飞派什么意思呢？就是**只知道去模仿鸟，却不去探究鸟为什么会飞？**但是要知道，莱特兄弟之所以能够造出飞机，是因为空气动力学而不是仿生学。</p>
-<p>下面我们来看看鸟飞派的研究历程吧：</p>
-<p>首先，<strong>西方语言语法研究已经久矣</strong>。当时摆在科学家面前的问题是如何<strong>让机器理解自然语言</strong>？</p>
-<p>普遍的认识是分析语句和获取语义，这实际上受到了传统语言学研究的影响，是惯性思维的结果。西方的语言学家在18，19世纪已经对自然语言的语法规则做了非常形式化的总结，而这些规则恰好很容易被计算机描述，这更加坚定了大家对基于规则的自然语言处理的决心。相较于语法语义更难研究，在那个时代也没有得到重视。</p>
-<p>随着不断地对语法规则进行人工总结以及基于乔姆斯基形式的高级语言发展，对自然语言的概括越来越全面，但是，这种的方法的问题也渐渐暴露：</p>
-<ol>
-<li>句法分析十分繁琐，当句子很复杂时，Parse Tree就会很大，并且有时候会自相矛盾。即使能写出所有自然语言现象的语法规则集合，用计算机解析这些规则是十分困难的。图灵奖得主高德纳提出了用计算复杂度来衡量算法的耗时。<strong>对于上下文无关文法，算法复杂度是长度的二次方；而对于上下文有关法，计算复杂度基本上是六次方。</strong></li>
-<li>语义与上下文相关。</li>
-</ol>
-<p>用一个很好的例子就能说明弊端：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714092019.png" alt="image-20210714092019268" /></p>
-<p>基于规则的NLP就要走到尽头了，统计语言学即将诞生。它的创始人是Frederick Jelinek 和他所领导的IBM华生研究室。为什么从规则过渡到统计要长达15年之久？</p>
-<ol>
-<li>20世纪70年代：基于统计的方法是通信系统+隐马尔可夫模型。在当时的这种方法下，输入输出都是一维的符号序列而且保持原有的次序，在语音识别和词性分析中；对比一下规则句法分析中，输入是一维的，但是输出是二维的。在机器翻译中，由于输出不会保持原有的次序，所以上述方法就不太适用了。<strong>到了20世纪80年代，由于没有足够的统计数据，没有强大的模型解决不同语言语序颠倒的问题，所以基于统计的方法发展不起来。</strong></li>
-<li>还有一个原因，就是得等老科学家们退休。。。等待新老交替。</li>
-</ol>
-<p>所以，一直等到2005年Google的基于统计的翻译系统全面超过基于规则方法的Systain翻译系统，基于规则的翻译系统最后的堡垒被拔掉了。今天，很少听到基于规则方法的声音了。</p>
-<h3 id="统计语言模型"><a class="markdownIt-Anchor" href="#统计语言模型"></a> 统计语言模型</h3>
-<p>NLP一个基本的问题就是为了自然语言这种<strong>上下文相关的特性</strong>建立model，这个model就是Statistical Language Model。Model 诞生的初衷是为了解决语言识别，**要衡量一个句子是否合理，就看看它的可能性大小如何。**下面开始严格地描述：</p>
-<p>设S表示某个有意义的句子，由一连串顺序排列的词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>3</mn></msub><mo separator="true">,</mo><mo>…</mo><mi mathvariant="normal">，</mi><msub><mi>w</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">w_1,w_2,w_3,…，w_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>组成，现在我们想知道S在文本中出现的可能性P(S)。当然，要想拿到几千年的样本是不太可行的，我们只能使用<strong>估算</strong>这一方法。利用条件概率公式：</p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mi>n</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>2</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>3</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>⋯</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>n</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>3</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_1,w_2,…,w_n)=P(w_1)\cdot P(w_2|w_1)\cdot P(w_3|w_1,w_2)\cdots P(w_n|w_1,w_2,w_3,…,w_{n-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
-<p>我们观察一下这个公式，前面两个式子还好算，但是越往后面，条件概率<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>n</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mi mathvariant="normal">，</mi><msub><mi>w</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_n|w_1,w_2,…，w_{n-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>可能性太多，无法估算。怎么办？</p>
-<p>俄罗斯数学家马尔可夫有一个偷懒但还颇为有效的方法，也就是每遇到这种情况时，就假设任意一个词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">w_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>出现的概率只同它前面的词有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">w_{i-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.638891em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span>关，于是问题变得很简单了。这种假设在数学上被称为马尔可夫假设。现在，S出现的概率就变得简单了：</p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>2</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>3</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>⋯</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>⋯</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>n</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(S)=P(w_1)\cdot P(w_2|w_1)\cdot P(w_3|w_2)\cdots P(w_i|w_{i-1})\cdots P(w_n|w_{n-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
-<p>这种统计语言模型是<strong>二元模型</strong>。接下来的问题就是如何估计<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_i|w_{i-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。根据条件概率的定义：</p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">P(w_i|w_{i-1})=\frac{P(w_{i-1},w_i)}{P(w_{i-1})}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">）</mi></mrow><annotation encoding="application/x-tex">P(w_{i-1},w_i）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">）</span></span></span></span>表示在语料库中，前后相邻出现多少次，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_{i-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>指在同样文本出现多少次。用这两个分别除以#（语料库大小）就是我们要求的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_{i-1},w_i),P(w_{i-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。最后我们就可以得出可能性P（S）<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≈</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\approx \frac{P(w_{i-1},w_i)}{P(w_{i-1})}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.48312em;vertical-align:0em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>。就是这么简单的原理大获成功。</p>
-<p>当然，真正实现一个好的统计语言模型，还有许多细节问题需要解决。比如，<strong>如果上面公式中的这对词</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(w_{i-1},w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>**在语料库中没出现，或只出现一两次，估算它的概率就有点困难了。**贾里尼克和其同事的贡献不仅在于提供了统计语言模型，而且还很漂亮地解决了所有的细节问题。这些解决方案将会在下节介绍。</p>
-<hr />
-<h3 id="高阶语言模型"><a class="markdownIt-Anchor" href="#高阶语言模型"></a> 高阶语言模型</h3>
-<p>所谓的高阶语言模型就是把原来的二阶模型转变为N元模型，就是这个词和前面N-1个词有关，<strong>让假设更复杂些</strong>。N=2时就是二元模型，N=1时就是不考虑上下文，N=3一般在实际应用中最广泛。<strong>为什么N一般都取值这么小呢？</strong></p>
-<ol>
-<li>N元模型的大小几乎是N的指数函数，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>o</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>V</mi><msup><mi mathvariant="normal">∣</mi><mi>N</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">o(|V|^N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord mathdefault">o</span><span class="mopen">(</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，这里|V|是一种语言词典的词汇量，一般在几万到几十万个。而使用N元模型的速度也几乎时一个指数函数，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>V</mi><msup><mi mathvariant="normal">∣</mi><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(|V|^{N-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。</li>
-<li>当N从1到2，再从2到3，模型的效果上升显著。而当模型从3到4时，模型上升的效果就不那么显著了。</li>
-</ol>
-<p>最后还有一个问题：<strong>是否三元，四元甚至更高阶的模型就能覆盖所有的语言现象呢？</strong></p>
-<p>显然答案是否定的。因为在自然语言中，上下文之间的关系可能跨度很大，甚至可以从一个段落跨到了一个段落。因此，即使模型的阶数再高，对这种情况也无可奈何，这就是马尔可夫模型的局限性。这时就要采用其它一些长程的依赖性来解决这个问题。</p>
-<h3 id="模型的训练-零概率和平滑问题"><a class="markdownIt-Anchor" href="#模型的训练-零概率和平滑问题"></a> 模型的训练、零概率和平滑问题</h3>
-<p>使用语言模型需要知道模型中<strong>所有的条件概率</strong>，我们称之为模型的参数。通过对语料的统计，得到这些参数的过程称作<strong>模型的训练</strong>。但还是那个老问题，如果上面公式中的这对词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(w_{i-1},w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>在语料库中没出现，或只出现一两次，怎么办？这就涉及统计的可靠性问题了。</p>
-<p>在数理统计中，我们之所以敢使用对采样数据的观察结果来预测概率，是<strong>因为有大数定律</strong>的支撑，它的要求是有足够的观察值。但是很多人都忽视了这一点，因此训练出来的模型不管用。<strong>那么如何训练出一个合理正确的语言模型呢？</strong></p>
-<ol>
-<li>直接的办法是增加数据量，但是依然会遇到零概率或者统计量不足的情况。假如说我现在要训练一个汉语的语言模型，汉语的词汇量在20万这个量级，训练一个三元模型就要20万的三次方=8x<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>15</mn></msup></mrow><annotation encoding="application/x-tex">10^{15}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>不同的参数。即使用互联网上全部的中文内容做训练，也就10的13次方。因此，**如果用直接的比值运算计算概率，大部分条件概率依然是0，这种模型被称为“不平滑”。**零概率问题在实际应用中是不可回避的。</li>
-<li>**训练统计语言模型的艺术就在于解决好统计样本不足的概率估计问题。**1953年，古德在图灵的指导下，提出了在统计中相信可靠的统计数据，而对不可信数据打折扣的一种概率估计方法。古德和图灵还提出了一个很漂亮的重新估算概率的公式，这个公式现在被称为古德-图灵估计。</li>
-</ol>
-<h4 id="古德-图灵估计"><a class="markdownIt-Anchor" href="#古德-图灵估计"></a> 古德-图灵估计</h4>
-<p>这一方法的原理是：对于我们没看见的东西不能认为它发生的概率是0，因此我们从概率的总量中，<strong>分配一个很小的比例给予这些没有看见的事件</strong>。这样一来，看见的那些事件的概率总和就要小于1了，因此，需要将所有看见的事件概率调小一点。至于小多少，要根据“越是不可信的统计折扣越多”的方法进行。下面就以统计词典中的每个词概率为例，来说明<strong>古德—图灵估计公式</strong>。额，下面已经看不懂了，先记录下来吧。</p>
-<h4 id="语料的选取问题"><a class="markdownIt-Anchor" href="#语料的选取问题"></a> 语料的选取问题</h4>
-<p>模型训练中有一个很重要的问题就是<strong>训练数据</strong>，或者说语料库的选取。如果训练语料和模型应用的领域相脱节，那么模型的效果将大打折扣。比如说腾讯的搜索部门，最早的语言模型是使用《人民日报》的语料训练的，因为开发者认为这些语料干净、无噪音。但是实际效果很差，经常出现搜索串和网页不匹配的例子。后来改用网页的诗句，尽管有很多噪音，但是搜索质量反而好。</p>
-<p>并非所有的应用都能得到足够的训练数据，比如说机器翻译的双语语料就非常少，在这种情况下片面追求高阶的大模型就变得一点意义都没有了。在训练数据和应用数据一致并且训练量足够大的情况下，<strong>训练语料的噪音高低</strong>也会对模型的效果产生一定的影响。因此，在训练以前有时需要<strong>对训练数据进行预处理</strong>。一般情况下，量小的噪音就不管了，但是<strong>量比较大的，能找到模式的噪音</strong>还是要进行过滤的，比如网页文本中大量的制表符</p>
-<h4 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h4>
-<p>统计语言模型的形式很简单，但是里面的学问可以很深，一个专家可以在这方面研究多年。<strong>数学的魅力就在于将复杂的问题简单化</strong>。</p>
-<h1 id="搜索引擎"><a class="markdownIt-Anchor" href="#搜索引擎"></a> 搜索引擎</h1>
-<p>搜索引擎的道是什么呢？</p>
-<ol>
-<li>自动下载尽可能多的网页（下载）</li>
-<li>建立快速有效的索引（索引）</li>
-<li>根据相关性对网页进行公平准确排序（排序）</li>
-</ol>
-<h2 id="文献检索与布尔代数的关系-索引"><a class="markdownIt-Anchor" href="#文献检索与布尔代数的关系-索引"></a> 文献检索与布尔代数的关系、索引</h2>
-<p>对于用户输入的关键词，搜素引擎要判断哪个文献里有这个关键词。如果一个文献里有它，则值为1，如果没有，则值为0.然后通过输入一系列关键词，每个条件都能得到一个0或者1，最后就可以找出符合条件的文献。</p>
-<p>索引，作为搜索引擎的基础，它的技术原理是怎样的呢？</p>
-<p>好的类比是图书馆的索引卡片，我们去图书馆找书，不是直接一本本的找，而是通过索引卡片直接到书架上去拿。只不过在信息时代，图书的索引不再是卡片，而是基于数据库的。数据库的查询语句（SQL）支持各种复杂的逻辑组合，但是背后的基本原理是<strong>基于布尔运算</strong>。它的原理是这样的一张表：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714092955.png" alt="image-20210714092955742" /></p>
-<p>每个关键字都对应一串二进制序列，每一位代表一个网页，一篇文献：若值为1，则说明这个网页有这个关键字；若值为0，则这个网页没有这个关键字。我们可以想到，实际的应用中，<strong>这个数量级是巨大的</strong>。那么我们平常的搜索引擎是怎么做到这么快出结果的呢？</p>
-<p>这些索引需要通过分布式的方式存储到不同的服务器上。普遍的做法就是：根据网页的序号将索引分成很多份，分别存储到不同的服务器上。每当接受一个查询时，这个查询就分发到许许多多的服务器上，这些服务器同时并行处理用户请求，并把结果送到主服务器进行合并处理，最后将结果返回给用户。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714093042.png" alt="image-20210714093042023" /></p>
-<h2 id="图论和网络爬虫"><a class="markdownIt-Anchor" href="#图论和网络爬虫"></a> 图论和网络爬虫</h2>
-<p>离散数学是CS的数学基础。它包括：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714093503.png" alt="image-20210714093456613" /></p>
-<p>第八章谈到了如何建立搜索引擎的索引，那么<strong>如何自动下载互联网所有的网页呢</strong>？这就需要图论中的遍历(Traverse)算法。</p>
-<h3 id="图论"><a class="markdownIt-Anchor" href="#图论"></a> 图论</h3>
-<p>有空去了解一下吧。就稍微讲一下两个基础图论算法：BFS和DFS。</p>
-<p>BFS简称为广撒网，DFS简称为不撞南墙不回头。。。</p>
-<h3 id="网络爬虫"><a class="markdownIt-Anchor" href="#网络爬虫"></a> 网络爬虫</h3>
-<p>互联网就像一张大网，每一个网页就是图上的一个节点，连接两点的弧就是超链接。有了超链接，我们可以从<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∀</mi></mrow><annotation encoding="application/x-tex">\forall</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">∀</span></span></span></span>一个网页出发，用图遍历算法就可以自动访问每个网页，然后保存每个网页，这就是网络爬虫。至于记载哪个网页下载过来就用哈希表。当网页量很大时，一个商业网络爬虫需要成千上万个服务器，并通过高速网络连接起来。这就引出了下面两个问题：</p>
-<ol>
-<li>如何建立这样复杂的网络系统?</li>
-<li>如何协调这些服务器的使用？</li>
-</ol>
-]]></content>
-      <categories>
-        <category>阅读笔记</category>
-      </categories>
-      <tags>
-        <tag>数学之美</tag>
-        <tag>吴军</tag>
-        <tag>阅读记录</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>监督与非监督学习</title>
     <url>/2021/07/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="监督学习和无监督学习"><a class="markdownIt-Anchor" href="#监督学习和无监督学习"></a> 监督学习和无监督学习</h2>
@@ -889,101 +834,6 @@
         <tag>ML</tag>
         <tag>regression</tag>
         <tag>梯度下降</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机逻辑的历史</title>
-    <url>/2021/07/01/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%BB%E8%BE%91%E7%9A%84%E5%8E%86%E5%8F%B2/</url>
-    <content><![CDATA[<p>  这篇阅读记录是对《逻辑的引擎》一书的选抄，这本书主要讲述了计算机逻辑的源头，虽然只是科普类的书籍，但我还是感到有点枯燥。所以权把这本书的选抄当作这一思路的简要框架，当日后想看了，再顺着这个框架看一看也不错。</p>
-<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>  计算机实际上是逻辑机器，它的电路体现了几个世纪以来一大批逻辑学家所提出的观点之精华。当前，正当计算机技术以惊人的速度前进时，正当我们羡慕工程师们令人瞩目的成就之时，我们很容易忘记那些逻辑学家，正是他们的思想使得这一切成为可能。</p>
-<span id="more"></span> 
-<h2 id="莱布尼茨之梦"><a class="markdownIt-Anchor" href="#莱布尼茨之梦"></a> 莱布尼茨之梦</h2>
-<p>  莱布尼茨为微积分运算而发明的符号沿用至今，这使得人们不用过多思考就可以很容易地进行复杂运算，实际进行工作的似乎就是那些符号。在莱布尼茨看来，我们对整个人类知识领域也可以实施类似的措施：</p>
-<ol>
-<li>对一种普遍的人工数学语言和演算规则进行一种百科全书式的汇编；</li>
-<li>知识的任何一个方面都可以用这种数学语言表达出来，而演算规则将揭示这些命题之间所有的逻辑关系；</li>
-<li>最后，创造出完成这些演算的机器，这就是莱布尼茨之梦—找到一个人类思想的真正符号系统以及操纵这些符号的恰当的演算工具，即他自己所说的普遍文字。</li>
-</ol>
-<h2 id="布尔把逻辑代数"><a class="markdownIt-Anchor" href="#布尔把逻辑代数"></a> 布尔把逻辑→代数</h2>
-<p>  当布尔在卫斯理学校教书 时，他星期天就研究数学，甚至做礼拜时也如此。他解释说，由于买书的钱十分有限，他发现数学书就很满足他的需求，因为数学书要看很长时间才能看完。正是在这样的学习过程中，布尔有一天灵感乍现：应该可以用代数形式来表达逻辑关系。从他学数学的劲头我们就可以看出布尔的一点性格特征：“无所顾忌地沉溺于自己强烈的欲望和激情中”。布尔不管在做什么，他都会抽出时间研究一些重要的数学文献。<br />
-  布尔相信代数的力量，符号似乎无须什么帮助就能奇迹般地产出问题的正确答案，而这一力量来源于：代表着量和运算的符号服从不多的几条基本规律或定律，这暗示着这也适用于形形色色的对象和运算，只要它们也符合某些同样的定理。</p>
-<h3 id="布尔的逻辑代数"><a class="markdownIt-Anchor" href="#布尔的逻辑代数"></a> 布尔的逻辑代数</h3>
-<p>  如果x,y表示两个类，布尔就用xy表示x与y的交集（现在的说法），可以看出他在将自己的逻辑表示方法与普通代数里的乘法进行类比。<br />
-  那么，在x表示一个数的普通代数时，什么时候方程xx=x为真？<br />
-  答案是x为0或1时方程才为真→如果只限于0和1的两个值，那么逻辑代数就成为了普通代数。但是，要说明这一点，就必须把符号0和1解释成类。<br />
-  我们知道：0 x=0,1 x=x。即：0乘以任何数都等于0；1乘以任何数都等于那个数。那么0可以理解为没有任何东西属于它的类（空集），1可以理解为包含我们所考虑的每一个对象（全集）。<br />
-  为了把逻辑代数解释为普通代数，除了乘法，布尔还要解释加减符号代表什么意思。 即：<br />
-  x+(1-x)=1</p>
-<h3 id="用布尔代数证明三段论是否有效"><a class="markdownIt-Anchor" href="#用布尔代数证明三段论是否有效"></a> 用布尔代数证明三段论是否有效</h3>
-<p>  当时，研究逻辑的人普遍把整个学科等同于亚里士多德在许多个世纪前所做的工作。正如布尔所说，这等于坚持“逻辑科学不会像所有其他科学那样有不完美的地方，也不会像它们那样有所进步。”亚里士多德所研究的那部分逻辑处理是一种被称为三段论的非常特殊的受限推理：从一对被称为前提的命题出发，得出另一个被称为结论的命题。<br />
-  所有X都是Y，所有Y都是Z→所有X都是Z<br />
-  但是不是每一个三段论都是有效的，比如这样换：<br />
-  所有X都是Y,    所有X都是Z→所有Y都是Z<br />
-  三段论推理明显不是全部，布尔提出，许多日常推理都涉及他所谓的二级命题，即表达其他命题之间关系的命题，这种推理就不是三段论。</p>
-<h3 id="布尔代数的成就"><a class="markdownIt-Anchor" href="#布尔代数的成就"></a> 布尔代数的成就</h3>
-<p>  考虑下面这个句子：所有失败的学生或是糊涂的或是懒惰的。这句话可能会被认为是所有X都是Y，但这就不允许区分糊涂和懒惰了。下面我们会看到戈特洛布·弗雷格的逻辑体系解决这个问题。<br />
-  乔治布尔的伟大成就在于一劳永逸地证明了逻辑演绎可以成为数学的一个分支。从他开始，数理逻辑就一直处于连续不断的发展之中。</p>
-<h2 id="弗雷格从突破到绝望"><a class="markdownIt-Anchor" href="#弗雷格从突破到绝望"></a> 弗雷格：从突破到绝望</h2>
-<p>  弗雷格个人暂且不论，他是给纳粹分子。咱们今天只说他的学术贡献。弗雷格试图找到一个能包含数学实践中全部演绎逻辑的逻辑系统。布尔把普通代数作为出发点，用代数符号来表示逻辑关系；由于弗雷格想以他的逻辑为基础而把代数构造出来，所以引入自己的特殊符号来表示逻辑关系以避免混乱；布尔曾经认为用于表示其他命题之间关系的命题是二阶命题，弗雷格发现那些连接命题的关系也可被用于分析命题的结构，他把这些关系充当他的逻辑的基础。<br />
-  中学时，学了一点逻辑，我清清楚楚地记得，当时的表述都是“如果……那么……”“……且……”以及符号∈，∪，^等等这些都是弗雷格搞出来的。<br />
-  他的目标是表面一切数学如何可能建立在逻辑的基础上，为此他必须找到某种不用逻辑来发展他逻辑的方法→使用冷酷无情的精确的语法规则。弗雷格的逻辑已经成了在数学系、计算接科学系和哲学系教给本科生的标准逻辑。<br />
-  但是如果我们不能从弗雷格的系统中得到希望的结论，那么他还是没有实现莱布尼茨之梦，即算一下就可以知道结论是否可以导出。</p>
-<h3 id="弗雷格逻辑的局限性"><a class="markdownIt-Anchor" href="#弗雷格逻辑的局限性"></a> 弗雷格逻辑的局限性</h3>
-<p>  不能像莱布尼茨所期望的那样，自动包含科学和哲学的一切真理。当然，莱布尼茨之梦有点天真。<br />
-  在弗雷格的逻辑组，除了那些最简单的演绎，其余的情况都复杂的让人难以忍受。这些演绎过程不仅长的可怕，而且在弗雷格概念文字的逻辑中，他的规则也没有为判定某个结论是否可以从给定前提在推导出来而提供演算步骤。</p>
-<h2 id="康托尔在无限中摸索"><a class="markdownIt-Anchor" href="#康托尔在无限中摸索"></a> 康托尔：在无限中摸索</h2>
-<p>  自然数的序列永无尽头。无论一个数有多大，总能通过+1获得一个更大的数，这种不断超越如何有限界限的方法被亚里士多德成为潜无限。但亚里士多德认为这种无限是不合理的，他的思想也影响了后来的经院哲学家们。无限的本性问题一直困扰着人们。在18世纪，19世纪发展的微积分的极限过程就是一种潜无限。19世纪半叶之后，从当时人们所关注的问题中自然产生出来的数学问题似乎要求在其精确表述中使用完成了的无限。在解决这一问题的数学家中，只有康托尔不顾高斯的反对，去创造一种关于实无限的数学理论。莱布尼茨、弗雷格都表示了支持，而由康托尔的无限所引发的激烈的讨论、研究和争辩会为通用数字计算机的发展提供重要启发。</p>
-<h3 id="无穷集的大小是不同的"><a class="markdownIt-Anchor" href="#无穷集的大小是不同的"></a> 无穷集的大小是不同的</h3>
-<p>  即使我们认为把所有自然数1，2，3……所组成的集合当成一个完成了的实无限来处理是有意义的，如果我们问这个集合有多少个数，难道是有意义的吗？是否有无限大数来数这个集合呢？<br />
-  莱布尼茨的结论是：这种无限大的数并不存在，他的推理如下：<br />
-  只要一个集合的元素可以和另一个集合的元素一一对应起来，就可以说明这两个集合的元素数目是相等的，即使我们不知道数目是多少。比如自然数集和偶数集：1→2，2→4，3→6……，又如如果我们发现一个礼堂中既没有空座位又没有站着的人，那么就可以下结论礼堂中的人数与座位数是相等的。（这个是否有歧义）。但是依据欧几里得提出的：整体大于它的任何部分，自然数集怎么可能=偶数集呢？所以谈论一个无限集中元素的个数是没有意义的。<br />
-  康托尔也和莱布尼茨做了同样的推理，但是他选择了：某些无限集将与它的子集具有相同的元素数目。康托尔是怎么做的呢？<br />
-  康托尔找到一种分数集合，并把它和自然数集建立起一一对应的关系：<br />
-首先是和为2的分数，然后是何为3的分数……由于从直观上来看，分数要比自然数多许多，所以这一证明可以给我们猜想：每一个无限集都可以与自然数之间建立其一一对应的关系，康托尔的伟大贡献就是说明了情况并非如此。<br />
-  可以用分数表示的数被称为有理数，如果有理数用小数表示，会有无限循环小数的出现，但如果小数不循环，则这些小数被称为无理数，无理数和有理数被统称为实数。而像根号2这样的数和所有的有理数被称为代数数（可以作为代数方程的根，而Π不能，所以Π这类的数被称为超越数）。<br />
-  在表明了分数可以与自然数之间建立一一对应的关系后，他又转向了由所有代数数组成的集合，结果可以一一对应，然后他又想知道对于实数是否也可行，最后康托尔得出：实数集无法与自然数集之间建立一一对应，无限集有两种大小。<br />
-  emmm，康托尔后面的数学内容就不写了吧🤣。</p>
-<h3 id="结束"><a class="markdownIt-Anchor" href="#结束"></a> 结束</h3>
-<p>  1918年康托尔去世，其时，一战的战火仍在蔓延。今天，尽管弗雷格在其隐喻的斗争中很是令人惊奇，但是并没有产生任何决定性的结果。这场斗争最令人称奇的副产品就是阿兰图灵关于通用计算机的数学模型。</p>
-<h2 id="哥德尔使计划落空"><a class="markdownIt-Anchor" href="#哥德尔使计划落空"></a> 哥德尔使计划落空</h2>
-<p>  哥德尔是爱因斯坦的好友，但两人的许多方面都大相径庭。比如爱因斯坦深受恩斯特·马赫怀疑论的实证主义的影响，游戏是马赫对康德先验时空观的批判。但是哥德尔从青年时就开始看康德的著作，他认为相对论可以被看作证实了康德某些关于时间的观点，正是通过拒斥这些思想，他才能看到其他人所忽视的联系，并且做出伟大的发现。<br />
-虽然哥德尔最初打算学习物理学，但在听了一些数论课程之后，整数中所蕴含的那种样式之美使他意识到，数学才是自己真正的追求。哥德尔的的一个重要定理就是不完备定理。<br />
-如何在那些极其相似系统中用编码去发展出形式逻辑系统的元数学，这对哥德尔来说时不成问题的。但在实际过程中，这种想法是被维也纳学派严令禁止的。哥德尔认为：它们从系统外部看是真命题，但却无法从系统内部得到证明；但维也纳学派的许多人看来，除了可证明性，数学真理性的其它观念都是放屁。哥德尔反对这种观点，并得出了一个与之相反的重要结论：一种有意义的数学真理的观念不仅是存在的，而且其范围超过了任何给定的形式系统的证明能力。系统中存在可表达但不可证的真命题。<br />
-  剩下的不想写了，hhh。</p>
-<h2 id="图灵构想通用计算机"><a class="markdownIt-Anchor" href="#图灵构想通用计算机"></a> 图灵构想通用计算机</h2>
-<p>  图灵的生平就不多说了，之前看过图灵传。关于他的早年，我印象很深刻的一点就是他的童年好友：克里斯多弗·毛肯患肺结核去世，毛肯作为一个完美的符号永远存在于阿兰的心中。图灵接下来的部分值得好好记录，这时候离现代计算机的诞生已经很近了。</p>
-<h3 id="希尔伯特的判定问题"><a class="markdownIt-Anchor" href="#希尔伯特的判定问题"></a> 希尔伯特的判定问题</h3>
-<p>  希尔伯特和弗雷格他们一样，希望找到清楚明白的演算程序，只要用所谓一阶逻辑的符号系统写出的某些前提和所提出的结论给定，那么通过这些程序就总是可以判定，弗雷格的规则是否可以保证该结论能够从这些前提中导出，寻找程序的任务后来被称为希尔伯特的“判定问题”。从原则上讲，解决他的判定问题的算法将把人的一切演绎推理都还原为冷冰冰的演算，它在很大程度上将实现莱布尼茨之梦。</p>
-<h3 id="图灵对计算过程的分析"><a class="markdownIt-Anchor" href="#图灵对计算过程的分析"></a> 图灵对计算过程的分析</h3>
-<p>  算法是由一系列规则来描述的，人们可以按照这种精确的机械方式来遵循这些规则，就像看菜谱炒菜一样。但是图灵把注意力从算法本身移到了人们实际在做的事情。他将说明：<br />
-  在去掉非本质的细节后，人可以局限在少数几种十分基本的操作上，而不会改变操作结果。→人可以被执行这些基本操作的机器所替代。→证明仅仅这些执行基本操作的机器是不可能判定一个给定的结论是否可以用弗雷格的规则从前提中得出结论。→判定问题的算法是不存在的，除此之外他还得到一个副产品：图灵发现一个通用计算机的数学模型。<br />
-  回顾一下，你在做一个乘法的过程，去掉那些不值一提的小细节，然后分解做乘法的心理过程，就能明白任何计算所具有的本质特征，任何计算都可以看成下列的方式来进行：</p>
-<ol>
-<li>计算通过一条被划分成方格的纸带上写下符号来进行。</li>
-<li>执行计算的人在每步计算时，只注意到一个方格中的符号。</li>
-<li>计算的人下一步只取决于这个方格的符号以及他的心理状态。</li>
-<li>然后下一步是：在当前注意的方格写下符号，然后把注意力转向其邻格。</li>
-</ol>
-<p>  这一方式的重要性体现于：任何算法程序能计算的任何东西都可以通过图灵机来实现。因此，如果某项任务无法用图灵机来计算，我们就能说明没有算法程序能够解决这个任务，这就是图灵判定问题不存在算法的方法。</p>
-<h3 id="不理社会框架的图灵"><a class="markdownIt-Anchor" href="#不理社会框架的图灵"></a> 不理社会框架的图灵</h3>
-<p>  有一件事值得记录，从中我们可以看到他的思维方式：阿兰图灵之前参加了一个民兵组织，民兵团要求按时参加训练，但没过多久，阿兰认为这存粹浪费时间，就不去了。上校找到他，问他为什么不去，还质问他当初在填表格时难道没同意遵守军纪吗？有趣的是，这个本来应该不做思考就填“是”的问题，阿兰填了否，显然他认为填“是”对他没什么好处。<br />
-  阿兰不理睬我们大多数人所默认的社会框架，而是通过思考得出答案，从开头寻求最佳行动。</p>
-<h3 id="真空管技术"><a class="markdownIt-Anchor" href="#真空管技术"></a> 真空管技术</h3>
-<p>  20世纪30年代，大多数欧洲人，美国人都已经有了收音机。在那晶体管发明之前的时代，真空管是收音机主要的构件。他们像灯泡一样，会发光，变烫，并且很快就会被烧坏。真空管电路被应用于电话交换，图灵与这一运动的先锋——才华横溢的工程师弗劳尔斯展开了合作，到了1945年战争结束，图灵已经掌握了真空管电子学的应用知识。他坚信，使用真空管可以造出通用计算机。<br />
-  其实到这里，现代计算机产生的逻辑基础就大部分结束了，最后转化为工程的通用计算机研制我就不写了。</p>
-<h2 id="尾声"><a class="markdownIt-Anchor" href="#尾声"></a> 尾声</h2>
-<p>  本书中的故事强调了观念的力量以及预测他们的徒劳。汉诺威的公爵们知道莱布尼茨最应该干什么：为他们编写家族谱。今天的情况更是如此，那些为科学家提供条件的人们竭力想把科学家们引向那些很快可以出成果的方向。<br />
-  如果只重眼前利益，而不重视那些不会带来直接回报的研究，最终遭殃的还是我们的未来。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>科普类、概论</category>
-      </categories>
-      <tags>
-        <tag>CS</tag>
-        <tag>阅读记录</tag>
-        <tag>计算机逻辑</tag>
       </tags>
   </entry>
   <entry>
@@ -1271,6 +1121,234 @@
       </tags>
   </entry>
   <entry>
+    <title>数学之美</title>
+    <url>/2021/07/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%A6%E4%B9%8B%E7%BE%8E/</url>
+    <content><![CDATA[<h1 id="从规则到统计"><a class="markdownIt-Anchor" href="#从规则到统计"></a> 从规则到统计</h1>
+<h2 id="信息的载体"><a class="markdownIt-Anchor" href="#信息的载体"></a> 信息的载体</h2>
+<p>第一章的内容和《code》里的内容有重复，就不详细写了，主要记录一点有趣的东西。</p>
+<h3 id="翻译"><a class="markdownIt-Anchor" href="#翻译"></a> 翻译</h3>
+<p>如今各种翻译软件司空见惯，但是我们有没有想过<strong>为什么一种语言承载的信息翻译成另一种语言还能传递大体相同的信息呢？</strong></p>
+<p>其实这样的事实已经告诉我们：翻译之所以能达成，是因为不同的文字系统在记录信息的能力上是等价的，文字只是信息的载体，而非信息本身。</p>
+<span id="more"></span>
+<h3 id="罗塞塔石碑"><a class="markdownIt-Anchor" href="#罗塞塔石碑"></a> 罗塞塔石碑</h3>
+<p>罗塞塔石碑上用三种文字记录了古埃及的信息，为研究古埃及社会提供了珍贵的史料。那么在吴军老师看来，罗塞塔石碑带来的启示是什么呢？</p>
+<ol>
+<li>**信息的冗余是信息安全的保障。**从这个石碑上我们就看一看到用多种文字记录信息的好处，即使一种文字失传，我们仍可以用其它两种文字解读信息，这就是信息冗余的好处。</li>
+<li><strong>语言的数据（语料），尤其是双语或多语的对照语料对翻译至关重要。</strong></li>
+</ol>
+<h3 id="词与语法"><a class="markdownIt-Anchor" href="#词与语法"></a> 词与语法</h3>
+<p>我们都知道语言有两个基本要素：词和语法。词是有限且封闭的集合，可以具备完备的解码规则；语法是无限且开放的集合，但是总有语法覆盖不到的地方。前者我们称“基于语料”,后者我们称&quot;基于规则&quot;。经过漫长的发展和实践，在两者的碰撞中，前者取得了胜利。</p>
+<p>以上就是第一章值得记录的地方，第一章引出了以下主题：</p>
+<ol>
+<li>通信的原理和信息传播的模型</li>
+<li>（信源）编码和最短编码</li>
+<li>解码的规则，语法</li>
+<li>聚类</li>
+<li>校验位</li>
+<li>双语对照文本，语料库和机器翻译</li>
+<li>多义性和利用上下文消除歧义性</li>
+</ol>
+<h2 id="从规则到统计-2"><a class="markdownIt-Anchor" href="#从规则到统计-2"></a> 从规则到统计</h2>
+<p>在接下来的篇章开始之前，作者提出了NLP最基本的两个问题：</p>
+<ul>
+<li>
+<p>计算机能否处理自然语言？</p>
+</li>
+<li>
+<p>如果能，它处理自然语言的方法是否和人类一样？</p>
+</li>
+</ul>
+<h3 id="nlp的历史简介"><a class="markdownIt-Anchor" href="#nlp的历史简介"></a> NLP的历史简介</h3>
+<p>NLP的源头要追溯到1950年Alan Turing发表的论文**《计算的机器和智能》**，这篇论文没有提出什么研究的方法，而是提出了一种检验机器是否有智能的方法，没错就是Turing Test。Turing留下来了一个问题，而非答案，一般认为自然语言的机器处理就是从这个时候开始的。</p>
+<p>在接下来的70多年中，NLP走过了两个阶段：</p>
+<p>在1950到1980这段时期，科学家们在走弯路，那时的普遍认识是<strong>用电脑去模拟人脑</strong>，基于规则语法去做NLP；而这段时期以后，另一种方法发展了起来，这就是<strong>基于数学模型和统计来NLP</strong>。这种方法在今天已经完全取代了第一种方法，并得到了大范围的应用。</p>
+<h3 id="规则"><a class="markdownIt-Anchor" href="#规则"></a> 规则</h3>
+<p>早期的学术界是这么认为AI和自然语言处理的：要让机器完成翻译或者语音识别这样只有人类能做的事情，就必须先让计算机<strong>理解语言</strong>，而做到这一点就必须让机器和我们人类一样有真正的智能。为什么会有这样的认识？因为人类就是这么做的，对于人类来讲，一个能把英语转换成汉语的人，这两种语言一定掌握的很好，这就是<strong>直觉的作用</strong>。后来的人把这一派称为&quot;鸟飞派&quot;。</p>
+<p>鸟飞派什么意思呢？就是**只知道去模仿鸟，却不去探究鸟为什么会飞？**但是要知道，莱特兄弟之所以能够造出飞机，是因为空气动力学而不是仿生学。</p>
+<p>下面我们来看看鸟飞派的研究历程吧：</p>
+<p>首先，<strong>西方语言语法研究已经久矣</strong>。当时摆在科学家面前的问题是如何<strong>让机器理解自然语言</strong>？</p>
+<p>普遍的认识是分析语句和获取语义，这实际上受到了传统语言学研究的影响，是惯性思维的结果。西方的语言学家在18，19世纪已经对自然语言的语法规则做了非常形式化的总结，而这些规则恰好很容易被计算机描述，这更加坚定了大家对基于规则的自然语言处理的决心。相较于语法语义更难研究，在那个时代也没有得到重视。</p>
+<p>随着不断地对语法规则进行人工总结以及基于乔姆斯基形式的高级语言发展，对自然语言的概括越来越全面，但是，这种的方法的问题也渐渐暴露：</p>
+<ol>
+<li>句法分析十分繁琐，当句子很复杂时，Parse Tree就会很大，并且有时候会自相矛盾。即使能写出所有自然语言现象的语法规则集合，用计算机解析这些规则是十分困难的。图灵奖得主高德纳提出了用计算复杂度来衡量算法的耗时。<strong>对于上下文无关文法，算法复杂度是长度的二次方；而对于上下文有关法，计算复杂度基本上是六次方。</strong></li>
+<li>语义与上下文相关。</li>
+</ol>
+<p>用一个很好的例子就能说明弊端：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714092019.png" alt="image-20210714092019268" /></p>
+<p>基于规则的NLP就要走到尽头了，统计语言学即将诞生。它的创始人是Frederick Jelinek 和他所领导的IBM华生研究室。为什么从规则过渡到统计要长达15年之久？</p>
+<ol>
+<li>20世纪70年代：基于统计的方法是通信系统+隐马尔可夫模型。在当时的这种方法下，输入输出都是一维的符号序列而且保持原有的次序，在语音识别和词性分析中；对比一下规则句法分析中，输入是一维的，但是输出是二维的。在机器翻译中，由于输出不会保持原有的次序，所以上述方法就不太适用了。<strong>到了20世纪80年代，由于没有足够的统计数据，没有强大的模型解决不同语言语序颠倒的问题，所以基于统计的方法发展不起来。</strong></li>
+<li>还有一个原因，就是得等老科学家们退休。。。等待新老交替。</li>
+</ol>
+<p>所以，一直等到2005年Google的基于统计的翻译系统全面超过基于规则方法的Systain翻译系统，基于规则的翻译系统最后的堡垒被拔掉了。今天，很少听到基于规则方法的声音了。</p>
+<h3 id="统计语言模型"><a class="markdownIt-Anchor" href="#统计语言模型"></a> 统计语言模型</h3>
+<p>NLP一个基本的问题就是为了自然语言这种<strong>上下文相关的特性</strong>建立model，这个model就是Statistical Language Model。Model 诞生的初衷是为了解决语言识别，**要衡量一个句子是否合理，就看看它的可能性大小如何。**下面开始严格地描述：</p>
+<p>设S表示某个有意义的句子，由一连串顺序排列的词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>3</mn></msub><mo separator="true">,</mo><mo>…</mo><mi mathvariant="normal">，</mi><msub><mi>w</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">w_1,w_2,w_3,…，w_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>组成，现在我们想知道S在文本中出现的可能性P(S)。当然，要想拿到几千年的样本是不太可行的，我们只能使用<strong>估算</strong>这一方法。利用条件概率公式：</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mi>n</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>2</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>3</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>⋯</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>n</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>3</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_1,w_2,…,w_n)=P(w_1)\cdot P(w_2|w_1)\cdot P(w_3|w_1,w_2)\cdots P(w_n|w_1,w_2,w_3,…,w_{n-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
+<p>我们观察一下这个公式，前面两个式子还好算，但是越往后面，条件概率<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>n</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mi mathvariant="normal">，</mi><msub><mi>w</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_n|w_1,w_2,…，w_{n-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>可能性太多，无法估算。怎么办？</p>
+<p>俄罗斯数学家马尔可夫有一个偷懒但还颇为有效的方法，也就是每遇到这种情况时，就假设任意一个词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">w_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>出现的概率只同它前面的词有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">w_{i-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.638891em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span>关，于是问题变得很简单了。这种假设在数学上被称为马尔可夫假设。现在，S出现的概率就变得简单了：</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>2</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>3</mn></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>⋯</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>⋯</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>n</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(S)=P(w_1)\cdot P(w_2|w_1)\cdot P(w_3|w_2)\cdots P(w_i|w_{i-1})\cdots P(w_n|w_{n-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
+<p>这种统计语言模型是<strong>二元模型</strong>。接下来的问题就是如何估计<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_i|w_{i-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。根据条件概率的定义：</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">P(w_i|w_{i-1})=\frac{P(w_{i-1},w_i)}{P(w_{i-1})}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mi mathvariant="normal">）</mi></mrow><annotation encoding="application/x-tex">P(w_{i-1},w_i）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">）</span></span></span></span>表示在语料库中，前后相邻出现多少次，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_{i-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>指在同样文本出现多少次。用这两个分别除以#（语料库大小）就是我们要求的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_{i-1},w_i),P(w_{i-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。最后我们就可以得出可能性P（S）<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≈</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\approx \frac{P(w_{i-1},w_i)}{P(w_{i-1})}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.48312em;vertical-align:0em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.02691em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>。就是这么简单的原理大获成功。</p>
+<p>当然，真正实现一个好的统计语言模型，还有许多细节问题需要解决。比如，<strong>如果上面公式中的这对词</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(w_{i-1},w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>**在语料库中没出现，或只出现一两次，估算它的概率就有点困难了。**贾里尼克和其同事的贡献不仅在于提供了统计语言模型，而且还很漂亮地解决了所有的细节问题。这些解决方案将会在下节介绍。</p>
+<hr />
+<h3 id="高阶语言模型"><a class="markdownIt-Anchor" href="#高阶语言模型"></a> 高阶语言模型</h3>
+<p>所谓的高阶语言模型就是把原来的二阶模型转变为N元模型，就是这个词和前面N-1个词有关，<strong>让假设更复杂些</strong>。N=2时就是二元模型，N=1时就是不考虑上下文，N=3一般在实际应用中最广泛。<strong>为什么N一般都取值这么小呢？</strong></p>
+<ol>
+<li>N元模型的大小几乎是N的指数函数，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>o</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>V</mi><msup><mi mathvariant="normal">∣</mi><mi>N</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">o(|V|^N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord mathdefault">o</span><span class="mopen">(</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，这里|V|是一种语言词典的词汇量，一般在几万到几十万个。而使用N元模型的速度也几乎时一个指数函数，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>V</mi><msup><mi mathvariant="normal">∣</mi><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(|V|^{N-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。</li>
+<li>当N从1到2，再从2到3，模型的效果上升显著。而当模型从3到4时，模型上升的效果就不那么显著了。</li>
+</ol>
+<p>最后还有一个问题：<strong>是否三元，四元甚至更高阶的模型就能覆盖所有的语言现象呢？</strong></p>
+<p>显然答案是否定的。因为在自然语言中，上下文之间的关系可能跨度很大，甚至可以从一个段落跨到了一个段落。因此，即使模型的阶数再高，对这种情况也无可奈何，这就是马尔可夫模型的局限性。这时就要采用其它一些长程的依赖性来解决这个问题。</p>
+<h3 id="模型的训练-零概率和平滑问题"><a class="markdownIt-Anchor" href="#模型的训练-零概率和平滑问题"></a> 模型的训练、零概率和平滑问题</h3>
+<p>使用语言模型需要知道模型中<strong>所有的条件概率</strong>，我们称之为模型的参数。通过对语料的统计，得到这些参数的过程称作<strong>模型的训练</strong>。但还是那个老问题，如果上面公式中的这对词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><msub><mi>w</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(w_{i-1},w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>在语料库中没出现，或只出现一两次，怎么办？这就涉及统计的可靠性问题了。</p>
+<p>在数理统计中，我们之所以敢使用对采样数据的观察结果来预测概率，是<strong>因为有大数定律</strong>的支撑，它的要求是有足够的观察值。但是很多人都忽视了这一点，因此训练出来的模型不管用。<strong>那么如何训练出一个合理正确的语言模型呢？</strong></p>
+<ol>
+<li>直接的办法是增加数据量，但是依然会遇到零概率或者统计量不足的情况。假如说我现在要训练一个汉语的语言模型，汉语的词汇量在20万这个量级，训练一个三元模型就要20万的三次方=8x<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>15</mn></msup></mrow><annotation encoding="application/x-tex">10^{15}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>不同的参数。即使用互联网上全部的中文内容做训练，也就10的13次方。因此，**如果用直接的比值运算计算概率，大部分条件概率依然是0，这种模型被称为“不平滑”。**零概率问题在实际应用中是不可回避的。</li>
+<li>**训练统计语言模型的艺术就在于解决好统计样本不足的概率估计问题。**1953年，古德在图灵的指导下，提出了在统计中相信可靠的统计数据，而对不可信数据打折扣的一种概率估计方法。古德和图灵还提出了一个很漂亮的重新估算概率的公式，这个公式现在被称为古德-图灵估计。</li>
+</ol>
+<h4 id="古德-图灵估计"><a class="markdownIt-Anchor" href="#古德-图灵估计"></a> 古德-图灵估计</h4>
+<p>这一方法的原理是：对于我们没看见的东西不能认为它发生的概率是0，因此我们从概率的总量中，<strong>分配一个很小的比例给予这些没有看见的事件</strong>。这样一来，看见的那些事件的概率总和就要小于1了，因此，需要将所有看见的事件概率调小一点。至于小多少，要根据“越是不可信的统计折扣越多”的方法进行。下面就以统计词典中的每个词概率为例，来说明<strong>古德—图灵估计公式</strong>。额，下面已经看不懂了，先记录下来吧。</p>
+<h4 id="语料的选取问题"><a class="markdownIt-Anchor" href="#语料的选取问题"></a> 语料的选取问题</h4>
+<p>模型训练中有一个很重要的问题就是<strong>训练数据</strong>，或者说语料库的选取。如果训练语料和模型应用的领域相脱节，那么模型的效果将大打折扣。比如说腾讯的搜索部门，最早的语言模型是使用《人民日报》的语料训练的，因为开发者认为这些语料干净、无噪音。但是实际效果很差，经常出现搜索串和网页不匹配的例子。后来改用网页的诗句，尽管有很多噪音，但是搜索质量反而好。</p>
+<p>并非所有的应用都能得到足够的训练数据，比如说机器翻译的双语语料就非常少，在这种情况下片面追求高阶的大模型就变得一点意义都没有了。在训练数据和应用数据一致并且训练量足够大的情况下，<strong>训练语料的噪音高低</strong>也会对模型的效果产生一定的影响。因此，在训练以前有时需要<strong>对训练数据进行预处理</strong>。一般情况下，量小的噪音就不管了，但是<strong>量比较大的，能找到模式的噪音</strong>还是要进行过滤的，比如网页文本中大量的制表符</p>
+<h4 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h4>
+<p>统计语言模型的形式很简单，但是里面的学问可以很深，一个专家可以在这方面研究多年。<strong>数学的魅力就在于将复杂的问题简单化</strong>。</p>
+<h1 id="搜索引擎"><a class="markdownIt-Anchor" href="#搜索引擎"></a> 搜索引擎</h1>
+<p>搜索引擎的道是什么呢？</p>
+<ol>
+<li>自动下载尽可能多的网页（下载）</li>
+<li>建立快速有效的索引（索引）</li>
+<li>根据相关性对网页进行公平准确排序（排序）</li>
+</ol>
+<h2 id="文献检索与布尔代数的关系-索引"><a class="markdownIt-Anchor" href="#文献检索与布尔代数的关系-索引"></a> 文献检索与布尔代数的关系、索引</h2>
+<p>对于用户输入的关键词，搜素引擎要判断哪个文献里有这个关键词。如果一个文献里有它，则值为1，如果没有，则值为0.然后通过输入一系列关键词，每个条件都能得到一个0或者1，最后就可以找出符合条件的文献。</p>
+<p>索引，作为搜索引擎的基础，它的技术原理是怎样的呢？</p>
+<p>好的类比是图书馆的索引卡片，我们去图书馆找书，不是直接一本本的找，而是通过索引卡片直接到书架上去拿。只不过在信息时代，图书的索引不再是卡片，而是基于数据库的。数据库的查询语句（SQL）支持各种复杂的逻辑组合，但是背后的基本原理是<strong>基于布尔运算</strong>。它的原理是这样的一张表：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714092955.png" alt="image-20210714092955742" /></p>
+<p>每个关键字都对应一串二进制序列，每一位代表一个网页，一篇文献：若值为1，则说明这个网页有这个关键字；若值为0，则这个网页没有这个关键字。我们可以想到，实际的应用中，<strong>这个数量级是巨大的</strong>。那么我们平常的搜索引擎是怎么做到这么快出结果的呢？</p>
+<p>这些索引需要通过分布式的方式存储到不同的服务器上。普遍的做法就是：根据网页的序号将索引分成很多份，分别存储到不同的服务器上。每当接受一个查询时，这个查询就分发到许许多多的服务器上，这些服务器同时并行处理用户请求，并把结果送到主服务器进行合并处理，最后将结果返回给用户。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714093042.png" alt="image-20210714093042023" /></p>
+<h2 id="图论和网络爬虫"><a class="markdownIt-Anchor" href="#图论和网络爬虫"></a> 图论和网络爬虫</h2>
+<p>离散数学是CS的数学基础。它包括：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714093503.png" alt="image-20210714093456613" /></p>
+<p>第八章谈到了如何建立搜索引擎的索引，那么<strong>如何自动下载互联网所有的网页呢</strong>？这就需要图论中的遍历(Traverse)算法。</p>
+<h3 id="图论"><a class="markdownIt-Anchor" href="#图论"></a> 图论</h3>
+<p>有空去了解一下吧。就稍微讲一下两个基础图论算法：BFS和DFS。</p>
+<p>BFS简称为广撒网，DFS简称为不撞南墙不回头。。。</p>
+<h3 id="网络爬虫"><a class="markdownIt-Anchor" href="#网络爬虫"></a> 网络爬虫</h3>
+<p>互联网就像一张大网，每一个网页就是图上的一个节点，连接两点的弧就是超链接。有了超链接，我们可以从<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∀</mi></mrow><annotation encoding="application/x-tex">\forall</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">∀</span></span></span></span>一个网页出发，用图遍历算法就可以自动访问每个网页，然后保存每个网页，这就是网络爬虫。至于记载哪个网页下载过来就用哈希表。当网页量很大时，一个商业网络爬虫需要成千上万个服务器，并通过高速网络连接起来。这就引出了下面两个问题：</p>
+<ol>
+<li>如何建立这样复杂的网络系统?</li>
+<li>如何协调这些服务器的使用？</li>
+</ol>
+]]></content>
+      <categories>
+        <category>阅读笔记</category>
+      </categories>
+      <tags>
+        <tag>数学之美</tag>
+        <tag>吴军</tag>
+        <tag>阅读记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机逻辑的历史</title>
+    <url>/2021/07/01/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%BB%E8%BE%91%E7%9A%84%E5%8E%86%E5%8F%B2/</url>
+    <content><![CDATA[<p>  这篇阅读记录是对《逻辑的引擎》一书的选抄，这本书主要讲述了计算机逻辑的源头，虽然只是科普类的书籍，但我还是感到有点枯燥。所以权把这本书的选抄当作这一思路的简要框架，当日后想看了，再顺着这个框架看一看也不错。</p>
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>  计算机实际上是逻辑机器，它的电路体现了几个世纪以来一大批逻辑学家所提出的观点之精华。当前，正当计算机技术以惊人的速度前进时，正当我们羡慕工程师们令人瞩目的成就之时，我们很容易忘记那些逻辑学家，正是他们的思想使得这一切成为可能。</p>
+<span id="more"></span> 
+<h2 id="莱布尼茨之梦"><a class="markdownIt-Anchor" href="#莱布尼茨之梦"></a> 莱布尼茨之梦</h2>
+<p>  莱布尼茨为微积分运算而发明的符号沿用至今，这使得人们不用过多思考就可以很容易地进行复杂运算，实际进行工作的似乎就是那些符号。在莱布尼茨看来，我们对整个人类知识领域也可以实施类似的措施：</p>
+<ol>
+<li>对一种普遍的人工数学语言和演算规则进行一种百科全书式的汇编；</li>
+<li>知识的任何一个方面都可以用这种数学语言表达出来，而演算规则将揭示这些命题之间所有的逻辑关系；</li>
+<li>最后，创造出完成这些演算的机器，这就是莱布尼茨之梦—找到一个人类思想的真正符号系统以及操纵这些符号的恰当的演算工具，即他自己所说的普遍文字。</li>
+</ol>
+<h2 id="布尔把逻辑代数"><a class="markdownIt-Anchor" href="#布尔把逻辑代数"></a> 布尔把逻辑→代数</h2>
+<p>  当布尔在卫斯理学校教书 时，他星期天就研究数学，甚至做礼拜时也如此。他解释说，由于买书的钱十分有限，他发现数学书就很满足他的需求，因为数学书要看很长时间才能看完。正是在这样的学习过程中，布尔有一天灵感乍现：应该可以用代数形式来表达逻辑关系。从他学数学的劲头我们就可以看出布尔的一点性格特征：“无所顾忌地沉溺于自己强烈的欲望和激情中”。布尔不管在做什么，他都会抽出时间研究一些重要的数学文献。<br />
+  布尔相信代数的力量，符号似乎无须什么帮助就能奇迹般地产出问题的正确答案，而这一力量来源于：代表着量和运算的符号服从不多的几条基本规律或定律，这暗示着这也适用于形形色色的对象和运算，只要它们也符合某些同样的定理。</p>
+<h3 id="布尔的逻辑代数"><a class="markdownIt-Anchor" href="#布尔的逻辑代数"></a> 布尔的逻辑代数</h3>
+<p>  如果x,y表示两个类，布尔就用xy表示x与y的交集（现在的说法），可以看出他在将自己的逻辑表示方法与普通代数里的乘法进行类比。<br />
+  那么，在x表示一个数的普通代数时，什么时候方程xx=x为真？<br />
+  答案是x为0或1时方程才为真→如果只限于0和1的两个值，那么逻辑代数就成为了普通代数。但是，要说明这一点，就必须把符号0和1解释成类。<br />
+  我们知道：0 x=0,1 x=x。即：0乘以任何数都等于0；1乘以任何数都等于那个数。那么0可以理解为没有任何东西属于它的类（空集），1可以理解为包含我们所考虑的每一个对象（全集）。<br />
+  为了把逻辑代数解释为普通代数，除了乘法，布尔还要解释加减符号代表什么意思。 即：<br />
+  x+(1-x)=1</p>
+<h3 id="用布尔代数证明三段论是否有效"><a class="markdownIt-Anchor" href="#用布尔代数证明三段论是否有效"></a> 用布尔代数证明三段论是否有效</h3>
+<p>  当时，研究逻辑的人普遍把整个学科等同于亚里士多德在许多个世纪前所做的工作。正如布尔所说，这等于坚持“逻辑科学不会像所有其他科学那样有不完美的地方，也不会像它们那样有所进步。”亚里士多德所研究的那部分逻辑处理是一种被称为三段论的非常特殊的受限推理：从一对被称为前提的命题出发，得出另一个被称为结论的命题。<br />
+  所有X都是Y，所有Y都是Z→所有X都是Z<br />
+  但是不是每一个三段论都是有效的，比如这样换：<br />
+  所有X都是Y,    所有X都是Z→所有Y都是Z<br />
+  三段论推理明显不是全部，布尔提出，许多日常推理都涉及他所谓的二级命题，即表达其他命题之间关系的命题，这种推理就不是三段论。</p>
+<h3 id="布尔代数的成就"><a class="markdownIt-Anchor" href="#布尔代数的成就"></a> 布尔代数的成就</h3>
+<p>  考虑下面这个句子：所有失败的学生或是糊涂的或是懒惰的。这句话可能会被认为是所有X都是Y，但这就不允许区分糊涂和懒惰了。下面我们会看到戈特洛布·弗雷格的逻辑体系解决这个问题。<br />
+  乔治布尔的伟大成就在于一劳永逸地证明了逻辑演绎可以成为数学的一个分支。从他开始，数理逻辑就一直处于连续不断的发展之中。</p>
+<h2 id="弗雷格从突破到绝望"><a class="markdownIt-Anchor" href="#弗雷格从突破到绝望"></a> 弗雷格：从突破到绝望</h2>
+<p>  弗雷格个人暂且不论，他是给纳粹分子。咱们今天只说他的学术贡献。弗雷格试图找到一个能包含数学实践中全部演绎逻辑的逻辑系统。布尔把普通代数作为出发点，用代数符号来表示逻辑关系；由于弗雷格想以他的逻辑为基础而把代数构造出来，所以引入自己的特殊符号来表示逻辑关系以避免混乱；布尔曾经认为用于表示其他命题之间关系的命题是二阶命题，弗雷格发现那些连接命题的关系也可被用于分析命题的结构，他把这些关系充当他的逻辑的基础。<br />
+  中学时，学了一点逻辑，我清清楚楚地记得，当时的表述都是“如果……那么……”“……且……”以及符号∈，∪，^等等这些都是弗雷格搞出来的。<br />
+  他的目标是表面一切数学如何可能建立在逻辑的基础上，为此他必须找到某种不用逻辑来发展他逻辑的方法→使用冷酷无情的精确的语法规则。弗雷格的逻辑已经成了在数学系、计算接科学系和哲学系教给本科生的标准逻辑。<br />
+  但是如果我们不能从弗雷格的系统中得到希望的结论，那么他还是没有实现莱布尼茨之梦，即算一下就可以知道结论是否可以导出。</p>
+<h3 id="弗雷格逻辑的局限性"><a class="markdownIt-Anchor" href="#弗雷格逻辑的局限性"></a> 弗雷格逻辑的局限性</h3>
+<p>  不能像莱布尼茨所期望的那样，自动包含科学和哲学的一切真理。当然，莱布尼茨之梦有点天真。<br />
+  在弗雷格的逻辑组，除了那些最简单的演绎，其余的情况都复杂的让人难以忍受。这些演绎过程不仅长的可怕，而且在弗雷格概念文字的逻辑中，他的规则也没有为判定某个结论是否可以从给定前提在推导出来而提供演算步骤。</p>
+<h2 id="康托尔在无限中摸索"><a class="markdownIt-Anchor" href="#康托尔在无限中摸索"></a> 康托尔：在无限中摸索</h2>
+<p>  自然数的序列永无尽头。无论一个数有多大，总能通过+1获得一个更大的数，这种不断超越如何有限界限的方法被亚里士多德成为潜无限。但亚里士多德认为这种无限是不合理的，他的思想也影响了后来的经院哲学家们。无限的本性问题一直困扰着人们。在18世纪，19世纪发展的微积分的极限过程就是一种潜无限。19世纪半叶之后，从当时人们所关注的问题中自然产生出来的数学问题似乎要求在其精确表述中使用完成了的无限。在解决这一问题的数学家中，只有康托尔不顾高斯的反对，去创造一种关于实无限的数学理论。莱布尼茨、弗雷格都表示了支持，而由康托尔的无限所引发的激烈的讨论、研究和争辩会为通用数字计算机的发展提供重要启发。</p>
+<h3 id="无穷集的大小是不同的"><a class="markdownIt-Anchor" href="#无穷集的大小是不同的"></a> 无穷集的大小是不同的</h3>
+<p>  即使我们认为把所有自然数1，2，3……所组成的集合当成一个完成了的实无限来处理是有意义的，如果我们问这个集合有多少个数，难道是有意义的吗？是否有无限大数来数这个集合呢？<br />
+  莱布尼茨的结论是：这种无限大的数并不存在，他的推理如下：<br />
+  只要一个集合的元素可以和另一个集合的元素一一对应起来，就可以说明这两个集合的元素数目是相等的，即使我们不知道数目是多少。比如自然数集和偶数集：1→2，2→4，3→6……，又如如果我们发现一个礼堂中既没有空座位又没有站着的人，那么就可以下结论礼堂中的人数与座位数是相等的。（这个是否有歧义）。但是依据欧几里得提出的：整体大于它的任何部分，自然数集怎么可能=偶数集呢？所以谈论一个无限集中元素的个数是没有意义的。<br />
+  康托尔也和莱布尼茨做了同样的推理，但是他选择了：某些无限集将与它的子集具有相同的元素数目。康托尔是怎么做的呢？<br />
+  康托尔找到一种分数集合，并把它和自然数集建立起一一对应的关系：<br />
+首先是和为2的分数，然后是何为3的分数……由于从直观上来看，分数要比自然数多许多，所以这一证明可以给我们猜想：每一个无限集都可以与自然数之间建立其一一对应的关系，康托尔的伟大贡献就是说明了情况并非如此。<br />
+  可以用分数表示的数被称为有理数，如果有理数用小数表示，会有无限循环小数的出现，但如果小数不循环，则这些小数被称为无理数，无理数和有理数被统称为实数。而像根号2这样的数和所有的有理数被称为代数数（可以作为代数方程的根，而Π不能，所以Π这类的数被称为超越数）。<br />
+  在表明了分数可以与自然数之间建立一一对应的关系后，他又转向了由所有代数数组成的集合，结果可以一一对应，然后他又想知道对于实数是否也可行，最后康托尔得出：实数集无法与自然数集之间建立一一对应，无限集有两种大小。<br />
+  emmm，康托尔后面的数学内容就不写了吧🤣。</p>
+<h3 id="结束"><a class="markdownIt-Anchor" href="#结束"></a> 结束</h3>
+<p>  1918年康托尔去世，其时，一战的战火仍在蔓延。今天，尽管弗雷格在其隐喻的斗争中很是令人惊奇，但是并没有产生任何决定性的结果。这场斗争最令人称奇的副产品就是阿兰图灵关于通用计算机的数学模型。</p>
+<h2 id="哥德尔使计划落空"><a class="markdownIt-Anchor" href="#哥德尔使计划落空"></a> 哥德尔使计划落空</h2>
+<p>  哥德尔是爱因斯坦的好友，但两人的许多方面都大相径庭。比如爱因斯坦深受恩斯特·马赫怀疑论的实证主义的影响，游戏是马赫对康德先验时空观的批判。但是哥德尔从青年时就开始看康德的著作，他认为相对论可以被看作证实了康德某些关于时间的观点，正是通过拒斥这些思想，他才能看到其他人所忽视的联系，并且做出伟大的发现。<br />
+虽然哥德尔最初打算学习物理学，但在听了一些数论课程之后，整数中所蕴含的那种样式之美使他意识到，数学才是自己真正的追求。哥德尔的的一个重要定理就是不完备定理。<br />
+如何在那些极其相似系统中用编码去发展出形式逻辑系统的元数学，这对哥德尔来说时不成问题的。但在实际过程中，这种想法是被维也纳学派严令禁止的。哥德尔认为：它们从系统外部看是真命题，但却无法从系统内部得到证明；但维也纳学派的许多人看来，除了可证明性，数学真理性的其它观念都是放屁。哥德尔反对这种观点，并得出了一个与之相反的重要结论：一种有意义的数学真理的观念不仅是存在的，而且其范围超过了任何给定的形式系统的证明能力。系统中存在可表达但不可证的真命题。<br />
+  剩下的不想写了，hhh。</p>
+<h2 id="图灵构想通用计算机"><a class="markdownIt-Anchor" href="#图灵构想通用计算机"></a> 图灵构想通用计算机</h2>
+<p>  图灵的生平就不多说了，之前看过图灵传。关于他的早年，我印象很深刻的一点就是他的童年好友：克里斯多弗·毛肯患肺结核去世，毛肯作为一个完美的符号永远存在于阿兰的心中。图灵接下来的部分值得好好记录，这时候离现代计算机的诞生已经很近了。</p>
+<h3 id="希尔伯特的判定问题"><a class="markdownIt-Anchor" href="#希尔伯特的判定问题"></a> 希尔伯特的判定问题</h3>
+<p>  希尔伯特和弗雷格他们一样，希望找到清楚明白的演算程序，只要用所谓一阶逻辑的符号系统写出的某些前提和所提出的结论给定，那么通过这些程序就总是可以判定，弗雷格的规则是否可以保证该结论能够从这些前提中导出，寻找程序的任务后来被称为希尔伯特的“判定问题”。从原则上讲，解决他的判定问题的算法将把人的一切演绎推理都还原为冷冰冰的演算，它在很大程度上将实现莱布尼茨之梦。</p>
+<h3 id="图灵对计算过程的分析"><a class="markdownIt-Anchor" href="#图灵对计算过程的分析"></a> 图灵对计算过程的分析</h3>
+<p>  算法是由一系列规则来描述的，人们可以按照这种精确的机械方式来遵循这些规则，就像看菜谱炒菜一样。但是图灵把注意力从算法本身移到了人们实际在做的事情。他将说明：<br />
+  在去掉非本质的细节后，人可以局限在少数几种十分基本的操作上，而不会改变操作结果。→人可以被执行这些基本操作的机器所替代。→证明仅仅这些执行基本操作的机器是不可能判定一个给定的结论是否可以用弗雷格的规则从前提中得出结论。→判定问题的算法是不存在的，除此之外他还得到一个副产品：图灵发现一个通用计算机的数学模型。<br />
+  回顾一下，你在做一个乘法的过程，去掉那些不值一提的小细节，然后分解做乘法的心理过程，就能明白任何计算所具有的本质特征，任何计算都可以看成下列的方式来进行：</p>
+<ol>
+<li>计算通过一条被划分成方格的纸带上写下符号来进行。</li>
+<li>执行计算的人在每步计算时，只注意到一个方格中的符号。</li>
+<li>计算的人下一步只取决于这个方格的符号以及他的心理状态。</li>
+<li>然后下一步是：在当前注意的方格写下符号，然后把注意力转向其邻格。</li>
+</ol>
+<p>  这一方式的重要性体现于：任何算法程序能计算的任何东西都可以通过图灵机来实现。因此，如果某项任务无法用图灵机来计算，我们就能说明没有算法程序能够解决这个任务，这就是图灵判定问题不存在算法的方法。</p>
+<h3 id="不理社会框架的图灵"><a class="markdownIt-Anchor" href="#不理社会框架的图灵"></a> 不理社会框架的图灵</h3>
+<p>  有一件事值得记录，从中我们可以看到他的思维方式：阿兰图灵之前参加了一个民兵组织，民兵团要求按时参加训练，但没过多久，阿兰认为这存粹浪费时间，就不去了。上校找到他，问他为什么不去，还质问他当初在填表格时难道没同意遵守军纪吗？有趣的是，这个本来应该不做思考就填“是”的问题，阿兰填了否，显然他认为填“是”对他没什么好处。<br />
+  阿兰不理睬我们大多数人所默认的社会框架，而是通过思考得出答案，从开头寻求最佳行动。</p>
+<h3 id="真空管技术"><a class="markdownIt-Anchor" href="#真空管技术"></a> 真空管技术</h3>
+<p>  20世纪30年代，大多数欧洲人，美国人都已经有了收音机。在那晶体管发明之前的时代，真空管是收音机主要的构件。他们像灯泡一样，会发光，变烫，并且很快就会被烧坏。真空管电路被应用于电话交换，图灵与这一运动的先锋——才华横溢的工程师弗劳尔斯展开了合作，到了1945年战争结束，图灵已经掌握了真空管电子学的应用知识。他坚信，使用真空管可以造出通用计算机。<br />
+  其实到这里，现代计算机产生的逻辑基础就大部分结束了，最后转化为工程的通用计算机研制我就不写了。</p>
+<h2 id="尾声"><a class="markdownIt-Anchor" href="#尾声"></a> 尾声</h2>
+<p>  本书中的故事强调了观念的力量以及预测他们的徒劳。汉诺威的公爵们知道莱布尼茨最应该干什么：为他们编写家族谱。今天的情况更是如此，那些为科学家提供条件的人们竭力想把科学家们引向那些很快可以出成果的方向。<br />
+  如果只重眼前利益，而不重视那些不会带来直接回报的研究，最终遭殃的还是我们的未来。</p>
+]]></content>
+      <categories>
+        <category>CS</category>
+        <category>科普类、概论</category>
+      </categories>
+      <tags>
+        <tag>CS</tag>
+        <tag>阅读记录</tag>
+        <tag>计算机逻辑</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深入理解计算机系统导言、概论</title>
     <url>/2021/07/15/%E5%9B%9B%E5%A4%A7%E9%87%91%E5%88%9A/CSAPP/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%A8%80%E3%80%81%E6%A6%82%E8%AE%BA/</url>
     <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200235.png" alt="image-20210715200235339" /></p>
@@ -1435,83 +1513,5 @@
         <tag>阅读记录</tag>
         <tag>达芬奇</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>经济学的方法论</title>
-    <url>/2021/07/19/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
-    <content><![CDATA[<p>本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719230645.png" alt="image-20210719230645371" style="zoom:67%;" />
-<span id="more"></span>
-<h2 id="研究时科学家"><a class="markdownIt-Anchor" href="#研究时科学家"></a> 研究时—科学家</h2>
-<p>emmm,作者说经济学家其实和物理学家，生物学家的方法论差不多，研究在保证客观性的前提下，按照：观察 → 提出假设 → 搜集data → 分析data → 证明或否定假设，所以说经济学家是一种科学。作者接下来解释了<strong>为什么说经济学是一种科学</strong>：</p>
-<blockquote>
-<p>科学的本质是科学方法——冷静地建立并检验有关世界如何运行的各种理论。这种研究方法适用于研究一国经济，就像适用于研究地心引力或生物进化一样。正如阿尔伯特·爱因斯坦（Albert Einstein）曾经指出的：“所有科学不过是日常思考的不断完善而已。”</p>
-</blockquote>
-<p>为了进一步说明，作者选了点上面说的科学的方法论的流程，说了说经济学的特色：</p>
-<h3 id="观察提出假设"><a class="markdownIt-Anchor" href="#观察提出假设"></a> 观察，提出假设</h3>
-<p>经济学家会观察经济现象，这个不用多说。特别的是，物理学家想观察，获得数据，做做实验就好了；可是<strong>经济学家想进行实验几乎是不可能的</strong>。比如研究通货膨胀的经济学家绝不会被允许仅仅为了获得有用的数据而操控一国的货币政策。</p>
-<p>为此，经济学家<strong>只能求助于历史提供的实验</strong>。例如，当中东战争中断了原油运输时，全世界石油价格飞涨。对石油和石油产品的消费者来说，这个事件降低了他们的生活水平；对经济决策者来说，这个事件提出了如何做出最佳应对的难题。但对经济科学家来说，它提供了<u>研究一种重要的自然资源对世界经济影响的机会</u>。</p>
-<p>这就是为什么经济学家十分关注历史事件的原因。</p>
-<h3 id="建立模型"><a class="markdownIt-Anchor" href="#建立模型"></a> 建立模型</h3>
-<p>其实参加过数学建模比赛的uu就知道，题目中会有一道经济学相关的题目，也就是让你建立一个经济学模型来解决一个经济学问题。这个建模的过程和数学建模的过程是很像的。</p>
-<ul>
-<li>首先提出假设，去掉一些不重要的细节，建立一个初步的模型。</li>
-<li>再不断增加<strong>必要的</strong>复杂度。（注意，这是个由浅入深的过程）</li>
-<li>最后建立一个<strong>合适的</strong>模型。（针对不同的问题而言）</li>
-</ul>
-<p>经济由从事许多活动——购买、销售、工作、雇佣、制造等——的千百万人所组成。为了理解经济的运行方式，我们必须找到某种方法来<strong>简化</strong>我们对所有这些活动的思考。换句话说，我们需要一个模型从总体上来解释经济是如何组织起来的，并说明经济的参与者如何相互交易。</p>
-<p>然后作者列举了两个经济学的经典模型：</p>
-<ol>
-<li><a href="https://zhuanlan.zhihu.com/p/95971285">循环流量图</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E5%8F%AF%E8%83%BD%E6%80%A7%E6%9B%B2%E7%BA%BF">生产可能性边界—简单的数学经济模型</a>,我觉得可以这么理解：总共50块钱，你是买汽水喝还是买辣条，多买辣条一点你就少喝点汽水。想想这个模型和前面讲到的十大原理中哪些原理有关系？</li>
-</ol>
-<h3 id="研究领域宏观和微观"><a class="markdownIt-Anchor" href="#研究领域宏观和微观"></a> 研究领域：宏观和微观</h3>
-<p>经济学的研究和其它科学一样，是分为不同层次的，传统意义上划分为两个大方向：</p>
-<ul>
-<li>
-<p>微观经济学（microeconomics）：研究家庭和企业如何做出决策，以及它们如何在特定市场上相互交易。</p>
-<p>一个微观经济学家可能研究租金控制对上海住房的影响、外国竞争对我国汽车行业的影响，或者接受义务教育对工人收入的影响。</p>
-</li>
-<li>
-<p>宏观经济学（macroeconomics）：研究整体经济现象。</p>
-<p>一个宏观经济学家可能研究政府借债的影响、经济中失业率随时间推移的变动，或者提高一国生活水平的不同政策。</p>
-</li>
-</ul>
-<p>微观经济学和宏观经济学是密切相关的。由于整体经济的变动产生于千百万个人的决策，所以，不考虑相关的微观经济决策而要去理解宏观经济的发展是不可能的。例如，宏观经济学家可能研究个人所得税的减少对整个物品与服务生产的影响。但是为了分析这个问题，他必须考虑所得税减少会如何影响家庭把多少钱用于购买物品与服务的决策。</p>
-<p>尽管微观经济学与宏观经济学之间存在固有的联系，但这两个领域仍然是不同的。由于它们强调不同的问题，且每个领域都有自己的一套模型，所以通常在不同的课程中讲授。</p>
-<hr />
-<h2 id="政策顾问"><a class="markdownIt-Anchor" href="#政策顾问"></a> 政策顾问</h2>
-<p>这经济乃民生之本，经济学家可不能躲进小楼成一统啊，研究那么多，总得告诉别人怎么做吧。</p>
-<p>当经济学家试图去<font color=purple><strong>解释世界时</strong>，他们是<strong>科学家</strong></font>；当经济学家试图去<font color=green><strong>帮助改善世界</strong>时，他们是<strong>政策顾问。</strong></font></p>
-<p>这句话很重要，两种不同的身份，语言是不一样的，你拿做研究时的术语去告诉不是学经济学的人怎么做，不是对牛弹琴吗？对此经济学规定了两套不同的术语（这是我没想到的😥）：实证表述与规范表述。额，怎么说呢，具体内容去查资料就有了，我就作为一个小白来说一说这俩玩意啥意思啊？</p>
-<ul>
-<li>实证表述就是靠证据说话，去<strong>解释</strong>一个经济系统是怎么运作的，是站在科学家的角度上（严谨）。</li>
-<li>规范表述不仅仅要涉及事实，还要考虑到社会、国家的方方面面。毕竟确定什么是好政策或什么是坏政策不仅仅是一个科学问题，它还涉及我们对伦理、宗教和政治哲学的看法，是一种<strong>指导性的语言</strong>，是站在顾问的角度上。</li>
-</ul>
-<p>在学习经济学时，要<strong>记住实证表述与规范表述的区别</strong>，因为这有助于你将精力集中在手头的任务上。</p>
-<p>经济学的许多内容是实证的：它仅仅在努力解释世界如何运行。但那些运用经济学的经济学家们通常有规范的目的：他们想知道如何改善经济。当你听到经济学家做出规范表述时，你就可以知道，他们此时已经是站在政策顾问的立场上，而不是站在科学家的立场上了。</p>
-<hr />
-<h3 id="经济学家的影响"><a class="markdownIt-Anchor" href="#经济学家的影响"></a> 经济学家的影响</h3>
-<p>经济学家对政策的影响超出了他们作为顾问的作用：他们的研究和著作经常间接地影响政策。经济学家约翰·梅纳德·凯恩斯（John Maynard Keynes）提出了这种看法：</p>
-<blockquote>
-<p>经济学家和政治哲学家的思想，无论正确与否，实际上都要比一般所想象的更有力量。事实上，这个世界就是由它们统治的。那些自认为能够免于受经济学家思想影响的实干家往往是某些已故经济学家的俘虏。那些当权狂人信奉的其实也不过是若干年前某些末流文人狂妄思想的零碎而已。</p>
-</blockquote>
-<p>虽然这些文字写于1935年，但至今仍然正确。实际上，现在正影响公共政策的“末流文人”往往是凯恩斯本人。</p>
-<p>经济学家的建议很重要，也有许多的领袖愿意听经济学家的建议。</p>
-<p>但是，<strong>经济学家的建议总是不被采纳</strong>……这个为什么也很好理解，都说了，经济学家的研究是建立在假设之上的，是抽象的模型，虽来源于现实但是脱离于现实，因此<strong>实际上的经济政策制定和经济学研究是两码事</strong>。</p>
-<hr />
-<h2 id="经济学家经常意见不一"><a class="markdownIt-Anchor" href="#经济学家经常意见不一"></a> 经济学家经常意见不一</h2>
-<p>萧伯纳曾经这样嘲讽道：</p>
-<blockquote>
-<p>如果让所有的经济学家围坐在一起，他们不会达成任何一个共识。</p>
-</blockquote>
-<p>至于为什么，我不想写了。</p>
-<h2 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h2>
-<p>以上其实就是绪论部分的结束，下面的章节就是经济学的干货了。在开始之前，作者引用了下面这段话：</p>
-<blockquote>
-<p>经济学研究似乎并不需要任何极高的特殊天赋。与更高深的哲学或纯科学相比，经济学难道不是……一门极其容易的学科吗？它是一门容易的学科，但这个学科中很少有人能出类拔萃！对这个悖论的解释也许在于杰出的经济学家应该具有罕见的各种天赋的组合。在某种程度上，他应该是数学家、历史学家、政治家和哲学家。他必须了解符号并用文字将其表达出来。他必须根据一般性来深入思考特殊性，并在思绪奔放的同时触及抽象与具体。他必须根据过去、着眼未来而研究现在。他必须考虑到人性或人的制度的每一部分。他必须同时保持坚定而客观的情绪，要像艺术家一样超然而不流俗，但有时又要像政治家一样脚踏实地。</p>
-</blockquote>
-<p>这无疑是一个高标准。但通过实践，我们将会越来越习惯于像经济学家一样思考。（好家伙，还整个交叉学科😳）</p>
-]]></content>
   </entry>
 </search>
