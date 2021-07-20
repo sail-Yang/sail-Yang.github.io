@@ -128,8 +128,6 @@
 <p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (*)[NUM_COLS]。<strong>这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</strong>。</p>
 <p>这样我们就可以简化上面的循环了，比如说我现在想把数组第i列清零：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="test"><a class="markdownIt-Anchor" href="#test"></a> test</h2>
-<p>test</p>
 ]]></content>
       <categories>
         <category>CS</category>
