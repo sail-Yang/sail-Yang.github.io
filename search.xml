@@ -1558,4 +1558,41 @@
         <tag>经济学</tag>
       </tags>
   </entry>
+  <entry>
+    <title>pta 1002 C解</title>
+    <url>/2021/07/21/pta/pta-1002-C%E8%A7%A3/</url>
+    <content><![CDATA[<p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了一个小时……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
+<p>先来看看题目：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png" alt="image-20210721232151446" style="zoom:67%;" />
+<p>解题思路：（C）</p>
+<ul>
+<li>建立一个字符串数组zimu{“ling”,“yi”,“er”,“san”,“si”,“wu”,“liu”,“qi”,“ba”,“jiu”}，下标与拼音一一对应。</li>
+<li>计算n的各位数字之和sum。</li>
+<li>将sum各位存入数组。假设sum = 123,则存入数组为[3,2,1]</li>
+<li>将数组从后往前读，读到i,则输出zimu[i]</li>
+</ul>
+<p>注意点：</p>
+<ul>
+<li>可以看到输出样例很长很长，这个时候可能会想到用long long int，但是很明显是不行的，看看n的最大值可以是10^100(我一开始没注意)所以用字符串来读入n比较合适。</li>
+<li>我们现在得到用字符串num[]表示的n，注意字符串一个单元存储（num[i]）的<strong>是字符而不是字符串</strong>。
+<ul>
+<li>将字符转化为int用num[i] - ‘0’,比如我现在想取n左边第一位的Int型，我们就可以用num[0] - ‘0’</li>
+<li>将字符串转化为int可以用&lt;stdlib.h&gt;头文件里的atoi()函数</li>
+</ul>
+</li>
+<li>后面一个切sum的时候可以采取和前面同样切的方法，我这里其实有点多此一举了。也就是不用切字符串的方法。</li>
+<li>注意输出的空格问题。</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line">    </span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">    	k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    	sum += k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>pta</tag>
+      </tags>
+  </entry>
 </search>
