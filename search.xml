@@ -195,9 +195,8 @@
 <p><font color=purple>使用外部变量，要保证它有意义。想什么循环要用的i，用作局部变量。</font></p>
 ]]></content>
       <categories>
-        <category>CS</category>
-        <category>编程语言</category>
-        <category>C</category>
+        <category>工具使用</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>C语言</tag>
@@ -334,9 +333,8 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>CS</category>
-        <category>编程语言</category>
-        <category>C</category>
+        <category>工具使用</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>C语言</tag>
@@ -354,9 +352,8 @@
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg" alt="Pull Request" /></p>
 ]]></content>
       <categories>
-        <category>CS</category>
-        <category>工具</category>
-        <category>git</category>
+        <category>工具使用</category>
+        <category>git/github</category>
       </categories>
       <tags>
         <tag>git</tag>
@@ -540,10 +537,7 @@
 <p>时间复杂度这部分就不写了，这里☞<a href="https://blog.csdn.net/user11223344abc/article/details/81485842?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E7%AE%97%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">算法—时间复杂度</a>。</p>
 ]]></content>
       <categories>
-        <category>CS</category>
-        <category>四大金刚</category>
         <category>数据结构和算法</category>
-        <category>《大话数据结构》</category>
       </categories>
       <tags>
         <tag>DS</tag>
@@ -611,7 +605,6 @@
 <p>我们其实可以注意到一个问题，我们最后是手动找最适合的参数的，我们真正需要的是一个高效的算法，能够自己寻找到最佳解，而这种方法将会在下一节讲到。</p>
 ]]></content>
       <categories>
-        <category>CS</category>
         <category>ML</category>
         <category>吴恩达机器学习课程笔记</category>
       </categories>
@@ -684,7 +677,6 @@
 <p>我觉得这个效果对于我这个初学者来说还是很amazing的，想听听实际效果，可以去看吴恩达机器学习课程无监督学习那个视频里的示例，真的很好玩。</p>
 ]]></content>
       <categories>
-        <category>CS</category>
         <category>ML</category>
         <category>吴恩达机器学习课程笔记</category>
       </categories>
@@ -748,7 +740,6 @@
 <p>下面一章吴将会用<strong>线性代数中的正规方程组方法</strong>来求解代价函数J的最小值。</p>
 ]]></content>
       <categories>
-        <category>CS</category>
         <category>ML</category>
         <category>吴恩达机器学习课程笔记</category>
       </categories>
@@ -1271,42 +1262,6 @@
       </tags>
   </entry>
   <entry>
-    <title>深入理解计算机系统导言、概论</title>
-    <url>/2021/07/15/%E5%9B%9B%E5%A4%A7%E9%87%91%E5%88%9A/CSAPP/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%A8%80%E3%80%81%E6%A6%82%E8%AE%BA/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200235.png" alt="image-20210715200235339" /></p>
-<span id="more"></span>
-<h2 id="本书的主旨"><a class="markdownIt-Anchor" href="#本书的主旨"></a> 本书的主旨</h2>
-<p>这本书可是个硬骨头😓，不过它的内容是我从小就想弄懂的。为此，我一定要搞懂里面的东西，也许一遍要看很长时间也要把它给看下来。</p>
-<p>这本书的主要目的是<font color=purple>解释所有计算机系统的本质概念，并展示这些概念是如何实实在在的影响程序的正确性、性能和实用性的。</font>这本书有个很大的特点就是从程序员的角度来写的而不是从构建者的角度来写的，那么所谓的<strong>程序员角度</strong>是什么意思呢？</p>
-<p>即<strong>讲述应用程序员如何能够利用系统知识来编写一个更好的程序</strong>。除此之外，<strong>学习一个计算机系统应该做些什么</strong>，是学习如何构建一个计算机系统的很好的出发点，所以对学习计算机系统的软硬件实现的人也是很有帮助的。</p>
-<p>总之，就是研究计算机系统这一系统是如何运作的。</p>
-<h2 id="背景知识"><a class="markdownIt-Anchor" href="#背景知识"></a> 背景知识</h2>
-<ol>
-<li>要求Linux系统，因为示例大部分是Linux上运行的C程序。</li>
-<li>对C和C++有一定的了解。</li>
-</ol>
-<h2 id="如何阅读此书"><a class="markdownIt-Anchor" href="#如何阅读此书"></a> 如何阅读此书？</h2>
-<p>我想的学习方法是这样的：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716205620.png" alt="image-20210716205620739" style="zoom:67%;" />
-<h2 id="本书框架"><a class="markdownIt-Anchor" href="#本书框架"></a> 本书框架</h2>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715200707.png" alt="image-20210715200707045" /></p>
-<p>这里我就借用大佬的视频里的框架了。全书分为四部分：第一章的计算机系统漫游，展示&quot;Hello World&quot;程序的一个生命周期，细节会在后面章节补充；第二部分（2~6）程序结构和执行；第三部分（7~9）在系统上运行程序；最后一部分进程间的交互与通信。</p>
-<hr />
-<p>以上就是导言和概论部分。</p>
-]]></content>
-      <categories>
-        <category>CS</category>
-        <category>四大金刚</category>
-        <category>OS</category>
-        <category>CSAPP</category>
-      </categories>
-      <tags>
-        <tag>os</tag>
-        <tag>四大金刚</tag>
-        <tag>CSAPP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>达芬奇传</title>
     <url>/2021/07/02/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%BE%BE%E8%8A%AC%E5%A5%87%E4%BC%A0/</url>
     <content><![CDATA[<h1 id="引言"><a class="markdownIt-Anchor" href="#引言"></a> 引言</h1>
@@ -1571,9 +1526,8 @@
 <p>​</p>
 ]]></content>
       <categories>
-        <category>CS</category>
-        <category>编程语言</category>
-        <category>C</category>
+        <category>工具使用</category>
+        <category>C/C++</category>
       </categories>
       <tags>
         <tag>C语言</tag>
