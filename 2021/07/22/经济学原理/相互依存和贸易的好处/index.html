@@ -23,23 +23,24 @@
     var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……">
+  <meta name="description" content="前言 我们在前面提到过十大原理中的：贸易可以使每个人的状况都变得更好。为什么如此呢？ 在本书中会不断提到这个问题，在这一篇中我们将为之后的探讨打下一个基础。人们在相互交易时获得了什么好处？为什么人们要相互依存？ 我们先假设一个简单的模型，假设这世上就两种食物：土豆和猪肉；而且只有两人：养猪张三和种土豆的李四。那么很明显，下面两种情况使得张三和李四不得不相互依存：  张三只会养猪，李四只会种土豆。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pta 1002 C解">
-<meta property="og:url" content="https://progsail.com/2021/07/21/pta/pta-1002-C%E8%A7%A3/index.html">
+<meta property="og:title" content="相互依存和贸易的好处">
+<meta property="og:url" content="https://progsail.com/2021/07/22/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/index.html">
 <meta property="og:site_name" content="sail Yang&#39;s Blog">
-<meta property="og:description" content="我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……">
+<meta property="og:description" content="前言 我们在前面提到过十大原理中的：贸易可以使每个人的状况都变得更好。为什么如此呢？ 在本书中会不断提到这个问题，在这一篇中我们将为之后的探讨打下一个基础。人们在相互交易时获得了什么好处？为什么人们要相互依存？ 我们先假设一个简单的模型，假设这世上就两种食物：土豆和猪肉；而且只有两人：养猪张三和种土豆的李四。那么很明显，下面两种情况使得张三和李四不得不相互依存：  张三只会养猪，李四只会种土豆。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png">
-<meta property="article:published_time" content="2021-07-21T15:12:30.000Z">
-<meta property="article:modified_time" content="2021-07-21T23:21:07.233Z">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210722094947.png">
+<meta property="article:published_time" content="2021-07-22T00:17:46.000Z">
+<meta property="article:modified_time" content="2021-07-22T02:37:10.812Z">
 <meta property="article:author" content="sail Yang">
-<meta property="article:tag" content="C">
-<meta property="article:tag" content="pta">
+<meta property="article:tag" content="经济学">
+<meta property="article:tag" content="贸易">
+<meta property="article:tag" content="比较优势">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210722094947.png">
 
-<link rel="canonical" href="https://progsail.com/2021/07/21/pta/pta-1002-C%E8%A7%A3/">
+<link rel="canonical" href="https://progsail.com/2021/07/22/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/">
 
 
 <script id="page-configurations">
@@ -52,7 +53,7 @@
   };
 </script>
 
-  <title>pta 1002 C解 | sail Yang's Blog</title>
+  <title>相互依存和贸易的好处 | sail Yang's Blog</title>
   
 
 
@@ -209,7 +210,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/07/21/pta/pta-1002-C%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/07/22/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -222,7 +223,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          pta 1002 C解
+          相互依存和贸易的好处
         </h1>
 
         <div class="post-meta">
@@ -231,27 +232,21 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-07-21 23:12:30" itemprop="dateCreated datePublished" datetime="2021-07-21T23:12:30+08:00">2021-07-21</time>
+              <time title="创建时间：2021-07-22 08:17:46 / 修改时间：10:37:10" itemprop="dateCreated datePublished" datetime="2021-07-22T08:17:46+08:00">2021-07-22</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-22 07:21:07" itemprop="dateModified" datetime="2021-07-22T07:21:07+08:00">2021-07-22</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工具使用</span></a>
+                  <a href="/categories/%E7%BB%8F%E6%B5%8E%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">经济学</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                  <a href="/categories/%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86%E3%80%8B%E2%80%94%E6%9B%BC%E6%98%86/" itemprop="url" rel="index"><span itemprop="name">《经济学原理》—曼昆</span></a>
                 </span>
             </span>
 
@@ -271,8 +266,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/07/21/pta/pta-1002-C%E8%A7%A3/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/21/pta/pta-1002-C%E8%A7%A3/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/07/22/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/22/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -287,32 +282,147 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
-<span id="more"></span>
-<p>先来看看题目：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png" alt="image-20210721232151446" style="zoom:67%;" />
-<p>解题思路：（C）</p>
+        <h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>我们在前面提到过十大原理中的：<strong>贸易可以使每个人的状况都变得更好</strong>。为什么如此呢？</p>
+<p>在本书中会不断提到这个问题，在这一篇中我们将为之后的探讨打下一个基础。人们在相互交易时获得了什么好处？为什么人们要相互依存？</p>
+<p>我们先假设一个简单的模型，假设这世上就两种食物：土豆和猪肉；而且只有两人：养猪张三和种土豆的李四。那么很明显，下面两种情况使得张三和李四不得不相互依存：</p>
 <ul>
-<li>建立一个字符串数组zimu{“ling”,“yi”,“er”,“san”,“si”,“wu”,“liu”,“qi”,“ba”,“jiu”}，下标与拼音一一对应。</li>
-<li>计算n的各位数字之和sum。</li>
-<li>将sum各位存入数组。假设sum = 123,则存入数组为[3,2,1]</li>
-<li>将数组从后往前读，读到i,则输出zimu[i]</li>
+<li>张三只会养猪，李四只会种土豆。如果它们不想只吃自己的猪肉或者土豆的话，他们就得贸易。</li>
+<li>张三、李四都会养猪，种土豆。但是李四更擅长养猪，张三更擅长种土豆。这种情况就是他们做自己的不擅长的事情时，成本会很高，他们还是可以从贸易中得到好处。</li>
 </ul>
-<p>注意点：</p>
+<p>上面两种情况其实是类似的，术业有专攻，我们可以从贸易中得到好处。但是，<strong>如果张三、李四都擅长养猪，种土豆，这个时候贸易还有必要存在吗？他们还要相互依存吗？</strong></p>
+<h2 id="生产可能性"><a class="markdownIt-Anchor" href="#生产可能性"></a> 生产可能性</h2>
+<p>为了探讨上面的问题，我们需要增加点模型的复杂度。我们设张三、李四都=每天工作八小时，并且两人的种土豆、养猪的效率如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>生产1kg🐖肉所需时间(min)</th>
+<th>生产1kg土豆所需时间(min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>20</td>
+<td>10</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>60</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p>张三就是人上人，干什么都比李四效率高。如果两人把精力都用于生产一样东西，就会得到下面这张表（都工作8小时）：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>牛肉</th>
+<th>土豆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>24</td>
+<td>48</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>8</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<p>我们之前学过<u>生产可能性</u>边界这个概念，它说明了一个经济学原理：<u>人们面临着权衡取舍</u>。在这里张三和李四也面临着权衡取舍，生产可能性边界反映了他们面临的各种可能产量的组合：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210722094947.png" alt="image-20210722094940141" style="zoom:67%;" />
+<p>上图就表示了两个人面临的所有可能，但是这只告诉了他们有哪些选择，却不能告诉他们该怎么选择。为了下面探讨方便，我们假设他们选取了A点和B点。</p>
+<h2 id="专业化和贸易"><a class="markdownIt-Anchor" href="#专业化和贸易"></a> 专业化和贸易</h2>
+<p>有一天，人上人张三找到李四聊会天，大概说了下面这段意思：</p>
+<blockquote>
+<p>如果李四你把一天8小时全部用于种土豆，你会得到32kg土豆，你把15kg给我；我把5kg猪肉给你。最后你将得到17kg土豆，5kg猪肉，比原来各多吃了1kg。</p>
+</blockquote>
+<p>可能我们会觉得这样张三一定亏了，但我我们来算一算：</p>
+<blockquote>
+<p>张三一天生产18kg猪肉,可以生产12kg土豆，给了李四5kg,还剩13kg；得到李四15kg，就会有27kg土豆。很明显也是赚的：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>张三</th>
+<th>李四</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无贸易时生产与消费</td>
+<td>24kg 土豆；12kg猪肉</td>
+<td>16kg土豆；4kg猪肉</td>
+</tr>
+<tr>
+<td>有贸易时生产</td>
+<td>12kg土豆；18kg猪肉</td>
+<td>32kg土豆；0kg猪肉</td>
+</tr>
+<tr>
+<td>有贸易时消费</td>
+<td>27kg土豆；13kg猪肉</td>
+<td>17kg土豆；5kg猪肉</td>
+</tr>
+<tr>
+<td>收益</td>
+<td>+3 土豆；+1 猪肉</td>
+<td>+1 土豆；+1猪肉</td>
+</tr>
+</tbody>
+</table>
+<p>张三、李四两人都可以获益是因为贸易使我们每个人都可以专门从事自己最擅长的工作。</p>
+<p>李四将把更多的时间用于种土豆，更少的时间用于养🐖。张三将把更多的时间用于养🐖，更少的时间用于种土豆。由于<strong>专业化和贸易</strong>，我们每个人都可以<strong>不用增加工作时间就消费更多的🐖肉和更多的土豆</strong>。</p>
+<p>我们知道张三养🐖和种🥔都擅长，而李李四貌似都不擅长，那么怎么判断李四的“专业”呢？也就是为什么不让李四一天全部养🐖而是让他一整天都种🥔？</p>
+<p>这就需要讲下面的概念：绝对优势与比较优势。我们判断一个人的专业，靠的是比较优势而不是绝对优势。</p>
+<h2 id="比较优势和绝对优势"><a class="markdownIt-Anchor" href="#比较优势和绝对优势"></a> 比较优势和绝对优势</h2>
+<p>谁能以较低的成本生产土豆？是张三还是李四？这个问题有两个答案，这是理解贸易所带来的好处的关键。</p>
+<h3 id="绝对优势"><a class="markdownIt-Anchor" href="#绝对优势"></a> 绝对优势</h3>
+<p>一种方法是比较比较两个生产者所需要的投入。</p>
+<p>当比较一个人、一个企业或一个国家与另一个人、另一个企业或另一个国家的生产率时，经济学家用<strong>绝对优势</strong>这个术语。<u>如果生产者生产一种物品所需要的投入较少，就可以说该生产者在生产这种物品上有绝对优势</u>。</p>
+<p>在我们的例子中，时间是唯一的投入。我们之前有一张表，上面清清楚楚写了两个人的生产投入：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>生产1kg🐖肉所需时间（min）</th>
+<th>生产1kg🥔所需时间(min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>20</td>
+<td>10</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>60</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p>很明显，张三生产1kg🥔只需要10min，张三生产土豆的绝对优势比较大。</p>
+<h3 id="比较优势"><a class="markdownIt-Anchor" href="#比较优势"></a> 比较优势</h3>
+<p>还有另一种方法：我们不比较生产的投入，而是<strong>机会成本</strong>（得到一样东西所放弃的东西）。我们要知道，多生产一分钟🐖牛肉，就要少生产一分钟的🥔。</p>
 <ul>
-<li>可以看到输出样例很长很长，这个时候可能会想到用long long int，但是很明显是不行的，看看n的最大值可以是10^100(我一开始没注意)，所以<strong>用字符串来读入n比较合适</strong>。</li>
-<li>我们现在得到用字符串num[]表示的n，注意字符串一个单元存储（num[i]）的<strong>是字符而不是字符串</strong>。
-<ul>
-<li>将<u>字符</u>转化为int用num[i] - ‘0’,比如我现在想取n左边第一位的Int型，我们就可以用num[0] - ‘0’</li>
-<li>将<u>字符串</u>转化为int可以用&lt;stdlib.h&gt;头文件里的atoi()函数</li>
+<li>张三生产1kg的🐖肉，机会成本就是2kg的🥔；生产1kg的土豆，机会成本就是0.5kg的🐖肉。</li>
+<li>李四生产1kg的🐖肉，机会成本就是4kg的🥔；生产1kg的土豆，机会成本就是0.25kg的🐖肉。</li>
 </ul>
-</li>
-<li>后面一个切sum的时候可以采取和前面同样切的方法，我这里其实有点多此一举了，也就是不用切字符串的方法。</li>
-<li><strong>注意输出的空格问题</strong>。</li>
-</ul>
-<p>代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line">    </span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">    	k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    	sum += k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后在贴一点，<strong>pta报&quot;运行时错误&quot;的时候对于C语言来说，很可能是数组越界了</strong>。</p>
+<p>在描述两个生产者的机会成本时，经济学家用<strong>比较优势</strong>这个术语。如果一个生产者在生产X物品时<strong>放弃了较少的其他物品</strong>，即生产X物品的机会成本较小，我们就可以说，他在生产该物品上具有比较优势。</p>
+<p>我们很明显就可以看出来，李四生产土豆的机会成本更小；张三生产猪肉的机会成本更小。所以应该像上面那样分配。</p>
+<blockquote>
+<p>尽管一个人有可能在两种物品的生产上都具有绝对优势（正如这个例子中的Rose那样），但一个人却不可能在两种物品的生产上都具有比较优势。</p>
+<p>因为一种物品的机会成本是另一种物品机会成本的倒数，如果一个人生产一种物品的机会成本较高，那么，他生产另一种物品的机会成本必然较低。比较优势反映了相对的机会成本。除非两个人有相同的机会成本，否则一个人就会在一种物品上具有比较优势，而另一个人将在另一种物品上具有比较优势。</p>
+</blockquote>
 
     </div>
 
@@ -322,8 +432,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/C/" rel="tag"># C</a>
-              <a href="/tags/pta/" rel="tag"># pta</a>
+              <a href="/tags/%E7%BB%8F%E6%B5%8E%E5%AD%A6/" rel="tag"># 经济学</a>
+              <a href="/tags/%E8%B4%B8%E6%98%93/" rel="tag"># 贸易</a>
+              <a href="/tags/%E6%AF%94%E8%BE%83%E4%BC%98%E5%8A%BF/" rel="tag"># 比较优势</a>
           </div>
 
         
@@ -332,13 +443,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/21/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/" rel="prev" title="从processon看边际收益">
-      <i class="fa fa-chevron-left"></i> 从processon看边际收益
+    <a href="/2021/07/21/pta/pta-1002-C%E8%A7%A3/" rel="prev" title="pta 1002 C解">
+      <i class="fa fa-chevron-left"></i> pta 1002 C解
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/22/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/" rel="next" title="相互依存和贸易的好处">
-      相互依存和贸易的好处 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -398,6 +506,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text"> 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E5%8F%AF%E8%83%BD%E6%80%A7"><span class="nav-text"> 生产可能性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E5%8C%96%E5%92%8C%E8%B4%B8%E6%98%93"><span class="nav-text"> 专业化和贸易</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E4%BC%98%E5%8A%BF%E5%92%8C%E7%BB%9D%E5%AF%B9%E4%BC%98%E5%8A%BF"><span class="nav-text"> 比较优势和绝对优势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9D%E5%AF%B9%E4%BC%98%E5%8A%BF"><span class="nav-text"> 绝对优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E4%BC%98%E5%8A%BF"><span class="nav-text"> 比较优势</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
