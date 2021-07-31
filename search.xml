@@ -1858,4 +1858,52 @@
         <tag>经济学</tag>
       </tags>
   </entry>
+  <entry>
+    <title>弹性及其应用</title>
+    <url>/2021/07/28/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E5%BC%B9%E6%80%A7%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p>之前我们探讨过需求定理，如果一件物品的价格上升，那么消费者会少买这个，但是到底会少买多少呢？我们要进行一个定量的分析，而不仅仅是定性，这个时候，我们就需要<strong>弹性</strong>的概念。</p>
+<blockquote>
+<p>弹性衡量买者与卖者对市场条件变化的反应程度。当研究一些事件或政策如何影响一个市场时，我们不仅要讨论影响的方向，而且要讨论影响的大小。</p>
+</blockquote>
+<h2 id="需求弹性"><a class="markdownIt-Anchor" href="#需求弹性"></a> 需求弹性</h2>
+<blockquote>
+<p>需求定理表明，一种物品的价格下降将使其需求量增加。<strong>需求价格弹性</strong>衡量需求量对价格变动的反应程度。若一种物品的需求量对价格变动的反应很大，就说这种物品的需求是富有弹性的。</p>
+</blockquote>
+<p>虽然决定需求价格弹性的因素很复杂，但是我们还是可以总结出一些经验法则。</p>
+<ul>
+<li><strong>相似替代品的可获得性</strong>。有相似替代品的物品的需求往往富有弹性，不用解释了。</li>
+<li><strong>必需品与奢侈品</strong>。必需品的需求往往缺乏弹性，而奢侈品的需求往往富有弹性。</li>
+<li><strong>市场的定义</strong>，任何一个市场上的需求弹性都取决于我们如何划定市场的边界。什么意思呢？如果我们定义食物的市场，这就很宽泛，越宽泛越没有替代品，就越缺乏需求弹性；但如果定义冰淇淋的市场，这就很狭窄，替代品就很明显，需求弹性就非常大。</li>
+<li><strong>时间范围</strong>。物品的需求往往在长期内更富有弹性。当汽油价格上升时，在最初的几个月中，汽油的需求量只是略有减少。但随着时间的推移，人们会购买更省油的汽车，或转而乘坐公共交通工具，或搬到离工作地点近的地方。在几年之内，汽油的需求量会更大幅度地减少。</li>
+</ul>
+<h3 id="需求价格弹性的计算"><a class="markdownIt-Anchor" href="#需求价格弹性的计算"></a> 需求价格弹性的计算</h3>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210728143000.png" alt="image-20210728142952210" /></p>
+<p>例如，假定冰淇淋蛋卷的价格上升了10%，使你购买的冰淇淋量减少了20%。我们计</p>
+<p>算出你的需求价格弹性为：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210728143013.png" alt="image-20210728143013182" /></p>
+<p>中点法</p>
+]]></content>
+      <categories>
+        <category>经济学</category>
+        <category>《经济学原理》—曼昆</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>觉得自己的代码很烂咋办</title>
+    <url>/2021/07/31/%E8%A7%89%E5%BE%97%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%9D%E8%B7%AF%E5%BE%88%E7%83%82%E6%80%8E%E4%B9%88%E5%8A%9E/</url>
+    <content><![CDATA[<p>今天写了道题，写完后我去csdn上看了看别人是怎么写的。看了之后，脑子里只有一个想法：“我怎么想不到这种写法，真的太好了🤣，反观我写得是什么东西😥”虽然我这人比较自负，但是还是对自己的天赋有点怀疑😅，但是这也没什么。</p>
+<p>其实这个标题的答案我是知道的：多读多思考，多读优秀的想法和代码，多思考不同的写法，如何让写的代码更好……</p>
+<p>之所以还要取这个题目的原因是，我希望让自己知道，我的水平还是刚入门的菜鸟水平，还有很多东西要学，学习不能松懈😠</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210731230557.png" alt="image-20210731230548350" style="zoom:67%;" />
+]]></content>
+      <categories>
+        <category>杂谈吹水</category>
+      </categories>
+      <tags>
+        <tag>反思</tag>
+      </tags>
+  </entry>
 </search>
