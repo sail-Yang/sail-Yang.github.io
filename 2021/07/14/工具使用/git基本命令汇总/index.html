@@ -23,21 +23,24 @@
     var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="​	在学DS的时候，编写函数遇到点小问题，就是关于结构体变量作为函数参数调用的，所以我想写一篇来总结一下。 我们先来声明一些变量： 12345typedef my_struct&amp;#123;    int i;    double j;&amp;#125;;">
+  <meta name="description" content="这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="结构体变量作为函数参数调用">
-<meta property="og:url" content="https://progsail.com/2021/08/06/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="git基本命令汇总">
+<meta property="og:url" content="https://progsail.com/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="sail Yang&#39;s Blog">
-<meta property="og:description" content="​	在学DS的时候，编写函数遇到点小问题，就是关于结构体变量作为函数参数调用的，所以我想写一篇来总结一下。 我们先来声明一些变量： 12345typedef my_struct&amp;#123;    int i;    double j;&amp;#125;;">
+<meta property="og:description" content="这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-06T07:39:41.000Z">
-<meta property="article:modified_time" content="2021-08-06T09:19:34.355Z">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg">
+<meta property="article:published_time" content="2021-07-14T00:42:49.000Z">
+<meta property="article:modified_time" content="2021-07-21T04:55:44.415Z">
 <meta property="article:author" content="sail Yang">
-<meta property="article:tag" content="C语言">
-<meta property="article:tag" content="结构体">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="基本命令汇总">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg">
 
-<link rel="canonical" href="https://progsail.com/2021/08/06/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="https://progsail.com/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
 
 
 <script id="page-configurations">
@@ -50,7 +53,7 @@
   };
 </script>
 
-  <title>结构体变量作为函数参数调用 | sail Yang's Blog</title>
+  <title>git基本命令汇总 | sail Yang's Blog</title>
   
 
 
@@ -207,7 +210,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/08/06/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -220,7 +223,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          结构体变量作为函数参数调用
+          git基本命令汇总
         </h1>
 
         <div class="post-meta">
@@ -229,10 +232,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-08-06 15:39:41 / 修改时间：17:19:34" itemprop="dateCreated datePublished" datetime="2021-08-06T15:39:41+08:00">2021-08-06</time>
+              <time title="创建时间：2021-07-14 08:42:49" itemprop="dateCreated datePublished" datetime="2021-07-14T08:42:49+08:00">2021-07-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-21 12:55:44" itemprop="dateModified" datetime="2021-07-21T12:55:44+08:00">2021-07-21</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -243,7 +252,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git-github/" itemprop="url" rel="index"><span itemprop="name">git/github</span></a>
                 </span>
             </span>
 
@@ -263,8 +272,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/08/06/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/06/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -279,33 +288,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>​	在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
-<p>我们先来声明一些变量：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> my_struct</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">double</span> j;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg" alt="Git基本操作" /></p>
+<p>这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。</p>
 <span id="more"></span>
-<h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
-<p>如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">(my_struct struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    struct1.i = <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    my_struct struct2;</span><br><span class="line">    struct2.i = <span class="number">17</span>;</span><br><span class="line">    func(struct2);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2.i);	<span class="comment">/*result is 6*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变怎么办实参结构体的成员值怎么办</strong>？</p>
-<h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
-<h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
-<p>将结构体数组作为函数的参数进行传参，修改后的元素的成员值是可以返回到主调函数的。</p>
-<p>详细的就不写了，不是本文讨论重点，以后遇到不会的话再补。</p>
-<h3 id="结构体指针变量"><a class="markdownIt-Anchor" href="#结构体指针变量"></a> 结构体指针变量</h3>
-<p>函数的参数传递类似于赋值，直接赋变量的值却不返回，肯定不会改变实参的值；但是，我们把指针作为参数呢？那就不一样了。</p>
-<p>我目前的理解是，用指针作为参数的确还是赋值，只不过赋的是指针的值（也就是地址）。（个人理解，未确定过正确与否）</p>
-<p>于是我们可以这么写：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(my_struct *struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*注意两种引用的书写方式*/</span></span><br><span class="line">    struct1-&gt;i = <span class="number">6</span>;	<span class="comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span></span><br><span class="line">    (*struct).i=<span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">	my_struct *struct2,struct1;</span><br><span class="line">    struct2 = &amp;struct1;			<span class="comment">//一定要让指针有个归处(doge)</span></span><br><span class="line">	struct1.i = <span class="number">17</span>;</span><br><span class="line">    func2(struct2);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2-&gt;i);	<span class="comment">/*result is 6*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="总结结构体变量作为函数参数传递的3种方法"><a class="markdownIt-Anchor" href="#总结结构体变量作为函数参数传递的3种方法"></a> 总结：结构体变量作为函数参数传递的3种方法</h2>
-<p>我们来做一个小总结，其实将一个结构体变量中的数据传递给另一个函数就3种方法：</p>
-<h3 id="1-用结构体变量名直接作为参数值传递"><a class="markdownIt-Anchor" href="#1-用结构体变量名直接作为参数值传递"></a> 1、用结构体变量名直接作为参数（值传递）</h3>
-<p>这种用法我们一般比较少，代码看值传递那一段。</p>
-<h3 id="2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"><a class="markdownIt-Anchor" href="#2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"></a> 2、用指向结构体变量的指针作为实参，将结构体变量的地址传给形参</h3>
-<p>这就是上面说的结构体指针变量那一段，这种方法效率很高，但程序不够直接。<strong>我们还有第三种写法，能够兼顾上面两者的优点</strong>。</p>
-<h3 id="3-将结构体变量的地址作为实参"><a class="markdownIt-Anchor" href="#3-将结构体变量的地址作为实参"></a> 3、将结构体变量的地址作为实参</h3>
-<p>实际上思想和第二种一样，<strong>不同的地方在于传递地址的方式</strong>。这种方法是直接使用取地址符&amp;来获取结构体变量的地址，而不是第二种的做法：创建一个指针，指向结构体，然后传指针。</p>
-<p>下面是代码的具体实现：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(my_struct *struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*注意两种引用的书写方式*/</span></span><br><span class="line">    struct1-&gt;i = <span class="number">6</span>;		<span class="comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span></span><br><span class="line">    (*struct).i=<span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">	my_struct struct1;</span><br><span class="line">	struct1.i = <span class="number">17</span>;</span><br><span class="line">    func2(&amp;struct1);		<span class="comment">//这里是重点，注意与第二钟方法这里的对比</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct1.i);	<span class="comment">/*result is 6*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<p>最近又发现一张github的pull request的步骤图，一块贴上来，好给我的processon腾点空间：<br />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg" alt="Pull Request" /></p>
 
     </div>
 
@@ -315,8 +303,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/C%E8%AF%AD%E8%A8%80/" rel="tag"># C语言</a>
-              <a href="/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" rel="tag"># 结构体</a>
+              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/" rel="tag"># 基本命令汇总</a>
           </div>
 
         
@@ -325,10 +313,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/05/RMS%E5%85%B3%E4%BA%8E%E5%9E%84%E6%96%AD%E7%9A%84%E4%B8%80%E6%AE%B5%E8%AF%9D/" rel="prev" title="RMS关于垄断的一段话">
-      <i class="fa fa-chevron-left"></i> RMS关于垄断的一段话
+    <a href="/2021/07/11/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/" rel="prev" title="上海之行">
+      <i class="fa fa-chevron-left"></i> 上海之行
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%A6%E4%B9%8B%E7%BE%8E/" rel="next" title="数学之美">
+      数学之美 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -388,7 +379,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%BC%E4%BC%A0%E9%80%92"><span class="nav-text"> 值传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E5%92%8C%E7%BB%93%E6%9E%84%E4%BD%93%E6%95%B0%E7%BB%84"><span class="nav-text"> 结构体指针变量和结构体数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%95%B0%E7%BB%84"><span class="nav-text"> 结构体数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F"><span class="nav-text"> 结构体指针变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E7%9A%843%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="nav-text"> 总结：结构体变量作为函数参数传递的3种方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E5%90%8D%E7%9B%B4%E6%8E%A5%E4%BD%9C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%80%BC%E4%BC%A0%E9%80%92"><span class="nav-text"> 1、用结构体变量名直接作为参数（值传递）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%A8%E6%8C%87%E5%90%91%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E7%9A%84%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%AE%9E%E5%8F%82%E5%B0%86%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E4%BC%A0%E7%BB%99%E5%BD%A2%E5%8F%82"><span class="nav-text"> 2、用指向结构体变量的指针作为实参，将结构体变量的地址传给形参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B0%86%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E4%BD%9C%E4%B8%BA%E5%AE%9E%E5%8F%82"><span class="nav-text"> 3、将结构体变量的地址作为实参</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -404,7 +394,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

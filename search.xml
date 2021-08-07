@@ -1,366 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C语言注意点复习</title>
-    <url>/2021/07/14/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9%E5%A4%8D%E4%B9%A0/</url>
-    <content><![CDATA[<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>我是大一下学期开始系统学习C语言的，学到指针左右由于要期末考试了所以暂时放一放，最近又想把这个C基础的知识快点学完，但之前的内容会有些许遗忘，所以索性乘着每天学习计划开始之前，今天把之前的内容复习一下。之前做的课后习题都在github上，复习也方便，我会记录一些注意点和规范，以及常见的写法，还有问与答中部分问答。（我是跟着《C语言现代程序设计现代方法》学的）</p>
-<span id="more"></span>
-<h2 id="概论"><a class="markdownIt-Anchor" href="#概论"></a> 概论</h2>
-<ul>
-<li>
-<p><a href="https://zh.wikipedia.org/wiki/GCC">什么是GCC—Wiki</a></p>
-</li>
-<li>
-<p><a href="https://www.cnblogs.com/QG-whz/p/5456720.html">Linux编译工具入门—gcc</a></p>
-</li>
-</ul>
-<h2 id="printf-scanf输入输出章节前置"><a class="markdownIt-Anchor" href="#printf-scanf输入输出章节前置"></a> printf、scanf（输入\输出章节前置）</h2>
-<p>首先要知道printf函数是用来显示格式串的，并且在该串的指定位置插入可能的值（通过转换说明：%+）。</p>
-<ul>
-<li>
-<p>转换说明：%m.pX 。</p>
-<ul>
-<li><strong>m→最小字段宽度</strong>。若要显示的字符数&lt;m，则会这样：%4d→🐕123（右对齐）；如果是大于，会自动扩展为需要的尺寸，而不会丢失数字。</li>
-<li><strong>p→精度</strong>，精度p依赖于<strong>转换说明符X</strong>的选择。
-<ul>
-<li>d,十进制形式的整数。p指明待显示数字的最少位数。65用%.3f输出→065。</li>
-<li>f,定点十进制形式的浮点数。p指明小数点后应出现的数字的位数。45.8用%.4f输出→45.8000。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>转义序列</p>
-<p>没什么好讲的</p>
-</li>
-</ul>
-<p>以上是printf函数的，下面再来稍微看一看scanf函数（<strong>模式匹配</strong>）：</p>
-<ul>
-<li>
-<p>scanf函数<strong>在寻找数的起始位置时，会忽略空白字符</strong>(including 空格、水平和垂直制表符、换页符和换行符)，所以我们可以把数字分散到几行输入。考虑下下面所示的scanf函数工作过程：</p>
-<ol>
-<li>
-<p>假设用户录入三行输入：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714172121.png" alt="image-20210714172042445" /></p>
-</li>
-<li>
-<p>scanf函数会把它们看成下面这样的一个连续的字符流(🐕表示空格，🐱表示换行符)：</p>
-<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
-</li>
-<li>
-<p>我们用×表示次项被跳过，√表示次项被读入为输入项的一部分：</p>
-<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
-<p>× × √ ×√√√×  ×  ×√√×  ×  ×  ×√√√√√√</p>
-<p>注意到，最后一个换行符🐱没有被读进去，<strong>这个换行符将是下一次scanf函数调用的第一个字符</strong>。（之后scanf放到循环里时要注意这个问题）</p>
-</li>
-<li>
-<p>scanf函数用来识别整数或浮点数的规则是：</p>
-<ol>
-<li>读入整数时，scanf函数首先寻找正负号，然后读取数字直到读到一个非数字时才停止</li>
-<li>读入浮点数时，scanf函数会先找一个正负号，随后是一串数字（可能会有小数点），再后是一个指数（可选）。</li>
-</ol>
-<p><font color=purple>当遇到一个<strong>不可能属于当前项</strong>的字符时，它<strong>会把此字符原封不动地放回去</strong>（放到缓冲区），留给扫描下一个输入或者下一次调用scanf的时候再次读入。</font></p>
-</li>
-</ol>
-</li>
-<li>
-<p>scanf处理格式串中的普通字符</p>
-<p>​	当scanf遇到非空白字符时，会把它与下一个输入字符进行比较。若<strong>两者相匹配，那么scanf函数会放弃输入字符而继续处理格式串</strong>；如果<strong>不匹配，那么scanf会把不匹配的字符放回输入中，然后异常退出</strong>，而不进一步读取和处理。举个例子：</p>
-<p>​	假设格式串是“%d/%d”，若输入是&quot;🐕5/🐕96&quot;（🐕是空格），那么scanf的工作流是：</p>
-<p>​	跳过第一个🐕，把%d与5匹配 → 把/与/匹配 → 在寻找下一个整数时跳过一个🐕，把%d与96匹配。</p>
-</li>
-</ul>
-<hr />
-<ol>
-<li>
-<p>如何显示字符&quot;%&quot;？</p>
-<p>printf(“10%%”)→10%</p>
-</li>
-</ol>
-<h2 id="表达式"><a class="markdownIt-Anchor" href="#表达式"></a> 表达式</h2>
-<p>这个就列举几个简单的课后习题吧</p>
-<h3 id="数字倒序"><a class="markdownIt-Anchor" href="#数字倒序"></a> 数字倒序</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> x,y,z,data;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data); </span><br><span class="line">	x = data/<span class="number">100</span>;</span><br><span class="line">	y = (data<span class="number">-100</span>*x)/<span class="number">10</span>;</span><br><span class="line">	z = data<span class="number">-100</span>*x<span class="number">-10</span>*y;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> re_data;</span><br><span class="line">	re_data = z*<span class="number">100</span>+y*<span class="number">10</span>+x;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %d&quot;</span>,re_data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i1,i2,i3;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%1d%1d%1d&quot;</span>,&amp;i1,&amp;i2,&amp;i3);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %1d%1d%1d&quot;</span>,i3,i2,i1);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="十进制八进制不用函数"><a class="markdownIt-Anchor" href="#十进制八进制不用函数"></a> 十进制→八进制（不用函数）</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a number between 1 and 32767:&quot;</span>);</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> a,b,c,d,e;</span><br><span class="line">	e = data % <span class="number">8</span>;</span><br><span class="line">	d = (data / <span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	c = (data / <span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	b = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	a = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;In octal,your number is:%1d%1d%1d%1d%1d\n&quot;</span>,a,b,c,d,e);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;the true number is %o&quot;</span>,data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="选择-循环语句"><a class="markdownIt-Anchor" href="#选择-循环语句"></a> 选择、循环语句</h2>
-<ol>
-<li>
-<p>switch语句的分支别忘了加break，没有break会默认执行下一个case。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714182008.png" alt="image-20210714182008671" style="zoom: 80%;" />
-</li>
-<li>
-<p>do循环与while循环本质上是一样的，只不过前者在对于至少需要执行一次的循环来说十分方便。</p>
-</li>
-<li>
-<p>注意i&lt;=n和i&lt;n循环次数上的差异。</p>
-</li>
-<li>
-<p>break可以跳出循环，当嵌套循环时使用break，只能跳出一层循环；break是刚好把程序控制在循环体末尾之后，而continue是刚好控制在循环体末尾之前</p>
-</li>
-</ol>
-<h2 id="字符字符串章节前置"><a class="markdownIt-Anchor" href="#字符字符串章节前置"></a> 字符（字符串章节前置）</h2>
-<ul>
-<li>
-<p><strong>C语言把字符当作小整数进行处理</strong>。在ASCII码中，字符可以看成是0~127的整数。字符’a’的值是97，'A’的值是65，'0’的值为48……在C语言中字符常量实际上是Int类型而不是char类型。当计算中出现字符时，C语言只是使用它对应的整数值，可以像比较数那样对字符进行比较，比如说下面这两个例子：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714185611.png" alt="image-20210714185611148" style="zoom:67%;" />
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用if语句将小写字母转化为大写字母(不用toupper函数)</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">&#x27;a&#x27;</span> &lt;= ch &amp;&amp; ch &lt;= <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">	ch = ch - <span class="string">&#x27;a&#x27;</span> + <span class="string">&#x27;A&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="字符处理函数"><a class="markdownIt-Anchor" href="#字符处理函数"></a> 字符处理函数</h3>
-<h4 id="scanf和printf读写字符"><a class="markdownIt-Anchor" href="#scanf和printf读写字符"></a> scanf和printf读写字符</h4>
-<p>重点讲讲scanf读入字符的问题。在读入字符前，scanf不会跳过空白字符。如果下一个未读字符是空格，那么返回后的变量将包含空格。为了强制scanf函数在读入字符前跳过空白字符，我们可以这么写：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot; %c&quot;</span>,&amp;ch)</span><br></pre></td></tr></table></figure>
-<p>因为scanf通常情况下不会跳过空白字符，所以它很容易检查到输入行的结尾：检查刚读入的字符是否为换行符。例如，下面的字符将读入并且忽略掉当前初入行中剩下的所有字符：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>,&amp;ch);</span><br><span class="line">&#125; <span class="keyword">while</span>(ch !=。 <span class="string">&#x27;\n&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>下一次调用scanf时会读入下一输入行中的第一个字符。</p>
-<h4 id="getchar和putchar读写字符"><a class="markdownIt-Anchor" href="#getchar和putchar读写字符"></a> getchar和putchar读写字符</h4>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) ！= <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
-<p>这个循环读入一个字符，把它存储在变量ch中，然后测试变量是不是\n。其实我们并不需要ch，下面引入一个C语言惯用法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (getchar() ！= <span class="string">&#x27;\n&#x27;</span>) <span class="comment">/*skips rest of line*/</span></span><br></pre></td></tr></table></figure>
-<p>getchar对于搜索字符的循环和跳过字符的循环是十分有用的，看一看下面这个利用getchar()跳过不定数量的空格字符的语句：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) == <span class="string">&#x27; &#x27;</span>) <span class="comment">/*skips blanks*/</span></span><br></pre></td></tr></table></figure>
-<p>当循环终止时，变量ch会包含getchar函数遇到的第一个非空白字符。</p>
-<h2 id="数组"><a class="markdownIt-Anchor" href="#数组"></a> 数组</h2>
-<p>惯用法</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;N; i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i])</span><br><span class="line">	sum += a[i];</span><br></pre></td></tr></table></figure>
-<h3 id="用sizeof计算数组长度"><a class="markdownIt-Anchor" href="#用sizeof计算数组长度"></a> 用sizeof计算数组长度</h3>
-<p>如果数组有10个整数，那么sizeof(a)通常为40(假定每个整数为4个字节)。我们可以用sizeof来计算数组元素的大小：sizeof(a)/sizeof(a[0])，当需要数组长度时，游戏额程序员采用上述表达式。如果使用这种方法，以后数组长度变了也不用变。所以会有下面这样的循环：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;(<span class="keyword">int</span>)(<span class="keyword">sizeof</span>(a)/<span class="keyword">sizeof</span>(a[<span class="number">0</span>]));i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>为什么要加一个强制类型转换呢？（int）</p>
-<p>主要是因为一些编译器不加会报错，因为变量i的类型可能是int型（有符号整型）而sizeof返回的类型为size_t(一种无符号整型)，把有符号整型和无符号整型相比较是很危险的，尽管在本例中做没什么大问题（因为i和sizeof(a)/sizeof(a[0])都是非负值）。所以要进行强制转换。这样写有点麻烦，我们可以用宏：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZE ((int) (sizeof(a)/sizeof(a[0])))</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>;i&lt; SIZE;i++)</span><br><span class="line">    a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>更好的方法在后面会讲到，到时候回来补。</p>
-<h3 id="练习题"><a class="markdownIt-Anchor" href="#练习题"></a> 练习题</h3>
-<p>这一章的练习题还蛮好玩的，我贴一些。<a href="https://github.com/sail-Yang/c-homework/tree/main/chapter8">第八章习题</a></p>
-<h4 id="81修改示例显示重复的数字"><a class="markdownIt-Anchor" href="#81修改示例显示重复的数字"></a> 8.1修改示例，显示重复的数字</h4>
-<h4 id="89随机步法"><a class="markdownIt-Anchor" href="#89随机步法"></a> 8.9随机步法</h4>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">不贴了，可以去我的仓库里看，代码贴多了，好像就加载不出来了。</span><br></pre></td></tr></table></figure>
-<h4 id="817幻方"><a class="markdownIt-Anchor" href="#817幻方"></a> 8.17幻方</h4>
-<h2 id="函数以及程序结构"><a class="markdownIt-Anchor" href="#函数以及程序结构"></a> 函数以及程序结构</h2>
-<h3 id="在调用前注意进行函数声明"><a class="markdownIt-Anchor" href="#在调用前注意进行函数声明"></a> 在调用前注意进行函数声明</h3>
-<p>我们首先来看看，如果没有函数声明，并且函数放到main函数后面，会发生什么？假设我们有一个sum函数：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214357.png" alt="image-20210715214357520" style="zoom: 67%;" />
-<p>​	我们可以发现，<strong>之所以会产生错误，是因为返回类型，形式参数等类型不匹配</strong>。</p>
-<p>​	前面提到了<strong>默认实际参数提升</strong>，我们来看看什么是默认实际参数提升：<strong>如果编译器在调用前没遇到函数原型。编译器会执行默认的实际参数提升</strong>：</p>
-<ol>
-<li>
-<ul>
-<li>float的实际参数→double型</li>
-</ul>
-</li>
-<li>
-<ul>
-<li>char类型和short类型的实际参数→int类型</li>
-</ul>
-</li>
-</ol>
-<p>​     这就是默认实际参数提升。</p>
-<h3 id="递归与循环"><a class="markdownIt-Anchor" href="#递归与循环"></a> 递归与循环</h3>
-<p>首先来简短说一下各概念的定义：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214750.png" alt="image.png" style="zoom:67%;" />
-<p>重点来说一下递归和循环。简单归纳一下递归的特征：<strong>递归</strong>因为是调用自身，所以代码简洁，也易于理解，但是因为函数调用过多，会占据太多空间和时间，效率不高，会造成<strong>栈溢出</strong>。</p>
-<p>函数调用它自身，使代码变得那么简洁。递归这种算法的底层思想就是<strong>分治法：<strong>把一个大问题分解成小问题，再把小问题分解成更小的问题，<strong>每层问题的差别仅仅在于数据的规模</strong>；既然我们要像套娃一样不断细分，那么一定要有一个停止套娃的条件，这就是</strong>递归停止的条件，必不可少</strong>。</p>
-<p><a href="https://blog.csdn.net/CSDN_SUSAN/article/details/100275406?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E9%80%92%E5%BD%92%E4%B9%8B%E7%BE%8E&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-7-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">☞递归详细内容</a>。</p>
-<h3 id="局部变量与全局变量"><a class="markdownIt-Anchor" href="#局部变量与全局变量"></a> 局部变量与全局变量</h3>
-<p>这是编写多个函数时应注意的问题。这两者的主要区别在于两个特征：</p>
-<ul>
-<li>
-<ul>
-<li>
-<p><strong>存储期限</strong>：变量存储单元存在期内程序执行的部分。</p>
-<ul>
-<li>局部变量是<strong>自动存储期限</strong>，在包含该变量的函数被调用时，局部变量的存储单元自动分配，函数返回时收回。因此，局部变量的函数返回时，局部变量的值无法保留；</li>
-<li>全局变量是<strong>静态存储期限</strong>，值将有就保留下来。</li>
-</ul>
-</li>
-<li>
-<p>​	如果想把局部变量的值保留下来，<strong>可以使用static</strong>，就可以<strong>把自动存储期限变成静态存储期限</strong>。</p>
-</li>
-<li>
-<pre class="highlight"><code class="c"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> i
-</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<ul>
-<li><strong>作用域</strong>，变量的作用域是可以引进该变量的程序文本的部分。局部变量是<strong>块作用域</strong>，就是从函数声明到函数体的末尾；<strong>全局变量是文件作用域</strong>，到文件末尾。</li>
-</ul>
-</li>
-</ul>
-<hr />
-<p><font color=purple>使用外部变量，要保证它有意义。想什么循环要用的i，用作局部变量。</font></p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-        <tag>基础知识</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C指针基础和指针的数组应用</title>
-    <url>/2021/07/16/C%E6%8C%87%E9%92%88/</url>
-    <content><![CDATA[<h1 id="指针基础知识"><a class="markdownIt-Anchor" href="#指针基础知识"></a> 指针基础知识</h1>
-<h2 id="机器级上指针表示的内容"><a class="markdownIt-Anchor" href="#机器级上指针表示的内容"></a> 机器级上指针表示的内容</h2>
-<p>现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的<strong>地址</strong>，就像我们的学号一样，用来和其它内存区别。</p>
-<p>可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png" alt="image-20210717090004435" style="zoom:67%;" />
-<span id="more"></span>
-<p>我们虽然用数表示内存地址，但是地址的取值范围是不同于整数的范围的，所以<u>一定不能用普通整型变量来存储地址</u>。但是，可以用<font color=purple>特殊的指针变量来存储地址。</font>这就是指针的出处。**指针就是地址，而指针变量就是存储地址的变量。**我们可以用下面这种方式来表示，指针变量p存储变量i的地址：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png" alt="image-20210717091538267" style="zoom:80%;" />
-<h2 id="指针变量的声明"><a class="markdownIt-Anchor" href="#指针变量的声明"></a> 指针变量的声明</h2>
-<p>常见的指针声明形式：</p>
-<ol>
-<li>int p 这是一个普通的整型变量；int *p 首先从p开始，先与*结合，说明p是一个指针，然后再与int结合，说明指针的类型为Int型，所以p（指针变量名，不是*p）是一个返回整型数据的指针。</li>
-<li>int p[3]说明p是一个由整型数据组成的数组；int *p[3] p先与[3]结合，因为[]优先级&gt;*，说明p是一个数组，然后再与*结合，说明数组里的元素都是指针，然后再与int 结合，说明指针指向的是对象是整型的，所以p是一个由返回整型数据的指针组成的数组。</li>
-<li>int (*p)[3] p先与*结合，说明p是一个指针，再与[3]结合，说明指针指向一个数组，再与Int结合，说明p指向一个由整型数据组成的数组。</li>
-<li>int **p 指向指针的指针。</li>
-<li>int p(int) p是一个函数，返回整型数据；int (*p)(int)，p是一个指向有一个整型参数且返回类型为整型的函数的指针。</li>
-</ol>
-<h2 id="指针的四方面"><a class="markdownIt-Anchor" href="#指针的四方面"></a> 指针的四方面</h2>
-<p>指针有四个方面的内容需要搞清楚：</p>
-<h3 id="指针的类型"><a class="markdownIt-Anchor" href="#指针的类型"></a> 指针的类型</h3>
-<p>从语法角度，我们只要把指针名字去掉，剩下的就是指针的类型（比如上面都把p去掉）。</p>
-<h3 id="指针所指向的类型"><a class="markdownIt-Anchor" href="#指针所指向的类型"></a> 指针所指向的类型</h3>
-<p>当通过指针来访问指针所指向的内存区时，指针所指向的类型决定了编译器将把那片内存区里的内容当做什么来看待。从语法看，去除名字和名字左边的*就行。</p>
-<p>一定要注意<font color=purple>指针所指向的类型</font>和<font color=green>指针的类型</font>的区别。</p>
-<h3 id="指针的值地址"><a class="markdownIt-Anchor" href="#指针的值地址"></a> 指针的值—地址</h3>
-<p>指针的值时指针变量存储的数值，这个数值将被编译器当作一个地址，而不是一个一般的数值。</p>
-<p>前面也说了，变量i的地址用首地址来表示，<strong>我们说一个指针的值是XX，就相当于说该指针指向了以XX为首地址的一片内存区域</strong>。</p>
-<h3 id="指针本身所占据的内存区"><a class="markdownIt-Anchor" href="#指针本身所占据的内存区"></a> 指针本身所占据的内存区</h3>
-<p>用sizeof就可以测一下指针本身所占的内存了。</p>
-<hr />
-<p>每当遇到一个指针，就问问自己这个指针的这四方面分别是什么，想的多了也就分的清了。</p>
-<h2 id="取地址运算符和间接寻址运算符"><a class="markdownIt-Anchor" href="#取地址运算符和间接寻址运算符"></a> 取地址运算符和间接寻址运算符</h2>
-<ul>
-<li>
-<p>为了找到变量的地址，可以使用取地址运算符&amp;。举个例子，若x是一个变量，&amp;x就是x在内存中的地址。</p>
-</li>
-<li>
-<p>为了获得指针所指向对象的访问，可以使用*（间接寻址运算符）。如果p是指针，*p表示p当前所指向的对象。</p>
-<p>&amp;与*是一对逆运算。</p>
-</li>
-</ul>
-<h3 id="指针初始化"><a class="markdownIt-Anchor" href="#指针初始化"></a> 指针初始化</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,p = &amp;i;</span><br></pre></td></tr></table></figure>
-<p>这就是指针初始化的一种方法。</p>
-<h3 id="间接寻址"><a class="markdownIt-Anchor" href="#间接寻址"></a> 间接寻址</h3>
-<p>一旦指针初始化了，即指针指向了对象，我们就可以用间接寻址来访问存储在对象中的内容。例如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,*p);</span><br></pre></td></tr></table></figure>
-<p>其实只要p指向i，*p就是i的别名，两者共生死（一块变动）。</p>
-<hr />
-<h2 id="指针的算术运算"><a class="markdownIt-Anchor" href="#指针的算术运算"></a> 指针的算术运算</h2>
-<h3 id="加减法"><a class="markdownIt-Anchor" href="#加减法"></a> 加减法</h3>
-<p>指针可以加上或减去一个整数。指针的这种运算的意义和通常的数值的加减运算的意义是不一样的，它是以单元为单位。例如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> a[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> *ptr=(<span class="keyword">int</span> *)a;		<span class="comment">//强制类型转换并不会改变a 的类型</span></span><br><span class="line">ptr++;</span><br></pre></td></tr></table></figure>
-<p>在上例中，指针ptr 的类型是int*,它指向的类型是int，它被初始化为指向整型变量a。接下来的第3句中，<strong>指针ptr被加了1，编译器是这样处理的</strong>：</p>
-<p>它把指针ptr 的值加上了<strong>sizeof(int)</strong>，在64 位程序中，是被加上了8，因为在64 位程序中，int 占 8 个字节。由于地址是用字节做单位的，故ptr 所指向的地址由原来的变量a 的地址向高地址方向增加了8个字节。由于char 类型的长度是一个字节，所以，原来ptr 是指向数组a 的第0 号单元开始的8个字节，此时指向了数组a 中从第8号单元开始的8个字节。</p>
-<h3 id="指针赋值"><a class="markdownIt-Anchor" href="#指针赋值"></a> 指针赋值</h3>
-<p>C语言允许使用赋值运算符进行指针的赋值，前提是两者具有相同的指针类型。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,j,*p,*q;</span><br><span class="line">p = &amp;i; <span class="comment">//把i的地址复制给指针p</span></span><br><span class="line">q = p;	<span class="comment">//把p的地址复制给q,效果是q指向了p所指向的地方</span></span><br></pre></td></tr></table></figure>
-<p>那么经过上面几个步骤，就变成了这样;</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717100202.png" alt="image-20210717100202148" style="zoom: 50%;" />
-<p>很显然，*p,*q,i就是共患难的兄弟了，一个变，其它两个都变。</p>
-<p>除此之外，我们还要注意p=q和*p = *q的区别，注意一下就好。</p>
-<hr />
-<p>以上就是指针的基础知识了，下面讲一些指针的应用，有低级应用也有高级应用。</p>
-<h1 id="指针的应用"><a class="markdownIt-Anchor" href="#指针的应用"></a> 指针的应用</h1>
-<h2 id="指针在数组的应用"><a class="markdownIt-Anchor" href="#指针在数组的应用"></a> 指针在数组的应用</h2>
-<p>我们先对指针进行初使化：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>],*p;</span><br><span class="line">p = &amp;a[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
-<h3 id="数组上的算术运算"><a class="markdownIt-Anchor" href="#数组上的算术运算"></a> 数组上的算术运算</h3>
-<p>现在我们让指针p指向a[0]，可以访问a[0]的值。下面让我们看下指针在数组上的算术运算。</p>
-<ul>
-<li>
-<p>指针加减整数</p>
-<p>如果p指向数组元素a[i]，p+j就指向数组元素a[i+j]。用图表示可能更清晰一点：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717103039.png" alt="image-20210717103039643" style="zoom: 50%;" />
-<p>减法也是一个道理</p>
-</li>
-<li>
-<p>两个指针相减</p>
-<p>当两个指针相减时，结果为两个指针的距离。因此，如果p指向a[i],q指向a[j]，那么q - p就是 a[j-i]。</p>
-</li>
-</ul>
-<h3 id="运算符和运算符的组合"><a class="markdownIt-Anchor" href="#运算符和运算符的组合"></a> *运算符和++运算符的组合</h3>
-<p>这是一种习惯，其中以*p++最常见，它在循环中很是方便，对数组a求和时，我们可以把下面这个程序：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[N];p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
-<p>改写成：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = &amp;a[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">while</span> (p &lt; &amp;a[N])</span><br><span class="line">	sum += *p++</span><br></pre></td></tr></table></figure>
-<h3 id="用数组名作为指针"><a class="markdownIt-Anchor" href="#用数组名作为指针"></a> 用数组名作为指针</h3>
-<p>数组本身就是一个地址，而指针可以直接操作地址，所以指针可以用数组的方式来表示。</p>
-<p><strong>我们可以把数组名作为指向数组第一个元素的指针</strong>，这种关系简化了指针的算术运算，而且使数组和指针更加通用。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line">*a = <span class="number">7</span>		<span class="comment">//把7赋值给a[0]</span></span><br><span class="line">*(a+<span class="number">1</span>) = <span class="number">8</span>	<span class="comment">//把8赋值给a[1]</span></span><br></pre></td></tr></table></figure>
-<p>通常情况下，(a+i)就等于 &amp;a[i]，*（a+i)等于a[i]。这一事实，使得循环更加容易：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a;p &lt; a+N;p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
-<p>这是惯用法。</p>
-<hr />
-<h3 id="指针和多维数组"><a class="markdownIt-Anchor" href="#指针和多维数组"></a> 指针和多维数组</h3>
-<h3 id="多维数组的存储"><a class="markdownIt-Anchor" href="#多维数组的存储"></a> 多维数组的存储</h3>
-<p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
-<p>根据定义我们的多维数组是长这样的：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" />
-<p>但实际上，其底层还是个一维数组:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091441.png" alt="image-20210718091441467" style="zoom:80%;" />
-<h3 id="将二维数组初始化为0"><a class="markdownIt-Anchor" href="#将二维数组初始化为0"></a> 将二维数组初始化为0</h3>
-<p>思考下面这段代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>][<span class="number">0</span>];p&lt;=&amp;a[NUM_ROWS<span class="number">-1</span>][NUM_COLS<span class="number">-1</span>];p++)</span><br><span class="line">    *p = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>我们来看一看这个过程：p开始时指向a[0][0]，随后对p连续自增可以使指针p指向a[0][1],a[0][2],a[0][3]……当p到达a[0][NUM_ROWS-1]时，再次对p自增将使它指向a[1][0],后面就重复之前的过程，直到p越过a[NUM_ROWS-1][NUM_COLS-1]，程序停止。</p>
-<h3 id="处理多维数组的行"><a class="markdownIt-Anchor" href="#处理多维数组的行"></a> 处理多维数组的行</h3>
-<p>处理多维数组一行的元素该怎么做？</p>
-<p>我们还是用指针变量，为了处理第i行，我们要先对p进行初始化：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = a[i] <span class="comment">//这里为什么不用p = &amp;a[i][0]呢？</span></span><br></pre></td></tr></table></figure>
-<p>因为两者实际上是等价的。a[i]等价于*(a+i)，所以&amp;a[i][0]等同于&amp;（*a[i]+0),后者等价于&amp;(*a[i])，而&amp;又与*等价，所以&amp;a[i][0]实际生等价于a[i]。</p>
-<p>我们就可以用这种简化来初始化第i行的数据为0：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a[i];p&lt;a[i]+NUMS_COLS;p++)</span><br><span class="line">	*p = <span class="number">0</span>; </span><br></pre></td></tr></table></figure>
-<h3 id="处理多维数组的列"><a class="markdownIt-Anchor" href="#处理多维数组的列"></a> 处理多维数组的列</h3>
-<p>处理列就没有行那么轻松了，因为数组是按行来存储的，而不是列。<u>对于清空数组的第i列</u>，我们可以这么写：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[NUM_ROWS];p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>我们来看一看运行过程：</p>
-<p>首先看看指针的声明，这个指针的类型是int(*)[],也就是<strong>指向一个数组的指针，而不是指针数组</strong>。表达式p++，把p移向了数组a的下一行开始的位置（+1实际上加了sizeof([NUMS_COLS])），(*p)[i]选中了该行第i列的位置。</p>
-<h3 id="用多维数组名作为指针"><a class="markdownIt-Anchor" href="#用多维数组名作为指针"></a> 用多维数组名作为指针</h3>
-<p>道理和一维是一样的，只不过要注意：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS];</span><br></pre></td></tr></table></figure>
-<p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (*)[NUM_COLS]。<strong>这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</strong>。</p>
-<p>这样我们就可以简化上面的循环了，比如说我现在想把数组第i列清零：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-        <tag>基础知识</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git基本命令汇总</title>
-    <url>/2021/07/14/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg" alt="Git基本操作" /></p>
-<p>这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。</p>
-<span id="more"></span>
-<hr />
-<p>最近又发现一张github的pull request的步骤图，一块贴上来，好给我的processon腾点空间：<br />
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg" alt="Pull Request" /></p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>git/github</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>基本命令汇总</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2021/06/30/%E6%9D%82%E8%B0%88%E5%90%B9%E6%B0%B4/Hello%20World/</url>
     <content><![CDATA[<h1 id="hello-world"><a class="markdownIt-Anchor" href="#hello-world"></a> Hello World</h1>
@@ -908,149 +548,6 @@
       </tags>
   </entry>
   <entry>
-    <title>字符串</title>
-    <url>/2021/07/19/%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
-    <content><![CDATA[<p>字符串包括字符串常量（常常被称为<strong>字符串字面量</strong>）和字符串变量，两者的差别就是一个常量和一个变量的区别。字符串我们一般都拿&quot;&quot;(双引号)框起来，而字符我们都拿’’(单引号)框起来，<strong>两者有什么区别呢？字符数组和字符串是一回事吗？</strong></p>
-<span id="more"></span>
-<h2 id="字符串的存储"><a class="markdownIt-Anchor" href="#字符串的存储"></a> 字符串的存储</h2>
-<p>从本质上来讲，C会把字符串作为字符数组来处理，但是<font color=purple>当编译器遇到长度为n的字符串字面量时，会给它分配长度为n+1的内存空间。</font>这是为什么？</p>
-<p>因为，<strong>存储字符串常量需要在字符的末尾多存储一个&quot;\0&quot;（空字符，注意和零字符&quot;0&quot;的ASCII码不一样），\0空字符用于标记字符串的末尾</strong>。</p>
-<p>这一特点，就导致C程序员声明一个字符串变量使时使用下面这种惯用法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STR_LEN 80</span></span><br><span class="line"><span class="keyword">char</span> str[STR_LEN+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
-<p>我们声明用于存放字符串的字符数组时，必须预留一个位置给&quot;\0&quot;，存放的字符数量范围是从“\0”到长度为STR_LEN的字符串。上面这种声明方法就是为了强调字符串这一特点，这也是字符串和字符数组的区别。</p>
-<hr />
-<p>既然字符串会被看作是字符数组，那么其实<strong>它就是个char*类型的指针</strong>。思考下面这个程序的输出就知道了：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *p;</span><br><span class="line">p = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,*p);		<span class="comment">//会输出多少？</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,<span class="string">&quot;abc&quot;</span>[<span class="number">2</span>]); <span class="comment">//又会输出多少?</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719174318.png" alt="image-20210719174309999" /></p>
-<p><font color=green>那么，单个字符的字符串常量和字符常量是一回事吗？</font></p>
-<p>当然不是一回事，字符串常量&quot;a&quot;是用一个指针来表示的，这个指针指向存放&quot;a&quot;的内存单元(后面跟着\0)；而字符常量’a’是整数表示的(比如ASCII码)：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719175231.png" alt="image-20210719175230996" style="zoom:67%;" />
-<hr />
-<h2 id="字符串变量的一系列操作"><a class="markdownIt-Anchor" href="#字符串变量的一系列操作"></a> 字符串变量的一系列操作</h2>
-<h3 id="初始化字符串变量"><a class="markdownIt-Anchor" href="#初始化字符串变量"></a> 初始化字符串变量</h3>
-<p>初始化时，<strong>一定要确保数组的长度&gt;初始化式的长度</strong>。否则，编译器讲忽略空字符，这将使得数组不能用作字符串：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
-<p>此时：（没有\0,不能算是字符串)</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180329.png" alt="image-20210719180328938" style="zoom:67%;" />
-<p>如果数组长度&gt;初始化长度呢? → 用\0字符填充</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">8</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180534.png" alt="image-20210719180533975" style="zoom:67%;" />
-<h3 id="字符串的读写"><a class="markdownIt-Anchor" href="#字符串的读写"></a> 字符串的读写</h3>
-<p>我们想想读字符串会遇到什么困难？ → <strong>输入的字符串可能比它的容器长……</strong> 我们一般使用scanf 或者gets函数读字符串；用printf函数和puts函数写字符串。</p>
-<h4 id="写"><a class="markdownIt-Anchor" href="#写"></a> 写</h4>
-<p>printf用%s,推荐使用puts()</p>
-<h4 id="读"><a class="markdownIt-Anchor" href="#读"></a> 读</h4>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,str) <span class="comment">//不用加&amp; ， str是数组名，编译器把它传递给函数时，会把它当作指针。</span></span><br></pre></td></tr></table></figure>
-<p>但是要注意scanf的特点:(顺便复习一下)</p>
-<ul>
-<li>用scanf读字符串你永远不会看到空白字符，也就是空格，scanf跳过第一个空白字符，读入字符直到遇到下一个空白字符为止。</li>
-<li>遇到什么\n,\t也会停止读</li>
-</ul>
-<p>我们可以用gets函数，道理和scanf是一样的，把字符一个个读到空数组中，然后在末尾存一个\0。但是：</p>
-<ul>
-<li>gets不会在开始的时候跳过空白字符。</li>
-<li>get直接读到\n。</li>
-</ul>
-<p>下面来个例子:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182851.png" alt="image-20210719182851689" /></p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182935.png" alt="image-20210719182935383" /></p>
-<p>不过还是不能解决之前提到的问题，gets函数天生不安全，<strong>fgets函数</strong>会更好（我还没学，学到回来补）。</p>
-<h4 id="一次一个字符的读"><a class="markdownIt-Anchor" href="#一次一个字符的读"></a> 一次一个字符的读</h4>
-<p>很显然，我们需要一个更灵活的输入函数，那么在设计之前，我们得先考虑下列问：</p>
-<ul>
-<li>开始之前，要跳空格吗？</li>
-<li>什么字符用来停止读入？</li>
-<li>如果太长了，该怎么办？是忽略额外的字符还是留给下一次输入？</li>
-</ul>
-<p>如果我们想要的是不跳过第一个空白，在第一个换行符处停止，并且忽略额外字符，我们就可以用下面这个函数：（str是存储的数组，n是读入字符的最大数量）</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read_line</span><span class="params">(<span class="keyword">char</span> str[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ch,i = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ((ch = getchar())! = <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> (i&lt;n)</span><br><span class="line">            str[i++] = ch;</span><br><span class="line">    str[i] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//末尾加一个\0,别忘了</span></span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意ch的类型是int，因为getchar返回的就是这一类型。</p>
-<h3 id="访问字符串中的字符"><a class="markdownIt-Anchor" href="#访问字符串中的字符"></a> 访问字符串中的字符</h3>
-<p>当然可以用下标，但我们更愿意用指针。</p>
-<p>来看看下面这个统计字符串中空格数量的函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">count_spaces</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count =<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(;*s! = <span class="string">&#x27;\0&#x27;</span>;s++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (*s == <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们来看一看这个const char *s，const并没有阻止函数对s的改变，它阻止了函数对s所指向的字符的修改。并且，因为s是传递给count_spaces的副本，所以对s的自增操作，也不会影响原来的指针s。(形参都是值传递，即是<strong>传递指针本身的地址</strong>，☞<a href="http://c.biancheng.net/cpp/html/74.html">指针作为参数</a>)</p>
-<hr />
-<h2 id="字符串库"><a class="markdownIt-Anchor" href="#字符串库"></a> 字符串库</h2>
-<p>由于C语言没有其它语言那么&quot;年轻&quot;，年起人习以为常的用运算符操作字符串，对于老年人C语言来说是不行滴。<strong>在C语言中字符串就是数组，对字符串的操作就是对数组的操作</strong>。C语言库为了方便，提供了大量对字符串操作的函数。☞&lt;string.h&gt;</p>
-<p>注意&lt;string.h&gt;中：</p>
-<ul>
-<li>声明每个函数都至少要一个字符串作为实参，声明为char *类型，使得实参可以是字符数组，char*类型的变量或者字符串字面量。但是，<strong>没有声明为const的字符串形参可能会在调用函数后导致改变，所以字符串常量不应该被作为字符串常量</strong>。</li>
-</ul>
-<hr />
-<h3 id="strcpy-strcnpy"><a class="markdownIt-Anchor" href="#strcpy-strcnpy"></a> strcpy、strcnpy</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">strcpy</span>(<span class="keyword">char</span> *s1,<span class="keyword">const</span> <span class="keyword">char</span> *s2)	<span class="comment">//将s2指向的字符串中的字符复制到s1指向的数组，遇到s2中第一个\0停止</span></span><br><span class="line"><span class="comment">/*更安全用法*/</span></span><br><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1));<span class="comment">//第三个参数用于限制所复制的字符数</span></span><br></pre></td></tr></table></figure>
-<p>但是如果str2还是大于str1，还是不太安全，因为没有\0，所以<strong>strcnpy比较安全的做法</strong>是下面这样：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>);</span><br><span class="line">str1(<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>) = <span class="string">&#x27;\0&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>这样确保str1以空字符结束。</p>
-<h3 id="strlen"><a class="markdownIt-Anchor" href="#strlen"></a> strlen</h3>
-<p>就是算字符串长度的，它的声明是：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span> <span class="params">(cont <span class="keyword">char</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>strlen返回字符串s第一个空字符之前的<strong>字符数</strong>，不包括空字符。</p>
-<h3 id="strcat-strncat"><a class="markdownIt-Anchor" href="#strcat-strncat"></a> strcat、strncat</h3>
-<p>cat就是拼接，strcat的声明如下:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>就是把str2的内容接到str1的末尾，并且返回字符串str1。</p>
-<p>同样的道理，也存在strncat:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">cahr *<span class="title">strncat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">char</span> *str2,<span class="keyword">sizeof</span>(str1)-<span class="keyword">sizeof</span>(str2<span class="number">-1</span>)</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="strcmp"><a class="markdownIt-Anchor" href="#strcmp"></a> strcmp</h3>
-<p>用于比较两个字符，根据小于、等于或大于，返回一个&lt;0,0,&gt;0的值。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br></pre></td></tr></table></figure>
-<p>只要满足下面两个条件之一，计算str1 &lt; str2：</p>
-<ul>
-<li>前i个字符相等，但第i个字符str1 &lt; str2，比如“abcd”&lt;“abch”</li>
-<li>str1比str2短</li>
-</ul>
-<hr />
-<h2 id="用字符串惯用法简化strlenstrcat函数"><a class="markdownIt-Anchor" href="#用字符串惯用法简化strlenstrcat函数"></a> 用字符串惯用法简化strlen,strcat函数</h2>
-<h3 id="搜索字符串的结尾"><a class="markdownIt-Anchor" href="#搜索字符串的结尾"></a> 搜索字符串的结尾</h3>
-<p>我们来看看strlen函数是怎么实现的？</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n;</span><br><span class="line">    <span class="keyword">for</span>(n = <span class="number">0</span>; *s != <span class="string">&#x27;\0&#x27;</span>; s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其实就是搜索一个字符串的结尾，用一个变量跟踪字符串的长度。那么我们可以做哪些简化呢？</p>
-<ul>
-<li>把n=0的初始化放到n的声明中。</li>
-<li>*s!=’\0’其实等价于*s!=0,因为空字符的整数值就是0；然后*s!=0其实又可以直接写成*s ，两者都在*s不为0时为真。</li>
-<li>那么我们可以把*s与自增操作合并起来，变成*s++。</li>
-<li>把for换成while循环</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>上面这些操作虽然精简了代码但是运行速度并没有提高,下面这种写法运行速度更快：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> *p = s;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        s++;</span><br><span class="line">    <span class="keyword">return</span> s-p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种方法，跳过定位空字符的位置，然后用空字符的地址减去字符串第一个字符的位置。运行速度就提升了，至于为什么，因为少了n的自增操作。</p>
-<p>这样我们就引出了两种<strong>搜索字符串结尾的空字符</strong>的惯用法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//最终s指向了空字符</span></span><br><span class="line"><span class="keyword">while</span> (*s) </span><br><span class="line">	s++;</span><br><span class="line"><span class="comment">//最终s指向空字符后面一个位置</span></span><br><span class="line"><span class="keyword">while</span> (*s++)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
-<h3 id="复制字符串"><a class="markdownIt-Anchor" href="#复制字符串"></a> 复制字符串</h3>
-<p>下面先看一个有点冗长的strcat的写法:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*s2)&#123;</span><br><span class="line">        *p = *s2;</span><br><span class="line">        p++;</span><br><span class="line">        s2++;</span><br><span class="line">    &#125;</span><br><span class="line">    *p = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其实核心思想就两步:</p>
-<ul>
-<li>确定s1末尾空字符的位置，使指针p指向它。</li>
-<li>把字符串s2中的字符逐个复制到p所指向的位置。</li>
-</ul>
-<p>我们可以改成下面这种精简后的strcat函数:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>strcat的核心就是<strong>字符串复制惯用法</strong>：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">	;</span><br></pre></td></tr></table></figure>
-<hr />
-<h2 id="字符串数组"><a class="markdownIt-Anchor" href="#字符串数组"></a> 字符串数组</h2>
-<p>我们需要的是<strong>参差不齐的字符串数组</strong>，而不是方方正正的数组。（这样会浪费太多空间）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *names[] = &#123;&quot;Yang&quot;,&quot;Zhu&quot;,&quot;Li&quot;,&quot;Cai&quot;,&quot;Zhang&quot;&#125;</span><br></pre></td></tr></table></figure>
-<p>也就是数组names的元素全是指针，每个指针指向一个字符串，这就减少了空间的浪费.如果我们想在数组中搜寻以字母C开头的字符串，可以使用下面的循环:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">	<span class="keyword">if</span>(names\[i][<span class="number">0</span>]=<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s begins with C\n&quot;</span>,names[i]);</span><br></pre></td></tr></table></figure>
-<p>​</p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-        <tag>基础知识</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>经济学的方法论</title>
     <url>/2021/07/20/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
     <content><![CDATA[<p>本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。</p>
@@ -1412,33 +909,6 @@
       </tags>
   </entry>
   <entry>
-    <title>从processon看边际收益</title>
-    <url>/2021/07/21/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/</url>
-    <content><![CDATA[<p>在阅读《经济学原理》笔记中，我提到学习经济学的主要目的是运用经济学的知识，去做出更好的决策，而要达到这样的能力，就需要多做练习。这不，我今天就遇到个日常生活中经济学原理的运用。</p>
-<p>我有画什么思维导图，流程图的习惯，画这些图当然离不开得心应手的工具，我经常用的就是这个在线绘图网站——<a href="https://www.processon.com/">processon</a>.它的免费版是有存储空间限制的，只能存储几个图：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153402.png" alt="image-20210721153354921" /></p>
-<span id="more"></span>
-<p>上面这个是我<strong>扩容过</strong>的可存储文件个数，怎么扩容呢？我们点击这个<strong>免费扩容</strong>，看一下processon的策略：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153538.png" alt="image-20210721153538698" style="zoom:67%;" />
-<p>可以看到，我们只要邀请一个好友，它就送我一个空间。是不是感觉<u>只要邀请好友就给奖励</u>这个操作十分熟悉？没错，其实都是一个套路，我们运用学到的经济学十大原理的知识来分析一下：</p>
-<hr />
-<p>首先，假设processon后面的制作团队是理性人（尽自己最大可能去实现目标），他们的目标是<strong>想要有更多的用户</strong>，他们要想办法实现这个目标。</p>
-<p>根据第四原理：人们会对激励作出反应。对于免费用户来说，能激励他们的除了好用的功能就是<strong>增加存储量</strong>，因为免费版的用户的可存储文件太少了，所以这对他们来说增加存储量是个不错的激励。</p>
-<p>增加存储量对于processon是有成本的，因为这是云服务，<strong>免费增加的存储量就是机会成本</strong>（根据第二原理），每个人都增加一点，对于服务器来说肯定是不小的负担，平均成本也是不少的。那么processon就不该用送存储来换用户吗？</p>
-<p>答案是否定的，根据第三原理，<strong>理性人考虑边际量</strong>。<u>我们决策除了看平均成本，更要关注边际收益和边际成本</u>。proceeson只给用户加一个存储空间，就能换来一个用户(至于用户粘性怎么样，暂且不论)，这样的效率是很高的。并且边际成本（一个存储空间）是很低的，而边际收益（一个用户）是很高的。边际收益 远远大于 边际成本，这样是很划算的。</p>
-<p>从用户角度来说，邀请一个好友换一个文件，成本几乎为0，收益却永远是正的。也就是你邀请的人越多，你赚的越多，并且processon也赚得越多。这是一个双赢，何乐而不为。</p>
-<p>其它的什么邀请好友送点小奖励也都是一个逻辑，你别说，没学经济学之前还真没注意这回事。</p>
-<p>最后，贴一个我的邀请链接，看到的朋友可以点击这个注册一下<a href="https://www.processon.com/i/606544d0f346fb0aa97e043a">👉点我</a>，这个网站还是很好用的😏。</p>
-]]></content>
-      <categories>
-        <category>经济学</category>
-        <category>经济学原理的运用</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pta 1002 C解</title>
     <url>/2021/07/21/pta/pta-1002-C%E8%A7%A3/</url>
     <content><![CDATA[<p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
@@ -1787,24 +1257,6 @@
       </tags>
   </entry>
   <entry>
-    <title>晾衣服中的第一性原理</title>
-    <url>/2021/08/03/%E6%99%BE%E8%A1%A3%E6%9C%8D%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<p>晾衣服的时候挺无聊的，我只好瞎想想。我想起小时候晾衣服的时候，不管什么衣服裤子，上去就是拿一个夹子把衣服固定在衣架上，最后总是导致夹子不够。导致我现在养成一个习惯，能不用夹子夹的就不用夹子……总是要想办法用衣服自身把它给固定住，比如带纽扣的衣服，直接把最上面的扣子扣起来；牛仔裤的话把利用放腰带的那个地方固定住……</p>
-<span id="more"></span>
-<p>虽然晾衣服很无聊，也很普通，但是我觉得这背后就有第一性原理的运用。我第一次听说这第一性原理还是从特斯拉的老板musk那儿听到的，听起来还挺高大上的。在我看来，这第一性原理其实就是<strong>分解问题，抓住每一部分最基本的需求</strong>。</p>
-<p>比如说，在制造电动车特斯拉的过程中，最大的成本来源于电池组件。研发团队发现电池组件成本要600美元／千瓦时，但马斯克运用第一性原理思考，把电池分为各种金属元素以及其他成分，再对生产流程、产地、供应链每一部分进行优化，最终将电池组件成本降低到80美元／千瓦时，这就是第一性原理的运用。</p>
-<p>我觉得晾衣服也是一个道理，我的目的是把衣服固定住，那么夹子是必须的吗？当然不是必须的，我可以利用衣服本身的一些特点来把衣服固定在衣架上，而不用夹子，这样我就降低了成本。怎么说呢，<strong>我觉得就是遇到一个问题，一定要围绕这个问题进行解答，而不是被一个答案所束缚住</strong>。比如，我晾衣服全用夹子，最后发现夹子不够了，这个时候我想的却是如何找到更多的夹子，而不是利用衣服自身的纽扣什么的，来省出一点夹子。</p>
-<p>额，就随便吹吹🐂🍺，要不然也挺无聊的😅。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210803123444.png" alt="image-20210803123435521" style="zoom: 67%;" />
-]]></content>
-      <categories>
-        <category>杂谈吹水</category>
-      </categories>
-      <tags>
-        <tag>第一性原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>RMS关于垄断的一段话</title>
     <url>/2021/08/05/RMS%E5%85%B3%E4%BA%8E%E5%9E%84%E6%96%AD%E7%9A%84%E4%B8%80%E6%AE%B5%E8%AF%9D/</url>
     <content><![CDATA[<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210805185642.png" alt="image-20210805185634521"  />
@@ -1818,15 +1270,400 @@
       </tags>
   </entry>
   <entry>
+    <title>C指针基础和指针的数组应用</title>
+    <url>/2021/07/16/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E6%8C%87%E9%92%88/</url>
+    <content><![CDATA[<h1 id="指针基础知识"><a class="markdownIt-Anchor" href="#指针基础知识"></a> 指针基础知识</h1>
+<h2 id="机器级上指针表示的内容"><a class="markdownIt-Anchor" href="#机器级上指针表示的内容"></a> 机器级上指针表示的内容</h2>
+<p>现代计算机大多把内存分割为字节，而每一字节存储8位信息。每个字节都有唯一的<strong>地址</strong>，就像我们的学号一样，用来和其它内存区别。</p>
+<p>可执行程序由代码和变量组成。程序中的每个变量占有一个或多个字节内存，把第一个字节的地址称为变量的地址。就像下图，变量i占有3001,3002两个字节，所以变量i的地址为3001.</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717090012.png" alt="image-20210717090004435" style="zoom:67%;" />
+<span id="more"></span>
+<p>我们虽然用数表示内存地址，但是地址的取值范围是不同于整数的范围的，所以<u>一定不能用普通整型变量来存储地址</u>。但是，可以用<font color=purple>特殊的指针变量来存储地址。</font>这就是指针的出处。**指针就是地址，而指针变量就是存储地址的变量。**我们可以用下面这种方式来表示，指针变量p存储变量i的地址：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717091538.png" alt="image-20210717091538267" style="zoom:80%;" />
+<h2 id="指针变量的声明"><a class="markdownIt-Anchor" href="#指针变量的声明"></a> 指针变量的声明</h2>
+<p>常见的指针声明形式：</p>
+<ol>
+<li>int p 这是一个普通的整型变量；int *p 首先从p开始，先与*结合，说明p是一个指针，然后再与int结合，说明指针的类型为Int型，所以p（指针变量名，不是*p）是一个返回整型数据的指针。</li>
+<li>int p[3]说明p是一个由整型数据组成的数组；int *p[3] p先与[3]结合，因为[]优先级&gt;*，说明p是一个数组，然后再与*结合，说明数组里的元素都是指针，然后再与int 结合，说明指针指向的是对象是整型的，所以p是一个由返回整型数据的指针组成的数组。</li>
+<li>int (*p)[3] p先与*结合，说明p是一个指针，再与[3]结合，说明指针指向一个数组，再与Int结合，说明p指向一个由整型数据组成的数组。</li>
+<li>int **p 指向指针的指针。</li>
+<li>int p(int) p是一个函数，返回整型数据；int (*p)(int)，p是一个指向有一个整型参数且返回类型为整型的函数的指针。</li>
+</ol>
+<h2 id="指针的四方面"><a class="markdownIt-Anchor" href="#指针的四方面"></a> 指针的四方面</h2>
+<p>指针有四个方面的内容需要搞清楚：</p>
+<h3 id="指针的类型"><a class="markdownIt-Anchor" href="#指针的类型"></a> 指针的类型</h3>
+<p>从语法角度，我们只要把指针名字去掉，剩下的就是指针的类型（比如上面都把p去掉）。</p>
+<h3 id="指针所指向的类型"><a class="markdownIt-Anchor" href="#指针所指向的类型"></a> 指针所指向的类型</h3>
+<p>当通过指针来访问指针所指向的内存区时，指针所指向的类型决定了编译器将把那片内存区里的内容当做什么来看待。从语法看，去除名字和名字左边的*就行。</p>
+<p>一定要注意<font color=purple>指针所指向的类型</font>和<font color=green>指针的类型</font>的区别。</p>
+<h3 id="指针的值地址"><a class="markdownIt-Anchor" href="#指针的值地址"></a> 指针的值—地址</h3>
+<p>指针的值时指针变量存储的数值，这个数值将被编译器当作一个地址，而不是一个一般的数值。</p>
+<p>前面也说了，变量i的地址用首地址来表示，<strong>我们说一个指针的值是XX，就相当于说该指针指向了以XX为首地址的一片内存区域</strong>。</p>
+<h3 id="指针本身所占据的内存区"><a class="markdownIt-Anchor" href="#指针本身所占据的内存区"></a> 指针本身所占据的内存区</h3>
+<p>用sizeof就可以测一下指针本身所占的内存了。</p>
+<hr />
+<p>每当遇到一个指针，就问问自己这个指针的这四方面分别是什么，想的多了也就分的清了。</p>
+<h2 id="取地址运算符和间接寻址运算符"><a class="markdownIt-Anchor" href="#取地址运算符和间接寻址运算符"></a> 取地址运算符和间接寻址运算符</h2>
+<ul>
+<li>
+<p>为了找到变量的地址，可以使用取地址运算符&amp;。举个例子，若x是一个变量，&amp;x就是x在内存中的地址。</p>
+</li>
+<li>
+<p>为了获得指针所指向对象的访问，可以使用*（间接寻址运算符）。如果p是指针，*p表示p当前所指向的对象。</p>
+<p>&amp;与*是一对逆运算。</p>
+</li>
+</ul>
+<h3 id="指针初始化"><a class="markdownIt-Anchor" href="#指针初始化"></a> 指针初始化</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,p = &amp;i;</span><br></pre></td></tr></table></figure>
+<p>这就是指针初始化的一种方法。</p>
+<h3 id="间接寻址"><a class="markdownIt-Anchor" href="#间接寻址"></a> 间接寻址</h3>
+<p>一旦指针初始化了，即指针指向了对象，我们就可以用间接寻址来访问存储在对象中的内容。例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,*p);</span><br></pre></td></tr></table></figure>
+<p>其实只要p指向i，*p就是i的别名，两者共生死（一块变动）。</p>
+<hr />
+<h2 id="指针的算术运算"><a class="markdownIt-Anchor" href="#指针的算术运算"></a> 指针的算术运算</h2>
+<h3 id="加减法"><a class="markdownIt-Anchor" href="#加减法"></a> 加减法</h3>
+<p>指针可以加上或减去一个整数。指针的这种运算的意义和通常的数值的加减运算的意义是不一样的，它是以单元为单位。例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> a[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> *ptr=(<span class="keyword">int</span> *)a;		<span class="comment">//强制类型转换并不会改变a 的类型</span></span><br><span class="line">ptr++;</span><br></pre></td></tr></table></figure>
+<p>在上例中，指针ptr 的类型是int*,它指向的类型是int，它被初始化为指向整型变量a。接下来的第3句中，<strong>指针ptr被加了1，编译器是这样处理的</strong>：</p>
+<p>它把指针ptr 的值加上了<strong>sizeof(int)</strong>，在64 位程序中，是被加上了8，因为在64 位程序中，int 占 8 个字节。由于地址是用字节做单位的，故ptr 所指向的地址由原来的变量a 的地址向高地址方向增加了8个字节。由于char 类型的长度是一个字节，所以，原来ptr 是指向数组a 的第0 号单元开始的8个字节，此时指向了数组a 中从第8号单元开始的8个字节。</p>
+<h3 id="指针赋值"><a class="markdownIt-Anchor" href="#指针赋值"></a> 指针赋值</h3>
+<p>C语言允许使用赋值运算符进行指针的赋值，前提是两者具有相同的指针类型。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i,j,*p,*q;</span><br><span class="line">p = &amp;i; <span class="comment">//把i的地址复制给指针p</span></span><br><span class="line">q = p;	<span class="comment">//把p的地址复制给q,效果是q指向了p所指向的地方</span></span><br></pre></td></tr></table></figure>
+<p>那么经过上面几个步骤，就变成了这样;</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717100202.png" alt="image-20210717100202148" style="zoom: 50%;" />
+<p>很显然，*p,*q,i就是共患难的兄弟了，一个变，其它两个都变。</p>
+<p>除此之外，我们还要注意p=q和*p = *q的区别，注意一下就好。</p>
+<hr />
+<p>以上就是指针的基础知识了，下面讲一些指针的应用，有低级应用也有高级应用。</p>
+<h1 id="指针的应用"><a class="markdownIt-Anchor" href="#指针的应用"></a> 指针的应用</h1>
+<h2 id="指针在数组的应用"><a class="markdownIt-Anchor" href="#指针在数组的应用"></a> 指针在数组的应用</h2>
+<p>我们先对指针进行初使化：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>],*p;</span><br><span class="line">p = &amp;a[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<h3 id="数组上的算术运算"><a class="markdownIt-Anchor" href="#数组上的算术运算"></a> 数组上的算术运算</h3>
+<p>现在我们让指针p指向a[0]，可以访问a[0]的值。下面让我们看下指针在数组上的算术运算。</p>
+<ul>
+<li>
+<p>指针加减整数</p>
+<p>如果p指向数组元素a[i]，p+j就指向数组元素a[i+j]。用图表示可能更清晰一点：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717103039.png" alt="image-20210717103039643" style="zoom: 50%;" />
+<p>减法也是一个道理</p>
+</li>
+<li>
+<p>两个指针相减</p>
+<p>当两个指针相减时，结果为两个指针的距离。因此，如果p指向a[i],q指向a[j]，那么q - p就是 a[j-i]。</p>
+</li>
+</ul>
+<h3 id="运算符和运算符的组合"><a class="markdownIt-Anchor" href="#运算符和运算符的组合"></a> *运算符和++运算符的组合</h3>
+<p>这是一种习惯，其中以*p++最常见，它在循环中很是方便，对数组a求和时，我们可以把下面这个程序：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[N];p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
+<p>改写成：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = &amp;a[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">while</span> (p &lt; &amp;a[N])</span><br><span class="line">	sum += *p++</span><br></pre></td></tr></table></figure>
+<h3 id="用数组名作为指针"><a class="markdownIt-Anchor" href="#用数组名作为指针"></a> 用数组名作为指针</h3>
+<p>数组本身就是一个地址，而指针可以直接操作地址，所以指针可以用数组的方式来表示。</p>
+<p><strong>我们可以把数组名作为指向数组第一个元素的指针</strong>，这种关系简化了指针的算术运算，而且使数组和指针更加通用。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line">*a = <span class="number">7</span>		<span class="comment">//把7赋值给a[0]</span></span><br><span class="line">*(a+<span class="number">1</span>) = <span class="number">8</span>	<span class="comment">//把8赋值给a[1]</span></span><br></pre></td></tr></table></figure>
+<p>通常情况下，(a+i)就等于 &amp;a[i]，*（a+i)等于a[i]。这一事实，使得循环更加容易：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a;p &lt; a+N;p++)</span><br><span class="line">	sum += *p;</span><br></pre></td></tr></table></figure>
+<p>这是惯用法。</p>
+<hr />
+<h3 id="指针和多维数组"><a class="markdownIt-Anchor" href="#指针和多维数组"></a> 指针和多维数组</h3>
+<h3 id="多维数组的存储"><a class="markdownIt-Anchor" href="#多维数组的存储"></a> 多维数组的存储</h3>
+<p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
+<p>根据定义我们的多维数组是长这样的：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" />
+<p>但实际上，其底层还是个一维数组:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091441.png" alt="image-20210718091441467" style="zoom:80%;" />
+<h3 id="将二维数组初始化为0"><a class="markdownIt-Anchor" href="#将二维数组初始化为0"></a> 将二维数组初始化为0</h3>
+<p>思考下面这段代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>][<span class="number">0</span>];p&lt;=&amp;a[NUM_ROWS<span class="number">-1</span>][NUM_COLS<span class="number">-1</span>];p++)</span><br><span class="line">    *p = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看这个过程：p开始时指向a[0][0]，随后对p连续自增可以使指针p指向a[0][1],a[0][2],a[0][3]……当p到达a[0][NUM_ROWS-1]时，再次对p自增将使它指向a[1][0],后面就重复之前的过程，直到p越过a[NUM_ROWS-1][NUM_COLS-1]，程序停止。</p>
+<h3 id="处理多维数组的行"><a class="markdownIt-Anchor" href="#处理多维数组的行"></a> 处理多维数组的行</h3>
+<p>处理多维数组一行的元素该怎么做？</p>
+<p>我们还是用指针变量，为了处理第i行，我们要先对p进行初始化：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p = a[i] <span class="comment">//这里为什么不用p = &amp;a[i][0]呢？</span></span><br></pre></td></tr></table></figure>
+<p>因为两者实际上是等价的。a[i]等价于*(a+i)，所以&amp;a[i][0]等同于&amp;（*a[i]+0),后者等价于&amp;(*a[i])，而&amp;又与*等价，所以&amp;a[i][0]实际生等价于a[i]。</p>
+<p>我们就可以用这种简化来初始化第i行的数据为0：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (p = a[i];p&lt;a[i]+NUMS_COLS;p++)</span><br><span class="line">	*p = <span class="number">0</span>; </span><br></pre></td></tr></table></figure>
+<h3 id="处理多维数组的列"><a class="markdownIt-Anchor" href="#处理多维数组的列"></a> 处理多维数组的列</h3>
+<p>处理列就没有行那么轻松了，因为数组是按行来存储的，而不是列。<u>对于清空数组的第i列</u>，我们可以这么写：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = &amp;a[<span class="number">0</span>];p &lt; &amp;a[NUM_ROWS];p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看运行过程：</p>
+<p>首先看看指针的声明，这个指针的类型是int(*)[],也就是<strong>指向一个数组的指针，而不是指针数组</strong>。表达式p++，把p移向了数组a的下一行开始的位置（+1实际上加了sizeof([NUMS_COLS])），(*p)[i]选中了该行第i列的位置。</p>
+<h3 id="用多维数组名作为指针"><a class="markdownIt-Anchor" href="#用多维数组名作为指针"></a> 用多维数组名作为指针</h3>
+<p>道理和一维是一样的，只不过要注意：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS];</span><br></pre></td></tr></table></figure>
+<p>这时的a不是指向a[0][0]的指针，而是指向a[0]的指针，即a的类型是int (*)[NUM_COLS]。<strong>这背后的道理其实和一维是一样的，只不过多维中，一个元素从一个数值变成了一个数组</strong>。</p>
+<p>这样我们就可以简化上面的循环了，比如说我现在想把数组第i列清零：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[NUM_ROWS][NUM_COLS],(*P)[NUM_COLS],i;</span><br><span class="line"><span class="keyword">for</span> (p = a;p &lt; a + NUM_COLS;p++)</span><br><span class="line">	(*p)[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C中NULL,NUL和null的区别</title>
+    <url>/2021/08/07/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>之前在看别人代码时，看到别人用了个NUL，我心里纳闷：C语言中空指针不是用NULL表示吗？NUL是什么鬼西东？我把他的代码运行一下，发现根本运行不了……心里在想这家伙是不是少打了一个L🤣，看到他后面都这么写，我心里就产生了疑惑……</p>
+<p>今天在看书的时候，看到了这么一段话：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210807211918.png" alt="image-20210807211917816" style="zoom:67%;" />
+<p>我擦，还真有NUL这种写法……我又去查了一下，<strong>发现NUL其实就是’\0’的意思😅，其本质是字符</strong>（character）。</p>
+<p>而我们的老熟人NULL呢，其实是宏定义，展开之后呢是<strong>空指针常量</strong>。在C语言中，NULL常常被下面这样定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NULL    ((void *)0)</span></span><br></pre></td></tr></table></figure>
+<p>也就是说NULL 是一个 void *类型的指针(pointers)。</p>
+<p>注意，NULL和null又是不一样的，null是一种概念的统称，不是C标准里的指针常量或者字符。</p>
+<hr />
+<p>最后，再来说一个骚气的隐喻😏：</p>
+<p><font color=purple><strong>当有人给你发null是什么意思呢？</strong></font></p>
+<p>我们知道，万物皆可对象，null在有些语言里就<font color=red><strong>表示对象还未赋值，对象为空，可以理解为&quot;没有对象&quot;</strong></font>。</p>
+<p>Do you understand?😲</p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言注意点复习</title>
+    <url>/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>我是大一下学期开始系统学习C语言的，学到指针左右由于要期末考试了所以暂时放一放，最近又想把这个C基础的知识快点学完，但之前的内容会有些许遗忘，所以索性乘着每天学习计划开始之前，今天把之前的内容复习一下。之前做的课后习题都在github上，复习也方便，我会记录一些注意点和规范，以及常见的写法，还有问与答中部分问答。（我是跟着《C语言现代程序设计现代方法》学的）</p>
+<span id="more"></span>
+<h2 id="概论"><a class="markdownIt-Anchor" href="#概论"></a> 概论</h2>
+<ul>
+<li>
+<p><a href="https://zh.wikipedia.org/wiki/GCC">什么是GCC—Wiki</a></p>
+</li>
+<li>
+<p><a href="https://www.cnblogs.com/QG-whz/p/5456720.html">Linux编译工具入门—gcc</a></p>
+</li>
+</ul>
+<h2 id="printf-scanf输入输出章节前置"><a class="markdownIt-Anchor" href="#printf-scanf输入输出章节前置"></a> printf、scanf（输入\输出章节前置）</h2>
+<p>首先要知道printf函数是用来显示格式串的，并且在该串的指定位置插入可能的值（通过转换说明：%+）。</p>
+<ul>
+<li>
+<p>转换说明：%m.pX 。</p>
+<ul>
+<li><strong>m→最小字段宽度</strong>。若要显示的字符数&lt;m，则会这样：%4d→🐕123（右对齐）；如果是大于，会自动扩展为需要的尺寸，而不会丢失数字。</li>
+<li><strong>p→精度</strong>，精度p依赖于<strong>转换说明符X</strong>的选择。
+<ul>
+<li>d,十进制形式的整数。p指明待显示数字的最少位数。65用%.3f输出→065。</li>
+<li>f,定点十进制形式的浮点数。p指明小数点后应出现的数字的位数。45.8用%.4f输出→45.8000。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>转义序列</p>
+<p>没什么好讲的</p>
+</li>
+</ul>
+<p>以上是printf函数的，下面再来稍微看一看scanf函数（<strong>模式匹配</strong>）：</p>
+<ul>
+<li>
+<p>scanf函数<strong>在寻找数的起始位置时，会忽略空白字符</strong>(including 空格、水平和垂直制表符、换页符和换行符)，所以我们可以把数字分散到几行输入。考虑下下面所示的scanf函数工作过程：</p>
+<ol>
+<li>
+<p>假设用户录入三行输入：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714172121.png" alt="image-20210714172042445" /></p>
+</li>
+<li>
+<p>scanf函数会把它们看成下面这样的一个连续的字符流(🐕表示空格，🐱表示换行符)：</p>
+<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
+</li>
+<li>
+<p>我们用×表示次项被跳过，√表示次项被读入为输入项的一部分：</p>
+<p>🐕🐕1🐱-20🐕🐕🐕.3🐱🐕🐕🐕-4.0e3🐱</p>
+<p>× × √ ×√√√×  ×  ×√√×  ×  ×  ×√√√√√√</p>
+<p>注意到，最后一个换行符🐱没有被读进去，<strong>这个换行符将是下一次scanf函数调用的第一个字符</strong>。（之后scanf放到循环里时要注意这个问题）</p>
+</li>
+<li>
+<p>scanf函数用来识别整数或浮点数的规则是：</p>
+<ol>
+<li>读入整数时，scanf函数首先寻找正负号，然后读取数字直到读到一个非数字时才停止</li>
+<li>读入浮点数时，scanf函数会先找一个正负号，随后是一串数字（可能会有小数点），再后是一个指数（可选）。</li>
+</ol>
+<p><font color=purple>当遇到一个<strong>不可能属于当前项</strong>的字符时，它<strong>会把此字符原封不动地放回去</strong>（放到缓冲区），留给扫描下一个输入或者下一次调用scanf的时候再次读入。</font></p>
+</li>
+</ol>
+</li>
+<li>
+<p>scanf处理格式串中的普通字符</p>
+<p>​	当scanf遇到非空白字符时，会把它与下一个输入字符进行比较。若<strong>两者相匹配，那么scanf函数会放弃输入字符而继续处理格式串</strong>；如果<strong>不匹配，那么scanf会把不匹配的字符放回输入中，然后异常退出</strong>，而不进一步读取和处理。举个例子：</p>
+<p>​	假设格式串是“%d/%d”，若输入是&quot;🐕5/🐕96&quot;（🐕是空格），那么scanf的工作流是：</p>
+<p>​	跳过第一个🐕，把%d与5匹配 → 把/与/匹配 → 在寻找下一个整数时跳过一个🐕，把%d与96匹配。</p>
+</li>
+</ul>
+<hr />
+<ol>
+<li>
+<p>如何显示字符&quot;%&quot;？</p>
+<p>printf(“10%%”)→10%</p>
+</li>
+</ol>
+<h2 id="表达式"><a class="markdownIt-Anchor" href="#表达式"></a> 表达式</h2>
+<p>这个就列举几个简单的课后习题吧</p>
+<h3 id="数字倒序"><a class="markdownIt-Anchor" href="#数字倒序"></a> 数字倒序</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> x,y,z,data;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data); </span><br><span class="line">	x = data/<span class="number">100</span>;</span><br><span class="line">	y = (data<span class="number">-100</span>*x)/<span class="number">10</span>;</span><br><span class="line">	z = data<span class="number">-100</span>*x<span class="number">-10</span>*y;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> re_data;</span><br><span class="line">	re_data = z*<span class="number">100</span>+y*<span class="number">10</span>+x;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %d&quot;</span>,re_data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i1,i2,i3;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a three-digit number:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%1d%1d%1d&quot;</span>,&amp;i1,&amp;i2,&amp;i3);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The reversal is: %1d%1d%1d&quot;</span>,i3,i2,i1);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="十进制八进制不用函数"><a class="markdownIt-Anchor" href="#十进制八进制不用函数"></a> 十进制→八进制（不用函数）</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Enter a number between 1 and 32767:&quot;</span>);</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;data);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> a,b,c,d,e;</span><br><span class="line">	e = data % <span class="number">8</span>;</span><br><span class="line">	d = (data / <span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	c = (data / <span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	b = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	a = (data/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>/<span class="number">8</span>)%<span class="number">8</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;In octal,your number is:%1d%1d%1d%1d%1d\n&quot;</span>,a,b,c,d,e);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;the true number is %o&quot;</span>,data);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="选择-循环语句"><a class="markdownIt-Anchor" href="#选择-循环语句"></a> 选择、循环语句</h2>
+<ol>
+<li>
+<p>switch语句的分支别忘了加break，没有break会默认执行下一个case。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714182008.png" alt="image-20210714182008671" style="zoom: 80%;" />
+</li>
+<li>
+<p>do循环与while循环本质上是一样的，只不过前者在对于至少需要执行一次的循环来说十分方便。</p>
+</li>
+<li>
+<p>注意i&lt;=n和i&lt;n循环次数上的差异。</p>
+</li>
+<li>
+<p>break可以跳出循环，当嵌套循环时使用break，只能跳出一层循环；break是刚好把程序控制在循环体末尾之后，而continue是刚好控制在循环体末尾之前</p>
+</li>
+</ol>
+<h2 id="字符字符串章节前置"><a class="markdownIt-Anchor" href="#字符字符串章节前置"></a> 字符（字符串章节前置）</h2>
+<ul>
+<li>
+<p><strong>C语言把字符当作小整数进行处理</strong>。在ASCII码中，字符可以看成是0~127的整数。字符’a’的值是97，'A’的值是65，'0’的值为48……在C语言中字符常量实际上是Int类型而不是char类型。当计算中出现字符时，C语言只是使用它对应的整数值，可以像比较数那样对字符进行比较，比如说下面这两个例子：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714185611.png" alt="image-20210714185611148" style="zoom:67%;" />
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用if语句将小写字母转化为大写字母(不用toupper函数)</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">&#x27;a&#x27;</span> &lt;= ch &amp;&amp; ch &lt;= <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">	ch = ch - <span class="string">&#x27;a&#x27;</span> + <span class="string">&#x27;A&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="字符处理函数"><a class="markdownIt-Anchor" href="#字符处理函数"></a> 字符处理函数</h3>
+<h4 id="scanf和printf读写字符"><a class="markdownIt-Anchor" href="#scanf和printf读写字符"></a> scanf和printf读写字符</h4>
+<p>重点讲讲scanf读入字符的问题。在读入字符前，scanf不会跳过空白字符。如果下一个未读字符是空格，那么返回后的变量将包含空格。为了强制scanf函数在读入字符前跳过空白字符，我们可以这么写：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot; %c&quot;</span>,&amp;ch)</span><br></pre></td></tr></table></figure>
+<p>因为scanf通常情况下不会跳过空白字符，所以它很容易检查到输入行的结尾：检查刚读入的字符是否为换行符。例如，下面的字符将读入并且忽略掉当前初入行中剩下的所有字符：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>,&amp;ch);</span><br><span class="line">&#125; <span class="keyword">while</span>(ch !=。 <span class="string">&#x27;\n&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>下一次调用scanf时会读入下一输入行中的第一个字符。</p>
+<h4 id="getchar和putchar读写字符"><a class="markdownIt-Anchor" href="#getchar和putchar读写字符"></a> getchar和putchar读写字符</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) ！= <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<p>这个循环读入一个字符，把它存储在变量ch中，然后测试变量是不是\n。其实我们并不需要ch，下面引入一个C语言惯用法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (getchar() ！= <span class="string">&#x27;\n&#x27;</span>) <span class="comment">/*skips rest of line*/</span></span><br></pre></td></tr></table></figure>
+<p>getchar对于搜索字符的循环和跳过字符的循环是十分有用的，看一看下面这个利用getchar()跳过不定数量的空格字符的语句：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> ((ch = getchar()) == <span class="string">&#x27; &#x27;</span>) <span class="comment">/*skips blanks*/</span></span><br></pre></td></tr></table></figure>
+<p>当循环终止时，变量ch会包含getchar函数遇到的第一个非空白字符。</p>
+<h2 id="数组"><a class="markdownIt-Anchor" href="#数组"></a> 数组</h2>
+<p>惯用法</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;N; i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i])</span><br><span class="line">	sum += a[i];</span><br></pre></td></tr></table></figure>
+<h3 id="用sizeof计算数组长度"><a class="markdownIt-Anchor" href="#用sizeof计算数组长度"></a> 用sizeof计算数组长度</h3>
+<p>如果数组有10个整数，那么sizeof(a)通常为40(假定每个整数为4个字节)。我们可以用sizeof来计算数组元素的大小：sizeof(a)/sizeof(a[0])，当需要数组长度时，游戏额程序员采用上述表达式。如果使用这种方法，以后数组长度变了也不用变。所以会有下面这样的循环：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;(<span class="keyword">int</span>)(<span class="keyword">sizeof</span>(a)/<span class="keyword">sizeof</span>(a[<span class="number">0</span>]));i++)</span><br><span class="line">	a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>为什么要加一个强制类型转换呢？（int）</p>
+<p>主要是因为一些编译器不加会报错，因为变量i的类型可能是int型（有符号整型）而sizeof返回的类型为size_t(一种无符号整型)，把有符号整型和无符号整型相比较是很危险的，尽管在本例中做没什么大问题（因为i和sizeof(a)/sizeof(a[0])都是非负值）。所以要进行强制转换。这样写有点麻烦，我们可以用宏：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZE ((int) (sizeof(a)/sizeof(a[0])))</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>;i&lt; SIZE;i++)</span><br><span class="line">    a[i] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>更好的方法在后面会讲到，到时候回来补。</p>
+<h3 id="练习题"><a class="markdownIt-Anchor" href="#练习题"></a> 练习题</h3>
+<p>这一章的练习题还蛮好玩的，我贴一些。<a href="https://github.com/sail-Yang/c-homework/tree/main/chapter8">第八章习题</a></p>
+<h4 id="81修改示例显示重复的数字"><a class="markdownIt-Anchor" href="#81修改示例显示重复的数字"></a> 8.1修改示例，显示重复的数字</h4>
+<h4 id="89随机步法"><a class="markdownIt-Anchor" href="#89随机步法"></a> 8.9随机步法</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">不贴了，可以去我的仓库里看，代码贴多了，好像就加载不出来了。</span><br></pre></td></tr></table></figure>
+<h4 id="817幻方"><a class="markdownIt-Anchor" href="#817幻方"></a> 8.17幻方</h4>
+<h2 id="函数以及程序结构"><a class="markdownIt-Anchor" href="#函数以及程序结构"></a> 函数以及程序结构</h2>
+<h3 id="在调用前注意进行函数声明"><a class="markdownIt-Anchor" href="#在调用前注意进行函数声明"></a> 在调用前注意进行函数声明</h3>
+<p>我们首先来看看，如果没有函数声明，并且函数放到main函数后面，会发生什么？假设我们有一个sum函数：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214357.png" alt="image-20210715214357520" style="zoom: 67%;" />
+<p>​	我们可以发现，<strong>之所以会产生错误，是因为返回类型，形式参数等类型不匹配</strong>。</p>
+<p>​	前面提到了<strong>默认实际参数提升</strong>，我们来看看什么是默认实际参数提升：<strong>如果编译器在调用前没遇到函数原型。编译器会执行默认的实际参数提升</strong>：</p>
+<ol>
+<li>
+<ul>
+<li>float的实际参数→double型</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>char类型和short类型的实际参数→int类型</li>
+</ul>
+</li>
+</ol>
+<p>​     这就是默认实际参数提升。</p>
+<h3 id="递归与循环"><a class="markdownIt-Anchor" href="#递归与循环"></a> 递归与循环</h3>
+<p>首先来简短说一下各概念的定义：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715214750.png" alt="image.png" style="zoom:67%;" />
+<p>重点来说一下递归和循环。简单归纳一下递归的特征：<strong>递归</strong>因为是调用自身，所以代码简洁，也易于理解，但是因为函数调用过多，会占据太多空间和时间，效率不高，会造成<strong>栈溢出</strong>。</p>
+<p>函数调用它自身，使代码变得那么简洁。递归这种算法的底层思想就是<strong>分治法：<strong>把一个大问题分解成小问题，再把小问题分解成更小的问题，<strong>每层问题的差别仅仅在于数据的规模</strong>；既然我们要像套娃一样不断细分，那么一定要有一个停止套娃的条件，这就是</strong>递归停止的条件，必不可少</strong>。</p>
+<p><a href="https://blog.csdn.net/CSDN_SUSAN/article/details/100275406?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E9%80%92%E5%BD%92%E4%B9%8B%E7%BE%8E&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-7-.first_rank_v2_pc_rank_v29&amp;spm=1018.2226.3001.4187">☞递归详细内容</a>。</p>
+<h3 id="局部变量与全局变量"><a class="markdownIt-Anchor" href="#局部变量与全局变量"></a> 局部变量与全局变量</h3>
+<p>这是编写多个函数时应注意的问题。这两者的主要区别在于两个特征：</p>
+<ul>
+<li>
+<ul>
+<li>
+<p><strong>存储期限</strong>：变量存储单元存在期内程序执行的部分。</p>
+<ul>
+<li>局部变量是<strong>自动存储期限</strong>，在包含该变量的函数被调用时，局部变量的存储单元自动分配，函数返回时收回。因此，局部变量的函数返回时，局部变量的值无法保留；</li>
+<li>全局变量是<strong>静态存储期限</strong>，值将有就保留下来。</li>
+</ul>
+</li>
+<li>
+<p>​	如果想把局部变量的值保留下来，<strong>可以使用static</strong>，就可以<strong>把自动存储期限变成静态存储期限</strong>。</p>
+</li>
+<li>
+<pre class="highlight"><code class="c"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> i
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li><strong>作用域</strong>，变量的作用域是可以引进该变量的程序文本的部分。局部变量是<strong>块作用域</strong>，就是从函数声明到函数体的末尾；<strong>全局变量是文件作用域</strong>，到文件末尾。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><font color=purple>使用外部变量，要保证它有意义。想什么循环要用的i，用作局部变量。</font></p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git基本命令汇总</title>
+    <url>/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg" alt="Git基本操作" /></p>
+<p>这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。</p>
+<span id="more"></span>
+<hr />
+<p>最近又发现一张github的pull request的步骤图，一块贴上来，好给我的processon腾点空间：<br />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg" alt="Pull Request" /></p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>git/github</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>基本命令汇总</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>结构体变量作为函数参数调用</title>
-    <url>/2021/08/06/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
+    <url>/2021/08/06/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>​	在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
 <p>我们先来声明一些变量：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> my_struct</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">double</span> j;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <span id="more"></span>
 <h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
 <p>如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">(my_struct struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    struct1.i = <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    my_struct struct2;</span><br><span class="line">    struct2.i = <span class="number">17</span>;</span><br><span class="line">    func(struct2);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2.i);	<span class="comment">/*result is 6*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">(my_struct struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    struct1.i = <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    my_struct struct2;</span><br><span class="line">    struct2.i = <span class="number">17</span>;</span><br><span class="line">    func(struct2);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2.i);	</span><br><span class="line">    <span class="comment">/*result is 6*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变怎么办实参结构体的成员值怎么办</strong>？</p>
 <h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
 <h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
@@ -1855,6 +1692,194 @@
       <tags>
         <tag>C语言</tag>
         <tag>结构体</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>字符串</title>
+    <url>/2021/07/19/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<p>字符串包括字符串常量（常常被称为<strong>字符串字面量</strong>）和字符串变量，两者的差别就是一个常量和一个变量的区别。字符串我们一般都拿&quot;&quot;(双引号)框起来，而字符我们都拿’’(单引号)框起来，<strong>两者有什么区别呢？字符数组和字符串是一回事吗？</strong></p>
+<span id="more"></span>
+<h2 id="字符串的存储"><a class="markdownIt-Anchor" href="#字符串的存储"></a> 字符串的存储</h2>
+<p>从本质上来讲，C会把字符串作为字符数组来处理，但是<font color=purple>当编译器遇到长度为n的字符串字面量时，会给它分配长度为n+1的内存空间。</font>这是为什么？</p>
+<p>因为，<strong>存储字符串常量需要在字符的末尾多存储一个&quot;\0&quot;（空字符，注意和零字符&quot;0&quot;的ASCII码不一样），\0空字符用于标记字符串的末尾</strong>。</p>
+<p>这一特点，就导致C程序员声明一个字符串变量使时使用下面这种惯用法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STR_LEN 80</span></span><br><span class="line"><span class="keyword">char</span> str[STR_LEN+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+<p>我们声明用于存放字符串的字符数组时，必须预留一个位置给&quot;\0&quot;，存放的字符数量范围是从“\0”到长度为STR_LEN的字符串。上面这种声明方法就是为了强调字符串这一特点，这也是字符串和字符数组的区别。</p>
+<hr />
+<p>既然字符串会被看作是字符数组，那么其实<strong>它就是个char*类型的指针</strong>。思考下面这个程序的输出就知道了：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *p;</span><br><span class="line">p = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,*p);		<span class="comment">//会输出多少？</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,<span class="string">&quot;abc&quot;</span>[<span class="number">2</span>]); <span class="comment">//又会输出多少?</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719174318.png" alt="image-20210719174309999" /></p>
+<p><font color=green>那么，单个字符的字符串常量和字符常量是一回事吗？</font></p>
+<p>当然不是一回事，字符串常量&quot;a&quot;是用一个指针来表示的，这个指针指向存放&quot;a&quot;的内存单元(后面跟着\0)；而字符常量’a’是整数表示的(比如ASCII码)：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719175231.png" alt="image-20210719175230996" style="zoom:67%;" />
+<hr />
+<h2 id="字符串变量的一系列操作"><a class="markdownIt-Anchor" href="#字符串变量的一系列操作"></a> 字符串变量的一系列操作</h2>
+<h3 id="初始化字符串变量"><a class="markdownIt-Anchor" href="#初始化字符串变量"></a> 初始化字符串变量</h3>
+<p>初始化时，<strong>一定要确保数组的长度&gt;初始化式的长度</strong>。否则，编译器讲忽略空字符，这将使得数组不能用作字符串：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
+<p>此时：（没有\0,不能算是字符串)</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180329.png" alt="image-20210719180328938" style="zoom:67%;" />
+<p>如果数组长度&gt;初始化长度呢? → 用\0字符填充</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">8</span>] = <span class="string">&quot;whoami&quot;</span></span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719180534.png" alt="image-20210719180533975" style="zoom:67%;" />
+<h3 id="字符串的读写"><a class="markdownIt-Anchor" href="#字符串的读写"></a> 字符串的读写</h3>
+<p>我们想想读字符串会遇到什么困难？ → <strong>输入的字符串可能比它的容器长……</strong> 我们一般使用scanf 或者gets函数读字符串；用printf函数和puts函数写字符串。</p>
+<h4 id="写"><a class="markdownIt-Anchor" href="#写"></a> 写</h4>
+<p>printf用%s,推荐使用puts()</p>
+<h4 id="读"><a class="markdownIt-Anchor" href="#读"></a> 读</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,str) <span class="comment">//不用加&amp; ， str是数组名，编译器把它传递给函数时，会把它当作指针。</span></span><br></pre></td></tr></table></figure>
+<p>但是要注意scanf的特点:(顺便复习一下)</p>
+<ul>
+<li>用scanf读字符串你永远不会看到空白字符，也就是空格，scanf跳过第一个空白字符，读入字符直到遇到下一个空白字符为止。</li>
+<li>遇到什么\n,\t也会停止读</li>
+</ul>
+<p>我们可以用gets函数，道理和scanf是一样的，把字符一个个读到空数组中，然后在末尾存一个\0。但是：</p>
+<ul>
+<li>gets不会在开始的时候跳过空白字符。</li>
+<li>get直接读到\n。</li>
+</ul>
+<p>下面来个例子:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182851.png" alt="image-20210719182851689" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210719182935.png" alt="image-20210719182935383" /></p>
+<p>不过还是不能解决之前提到的问题，gets函数天生不安全，<strong>fgets函数</strong>会更好（我还没学，学到回来补）。</p>
+<h4 id="一次一个字符的读"><a class="markdownIt-Anchor" href="#一次一个字符的读"></a> 一次一个字符的读</h4>
+<p>很显然，我们需要一个更灵活的输入函数，那么在设计之前，我们得先考虑下列问：</p>
+<ul>
+<li>开始之前，要跳空格吗？</li>
+<li>什么字符用来停止读入？</li>
+<li>如果太长了，该怎么办？是忽略额外的字符还是留给下一次输入？</li>
+</ul>
+<p>如果我们想要的是不跳过第一个空白，在第一个换行符处停止，并且忽略额外字符，我们就可以用下面这个函数：（str是存储的数组，n是读入字符的最大数量）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read_line</span><span class="params">(<span class="keyword">char</span> str[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ch,i = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ((ch = getchar())! = <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> (i&lt;n)</span><br><span class="line">            str[i++] = ch;</span><br><span class="line">    str[i] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//末尾加一个\0,别忘了</span></span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意ch的类型是int，因为getchar返回的就是这一类型。</p>
+<h3 id="访问字符串中的字符"><a class="markdownIt-Anchor" href="#访问字符串中的字符"></a> 访问字符串中的字符</h3>
+<p>当然可以用下标，但我们更愿意用指针。</p>
+<p>来看看下面这个统计字符串中空格数量的函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">count_spaces</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count =<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(;*s! = <span class="string">&#x27;\0&#x27;</span>;s++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (*s == <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来看一看这个const char *s，const并没有阻止函数对s的改变，它阻止了函数对s所指向的字符的修改。并且，因为s是传递给count_spaces的副本，所以对s的自增操作，也不会影响原来的指针s。(形参都是值传递，即是<strong>传递指针本身的地址</strong>，☞<a href="http://c.biancheng.net/cpp/html/74.html">指针作为参数</a>)</p>
+<hr />
+<h2 id="字符串库"><a class="markdownIt-Anchor" href="#字符串库"></a> 字符串库</h2>
+<p>由于C语言没有其它语言那么&quot;年轻&quot;，年起人习以为常的用运算符操作字符串，对于老年人C语言来说是不行滴。<strong>在C语言中字符串就是数组，对字符串的操作就是对数组的操作</strong>。C语言库为了方便，提供了大量对字符串操作的函数。☞&lt;string.h&gt;</p>
+<p>注意&lt;string.h&gt;中：</p>
+<ul>
+<li>声明每个函数都至少要一个字符串作为实参，声明为char *类型，使得实参可以是字符数组，char*类型的变量或者字符串字面量。但是，<strong>没有声明为const的字符串形参可能会在调用函数后导致改变，所以字符串常量不应该被作为字符串常量</strong>。</li>
+</ul>
+<hr />
+<h3 id="strcpy-strcnpy"><a class="markdownIt-Anchor" href="#strcpy-strcnpy"></a> strcpy、strcnpy</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">strcpy</span>(<span class="keyword">char</span> *s1,<span class="keyword">const</span> <span class="keyword">char</span> *s2)	<span class="comment">//将s2指向的字符串中的字符复制到s1指向的数组，遇到s2中第一个\0停止</span></span><br><span class="line"><span class="comment">/*更安全用法*/</span></span><br><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1));<span class="comment">//第三个参数用于限制所复制的字符数</span></span><br></pre></td></tr></table></figure>
+<p>但是如果str2还是大于str1，还是不太安全，因为没有\0，所以<strong>strcnpy比较安全的做法</strong>是下面这样：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">strcnpy(str1,str2,<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>);</span><br><span class="line">str1(<span class="keyword">sizeof</span>(str1)<span class="number">-1</span>) = <span class="string">&#x27;\0&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>这样确保str1以空字符结束。</p>
+<h3 id="strlen"><a class="markdownIt-Anchor" href="#strlen"></a> strlen</h3>
+<p>就是算字符串长度的，它的声明是：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span> <span class="params">(cont <span class="keyword">char</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>strlen返回字符串s第一个空字符之前的<strong>字符数</strong>，不包括空字符。</p>
+<h3 id="strcat-strncat"><a class="markdownIt-Anchor" href="#strcat-strncat"></a> strcat、strncat</h3>
+<p>cat就是拼接，strcat的声明如下:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>就是把str2的内容接到str1的末尾，并且返回字符串str1。</p>
+<p>同样的道理，也存在strncat:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">cahr *<span class="title">strncat</span><span class="params">(<span class="keyword">char</span> *str1,<span class="keyword">char</span> *str2,<span class="keyword">sizeof</span>(str1)-<span class="keyword">sizeof</span>(str2<span class="number">-1</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="strcmp"><a class="markdownIt-Anchor" href="#strcmp"></a> strcmp</h3>
+<p>用于比较两个字符，根据小于、等于或大于，返回一个&lt;0,0,&gt;0的值。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1,<span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br></pre></td></tr></table></figure>
+<p>只要满足下面两个条件之一，计算str1 &lt; str2：</p>
+<ul>
+<li>前i个字符相等，但第i个字符str1 &lt; str2，比如“abcd”&lt;“abch”</li>
+<li>str1比str2短</li>
+</ul>
+<hr />
+<h2 id="用字符串惯用法简化strlenstrcat函数"><a class="markdownIt-Anchor" href="#用字符串惯用法简化strlenstrcat函数"></a> 用字符串惯用法简化strlen,strcat函数</h2>
+<h3 id="搜索字符串的结尾"><a class="markdownIt-Anchor" href="#搜索字符串的结尾"></a> 搜索字符串的结尾</h3>
+<p>我们来看看strlen函数是怎么实现的？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n;</span><br><span class="line">    <span class="keyword">for</span>(n = <span class="number">0</span>; *s != <span class="string">&#x27;\0&#x27;</span>; s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是搜索一个字符串的结尾，用一个变量跟踪字符串的长度。那么我们可以做哪些简化呢？</p>
+<ul>
+<li>把n=0的初始化放到n的声明中。</li>
+<li>*s!=’\0’其实等价于*s!=0,因为空字符的整数值就是0；然后*s!=0其实又可以直接写成*s ，两者都在*s不为0时为真。</li>
+<li>那么我们可以把*s与自增操作合并起来，变成*s++。</li>
+<li>把for换成while循环</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> n = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        n++;</span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上面这些操作虽然精简了代码但是运行速度并没有提高,下面这种写法运行速度更快：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> *p = s;</span><br><span class="line">    <span class="keyword">while</span> (*s++)</span><br><span class="line">        s++;</span><br><span class="line">    <span class="keyword">return</span> s-p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方法，跳过定位空字符的位置，然后用空字符的地址减去字符串第一个字符的位置。运行速度就提升了，至于为什么，因为少了n的自增操作。</p>
+<p>这样我们就引出了两种<strong>搜索字符串结尾的空字符</strong>的惯用法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//最终s指向了空字符</span></span><br><span class="line"><span class="keyword">while</span> (*s) </span><br><span class="line">	s++;</span><br><span class="line"><span class="comment">//最终s指向空字符后面一个位置</span></span><br><span class="line"><span class="keyword">while</span> (*s++)</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<h3 id="复制字符串"><a class="markdownIt-Anchor" href="#复制字符串"></a> 复制字符串</h3>
+<p>下面先看一个有点冗长的strcat的写法:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*s2)&#123;</span><br><span class="line">        *p = *s2;</span><br><span class="line">        p++;</span><br><span class="line">        s2++;</span><br><span class="line">    &#125;</span><br><span class="line">    *p = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实核心思想就两步:</p>
+<ul>
+<li>确定s1末尾空字符的位置，使指针p指向它。</li>
+<li>把字符串s2中的字符逐个复制到p所指向的位置。</li>
+</ul>
+<p>我们可以改成下面这种精简后的strcat函数:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcat</span><span class="params">(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (*p)</span><br><span class="line">        p++;</span><br><span class="line">    <span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">return</span> s1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>strcat的核心就是<strong>字符串复制惯用法</strong>：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (*p++ = *s2++)</span><br><span class="line">	;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="字符串数组"><a class="markdownIt-Anchor" href="#字符串数组"></a> 字符串数组</h2>
+<p>我们需要的是<strong>参差不齐的字符串数组</strong>，而不是方方正正的数组。（这样会浪费太多空间）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *names[] = &#123;&quot;Yang&quot;,&quot;Zhu&quot;,&quot;Li&quot;,&quot;Cai&quot;,&quot;Zhang&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是数组names的元素全是指针，每个指针指向一个字符串，这就减少了空间的浪费.如果我们想在数组中搜寻以字母C开头的字符串，可以使用下面的循环:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">	<span class="keyword">if</span>(names\[i][<span class="number">0</span>]=<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s begins with C\n&quot;</span>,names[i]);</span><br></pre></td></tr></table></figure>
+<p>​</p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从processon看边际收益</title>
+    <url>/2021/07/21/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/</url>
+    <content><![CDATA[<p>在阅读《经济学原理》笔记中，我提到学习经济学的主要目的是运用经济学的知识，去做出更好的决策，而要达到这样的能力，就需要多做练习。这不，我今天就遇到个日常生活中经济学原理的运用。</p>
+<p>我有画什么思维导图，流程图的习惯，画这些图当然离不开得心应手的工具，我经常用的就是这个在线绘图网站——<a href="https://www.processon.com/">processon</a>.它的免费版是有存储空间限制的，只能存储几个图：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153402.png" alt="image-20210721153354921" /></p>
+<span id="more"></span>
+<p>上面这个是我<strong>扩容过</strong>的可存储文件个数，怎么扩容呢？我们点击这个<strong>免费扩容</strong>，看一下processon的策略：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153538.png" alt="image-20210721153538698" style="zoom:67%;" />
+<p>可以看到，我们只要邀请一个好友，它就送我一个空间。是不是感觉<u>只要邀请好友就给奖励</u>这个操作十分熟悉？没错，其实都是一个套路，我们运用学到的经济学十大原理的知识来分析一下：</p>
+<hr />
+<p>首先，假设processon后面的制作团队是理性人（尽自己最大可能去实现目标），他们的目标是<strong>想要有更多的用户</strong>，他们要想办法实现这个目标。</p>
+<p>根据第四原理：人们会对激励作出反应。对于免费用户来说，能激励他们的除了好用的功能就是<strong>增加存储量</strong>，因为免费版的用户的可存储文件太少了，所以这对他们来说增加存储量是个不错的激励。</p>
+<p>增加存储量对于processon是有成本的，因为这是云服务，<strong>免费增加的存储量就是机会成本</strong>（根据第二原理），每个人都增加一点，对于服务器来说肯定是不小的负担，平均成本也是不少的。那么processon就不该用送存储来换用户吗？</p>
+<p>答案是否定的，根据第三原理，<strong>理性人考虑边际量</strong>。<u>我们决策除了看平均成本，更要关注边际收益和边际成本</u>。proceeson只给用户加一个存储空间，就能换来一个用户(至于用户粘性怎么样，暂且不论)，这样的效率是很高的。并且边际成本（一个存储空间）是很低的，而边际收益（一个用户）是很高的。边际收益 远远大于 边际成本，这样是很划算的。</p>
+<p>从用户角度来说，邀请一个好友换一个文件，成本几乎为0，收益却永远是正的。也就是你邀请的人越多，你赚的越多，并且processon也赚得越多。这是一个双赢，何乐而不为。</p>
+<p>其它的什么邀请好友送点小奖励也都是一个逻辑，你别说，没学经济学之前还真没注意这回事。</p>
+<p>最后，贴一个我的邀请链接，看到的朋友可以点击这个注册一下<a href="https://www.processon.com/i/606544d0f346fb0aa97e043a">👉点我</a>，这个网站还是很好用的😏。</p>
+]]></content>
+      <categories>
+        <category>经济学</category>
+        <category>经济学原理的运用</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>晾衣服中的第一性原理</title>
+    <url>/2021/08/03/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/%E6%99%BE%E8%A1%A3%E6%9C%8D%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<p>晾衣服的时候挺无聊的，我只好瞎想想。我想起小时候晾衣服的时候，不管什么衣服裤子，上去就是拿一个夹子把衣服固定在衣架上，最后总是导致夹子不够。导致我现在养成一个习惯，能不用夹子夹的就不用夹子……总是要想办法用衣服自身把它给固定住，比如带纽扣的衣服，直接把最上面的扣子扣起来；牛仔裤的话把利用放腰带的那个地方固定住……</p>
+<span id="more"></span>
+<p>虽然晾衣服很无聊，也很普通，但是我觉得这背后就有第一性原理的运用。我第一次听说这第一性原理还是从特斯拉的老板musk那儿听到的，听起来还挺高大上的。在我看来，这第一性原理其实就是<strong>分解问题，抓住每一部分最基本的需求</strong>。</p>
+<p>比如说，在制造电动车特斯拉的过程中，最大的成本来源于电池组件。研发团队发现电池组件成本要600美元／千瓦时，但马斯克运用第一性原理思考，把电池分为各种金属元素以及其他成分，再对生产流程、产地、供应链每一部分进行优化，最终将电池组件成本降低到80美元／千瓦时，这就是第一性原理的运用。</p>
+<p>我觉得晾衣服也是一个道理，我的目的是把衣服固定住，那么夹子是必须的吗？当然不是必须的，我可以利用衣服本身的一些特点来把衣服固定在衣架上，而不用夹子，这样我就降低了成本。怎么说呢，<strong>我觉得就是遇到一个问题，一定要围绕这个问题进行解答，而不是被一个答案所束缚住</strong>。比如，我晾衣服全用夹子，最后发现夹子不够了，这个时候我想的却是如何找到更多的夹子，而不是利用衣服自身的纽扣什么的，来省出一点夹子。</p>
+<p>额，就随便吹吹🐂🍺，要不然也挺无聊的😅。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210803123444.png" alt="image-20210803123435521" style="zoom: 67%;" />
+]]></content>
+      <categories>
+        <category>杂谈吹水</category>
+      </categories>
+      <tags>
+        <tag>第一性原理</tag>
       </tags>
   </entry>
 </search>
