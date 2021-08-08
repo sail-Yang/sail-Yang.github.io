@@ -202,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/08/07/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/08/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -216,7 +216,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/08/07/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">C中NULL,NUL和null的区别</a>
+            <a href="/2021/08/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">C中NULL,NUL和null的区别</a>
         </h2>
 
         <div class="post-meta">
@@ -225,10 +225,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-08-07 21:07:41 / 修改时间：21:31:03" itemprop="dateCreated datePublished" datetime="2021-08-07T21:07:41+08:00">2021-08-07</time>
+              <time title="创建时间：2021-08-07 21:07:41" itemprop="dateCreated datePublished" datetime="2021-08-07T21:07:41+08:00">2021-08-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:48:16" itemprop="dateModified" datetime="2021-08-08T08:48:16+08:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -252,8 +258,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/08/07/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/07/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/08/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -269,19 +275,14 @@
 
       
           <p>之前在看别人代码时，看到别人用了个NUL，我心里纳闷：C语言中空指针不是用NULL表示吗？NUL是什么鬼西东？我把他的代码运行一下，发现根本运行不了……心里在想这家伙是不是少打了一个L🤣，看到他后面都这么写，我心里就产生了疑惑……</p>
-<p>今天在看书的时候，看到了这么一段话：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210807211918.png" alt="image-20210807211917816" style="zoom:67%;" />
-<p>我擦，还真有NUL这种写法……我又去查了一下，<strong>发现NUL其实就是’\0’的意思😅，其本质是字符</strong>（character）。</p>
-<p>而我们的老熟人NULL呢，其实是宏定义，展开之后呢是<strong>空指针常量</strong>。在C语言中，NULL常常被下面这样定义：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NULL    ((void *)0)</span></span><br></pre></td></tr></table></figure>
-<p>也就是说NULL 是一个 void *类型的指针(pointers)。</p>
-<p>注意，NULL和null又是不一样的，null是一种概念的统称，不是C标准里的指针常量或者字符。</p>
-<hr />
-<p>最后，再来说一个骚气的隐喻😏：</p>
-<p><font color=purple><strong>当有人给你发null是什么意思呢？</strong></font></p>
-<p>我们知道，万物皆可对象，null在有些语言里就<font color=red><strong>表示对象还未赋值，对象为空，可以理解为&quot;没有对象&quot;</strong></font>。</p>
-<p>Do you understand?😲</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
