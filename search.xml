@@ -146,58 +146,6 @@
       </tags>
   </entry>
   <entry>
-    <title>明年今日</title>
-    <url>/2021/07/22/%E6%98%8E%E5%B9%B4%E4%BB%8A%E6%97%A5/</url>
-    <content><![CDATA[<div align=life> 
-<iframe frameborder="no" marginwidth="0" marginheight="0" width=400 height=140 src="https://music.163.com/outchain/player?type=2&id=65312&auto=0&height=66"></iframe>
-</div>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210722110739.jpg" alt="psb (4)" style="zoom: 33%;" />
-<span id="more"></span>
-<p style="text-align: center;"><br/>
-    我们，是沉默的叶<br/>
-    无声世界里<br/>不语，是我们的语言<br/>
-    绿叶般的羞涩<br/>
-    如海风，吹得我们<br/>
-    若即若离<br/>
-    <br/>
-    叶子的脉纹<br/>
-    是丝状的记忆<br/>
-    可我愿意用这永恒的丝<br/>
-    换来一阵雨<br/>
-    滋润我<br/>
-    早已干涸的心田<br/>
-    <br/>
-    世界，网住了你<br/>
-    世界，网住了我与你<br/>
-    我曾为在黑夜奔行的魂灵<br/>
-    掉进了你的温柔陷阱<br/>
-    从此，我找到了黎明<br/>
-</p>
-<p>听明年今日有感，贴上以前的拙作，算是一种纪念吧。</p>
-]]></content>
-      <categories>
-        <category>杂谈吹水</category>
-      </categories>
-      <tags>
-        <tag>past</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>觉得自己的代码很烂咋办</title>
-    <url>/2021/07/31/%E8%A7%89%E5%BE%97%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%9D%E8%B7%AF%E5%BE%88%E7%83%82%E6%80%8E%E4%B9%88%E5%8A%9E/</url>
-    <content><![CDATA[<p>今天写了道题，写完后我去csdn上看了看别人是怎么写的。看了之后，脑子里只有一个想法：“我怎么想不到这种写法，真的太好了🤣，反观我写得是什么东西😥”虽然我这人比较自负，但是还是对自己的天赋有点怀疑😅，但是这也没什么。</p>
-<p>其实这个标题的答案我是知道的：多读多思考，多读优秀的想法和代码，多思考不同的写法，如何让写的代码更好……</p>
-<p>之所以还要取这个题目的原因是，我希望让自己知道，我的水平还是刚入门的菜鸟水平，还有很多东西要学，学习不能松懈😠</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210731230557.png" alt="image-20210731230548350" style="zoom:67%;" />
-]]></content>
-      <categories>
-        <category>杂谈吹水</category>
-      </categories>
-      <tags>
-        <tag>反思</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pta 1002 C解</title>
     <url>/2021/07/21/pta/pta-1002-C%E8%A7%A3/</url>
     <content><![CDATA[<p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
