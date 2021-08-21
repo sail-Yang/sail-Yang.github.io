@@ -1,138 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C语言声明的问题</title>
-    <url>/2021/08/10/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。</p>
-<blockquote>
-<p>C语言声明的语法有时会带来严重的问题。						——K&amp;R</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="c语言声明模型如此晦涩的原因"><a class="markdownIt-Anchor" href="#c语言声明模型如此晦涩的原因"></a> C语言声明模型如此晦涩的原因</h2>
-<p>对于编程语言的语法来说，<strong>歧义是非常忌讳的</strong>，因为它使编译器设计者的工作严重复杂化。而C语言’声明语法‘的歧义性渗透进语言的方方面面，正是由于在<strong>组合类型方面</strong>的笨拙行为，C语言变得十分复杂。下面我们来说说，C语言会变成这样的几个原因：</p>
-<ul>
-<li>
-<p>type model(类型模型)，在C之前并无广泛应用，BCPL（C的祖先）的数据类型也只有二进制，C先天有缺。</p>
-</li>
-<li>
-<p>C出现一种设计哲学：<font color=purple><strong>要求对象的声明形式与它的使用形式尽可能相似</strong></font>。</p>
-<p>​		举个例子：int *p[3]声明了一个指向int的指针数组，并以*p[i]这样的表达式引用或使用指针所指向的int数据，所以它的声明形式和使用形式非常相似。这样设计的好处是：<font color=orange>操作符的优先级</font>在声明和使用时是一样的；缺点为它是在一个缺点上进行的改进，<font color=orange>操作符的优先级</font>也是C设计不当和复杂之处。</p>
-<p>​	“声明的形式和使用的形式相似”这种用法可能是C语言的独创，其他语言并没有采取这种方法。放在上个世纪6、70年代，这种设计都是不合理的，<strong>把两种截然不同的东西做成一个样子真的有必要吗</strong>？</p>
-</li>
-<li>
-<p>C声明最大的问题：<font color=purple><strong>无法以一种人们所习惯的自然方式从左向右阅读一个声明。</strong></font>特别是const,volatile出现之后，情况更糟了。举个例子：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*涉及指针和const的声明可能会出现几种不同的顺序*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> i_jelly;	<span class="comment">/*指针是只读的*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * <span class="keyword">const</span> i_jam;<span class="comment">/*指针和其所指的对象都是只读的*/</span></span><br></pre></td></tr></table></figure>
-<p>​		除此之外，C中风格似声明，但却没有标识符的情况，例如强制类型转换，形式参数声明显得没有必要，我们来看一个例子：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*强制转换成指向数组的指针*/</span></span><br><span class="line"><span class="keyword">char</span> (*j)[<span class="number">20</span>];</span><br><span class="line">j = (<span class="keyword">char</span> (*)[<span class="number">20</span>]) <span class="built_in">malloc</span>[<span class="number">20</span>];	<span class="comment">//作者所诟病的就是(*)的括号，显得十分多余</span></span><br></pre></td></tr></table></figure>
-<p>这一节是这一章的开篇，作者指出了C语言声明设计不合理的地方，<strong>下面会详细介绍C语言声明相关知识，并且给出面对这种复杂声明的方法。</strong></p>
-</li>
-</ul>
-<hr />
-<h2 id="声明的形成"><a class="markdownIt-Anchor" href="#声明的形成"></a> 声明的形成</h2>
-<h3 id="声明的基础"><a class="markdownIt-Anchor" href="#声明的基础"></a> 声明的基础</h3>
-<p>声明器（declarator）就是<strong>标识符以及与它组合在一起的任何指针、函数括号、数组下标</strong>，这是C语言声明的核心，下面贴一张表格来总结一下声明器：</p>
-<table>
-<thead>
-<tr>
-<th>数量</th>
-<th>C语言中的名字</th>
-<th>C语言中出现的形式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0 or many</td>
-<td>指针</td>
-<td>下列形式之一：1.*const volatile 2. *volatile 3. * 4.*const 5.*volatile const</td>
-</tr>
-<tr>
-<td>only  one</td>
-<td>direct declarator（直接声明器）</td>
-<td>标识符 or 标识符[] or 标识符（参数）or (声明器)</td>
-</tr>
-<tr>
-<td>zero or one</td>
-<td>初始化内容</td>
-<td>= 初始值</td>
-</tr>
-</tbody>
-</table>
-<p>上面所描述的只是声明的一部分——声明器，声明的基本组成如下：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810095339.png" alt="image-20210810095331255" style="zoom:50%;" />
-<p>注意，要想声明合法，还得注意：</p>
-<ul>
-<li>函数的返回值不能是一个函数，所以像foo()()这样是非法的；</li>
-<li>函数的返回值不能是一个数组，所以像foo()[]这样是非法的；</li>
-<li>数组里面不能有函数，所以像foo这样是非法的。</li>
-</ul>
-<p>但下面这些是合法的：（<strong>简单来说，指针yyds</strong>）</p>
-<ul>
-<li>函数的返回值允许是一个函数指针，如int(* fun())()；</li>
-<li>函数的返回值允许是一个指向数组的指针，如int(* foo())[]；</li>
-<li>数组里面允许有函数指针，如int (* foo[])()；</li>
-<li>数组里面允许有其他数组，所以你经常能看到int foo[][]</li>
-</ul>
-<p>在我们看看组合类型是怎么恶心人之前，我们先来复习一下下面这些知识。</p>
-<hr />
-<h3 id="结构-联合和枚举"><a class="markdownIt-Anchor" href="#结构-联合和枚举"></a> 结构、联合和枚举</h3>
-<p>额，其实这部分没必要特别写，只是我自己也不太清楚联合、枚举的意思，所以权当复习，会的话可以直接跳过。</p>
-<h4 id="联合"><a class="markdownIt-Anchor" href="#联合"></a> 联合</h4>
-<p>结构是什么，没必要再细说了，就是一种把一些数据项组合在一起的数据结构。所谓的<strong>联合</strong>，其实声明和结构一模一样，只要把struct换成union一样就行了。</p>
-<blockquote>
-<p><strong>那么联合和结构有什么区别呢？</strong></p>
-<p>在结构中，每个成员依次存储；而<strong>在联合中，所有的成员都从偏移地址零开始存储</strong>。这样，每个成员的位置都重叠在一起：<strong>在某一时刻，只有一个成员真正存储于该地址。</strong></p>
-</blockquote>
-<p>联合的存储特性决定了它的几个有限的用途：</p>
-<ul>
-<li>联合<strong>一般是作为大型结构的一部分存在的</strong>。在有些大型结构中，存在一些与实际表示的数据类型有关的隐式或显式的信息。如果存储数据时是一种类型，但在提取该数据时却成了另外一种类型，这显然存在着明显的类型不安全性</li>
-<li>节省备用的存储空间。我们可以用联合来存储彼此相互矛盾的数据（即不可能同时出现），比如男和女，你总不可能又是🚹的又是🚺的吧。</li>
-<li><strong>把同一个数据解释成两种不同的东西</strong>，而不是把两个不同的数据解释为同一种东西。</li>
-</ul>
-<h4 id="枚举enum"><a class="markdownIt-Anchor" href="#枚举enum"></a> 枚举(enum)</h4>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101203.png" alt="image-20210810101203170" /></p>
-<p>长这样的就是枚举，sizes是可选标签，后面是标识符的列表以及赋给他们的值。在C语言中，#define其实干了enum的活，只不过其它语言都有enum，那咱C语言不能没有(doge)</p>
-<h3 id="优先级"><a class="markdownIt-Anchor" href="#优先级"></a> 优先级</h3>
-<p>读声明得有个先后顺序，这就是优先级，懒得写了，直接看表吧：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101650.png" alt="image-20210810101650022" style="zoom:67%;" />
-<h3 id="读声明的方法"><a class="markdownIt-Anchor" href="#读声明的方法"></a> 读声明的方法</h3>
-<h4 id="通过图表"><a class="markdownIt-Anchor" href="#通过图表"></a> 通过图表</h4>
-<p>我们来看一个分析的过程，假设我们现在要分析：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> * <span class="keyword">const</span> *(*next)();</span><br></pre></td></tr></table></figure>
-<p>下面是分析过程：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102036.png" alt="image-20210810102036341" style="zoom:67%;" />
-<p>拼在一起，读作：“next是一个指向函数的指针，该函数返回另一个指针，该指针指向一个只读的指向char的指针”，</p>
-<h4 id="typedef"><a class="markdownIt-Anchor" href="#typedef"></a> typedef</h4>
-<p>我们知道typedef的作用是：<strong>它为一种类型引入新的名字，而不是为变量分配空间</strong>。也就是指明一种类型的同义词，而不是去定义一种类型。这毫无疑问，会给我们的声明带来简便这一好处。</p>
-<p>但千万不要像下面这样做：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102821.png" alt="image-20210810102821499" style="zoom:67%;" />
-<h5 id="typedef-和宏文本替换define的区别"><a class="markdownIt-Anchor" href="#typedef-和宏文本替换define的区别"></a> typedef 和宏文本替换define的区别</h5>
-<p>我们应该注意到，typedef的功能和宏文本替换的功能极其相似，那么两者有什么区别呢？</p>
-<p>在说区别之前，我们要有这样的认识：<font color=purple><strong>typedef是一种彻底的“封装”类型，在声明它之后，就不能再往里面加东西了。</strong></font>下面来说说区别：</p>
-<ul>
-<li>
-<p>可以用其他类型说明符对宏类型名进行扩展，但对typedef所定义的类型名却不能这样做。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> apple int</span></span><br><span class="line">unsighed apple i;	<span class="comment">/*legal*/</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> peach;</span><br><span class="line">unsighed peach i;	<span class="comment">/*illeagl,你在想桃子吃*/</span></span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>在连续几个变量的声明中，用typedef定义的类型能够保证声明中所有的变量均为同一种类型，而用#define定义的类型则无法保证。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int_ptr int *</span></span><br><span class="line">int_ptr a,b;		<span class="comment">/*我们展开：int * a,b;其实只有a 为int*型，而b只是一个int类型。*/</span></span><br><span class="line"><span class="meta">#typedef int * int_ptr;</span></span><br><span class="line">int_ptr a,b			<span class="comment">/*这个时候a,b的类型都是指向int的指针*/</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这些就是typedef和define的区别。</p>
-<h5 id="typedef和结构"><a class="markdownIt-Anchor" href="#typedef和结构"></a> typedef和结构</h5>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810104832.png" alt="image-20210810104832794" style="zoom:67%;" />
-<p>这些就是本篇的内容了。</p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-        <tag>基础知识</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>RMS关于垄断的一段话</title>
     <url>/2021/08/05/RMS%E5%85%B3%E4%BA%8E%E5%9E%84%E6%96%AD%E7%9A%84%E4%B8%80%E6%AE%B5%E8%AF%9D/</url>
     <content><![CDATA[<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210805185642.png" alt="image-20210805185634521"  />
@@ -311,7 +179,7 @@
 <h3 id="指针和多维数组"><a class="markdownIt-Anchor" href="#指针和多维数组"></a> 指针和多维数组</h3>
 <h3 id="多维数组的存储"><a class="markdownIt-Anchor" href="#多维数组的存储"></a> 多维数组的存储</h3>
 <p>首先我们得知道多维是怎么存储的。我们先定义一个二维数组。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">3</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">4</span>][<span class="number">4</span>] = &#123;&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">8</span>&#125;&#125;;    <span class="comment">//定义一个二维数组</span></span><br></pre></td></tr></table></figure>
 <p>根据定义我们的多维数组是长这样的：</p>
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210718091419.png" alt="image-20210718091419443" style="zoom:67%;" />
 <p>但实际上，其底层还是个一维数组:</p>
@@ -1962,6 +1830,280 @@
       <tags>
         <tag>阅读记录</tag>
         <tag>达芬奇</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu解决apt-get报错问题</title>
+    <url>/2021/08/21/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
+<p>下面这个是报错的情况：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
+<p>貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
+<span id="more"></span>
+<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
+<p>我使用的是这个方法，就一条命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /var/lib/dpkg/lock</span><br></pre></td></tr></table></figure>
+<p>其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm /var/lib/apt/lists/lock</span><br><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock*</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
+<p>这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
+<p>我们直接执行下面这个命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo killall apt apt-get</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Ubuntu</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>apt—get</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>英语语法—简单句型</title>
+    <url>/2021/08/17/%E8%8B%B1%E8%AF%AD%E8%AF%AD%E6%B3%95%E2%80%94%E7%AE%80%E5%8D%95%E5%8F%A5%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>作为一名程序猿预备军，对英语这门语言的掌握是必要的，而作为英语的基础——英语语法也是必须学习的。但我可不想像高中那样，找本“语法手册”边背边做题😫，这样学语法的确有效果，但是太痛苦了。最近发现了一般好书——《文法俱乐部》，看完这本书，我觉得基础语法够用了，比什么“语法手册”好太多了。</p>
+<h2 id="学习顺序"><a class="markdownIt-Anchor" href="#学习顺序"></a> 学习顺序</h2>
+<p>《文法俱乐部》这本书的编排顺序如下，我们将照这种顺序学习语法：</p>
+<ul>
+<li>简单句：了解简单句的各个组成部分，包括各种词和词组，为之后学习打下基础。</li>
+<li>复句、合句：简单句的组合，使文章富有变化</li>
+<li>简化从句：返璞归真</li>
+</ul>
+<p>下面就开始学习第一篇：简单句。</p>
+<hr />
+<h1 id="基本句型"><a class="markdownIt-Anchor" href="#基本句型"></a> 基本句型</h1>
+<h2 id="基本句型-2"><a class="markdownIt-Anchor" href="#基本句型-2"></a> 基本句型</h2>
+<p>所谓的简单句呢，其实就五种基本句型：</p>
+<blockquote>
+<ol>
+<li>S+V (主语+动词)</li>
+<li>S+V+O（主语+动词+宾语）</li>
+<li>S+V+C （主语+动词+补语）</li>
+<li>S+V+O+O (主语+动词+宾语+宾语)</li>
+<li>S+V+O+C (主语+动词+宾语+补语)</li>
+</ol>
+</blockquote>
+<p>这主、动、宾都知道是啥意思，可是<strong>补语</strong>这个概念，我想就算我们这些学了十几年英语的人，可能也说不清，道不明。不知道补语，这简单句型的3和5就搞不懂，简单句型的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mn>2</mn><mn>5</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{2}{5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>​​都不知道咋回事，我们学了十几年英语学了啥……</p>
+<p>所以，我们要了解的第一个概念就是<font color=purple size=4><strong>补语</strong></font></p>
+<h2 id="补语"><a class="markdownIt-Anchor" href="#补语"></a> 补语</h2>
+<h3 id="补语的概念"><a class="markdownIt-Anchor" href="#补语的概念"></a> 补语的概念</h3>
+<p>基本句型分为五种，是因为有五种特性不同的动词而造成的。<strong>其中有一种解释为“是”的动词，其本身毫无意义，所以我们需要补语去帮助这种动词补充句子的含义</strong>。</p>
+<p><u>一个完整的句子，必须能够表达完整的意思</u>。这需要以两个部分来完成: <strong>主语</strong>和<strong>动词</strong>。主语，是这个句子所叙述的对象。动词，构成叙述的主要内容。</p>
+<p>我们来看两个例子：</p>
+<blockquote>
+<p>(1)John died in World War Ⅱ.</p>
+<p>(2)John killed two enemy soilders.</p>
+</blockquote>
+<p>（1）这个句子表达了“john死于二战”这个意思，它告诉我们关于John的事，什么事？→ died，至于死于二战还是一战，是可有可无的细节，我们把这个介词短语去掉，这个句子照样能表达出意思。像die这种，可以独立发生，不需要承接对象的，我们称之为“不及物动词”；但是像(2)中的“kill”这个动词就需要承接这个动词的对象（two enemy soilders），我们称之为“及物动词”。</p>
+<p>但是，如果我们把（2）的宾语“two enemy soilders”省略，句子还是能表达出大致的意思，即John杀了什么东西；但是<strong>如果句子缺了补语，就会变得完全没有意义，因为叙述的部分完全缺乏</strong>。</p>
+<p>我们前面说了，解释为“是”的动词不像“及物动词”（kill）和“不及物动词”(die)有表达意思的功能，这类动词毫无叙述能力，所以需要补语来帮助它们表达意思：</p>
+<blockquote>
+<p>John was a soilder.</p>
+<p>John was brave.</p>
+</blockquote>
+<p>如果我们把这两句子的补语给去掉，我们就会发现句子的意思严重缺失，was “毫无用处”，它只是起到了一个串联的作用。</p>
+<blockquote>
+<p>我们把像was（be动词）这样没有叙述能力，只能连接主语和补语的动词称为“连缀动词”。</p>
+<p>我们把跟在连缀动词后面，代替连缀动词叙述，补足句子意思的部分称为补语。</p>
+</blockquote>
+<h3 id="需要补语的连缀动词"><a class="markdownIt-Anchor" href="#需要补语的连缀动词"></a> 需要补语的连缀动词</h3>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210817094053.png" alt="image-20210817094045116" /></p>
+<p>上面这些，就是常见的“性无能”动词。我们可以做个小实验，把这些动词全部换成be动词。我们会发现什么？</p>
+<p>我么可以发现，句子意思并没有怎么变。我们把这种动词解释为“是”的句子统一归为，S+V+C句型。</p>
+<h3 id="svoc宾补句型"><a class="markdownIt-Anchor" href="#svoc宾补句型"></a> S+V+O+C宾补句型</h3>
+<p>我们来看看简单句型的第五个句型是怎么回事，我们来看几个例子：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210817094546.png" alt="image-20210817094546352" style="zoom:80%;" />
+<p>在宾补中，补语充当“补充宾语意思”的角色，我们在宾语和补语中间插入一个be动词，看能不能说通，如果能说通，大概率是宾补句型。（为什么说是大概率看讲解“冰冰”句型的部分）</p>
+<blockquote>
+<p>补充一点，补语的词类一般只有名词和形容词。</p>
+</blockquote>
+<h3 id="没有补语的be动词"><a class="markdownIt-Anchor" href="#没有补语的be动词"></a> 没有补语的be动词</h3>
+<p>我们知道be动词属于“性无能”的动词，而且是最纯粹的那种。但有时候，be动词也有支棱起来的时候——当be动词后面没有补语，be动词不解释为“是”，而是“存在”，属于“S+V”句型。</p>
+<blockquote>
+<p>I think; therefore I am.(我思故我在)</p>
+<p>To be or not to be，that is the question.</p>
+</blockquote>
+<p>以上就是所有关于“补语”概念。</p>
+<h2 id="svoo冰冰句型"><a class="markdownIt-Anchor" href="#svoo冰冰句型"></a> S+V+O+O&quot;冰冰&quot;句型</h2>
+<p>我们最后再来说一说有两个宾语的句型，我把它称为冰冰句型。</p>
+<p>我们前面说过，之所以会有五个不同的基本句型，是对应五种不同特性的动词，而就有这么一种动词，它是“性无能”的反面，它可以跟两个宾语。但正是因为这一特性，<strong>它很容易和宾补句型搞混</strong>：</p>
+<blockquote>
+<p>John gives Tom a dog.(S+V+O+O)</p>
+<p>John called Tom a dog.(S+V+O+C)</p>
+</blockquote>
+<p>如果我们按照之前判断宾补句型的方法，在Tom 和 dog之间插入be动词，我们发现两个句子会是一个意思：Tom是条狗。</p>
+<p>这在第二句是可以说通的，因此第二句是一个宾补句型；但是在第一句，就说不通了，Tom是“give”给的对象，“a dog”是被给的对象，因此第一句是冰冰句型。</p>
+<p>以上就是对简单句的五种基本句型的讲解。</p>
+<hr />
+<h1 id="词类"><a class="markdownIt-Anchor" href="#词类"></a> 词类</h1>
+<p>讲完了基本的句型，我们再来说说组成句子的成分——词，这部分我准备只挑重点地记一下。</p>
+<h2 id="名词短语和冠词"><a class="markdownIt-Anchor" href="#名词短语和冠词"></a> 名词短语和冠词</h2>
+<p>我们如何限定名词短语的范围？一种方法是改末尾，加个s之类的；一种方法是在开头加个a（<strong>冠词</strong>），many之类的，我们称这种为“<strong>限定词</strong>”。</p>
+<blockquote>
+<p><strong>限定词</strong>和<strong>末尾的复数</strong>共同决定了名词短语的范围。</p>
+</blockquote>
+<h3 id="什么时候不需要限定词"><a class="markdownIt-Anchor" href="#什么时候不需要限定词"></a> 什么时候不需要限定词</h3>
+<p>我们来看两个例子：</p>
+<blockquote>
+<p>many new students. → new students</p>
+<p>a new book → new book</p>
+</blockquote>
+<p>我们将这两个名词短语的限定词都去掉，就会发现第一句还是对的，第二句就有问题了。重点就在这个冠词上，因为对于复数，末尾有限定范围的s,es，而头有锦上添花的限定词，所以对于有复数的名词短语来说，限定词可去；<strong>但是对于“一个”这种，无末尾复数形式的名词短语，就需要冠词来限定范围</strong>。</p>
+<p>所以，<strong>什么时候我们不需要限定词？</strong> → 如果后面的名词不适合以”一个“来交代，也就是不适合加a(n)的话，就可把限定词这个位置空下来。</p>
+<blockquote>
+<p>注意，对于像honesty这种<strong>抽象名词</strong>和像water这种无具体形状的<strong>物质名词</strong>，不能加冠词来限定范围，因此它们也可以省略限定词。</p>
+</blockquote>
+<h3 id="定冠词the的用法"><a class="markdownIt-Anchor" href="#定冠词the的用法"></a> 定冠词the的用法</h3>
+<p>在语源学上， the可视为that或those的弱化形式。而that或those 是指示形容词，有明确的指示功能。所以定冠词the也可以用同样的角度来了解: <strong>凡是上下文中有明指或暗示时,也就是有&quot;那个&quot; 的指示功能时，便要用定冠词the</strong> 。</p>
+<p>我们来看个例子：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210818082001.png" alt="image-20210818081953147" /></p>
+<p>另外，<strong>如果上下文中没有明确指出来，但有清楚的暗示，仍然要用定冠词 the</strong> ：</p>
+<blockquote>
+<p>你在乘公交车的时候，有人对你说：</p>
+<p>Do you mind if I open the window?</p>
+<p>这里就暗指了你旁边的window，要不然人家问你干嘛？如果改成下面这样：</p>
+<p>Do you mind if I open a window?</p>
+<p>这里就是随便开一扇窗，既然是随便开，那为什么要问你一个人，是不是感觉很怪？</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Grammar</tag>
+        <tag>English</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言声明的问题</title>
+    <url>/2021/08/10/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。</p>
+<blockquote>
+<p>C语言声明的语法有时会带来严重的问题。						——K&amp;R</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="c语言声明模型如此晦涩的原因"><a class="markdownIt-Anchor" href="#c语言声明模型如此晦涩的原因"></a> C语言声明模型如此晦涩的原因</h2>
+<p>对于编程语言的语法来说，<strong>歧义是非常忌讳的</strong>，因为它使编译器设计者的工作严重复杂化。而C语言’声明语法‘的歧义性渗透进语言的方方面面，正是由于在<strong>组合类型方面</strong>的笨拙行为，C语言变得十分复杂。下面我们来说说，C语言会变成这样的几个原因：</p>
+<ul>
+<li>
+<p>type model(类型模型)，在C之前并无广泛应用，BCPL（C的祖先）的数据类型也只有二进制，C先天有缺。</p>
+</li>
+<li>
+<p>C出现一种设计哲学：<font color=purple><strong>要求对象的声明形式与它的使用形式尽可能相似</strong></font>。</p>
+<p>​		举个例子：int *p[3]声明了一个指向int的指针数组，并以*p[i]这样的表达式引用或使用指针所指向的int数据，所以它的声明形式和使用形式非常相似。这样设计的好处是：<font color=orange>操作符的优先级</font>在声明和使用时是一样的；缺点为它是在一个缺点上进行的改进，<font color=orange>操作符的优先级</font>也是C设计不当和复杂之处。</p>
+<p>​	“声明的形式和使用的形式相似”这种用法可能是C语言的独创，其他语言并没有采取这种方法。放在上个世纪6、70年代，这种设计都是不合理的，<strong>把两种截然不同的东西做成一个样子真的有必要吗</strong>？</p>
+</li>
+<li>
+<p>C声明最大的问题：<font color=purple><strong>无法以一种人们所习惯的自然方式从左向右阅读一个声明。</strong></font>特别是const,volatile出现之后，情况更糟了。举个例子：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*涉及指针和const的声明可能会出现几种不同的顺序*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> i_jelly;	<span class="comment">/*指针是只读的*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * <span class="keyword">const</span> i_jam;<span class="comment">/*指针和其所指的对象都是只读的*/</span></span><br></pre></td></tr></table></figure>
+<p>​		除此之外，C中风格似声明，但却没有标识符的情况，例如强制类型转换，形式参数声明显得没有必要，我们来看一个例子：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*强制转换成指向数组的指针*/</span></span><br><span class="line"><span class="keyword">char</span> (*j)[<span class="number">20</span>];</span><br><span class="line">j = (<span class="keyword">char</span> (*)[<span class="number">20</span>]) <span class="built_in">malloc</span>[<span class="number">20</span>];	<span class="comment">//作者所诟病的就是(*)的括号，显得十分多余</span></span><br></pre></td></tr></table></figure>
+<p>这一节是这一章的开篇，作者指出了C语言声明设计不合理的地方，<strong>下面会详细介绍C语言声明相关知识，并且给出面对这种复杂声明的方法。</strong></p>
+</li>
+</ul>
+<hr />
+<h2 id="声明的形成"><a class="markdownIt-Anchor" href="#声明的形成"></a> 声明的形成</h2>
+<h3 id="声明的基础"><a class="markdownIt-Anchor" href="#声明的基础"></a> 声明的基础</h3>
+<p>声明器（declarator）就是<strong>标识符以及与它组合在一起的任何指针、函数括号、数组下标</strong>，这是C语言声明的核心，下面贴一张表格来总结一下声明器：</p>
+<table>
+<thead>
+<tr>
+<th>数量</th>
+<th>C语言中的名字</th>
+<th>C语言中出现的形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 or many</td>
+<td>指针</td>
+<td>下列形式之一：1.*const volatile 2. *volatile 3. * 4.*const 5.*volatile const</td>
+</tr>
+<tr>
+<td>only  one</td>
+<td>direct declarator（直接声明器）</td>
+<td>标识符 or 标识符[] or 标识符（参数）or (声明器)</td>
+</tr>
+<tr>
+<td>zero or one</td>
+<td>初始化内容</td>
+<td>= 初始值</td>
+</tr>
+</tbody>
+</table>
+<p>上面所描述的只是声明的一部分——声明器，声明的基本组成如下：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810095339.png" alt="image-20210810095331255" style="zoom:50%;" />
+<p>注意，要想声明合法，还得注意：</p>
+<ul>
+<li>函数的返回值不能是一个函数，所以像foo()()这样是非法的；</li>
+<li>函数的返回值不能是一个数组，所以像foo()[]这样是非法的；</li>
+<li>数组里面不能有函数，所以像foo这样是非法的。</li>
+</ul>
+<p>但下面这些是合法的：（<strong>简单来说，指针yyds</strong>）</p>
+<ul>
+<li>函数的返回值允许是一个函数指针，如int(* fun())()；</li>
+<li>函数的返回值允许是一个指向数组的指针，如int(* foo())[]；</li>
+<li>数组里面允许有函数指针，如int (* foo[])()；</li>
+<li>数组里面允许有其他数组，所以你经常能看到int foo[][]</li>
+</ul>
+<p>在我们看看组合类型是怎么恶心人之前，我们先来复习一下下面这些知识。</p>
+<hr />
+<h3 id="结构-联合和枚举"><a class="markdownIt-Anchor" href="#结构-联合和枚举"></a> 结构、联合和枚举</h3>
+<p>额，其实这部分没必要特别写，只是我自己也不太清楚联合、枚举的意思，所以权当复习，会的话可以直接跳过。</p>
+<h4 id="联合"><a class="markdownIt-Anchor" href="#联合"></a> 联合</h4>
+<p>结构是什么，没必要再细说了，就是一种把一些数据项组合在一起的数据结构。所谓的<strong>联合</strong>，其实声明和结构一模一样，只要把struct换成union一样就行了。</p>
+<blockquote>
+<p><strong>那么联合和结构有什么区别呢？</strong></p>
+<p>在结构中，每个成员依次存储；而<strong>在联合中，所有的成员都从偏移地址零开始存储</strong>。这样，每个成员的位置都重叠在一起：<strong>在某一时刻，只有一个成员真正存储于该地址。</strong></p>
+</blockquote>
+<p>联合的存储特性决定了它的几个有限的用途：</p>
+<ul>
+<li>联合<strong>一般是作为大型结构的一部分存在的</strong>。在有些大型结构中，存在一些与实际表示的数据类型有关的隐式或显式的信息。如果存储数据时是一种类型，但在提取该数据时却成了另外一种类型，这显然存在着明显的类型不安全性</li>
+<li>节省备用的存储空间。我们可以用联合来存储彼此相互矛盾的数据（即不可能同时出现），比如男和女，你总不可能又是🚹的又是🚺的吧。</li>
+<li><strong>把同一个数据解释成两种不同的东西</strong>，而不是把两个不同的数据解释为同一种东西。</li>
+</ul>
+<h4 id="枚举enum"><a class="markdownIt-Anchor" href="#枚举enum"></a> 枚举(enum)</h4>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101203.png" alt="image-20210810101203170" /></p>
+<p>长这样的就是枚举，sizes是可选标签，后面是标识符的列表以及赋给他们的值。在C语言中，#define其实干了enum的活，只不过其它语言都有enum，那咱C语言不能没有(doge)</p>
+<h3 id="优先级"><a class="markdownIt-Anchor" href="#优先级"></a> 优先级</h3>
+<p>读声明得有个先后顺序，这就是优先级，懒得写了，直接看表吧：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101650.png" alt="image-20210810101650022" style="zoom:67%;" />
+<h3 id="读声明的方法"><a class="markdownIt-Anchor" href="#读声明的方法"></a> 读声明的方法</h3>
+<h4 id="通过图表"><a class="markdownIt-Anchor" href="#通过图表"></a> 通过图表</h4>
+<p>我们来看一个分析的过程，假设我们现在要分析：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> * <span class="keyword">const</span> *(*next)();</span><br></pre></td></tr></table></figure>
+<p>下面是分析过程：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102036.png" alt="image-20210810102036341" style="zoom:67%;" />
+<p>拼在一起，读作：“next是一个指向函数的指针，该函数返回另一个指针，该指针指向一个只读的指向char的指针”，</p>
+<h4 id="typedef"><a class="markdownIt-Anchor" href="#typedef"></a> typedef</h4>
+<p>我们知道typedef的作用是：<strong>它为一种类型引入新的名字，而不是为变量分配空间</strong>。也就是指明一种类型的同义词，而不是去定义一种类型。这毫无疑问，会给我们的声明带来简便这一好处。</p>
+<p>但千万不要像下面这样做：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102821.png" alt="image-20210810102821499" style="zoom:67%;" />
+<h5 id="typedef-和宏文本替换define的区别"><a class="markdownIt-Anchor" href="#typedef-和宏文本替换define的区别"></a> typedef 和宏文本替换define的区别</h5>
+<p>我们应该注意到，typedef的功能和宏文本替换的功能极其相似，那么两者有什么区别呢？</p>
+<p>在说区别之前，我们要有这样的认识：<font color=purple><strong>typedef是一种彻底的“封装”类型，在声明它之后，就不能再往里面加东西了。</strong></font>下面来说说区别：</p>
+<ul>
+<li>
+<p>可以用其他类型说明符对宏类型名进行扩展，但对typedef所定义的类型名却不能这样做。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> apple int</span></span><br><span class="line">unsighed apple i;	<span class="comment">/*legal*/</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> peach;</span><br><span class="line">unsighed peach i;	<span class="comment">/*illeagl,你在想桃子吃*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>在连续几个变量的声明中，用typedef定义的类型能够保证声明中所有的变量均为同一种类型，而用#define定义的类型则无法保证。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int_ptr int *</span></span><br><span class="line">int_ptr a,b;		<span class="comment">/*我们展开：int * a,b;其实只有a 为int*型，而b只是一个int类型。*/</span></span><br><span class="line"><span class="meta">#typedef int * int_ptr;</span></span><br><span class="line">int_ptr a,b			<span class="comment">/*这个时候a,b的类型都是指向int的指针*/</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这些就是typedef和define的区别。</p>
+<h5 id="typedef和结构"><a class="markdownIt-Anchor" href="#typedef和结构"></a> typedef和结构</h5>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810104832.png" alt="image-20210810104832794" style="zoom:67%;" />
+<p>这些就是本篇的内容了。</p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+        <tag>基础知识</tag>
       </tags>
   </entry>
 </search>
