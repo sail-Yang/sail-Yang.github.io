@@ -1861,8 +1861,8 @@
       </tags>
   </entry>
   <entry>
-    <title>英语语法—简单句型</title>
-    <url>/2021/08/17/%E8%8B%B1%E8%AF%AD%E8%AF%AD%E6%B3%95%E2%80%94%E7%AE%80%E5%8D%95%E5%8F%A5%E5%9E%8B/</url>
+    <title>英语语法—简单句型（1）</title>
+    <url>/2021/08/21/%E8%8B%B1%E8%AF%AD%E8%AF%AD%E6%B3%95%E2%80%94%E7%AE%80%E5%8D%95%E5%8F%A5%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
 <p>作为一名程序猿预备军，对英语这门语言的掌握是必要的，而作为英语的基础——英语语法也是必须学习的。但我可不想像高中那样，找本“语法手册”边背边做题😫，这样学语法的确有效果，但是太痛苦了。最近发现了一般好书——《文法俱乐部》，看完这本书，我觉得基础语法够用了，比什么“语法手册”好太多了。</p>
 <h2 id="学习顺序"><a class="markdownIt-Anchor" href="#学习顺序"></a> 学习顺序</h2>
@@ -1968,6 +1968,73 @@
 <p>这里就暗指了你旁边的window，要不然人家问你干嘛？如果改成下面这样：</p>
 <p>Do you mind if I open a window?</p>
 <p>这里就是随便开一扇窗，既然是随便开，那为什么要问你一个人，是不是感觉很怪？</p>
+</blockquote>
+<hr />
+<h2 id="动词的时态问题"><a class="markdownIt-Anchor" href="#动词的时态问题"></a> 动词的时态问题</h2>
+<p>以前学时态的时候……可下了不少功夫，学了十几年都没形成体系，现在就忘了这些玩意了。这给老师说：要掌握时态，我们只要<strong>掌握简单式和完成式两种状态</strong>就行了，amazing😏</p>
+<p>首先要说明，时态分为<font color=green><strong>时间（过去，现在，未来）</strong></font>和<font color=purple><strong>状态</strong></font>。状态的观念就比较麻烦， 如果再把主动、被动语态(voice)加进来，变化就更多了。那么，我们化繁为简的方法就是：</p>
+<blockquote>
+<p>动词短语长的时候，里面一定会有be动词，如果<strong>把be动词抽离出来当做动词看待</strong>，那就只剩下用be动词写的简单式，以及用have been 写的完成式两种状态。 <strong>分词则可视为形容词补语</strong>，不放在动词短语里面，如此一来整个时态的问题就会简单化。</p>
+</blockquote>
+<p>具体什么意思，不要急，我们先来看看简单式和完成式的内容：</p>
+<h3 id="简单式括弧法"><a class="markdownIt-Anchor" href="#简单式括弧法"></a> 简单式——括弧法</h3>
+<blockquote>
+<p>简单式的动词可以清楚交代此动作是发生于哪个<strong>时段</strong>，而与它搭配的<strong>时间副词通常会明确标示出一个时段</strong>。</p>
+</blockquote>
+<p>也就是说，我们可以用一个***括弧***来表示简单式的各个时态。这个括弧可以大到无限，也可以小到一个点，但是界限一定要明确。我们来看看实例(<strong>注意时间副词和动词时态的关系</strong>)：</p>
+<h4 id="过去"><a class="markdownIt-Anchor" href="#过去"></a> 过去</h4>
+<p>第一个例子因为动词短语只有一个动词，很短，是没有be动词的：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821224503.png" alt="image-20210821224502822" style="zoom:80%;" />
+<p>这里用in 1979来修饰动词establish的时间，很明显括弧在Now的左边，属于过去时段，所以我们应该用establish的过去式established。（<strong>时态看时间副词，时刻记住</strong>）</p>
+<hr />
+<p>我们再来看一个<u>关于现在分词</u>的例子：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821224954.png" alt="image-20210821224954012" style="zoom:80%;" />
+<p>whole day yesterday的性质和 in 1979 是相同的: 都是一个过去时间的括弧。 所以，动词时态都是过去简单式。</p>
+<p>be 动词后面 visiting clients 这个部分可视为<strong>一个现在分词的短语，做为形容词补语来形容主语</strong>。现在分词表示一种持续性、相当于中文的&quot;正在&quot;、“一直&quot;的口吻。be动词不必翻译，因为它是一个没有意义的连缀动词，连接主语&quot;我&quot;和补语&quot;一直在拜访客户”。 <strong>be动词只要负责交代时态就好</strong>。</p>
+<hr />
+<p>我们再来看一个<u>关于过去分词</u>的例子：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821225851.png" alt="image-20210821225851128" style="zoom:80%;" />
+<p>时间副词 when he had a heart attack 指的是他心脏病突发的瞬间，是一个最小的括弧。而had表示这个时间是过去的时间，所以be动词用was来表示过去简单式。（<strong>时态看时间副词，时刻记住</strong>）</p>
+<p><strong>be动词后的部分都被看作形容词补语</strong>，有being和questioned两个分词都视为形容词。be动词没有意义，其主要作用在于这个-ing，表示“正在”；过去分词 questioned也当形容词看，可是过去分词字尾-ed表示被动，配合question就解释为&quot;被质询&quot;。</p>
+<p>所以being questioned 解释为&quot;正在被质询&quot;，用来做为主语&quot;证 人&quot;的补语。</p>
+<hr />
+<h4 id="现在"><a class="markdownIt-Anchor" href="#现在"></a> 现在</h4>
+<p>如果时间副词是now或是以now为中心的或大或小的括弧，就要用现在时间的简单式。至于什么真理，时间表用现在时间，其实没什么好背的……因为什么真理无非就是包括now的比较大的括弧。</p>
+<p>我们来看这方面的例子：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210822081212.png" alt="image-20210822081204359" style="zoom:80%;" />
+<p>这很明显是真理，古今皆然的，所以这是以 now 为中心的一个极大的括弧。不论大小，只要可以用括弧表示，就是简单式，所以动词用现在简单式的love.</p>
+<hr />
+<p>再来看一个现在分词的例子：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210822081714.png" alt="image-20210822081714034" style="zoom:80%;" />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210822081728.png" alt="image-20210822081728080" style="zoom:80%;" />
+<p>this month很明显是包含now的一个括弧，所以用现在时间的简单式is,selling big cokes作为补语。selling用现在分词表示一种持续性。</p>
+<hr />
+<h4 id="未来"><a class="markdownIt-Anchor" href="#未来"></a> 未来</h4>
+<p>未来时间的简单式，只是把括弧放在 now 的右边，其他的原理则完全相同。至于关于语气的变化在后面的章节会讲到。</p>
+<hr />
+<h3 id="完成式箭头法"><a class="markdownIt-Anchor" href="#完成式箭头法"></a> 完成式——箭头法</h3>
+<p>相对于简单式用括弧形状来表达时间段，完成式则是以箭头形状来表示<strong>动作的截止时间</strong>。从功能上来看，简单式是交代动作发生的时段，而完成式并不对动作发生的时段作明确的交代，<strong>只表示&quot;曾经&quot;、 &quot;做过&quot;的意思</strong>。</p>
+<h4 id="现在-2"><a class="markdownIt-Anchor" href="#现在-2"></a> 现在</h4>
+<p>我们先来看一个例句：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210822083357.png" alt="image-20210822083357026" style="zoom: 50%;" />
+<p>主句的I am交代了是现在时间，可是时间副词并没有交代具体的时间段，只知道曾经看过。所以我们可以用一个指向Now的箭头表示：在这一刻以前看到过都 算数，以后才要去看则不算数，这就是现在时间完成式的条件。</p>
+<hr />
+<p>我们再来看一个：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210822083814.png" alt="image-20210822083814533" style="zoom: 80%;" />
+<p>时间副词since they moved in虽然看上去是计算开始的时间，但语气的重点其实是“算到现在有多久”，所以用完成式；补语部分是过去分词，要用被动语态。</p>
+<hr />
+<h4 id="未来-2"><a class="markdownIt-Anchor" href="#未来-2"></a> 未来</h4>
+<p>未来也是一个道理，把截止时间移到now的右边就行了。</p>
+<hr />
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>现在我们来总结一下，解决动词时态问题的方法：</p>
+<blockquote>
+<ol>
+<li><strong>把be动词当动词看、句子就只剩两种状态:简单式与完成式。</strong></li>
+<li><strong>简单式是以括弧型的时间来表达。</strong></li>
+<li><strong>完成式是以箭头型的时间来表达。</strong></li>
+<li><strong>be动词后面的分词当做形容词补语。现在分词有正在进行的意思，过去分词有被动的意思。</strong></li>
+</ol>
 </blockquote>
 ]]></content>
       <tags>
