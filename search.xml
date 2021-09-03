@@ -2750,6 +2750,164 @@
     <content><![CDATA[<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
 <p>最近想学一下vscode,将vscode当作主要使用的编辑器。所以想专门写一篇，来记录一下使用和配置的过程，一开始不会有体系，只是遇到什么问题就记什么，当用得差不多时，可能会回头整理一下。</p>
 <span id="more"></span>
+<h1 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h1>
+<h2 id="全局快捷键"><a class="markdownIt-Anchor" href="#全局快捷键"></a> 全局快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">打开/关闭侧边栏</td>
+<td style="text-align:center">Ctrl+B</td>
+</tr>
+<tr>
+<td style="text-align:center">打开多个编辑器</td>
+<td style="text-align:center">Ctrl+\</td>
+</tr>
+<tr>
+<td style="text-align:center">聚焦到第n个编辑器</td>
+<td style="text-align:center">Ctrl+n(数字)</td>
+</tr>
+<tr>
+<td style="text-align:center">放大/缩小</td>
+<td style="text-align:center">Ctrl + +/-</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">删除整行</td>
+<td style="text-align:center">Ctrl+Shift+K</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之前的一个英文单词</td>
+<td style="text-align:center">Ctrl+backspace</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之后的一个英文单词</td>
+<td style="text-align:center">Ctrl+delete</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码编辑快捷键"><a class="markdownIt-Anchor" href="#代码编辑快捷键"></a> 代码编辑快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">光标移动到开头/结尾</td>
+<td style="text-align:center">home/end</td>
+</tr>
+<tr>
+<td style="text-align:center">光标移动到文档开头/结尾</td>
+<td style="text-align:center">Ctrl+home/Ctrl+end</td>
+</tr>
+<tr>
+<td style="text-align:center">回到上一个光标的位置</td>
+<td style="text-align:center">Ctrl+U</td>
+</tr>
+<tr>
+<td style="text-align:center">代码上下换位</td>
+<td style="text-align:center">Alt+↑↓</td>
+</tr>
+<tr>
+<td style="text-align:center">代码复制并填充上/下</td>
+<td style="text-align:center">Alt+Shift+↑↓</td>
+</tr>
+<tr>
+<td style="text-align:center">快捷注释（单行）</td>
+<td style="text-align:center">Ctrl+/</td>
+</tr>
+<tr>
+<td style="text-align:center">全局代码格式化（根据语言）</td>
+<td style="text-align:center">Alt+shift+F</td>
+</tr>
+<tr>
+<td style="text-align:center">选中代码格式化</td>
+<td style="text-align:center">Ctrl+F</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="快速跳转"><a class="markdownIt-Anchor" href="#快速跳转"></a> 快速跳转</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">快速打开文件</td>
+<td style="text-align:center">Ctrl+P</td>
+</tr>
+<tr>
+<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
+<td style="text-align:center">Ctrl+G+行号</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开文件第n行</td>
+<td style="text-align:center">Ctrl+P，输入 :+行号</td>
+</tr>
+<tr>
+<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
+<td style="text-align:center">F12/Ctrl+F12</td>
+</tr>
+<tr>
+<td style="text-align:center">展现谁引用了函数或类</td>
+<td style="text-align:center">Shift+F12</td>
+</tr>
+<tr>
+<td style="text-align:center">代码重构（修改一个函数或者变量名）</td>
+<td style="text-align:center">光标移到修改处+F2</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="自定义快捷键"><a class="markdownIt-Anchor" href="#自定义快捷键"></a> 自定义快捷键</h2>
+<p>vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" alt="image-20210903152109373" /></p>
+<h1 id="创建多层文件夹"><a class="markdownIt-Anchor" href="#创建多层文件夹"></a> 创建多层文件夹</h1>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152644.png" alt="image-20210903152636945" style="zoom:80%;" />
+<h1 id="vscode配置云同步"><a class="markdownIt-Anchor" href="#vscode配置云同步"></a> VScode配置云同步</h1>
+<p>我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。</p>
+<p>我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。</p>
+<p><strong>将自己本地的配置云同步到 GitHub</strong>：</p>
+<p>（1）安装插件 <code>settings-sync</code>。</p>
+<p>（2）安装完插件后，在插件里使用 GitHub 账号登录。</p>
+<p>（3）登录后在 vscode 的界面中，可以选择一个别人的 gist；也可以忽略掉，然后创建一个属于自己的 gist。</p>
+<p>（4）使用快捷键 「Command + Shift + P」，在弹出的命令框中输入 sync，并选择「更新/上传配置」，这样就可以把最新的配置上传到 GitHub。</p>
+<p><strong>我们如何将Gist中保存的配置同步到本地呢？</strong></p>
+<p>首先将gist ID更改为你想要的ID：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903155215.png" alt="image-20210903155208689" /></p>
+<p>打开命令面板，输入sync，选择高级选线，里面就可以更改你想要的gist ID，然后进行下载配置(shift + ALt + D)</p>
 ]]></content>
       <categories>
         <category>工具使用</category>
