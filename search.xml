@@ -852,11 +852,10 @@
 ]]></content>
       <categories>
         <category>工具使用</category>
-        <category>git/github</category>
+        <category>版本管理</category>
       </categories>
       <tags>
         <tag>git</tag>
-        <tag>基本命令汇总</tag>
       </tags>
   </entry>
   <entry>
@@ -1029,9 +1028,7 @@
         <category>IDE/编辑器</category>
       </categories>
       <tags>
-        <tag>tools</tag>
         <tag>vs</tag>
-        <tag>guide</tag>
       </tags>
   </entry>
   <entry>
@@ -1214,7 +1211,6 @@
         <category>数据结构和算法</category>
       </categories>
       <tags>
-        <tag>CS</tag>
         <tag>DS</tag>
       </tags>
   </entry>
