@@ -831,8 +831,8 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo killall apt apt-get</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
+        <category>操作系统</category>
         <category>Linux</category>
-        <category>Ubuntu</category>
       </categories>
       <tags>
         <tag>Linux</tag>
