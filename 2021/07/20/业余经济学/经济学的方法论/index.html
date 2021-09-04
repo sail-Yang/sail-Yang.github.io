@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Ma Shan Zheng:300,300italic,400,400italic,700,700italic|ZCOOL XiaoWei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="经济学的方法论">
+<meta property="og:url" content="https://progsail.com/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/index.html">
+<meta property="og:site_name" content="sail Yang&#39;s Blog">
+<meta property="og:description" content="本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210720145206.jpg">
+<meta property="article:published_time" content="2021-07-20T01:55:50.000Z">
+<meta property="article:modified_time" content="2021-09-04T12:47:59.519Z">
+<meta property="article:author" content="sail Yang">
+<meta property="article:tag" content="经济学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210720145206.jpg">
+
+<link rel="canonical" href="https://progsail.com/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>经济学的方法论 | sail Yang's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b39039cf0480fc7ace0048fd5a806193";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sail Yang's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="sail Yang">
+      <meta itemprop="description" content="企者不立，跨者不行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sail Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          经济学的方法论
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-20 09:55:50" itemprop="dateCreated datePublished" datetime="2021-07-20T09:55:50+08:00">2021-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-04 20:47:59" itemprop="dateModified" datetime="2021-09-04T20:47:59+08:00">2021-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">业余经济学</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%90%86%E8%AE%BA%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">理论学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210720145206.jpg" alt="" /></p>
+<span id="more"></span>
+<h2 id="研究时科学家"><a class="markdownIt-Anchor" href="#研究时科学家"></a> 研究时—科学家</h2>
+<p>emmm,作者说经济学家其实和物理学家，生物学家的方法论差不多，研究在保证客观性的前提下，按照：观察 → 提出假设 → 搜集data → 分析data → 证明或否定假设，所以说经济学家是一种科学。作者接下来解释了<strong>为什么说经济学是一种科学</strong>：</p>
+<blockquote>
+<p>科学的本质是科学方法——冷静地建立并检验有关世界如何运行的各种理论。这种研究方法适用于研究一国经济，就像适用于研究地心引力或生物进化一样。正如阿尔伯特·爱因斯坦（Albert Einstein）曾经指出的：“所有科学不过是日常思考的不断完善而已。”</p>
+</blockquote>
+<p>为了进一步说明，作者选了点上面说的科学的方法论的流程，说了说经济学的特色：</p>
+<h3 id="观察提出假设"><a class="markdownIt-Anchor" href="#观察提出假设"></a> 观察，提出假设</h3>
+<p>经济学家会观察经济现象，这个不用多说。特别的是，物理学家想观察，获得数据，做做实验就好了；可是<strong>经济学家想进行实验几乎是不可能的</strong>。比如研究通货膨胀的经济学家绝不会被允许仅仅为了获得有用的数据而操控一国的货币政策。</p>
+<p>为此，经济学家<strong>只能求助于历史提供的实验</strong>。例如，当中东战争中断了原油运输时，全世界石油价格飞涨。对石油和石油产品的消费者来说，这个事件降低了他们的生活水平；对经济决策者来说，这个事件提出了如何做出最佳应对的难题。但对经济科学家来说，它提供了<u>研究一种重要的自然资源对世界经济影响的机会</u>。</p>
+<p>这就是为什么经济学家十分关注历史事件的原因。</p>
+<h3 id="建立模型"><a class="markdownIt-Anchor" href="#建立模型"></a> 建立模型</h3>
+<p>其实参加过数学建模比赛的uu就知道，题目中会有一道经济学相关的题目，也就是让你建立一个经济学模型来解决一个经济学问题。这个建模的过程和数学建模的过程是很像的。</p>
+<ul>
+<li>首先提出假设，去掉一些不重要的细节，建立一个初步的模型。</li>
+<li>再不断增加<strong>必要的</strong>复杂度。（注意，这是个由浅入深的过程）</li>
+<li>最后建立一个<strong>合适的</strong>模型。（针对不同的问题而言）</li>
+</ul>
+<p>经济由从事许多活动——购买、销售、工作、雇佣、制造等——的千百万人所组成。为了理解经济的运行方式，我们必须找到某种方法来<strong>简化</strong>我们对所有这些活动的思考。换句话说，我们需要一个模型从总体上来解释经济是如何组织起来的，并说明经济的参与者如何相互交易。</p>
+<p>然后作者列举了两个经济学的经典模型：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/95971285">循环流量图</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E5%8F%AF%E8%83%BD%E6%80%A7%E6%9B%B2%E7%BA%BF">生产可能性边界—简单的数学经济模型</a>,我觉得可以这么理解：总共50块钱，你是买汽水喝还是买辣条，多买辣条一点你就少喝点汽水。想想这个模型和前面讲到的十大原理中哪些原理有关系？</li>
+</ol>
+<h3 id="研究领域宏观和微观"><a class="markdownIt-Anchor" href="#研究领域宏观和微观"></a> 研究领域：宏观和微观</h3>
+<p>经济学的研究和其它科学一样，是分为不同层次的，传统意义上划分为两个大方向：</p>
+<ul>
+<li>
+<p>微观经济学（microeconomics）：研究家庭和企业如何做出决策，以及它们如何在特定市场上相互交易。</p>
+<p>一个微观经济学家可能研究租金控制对上海住房的影响、外国竞争对我国汽车行业的影响，或者接受义务教育对工人收入的影响。</p>
+</li>
+<li>
+<p>宏观经济学（macroeconomics）：研究整体经济现象。</p>
+<p>一个宏观经济学家可能研究政府借债的影响、经济中失业率随时间推移的变动，或者提高一国生活水平的不同政策。</p>
+</li>
+</ul>
+<p>微观经济学和宏观经济学是密切相关的。由于整体经济的变动产生于千百万个人的决策，所以，不考虑相关的微观经济决策而要去理解宏观经济的发展是不可能的。例如，宏观经济学家可能研究个人所得税的减少对整个物品与服务生产的影响。但是为了分析这个问题，他必须考虑所得税减少会如何影响家庭把多少钱用于购买物品与服务的决策。</p>
+<p>尽管微观经济学与宏观经济学之间存在固有的联系，但这两个领域仍然是不同的。由于它们强调不同的问题，且每个领域都有自己的一套模型，所以通常在不同的课程中讲授。</p>
+<hr />
+<h2 id="政策顾问"><a class="markdownIt-Anchor" href="#政策顾问"></a> 政策顾问</h2>
+<p>这经济乃民生之本，经济学家可不能躲进小楼成一统啊，研究那么多，总得告诉别人怎么做吧。</p>
+<p>当经济学家试图去<font color=purple><strong>解释世界时</strong>，他们是<strong>科学家</strong></font>；当经济学家试图去<font color=green><strong>帮助改善世界</strong>时，他们是<strong>政策顾问。</strong></font></p>
+<p>这句话很重要，两种不同的身份，语言是不一样的，你拿做研究时的术语去告诉不是学经济学的人怎么做，不是对牛弹琴吗？对此经济学规定了两套不同的术语（这是我没想到的😥）：实证表述与规范表述。额，怎么说呢，具体内容去查资料就有了，我就作为一个小白来说一说这俩玩意啥意思啊？</p>
+<ul>
+<li>实证表述就是靠证据说话，去<strong>解释</strong>一个经济系统是怎么运作的，是站在科学家的角度上（严谨）。</li>
+<li>规范表述不仅仅要涉及事实，还要考虑到社会、国家的方方面面。毕竟确定什么是好政策或什么是坏政策不仅仅是一个科学问题，它还涉及我们对伦理、宗教和政治哲学的看法，是一种<strong>指导性的语言</strong>，是站在顾问的角度上。</li>
+</ul>
+<p>在学习经济学时，要<strong>记住实证表述与规范表述的区别</strong>，因为这有助于你将精力集中在手头的任务上。</p>
+<p>经济学的许多内容是实证的：它仅仅在努力解释世界如何运行。但那些运用经济学的经济学家们通常有规范的目的：他们想知道如何改善经济。当你听到经济学家做出规范表述时，你就可以知道，他们此时已经是站在政策顾问的立场上，而不是站在科学家的立场上了。</p>
+<hr />
+<h3 id="经济学家的影响"><a class="markdownIt-Anchor" href="#经济学家的影响"></a> 经济学家的影响</h3>
+<p>经济学家对政策的影响超出了他们作为顾问的作用：他们的研究和著作经常间接地影响政策。经济学家约翰·梅纳德·凯恩斯（John Maynard Keynes）提出了这种看法：</p>
+<blockquote>
+<p>经济学家和政治哲学家的思想，无论正确与否，实际上都要比一般所想象的更有力量。事实上，这个世界就是由它们统治的。那些自认为能够免于受经济学家思想影响的实干家往往是某些已故经济学家的俘虏。那些当权狂人信奉的其实也不过是若干年前某些末流文人狂妄思想的零碎而已。</p>
+</blockquote>
+<p>虽然这些文字写于1935年，但至今仍然正确。实际上，现在正影响公共政策的“末流文人”往往是凯恩斯本人。</p>
+<p>经济学家的建议很重要，也有许多的领袖愿意听经济学家的建议。</p>
+<p>但是，<strong>经济学家的建议总是不被采纳</strong>……这个为什么也很好理解，都说了，经济学家的研究是建立在假设之上的，是抽象的模型，虽来源于现实但是脱离于现实，因此<strong>实际上的经济政策制定和经济学研究是两码事</strong>。</p>
+<hr />
+<h2 id="经济学家经常意见不一"><a class="markdownIt-Anchor" href="#经济学家经常意见不一"></a> 经济学家经常意见不一</h2>
+<p>萧伯纳曾经这样嘲讽道：</p>
+<blockquote>
+<p>如果让所有的经济学家围坐在一起，他们不会达成任何一个共识。</p>
+</blockquote>
+<p>至于为什么，我不想写了。</p>
+<h2 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h2>
+<p>以上其实就是绪论部分的结束，下面的章节就是经济学的干货了。在开始之前，作者引用了下面这段话：</p>
+<blockquote>
+<p>经济学研究似乎并不需要任何极高的特殊天赋。与更高深的哲学或纯科学相比，经济学难道不是……一门极其容易的学科吗？它是一门容易的学科，但这个学科中很少有人能出类拔萃！对这个悖论的解释也许在于杰出的经济学家应该具有罕见的各种天赋的组合。在某种程度上，他应该是数学家、历史学家、政治家和哲学家。他必须了解符号并用文字将其表达出来。他必须根据一般性来深入思考特殊性，并在思绪奔放的同时触及抽象与具体。他必须根据过去、着眼未来而研究现在。他必须考虑到人性或人的制度的每一部分。他必须同时保持坚定而客观的情绪，要像艺术家一样超然而不流俗，但有时又要像政治家一样脚踏实地。</p>
+</blockquote>
+<p>这无疑是一个高标准。但通过实践，我们将会越来越习惯于像经济学家一样思考。（好家伙，还整个交叉学科😳）</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BB%8F%E6%B5%8E%E5%AD%A6/" rel="tag"># 经济学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/17/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/" rel="prev" title="十大原理之整体性六大原理">
+      <i class="fa fa-chevron-left"></i> 十大原理之整体性六大原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/21/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/" rel="next" title="从processon看边际收益">
+      从processon看边际收益 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E6%97%B6%E7%A7%91%E5%AD%A6%E5%AE%B6"><span class="nav-text"> 研究时—科学家</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E6%8F%90%E5%87%BA%E5%81%87%E8%AE%BE"><span class="nav-text"> 观察，提出假设</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%A8%A1%E5%9E%8B"><span class="nav-text"> 建立模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E9%A2%86%E5%9F%9F%E5%AE%8F%E8%A7%82%E5%92%8C%E5%BE%AE%E8%A7%82"><span class="nav-text"> 研究领域：宏观和微观</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BF%E7%AD%96%E9%A1%BE%E9%97%AE"><span class="nav-text"> 政策顾问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%AE%B6%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text"> 经济学家的影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%AE%B6%E7%BB%8F%E5%B8%B8%E6%84%8F%E8%A7%81%E4%B8%8D%E4%B8%80"><span class="nav-text"> 经济学家经常意见不一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93"><span class="nav-text"> 结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="sail Yang"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">sail Yang</p>
+  <div class="site-description" itemprop="description">企者不立，跨者不行</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sail-Yang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sail-Yang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1186599081@qq.com" title="E-Mail → mailto:1186599081@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-block">
+        <div class="links-of-blogroll-title">
+          <!-- modify icon to fire by szw -->
+          <i class="fa fa-history fa-" aria-hidden="true"></i>
+          近期文章
+        </div>
+        <ul class="links-of-blogroll-list">
+          
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+        </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sail Yang</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'ACXvwk7p217craOCxA2G4PjX-MdYXbMMI',
+      appKey     : 'lBCQXXu3bCQ5MocqBE0V6rHa',
+      placeholder: "请举手发言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"moblie":{"show":true}});</script></body>
+</html>

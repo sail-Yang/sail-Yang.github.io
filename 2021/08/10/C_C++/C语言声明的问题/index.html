@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Ma Shan Zheng:300,300italic,400,400italic,700,700italic|ZCOOL XiaoWei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。  C语言声明的语法有时会带来严重的问题。						——K&amp;R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言声明的问题">
+<meta property="og:url" content="https://progsail.com/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="sail Yang&#39;s Blog">
+<meta property="og:description" content="这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。  C语言声明的语法有时会带来严重的问题。						——K&amp;R">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810095339.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101203.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101650.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102036.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102821.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810104832.png">
+<meta property="article:published_time" content="2021-08-10T01:03:58.000Z">
+<meta property="article:modified_time" content="2021-09-04T12:53:37.725Z">
+<meta property="article:author" content="sail Yang">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="声明">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810095339.png">
+
+<link rel="canonical" href="https://progsail.com/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C语言声明的问题 | sail Yang's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b39039cf0480fc7ace0048fd5a806193";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sail Yang's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="sail Yang">
+      <meta itemprop="description" content="企者不立，跨者不行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sail Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言声明的问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-10 09:03:58" itemprop="dateCreated datePublished" datetime="2021-08-10T09:03:58+08:00">2021-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-04 20:53:37" itemprop="dateModified" datetime="2021-09-04T20:53:37+08:00">2021-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。</p>
+<blockquote>
+<p>C语言声明的语法有时会带来严重的问题。						——K&amp;R</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="c语言声明模型如此晦涩的原因"><a class="markdownIt-Anchor" href="#c语言声明模型如此晦涩的原因"></a> C语言声明模型如此晦涩的原因</h2>
+<p>对于编程语言的语法来说，<strong>歧义是非常忌讳的</strong>，因为它使编译器设计者的工作严重复杂化。而C语言’声明语法‘的歧义性渗透进语言的方方面面，正是由于在<strong>组合类型方面</strong>的笨拙行为，C语言变得十分复杂。下面我们来说说，C语言会变成这样的几个原因：</p>
+<ul>
+<li>
+<p>type model(类型模型)，在C之前并无广泛应用，BCPL（C的祖先）的数据类型也只有二进制，C先天有缺。</p>
+</li>
+<li>
+<p>C出现一种设计哲学：<font color=purple><strong>要求对象的声明形式与它的使用形式尽可能相似</strong></font>。</p>
+<p>​		举个例子：int *p[3]声明了一个指向int的指针数组，并以*p[i]这样的表达式引用或使用指针所指向的int数据，所以它的声明形式和使用形式非常相似。这样设计的好处是：<font color=orange>操作符的优先级</font>在声明和使用时是一样的；缺点为它是在一个缺点上进行的改进，<font color=orange>操作符的优先级</font>也是C设计不当和复杂之处。</p>
+<p>​	“声明的形式和使用的形式相似”这种用法可能是C语言的独创，其他语言并没有采取这种方法。放在上个世纪6、70年代，这种设计都是不合理的，<strong>把两种截然不同的东西做成一个样子真的有必要吗</strong>？</p>
+</li>
+<li>
+<p>C声明最大的问题：<font color=purple><strong>无法以一种人们所习惯的自然方式从左向右阅读一个声明。</strong></font>特别是const,volatile出现之后，情况更糟了。举个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*涉及指针和const的声明可能会出现几种不同的顺序*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> i_jelly;	<span class="comment">/*指针是只读的*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * <span class="keyword">const</span> i_jam;<span class="comment">/*指针和其所指的对象都是只读的*/</span></span><br></pre></td></tr></table></figure>
+<p>​		除此之外，C中风格似声明，但却没有标识符的情况，例如强制类型转换，形式参数声明显得没有必要，我们来看一个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*强制转换成指向数组的指针*/</span></span><br><span class="line"><span class="keyword">char</span> (*j)[<span class="number">20</span>];</span><br><span class="line">j = (<span class="keyword">char</span> (*)[<span class="number">20</span>]) <span class="built_in">malloc</span>[<span class="number">20</span>];	<span class="comment">//作者所诟病的就是(*)的括号，显得十分多余</span></span><br></pre></td></tr></table></figure>
+<p>这一节是这一章的开篇，作者指出了C语言声明设计不合理的地方，<strong>下面会详细介绍C语言声明相关知识，并且给出面对这种复杂声明的方法。</strong></p>
+</li>
+</ul>
+<hr />
+<h2 id="声明的形成"><a class="markdownIt-Anchor" href="#声明的形成"></a> 声明的形成</h2>
+<h3 id="声明的基础"><a class="markdownIt-Anchor" href="#声明的基础"></a> 声明的基础</h3>
+<p>声明器（declarator）就是<strong>标识符以及与它组合在一起的任何指针、函数括号、数组下标</strong>，这是C语言声明的核心，下面贴一张表格来总结一下声明器：</p>
+<table>
+<thead>
+<tr>
+<th>数量</th>
+<th>C语言中的名字</th>
+<th>C语言中出现的形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 or many</td>
+<td>指针</td>
+<td>下列形式之一：1.*const volatile 2. *volatile 3. * 4.*const 5.*volatile const</td>
+</tr>
+<tr>
+<td>only  one</td>
+<td>direct declarator（直接声明器）</td>
+<td>标识符 or 标识符[] or 标识符（参数）or (声明器)</td>
+</tr>
+<tr>
+<td>zero or one</td>
+<td>初始化内容</td>
+<td>= 初始值</td>
+</tr>
+</tbody>
+</table>
+<p>上面所描述的只是声明的一部分——声明器，声明的基本组成如下：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810095339.png" alt="image-20210810095331255" style="zoom:50%;" />
+<p>注意，要想声明合法，还得注意：</p>
+<ul>
+<li>函数的返回值不能是一个函数，所以像foo()()这样是非法的；</li>
+<li>函数的返回值不能是一个数组，所以像foo()[]这样是非法的；</li>
+<li>数组里面不能有函数，所以像foo这样是非法的。</li>
+</ul>
+<p>但下面这些是合法的：（<strong>简单来说，指针yyds</strong>）</p>
+<ul>
+<li>函数的返回值允许是一个函数指针，如int(* fun())()；</li>
+<li>函数的返回值允许是一个指向数组的指针，如int(* foo())[]；</li>
+<li>数组里面允许有函数指针，如int (* foo[])()；</li>
+<li>数组里面允许有其他数组，所以你经常能看到int foo[][]</li>
+</ul>
+<p>在我们看看组合类型是怎么恶心人之前，我们先来复习一下下面这些知识。</p>
+<hr />
+<h3 id="结构-联合和枚举"><a class="markdownIt-Anchor" href="#结构-联合和枚举"></a> 结构、联合和枚举</h3>
+<p>额，其实这部分没必要特别写，只是我自己也不太清楚联合、枚举的意思，所以权当复习，会的话可以直接跳过。</p>
+<h4 id="联合"><a class="markdownIt-Anchor" href="#联合"></a> 联合</h4>
+<p>结构是什么，没必要再细说了，就是一种把一些数据项组合在一起的数据结构。所谓的<strong>联合</strong>，其实声明和结构一模一样，只要把struct换成union一样就行了。</p>
+<blockquote>
+<p><strong>那么联合和结构有什么区别呢？</strong></p>
+<p>在结构中，每个成员依次存储；而<strong>在联合中，所有的成员都从偏移地址零开始存储</strong>。这样，每个成员的位置都重叠在一起：<strong>在某一时刻，只有一个成员真正存储于该地址。</strong></p>
+</blockquote>
+<p>联合的存储特性决定了它的几个有限的用途：</p>
+<ul>
+<li>联合<strong>一般是作为大型结构的一部分存在的</strong>。在有些大型结构中，存在一些与实际表示的数据类型有关的隐式或显式的信息。如果存储数据时是一种类型，但在提取该数据时却成了另外一种类型，这显然存在着明显的类型不安全性</li>
+<li>节省备用的存储空间。我们可以用联合来存储彼此相互矛盾的数据（即不可能同时出现），比如男和女，你总不可能又是🚹的又是🚺的吧。</li>
+<li><strong>把同一个数据解释成两种不同的东西</strong>，而不是把两个不同的数据解释为同一种东西。</li>
+</ul>
+<h4 id="枚举enum"><a class="markdownIt-Anchor" href="#枚举enum"></a> 枚举(enum)</h4>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101203.png" alt="image-20210810101203170" /></p>
+<p>长这样的就是枚举，sizes是可选标签，后面是标识符的列表以及赋给他们的值。在C语言中，#define其实干了enum的活，只不过其它语言都有enum，那咱C语言不能没有(doge)</p>
+<h3 id="优先级"><a class="markdownIt-Anchor" href="#优先级"></a> 优先级</h3>
+<p>读声明得有个先后顺序，这就是优先级，懒得写了，直接看表吧：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810101650.png" alt="image-20210810101650022" style="zoom:67%;" />
+<h3 id="读声明的方法"><a class="markdownIt-Anchor" href="#读声明的方法"></a> 读声明的方法</h3>
+<h4 id="通过图表"><a class="markdownIt-Anchor" href="#通过图表"></a> 通过图表</h4>
+<p>我们来看一个分析的过程，假设我们现在要分析：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> * <span class="keyword">const</span> *(*next)();</span><br></pre></td></tr></table></figure>
+<p>下面是分析过程：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102036.png" alt="image-20210810102036341" style="zoom:67%;" />
+<p>拼在一起，读作：“next是一个指向函数的指针，该函数返回另一个指针，该指针指向一个只读的指向char的指针”，</p>
+<h4 id="typedef"><a class="markdownIt-Anchor" href="#typedef"></a> typedef</h4>
+<p>我们知道typedef的作用是：<strong>它为一种类型引入新的名字，而不是为变量分配空间</strong>。也就是指明一种类型的同义词，而不是去定义一种类型。这毫无疑问，会给我们的声明带来简便这一好处。</p>
+<p>但千万不要像下面这样做：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810102821.png" alt="image-20210810102821499" style="zoom:67%;" />
+<h5 id="typedef-和宏文本替换define的区别"><a class="markdownIt-Anchor" href="#typedef-和宏文本替换define的区别"></a> typedef 和宏文本替换define的区别</h5>
+<p>我们应该注意到，typedef的功能和宏文本替换的功能极其相似，那么两者有什么区别呢？</p>
+<p>在说区别之前，我们要有这样的认识：<font color=purple><strong>typedef是一种彻底的“封装”类型，在声明它之后，就不能再往里面加东西了。</strong></font>下面来说说区别：</p>
+<ul>
+<li>
+<p>可以用其他类型说明符对宏类型名进行扩展，但对typedef所定义的类型名却不能这样做。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> apple int</span></span><br><span class="line">unsighed apple i;	<span class="comment">/*legal*/</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> peach;</span><br><span class="line">unsighed peach i;	<span class="comment">/*illeagl,你在想桃子吃*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>在连续几个变量的声明中，用typedef定义的类型能够保证声明中所有的变量均为同一种类型，而用#define定义的类型则无法保证。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int_ptr int *</span></span><br><span class="line">int_ptr a,b;		<span class="comment">/*我们展开：int * a,b;其实只有a 为int*型，而b只是一个int类型。*/</span></span><br><span class="line"><span class="meta">#typedef int * int_ptr;</span></span><br><span class="line">int_ptr a,b			<span class="comment">/*这个时候a,b的类型都是指向int的指针*/</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这些就是typedef和define的区别。</p>
+<h5 id="typedef和结构"><a class="markdownIt-Anchor" href="#typedef和结构"></a> typedef和结构</h5>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210810104832.png" alt="image-20210810104832794" style="zoom:67%;" />
+<p>这些就是本篇的内容了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/%E5%A3%B0%E6%98%8E/" rel="tag"># 声明</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/07/C_C++/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="C中NULL,NUL和null的区别">
+      <i class="fa fa-chevron-left"></i> C中NULL,NUL和null的区别
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/" rel="next" title="ubuntu解决apt-get报错问题">
+      ubuntu解决apt-get报错问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#c%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E6%A8%A1%E5%9E%8B%E5%A6%82%E6%AD%A4%E6%99%A6%E6%B6%A9%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-text"> C语言声明模型如此晦涩的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E7%9A%84%E5%BD%A2%E6%88%90"><span class="nav-text"> 声明的形成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-text"> 声明的基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84-%E8%81%94%E5%90%88%E5%92%8C%E6%9E%9A%E4%B8%BE"><span class="nav-text"> 结构、联合和枚举</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%94%E5%90%88"><span class="nav-text"> 联合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BEenum"><span class="nav-text"> 枚举(enum)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text"> 优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%A3%B0%E6%98%8E%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-text"> 读声明的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%9B%BE%E8%A1%A8"><span class="nav-text"> 通过图表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#typedef"><span class="nav-text"> typedef</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#typedef-%E5%92%8C%E5%AE%8F%E6%96%87%E6%9C%AC%E6%9B%BF%E6%8D%A2define%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text"> typedef 和宏文本替换define的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#typedef%E5%92%8C%E7%BB%93%E6%9E%84"><span class="nav-text"> typedef和结构</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="sail Yang"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">sail Yang</p>
+  <div class="site-description" itemprop="description">企者不立，跨者不行</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sail-Yang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sail-Yang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1186599081@qq.com" title="E-Mail → mailto:1186599081@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-block">
+        <div class="links-of-blogroll-title">
+          <!-- modify icon to fire by szw -->
+          <i class="fa fa-history fa-" aria-hidden="true"></i>
+          近期文章
+        </div>
+        <ul class="links-of-blogroll-list">
+          
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+        </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sail Yang</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'ACXvwk7p217craOCxA2G4PjX-MdYXbMMI',
+      appKey     : 'lBCQXXu3bCQ5MocqBE0V6rHa',
+      placeholder: "请举手发言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"moblie":{"show":true}});</script></body>
+</html>
