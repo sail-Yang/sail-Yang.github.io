@@ -1781,6 +1781,11 @@
 </ul>
 <p>那么，我们如何查找别名所指的真是cmdlet命令呢？</p>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;	//查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
+<h1 id="调用入口的优先级"><a class="markdownIt-Anchor" href="#调用入口的优先级"></a> 调用入口的优先级</h1>
+<p>如果我们输入的命令，powershell识别不了，就会报错：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911180921.png" alt="can't recognize" /></p>
+<p>那么，powershell是如何与我们输入的命令想匹配的呢？这是存在一个<strong>优先级顺序</strong>的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911181453.png" alt="调用入口的优先级" /></p>
 ]]></content>
       <categories>
         <category>工具使用</category>
