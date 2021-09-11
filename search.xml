@@ -782,7 +782,7 @@
   <entry>
     <title>vscode使用指南</title>
     <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
 <p>最近想学一下vscode,将vscode当作主要使用的编辑器。所以想专门写一篇，来记录一下使用和配置的过程，一开始不会有体系，只是遇到什么问题就记什么，当用得差不多时，可能会回头整理一下。</p>
 <span id="more"></span>
 <h1 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h1>
@@ -812,8 +812,8 @@
 <td style="text-align:center">Ctrl + +/-</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
+<td style="text-align:center">进入专注模式</td>
+<td style="text-align:center">进：Ctrl+K再按M,退：Esc twice</td>
 </tr>
 </tbody>
 </table>
@@ -899,6 +899,10 @@
 <tr>
 <td style="text-align:center">快速打开文件</td>
 <td style="text-align:center">Ctrl+P</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开最近文件</td>
+<td style="text-align:center">Ctrl+R</td>
 </tr>
 <tr>
 <td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
@@ -1730,6 +1734,61 @@
       </categories>
       <tags>
         <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>powershell基础知识</title>
+    <url>/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU" alt="PowerShell" style="zoom:150%;" />
+<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>最近想学一下powershell,查了很多资料，于是想整合一下这些资料，所以本篇是对链接的一个整合，可能会记录一些我不熟悉但是比较有用的地方。</p>
+<p>这里先贴出比较详细的教程：</p>
+<ul>
+<li><a href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">微软官方文档</a></li>
+<li><a href="https://www.pstips.net/">powershell中文博客</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="什么是powershell"><a class="markdownIt-Anchor" href="#什么是powershell"></a> 什么是PowerShell</h1>
+<p>这里直接给出一些介绍的链接：</p>
+<ul>
+<li><a href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">PowerShell官方文档介绍</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell-Wikipedia(要翻墙)</a></li>
+</ul>
+<h2 id="powershell和powershell-core的区别"><a class="markdownIt-Anchor" href="#powershell和powershell-core的区别"></a> powershell和powershell core的区别</h2>
+<p>注意，PowerShell 和PowerShell core是不同的，powershell core是微软发布的powershell的新版本（<a href="https://github.com/PowerShell/PowerShell/tags">下载地址</a>）。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911175705.png" alt="左边是powershell core,右边是Powershell" /></p>
+<p>那么两者有什么具体的区别呢？</p>
+<ul>
+<li>PowerShell core是跨平台的，可以在Windows、Linux和Macos上运行，而作为旧版本的PowerShell只能在Windows上运行。</li>
+<li><a href="http://xn--PowerShell-dv5p619sxxzbh8d.NET">PowerShell使用的是.NET</a> <a href="http://xn--Framework-yw9o.NET">Framework和.NET</a> Standard ; 作为新版本的PowerShell core使用的是**.NET Core**<a href="http://xn--0tr.NET">和.NET</a> Standard 。（什么是.NET框架→<a href="https://docs.microsoft.com/zh-cn/dotnet/?view=aspnetcore-5.0">.NET官方文档</a>，<a href="https://blog.csdn.net/weixin_30435261/article/details/95944269?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163134856016780265456793%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=163134856016780265456793&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-95944269.first_rank_v2_pc_rank_v29&amp;utm_term=%E4%BB%80%E4%B9%88%E6%98%AF.NET&amp;spm=1018.2226.3001.4187">.NET简单介绍(csdn)</a>）</li>
+</ul>
+<p>现在使用的一般都是powershell core，下面的基础知识的介绍也是依托于powershell core.</p>
+<h1 id="cmdlet和别名"><a class="markdownIt-Anchor" href="#cmdlet和别名"></a> cmdlet和别名</h1>
+<h2 id="cmdlet简单介绍"><a class="markdownIt-Anchor" href="#cmdlet简单介绍"></a> cmdlet简单介绍</h2>
+<p>cmdlet 是本机 PowerShell 命令，而不是独立的可执行文件。 cmdlet 收集在 PowerShell 模块中，可按需加载。 可以用任何编译的 .NET 语言或 PowerShell 脚本语言本身来编写 cmdlet。</p>
+<p>PowerShell用”动词-名词“的方法来命名cmdlet命令，例如： <code>Get-Command</code> cmdlet 用于获取在命令行界面中注册的所有 cmdlet。 动词标识 cmdlet 执行的操作，名词标识该 cmdlet 执行其操作的所在资源。</p>
+<p>那么，我们如何查看一个<code>命令的使用说明</code>呢？</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查找某个命令的作用 → GetHelp name，后面加个<span class="literal">-Full</span>就是详细说明,加个<span class="literal">-examples</span>就是简略说明</span><br><span class="line"><span class="built_in">Get-Help</span> <span class="built_in">Get-VM</span></span><br><span class="line">//如果我们不知道命令的确切名字，可以使用<span class="built_in">Get-Command</span> *……*</span><br><span class="line"><span class="built_in">Get-Command</span> *VM*</span><br></pre></td></tr></table></figure>
+<p>在命令的详细介绍里，会出现下面这些格式，要能看懂：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911174724.png" alt="说明格式" style="zoom:80%;" />
+<p>以上就是获取cmdlet说明的介绍。</p>
+<h2 id="别名alias"><a class="markdownIt-Anchor" href="#别名alias"></a> 别名(Alias)</h2>
+<p>cmdlet命令的起名很清晰，但是对于熟练的使用者来说，每次都要打一个动词加名词肯定很费劲，所以powershell内部很多命令也有不同的<strong>别名</strong>，例如Get-ChildItem，列出当前的子文件或目录。它有两个别名：ls 和 dir，这两个别名来源于unix 的shell和windows的cmd。</p>
+<p>别名有两个作用：</p>
+<ul>
+<li><strong>继承</strong>：继承unix-shell和windows-cmd</li>
+<li><strong>方便</strong>：方便用户使用。</li>
+</ul>
+<p>那么，我们如何查找别名所指的真是cmdlet命令呢？</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;	//查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>powershell</category>
+      </categories>
+      <tags>
+        <tag>powershell</tag>
+        <tag>windows</tag>
       </tags>
   </entry>
 </search>
