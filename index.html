@@ -203,6 +203,119 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E5%AE%9E%E9%AA%8C%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="sail Yang">
+      <meta itemprop="description" content="企者不立，跨者不行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sail Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E5%AE%9E%E9%AA%8C%E4%B8%80/" class="post-title-link" itemprop="url">王爽《汇编语言》实验环境搭建</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-23 19:49:10 / 修改时间：20:47:35" itemprop="dateCreated datePublished" datetime="2021-09-23T19:49:10+08:00">2021-09-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">汇编语言</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E5%AE%9E%E9%AA%8C%E4%B8%80/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E5%AE%9E%E9%AA%8C%E4%B8%80/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>​	这一学期学校的课程里有汇编语言，要求是掌握8086的，我上网搜了一下，网评比较好的教材是<a target="_blank" rel="noopener" href="https://book.douban.com/subject/35038473/">王爽的《汇编语言（第四版）》</a>，于是我就选择了这本书作为我的主力教材，而学习的教材准备考试前用一用。</p>
+<blockquote>
+<p>教材的电子版推荐去<a target="_blank" rel="noopener" href="https://sg1lib.org/">Z-Library</a>下载，这个真的好用，我的书全是这个上面下的。</p>
+</blockquote>
+<p>​	这个专题主要是存放王爽《汇编语言》这本书里的一些实验记录以及汇编语言的使用问题等等，至于笔记什么的，我都放到我的语雀里了，就不展示了，网上有很多关于这本书的笔记。</p>
+<h1 id="实验环境的搭建"><a class="markdownIt-Anchor" href="#实验环境的搭建"></a> 实验环境的搭建</h1>
+<p>​	首先我们要知道要实践8086汇编语言的学习，最好的学习环境是DOS操作系统，Windows10是不支持DOS的，我选择的方案是Dosbox + MASM,当然也可以用VMware搭个虚拟机，我这里就稍微介绍一下Dosbox+MASM搭建实验环境的方法。</p>
+<p>​	首先，我们要知道Dosbox和MASM是什么，咱们长话短说，简单说一说。<strong>Dosbox</strong>是一个模拟器，模拟的是老古董;ms-Dos系统，它能为本地的Dos程序提供执行环境，其早期主要是为了玩Dos游戏设计的，用C++编写。<strong>MASM</strong> 是 <strong>Microsoft Macro Assembler</strong> 的缩写，它是微软为 x86 微处理器家族所写的一套宏汇编器。它最初是用来发展在 MS-DOS上面运行的软件。</p>
+<blockquote>
+<p>DosBox0.74 + MASM资源包下载链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1VGrXUrf1fXMaG97-imm60g">https://pan.baidu.com/s/1VGrXUrf1fXMaG97-imm60g</a><br />
+提取码：dya5</p>
+</blockquote>
+<p>​	安装应该不用多说了，就正常安装，实在不会搜一下就知道了，没什么好说的。值得说的是<strong>配置工作</strong>：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923202109.png" alt="image-20210923202109171" style="zoom:80%;" />
+<p>我们打开DosBox的exe文件，会看到下面这个画面：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923202515.png" alt="image-20210923202515597" style="zoom:80%;" />
+<p>这个时候我们需要做的工作是<strong>虚拟C盘</strong>，我们使用命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount c e:\DosBox\my_c		\\虚拟C盘,my_c是我指定的文件夹，作为虚拟C盘</span><br><span class="line">c: 							\\转到c盘</span><br></pre></td></tr></table></figure>
+<p>在这个虚拟C盘里我们可以存放我们的汇编语言程序和之前的MASM工具包,当出现下图这种情况时，说明我们的虚拟化成功了：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203130.png" alt="image-20210923203130144" style="zoom:80%;" />
+<p>但是，当我们第二次登入时，就会发现我们每次登入DosBox都要重新虚拟化，这显得很麻烦，因此我们需要改一个脚本文件：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203637.png" alt="image-20210923203637235" style="zoom:80%;" />
+<p>打开DosBox的安装目录，<strong>双击打开</strong>图示高亮的文件（不要用什么记事本打开），找到下面这个部分应该在底部;</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203832.png" alt="image-20210923203832406" style="zoom:80%;" />
+<p>然后这段后面加上我们之前进行虚拟化的命令（不区分大小写的）：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204157.png" alt="image-20210923204157864" style="zoom:80%;" />
+<p>下次我们打开的时候就会自动执行我们之前输入的命令，如果想自动执行什么命令，可以在刚才那个文件里加。好了，现在我们进入第二部分，我们现在要做的就是把之前下载好的MASM文件夹打开，里面会有各种工具：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204436.png" alt="image-20210923204436152" style="zoom:67%;" />
+<p>我们把我们需要的工具全部放进我们之前指定的虚拟C盘中，这样我们就能使用了：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204546.png" alt="image-20210923204546371" style="zoom: 67%;" />
+<p>到这，我们实验环境的搭建基本上就完成了，之后想要在DosBox运行的文件以及DosBox生成的文件都会在我们的虚拟C盘里。至于这些工具的使用，网上的教材很多，这里就不赘述了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/09/14/%E6%9D%82%E8%B0%88/%E8%87%AA%E7%9C%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1065,103 +1178,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cat.jpg">
-      <meta itemprop="name" content="sail Yang">
-      <meta itemprop="description" content="企者不立，跨者不行">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="sail Yang's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">结构体变量作为函数参数调用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-06 15:39:41" itemprop="dateCreated datePublished" datetime="2021-08-06T15:39:41+08:00">2021-08-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-04 20:53:52" itemprop="dateModified" datetime="2021-09-04T20:53:52+08:00">2021-09-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>​	在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
-<p>我们先来声明一些变量：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> my_struct</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">double</span> j;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1233,20 +1249,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
