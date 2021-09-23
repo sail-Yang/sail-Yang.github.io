@@ -1872,6 +1872,7 @@
 <blockquote>
 <p>​	除此之外，还要说一下，<strong>下面的截图中在结束的时候会有一个S，请忽略这个S</strong>。之所以会产生是因为我用快捷键截图的时候会把S输入到DosBox中。</p>
 </blockquote>
+<span id="more"></span>
 <h1 id="预备知识debug"><a class="markdownIt-Anchor" href="#预备知识debug"></a> 预备知识：debug</h1>
 <h2 id="查看-改变寄存器的内容r"><a class="markdownIt-Anchor" href="#查看-改变寄存器的内容r"></a> 查看、改变寄存器的内容（r）</h2>
 <p>​	我们使用r命令，查看寄存器的状态：</p>
