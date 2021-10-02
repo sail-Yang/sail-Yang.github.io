@@ -1934,8 +1934,7 @@
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" alt="image-20211002125045305" /></p>
 <p>  关于stty的详细内容，下面会说。</p>
 <h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
-<pre><code>## Ctrl +Z
-</code></pre>
+<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
 <p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" />
 <p>我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
