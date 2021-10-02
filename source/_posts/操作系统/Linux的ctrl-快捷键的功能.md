@@ -33,7 +33,7 @@ while(std::cin >> value)
 
 # 默认的ctrl快捷键
 
-	## Ctrl +Z
+## Ctrl +Z
 
 &emsp;&emsp;这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：
 
