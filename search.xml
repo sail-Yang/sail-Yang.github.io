@@ -1922,4 +1922,97 @@
         <tag>王爽《汇编语言》</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Linux的ctrl+快捷键的功能</title>
+    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  额，最近在看《C++primer》，遇到一个很简单的循环输入：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(std::cin &gt;&gt; value)</span><br><span class="line">&#123;</span><br><span class="line">    sum += value </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都看了一遍，来这做个总结。</p>
+<span id="more"></span>
+<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" alt="image-20211002125045305" /></p>
+<p>  关于stty的详细内容，下面会说。</p>
+<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
+<pre><code>## Ctrl +Z
+</code></pre>
+<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" />
+<p>我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" alt="image-20211002131411566" /></p>
+<p>等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851"  />
+<p>其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" alt="image-20211002131920966" /></p>
+<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" />
+<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
+<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
+<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
+<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
+<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" alt="image-20211002132722906" /></p>
+<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" alt="image-20211002133025989" /></p>
+<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" alt="image-20211002133243103" /></p>
+<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" alt="image-20211002133452812" /></p>
+<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">快捷键(ctrl用^表示)</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">^l</td>
+<td style="text-align:center">相当于clear,清空终端</td>
+</tr>
+<tr>
+<td style="text-align:center">^s</td>
+<td style="text-align:center">中断输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^q</td>
+<td style="text-align:center">继续输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^a/^e</td>
+<td style="text-align:center">光标移到行首/行尾巴</td>
+</tr>
+<tr>
+<td style="text-align:center">^p</td>
+<td style="text-align:center">重复上次命令</td>
+</tr>
+<tr>
+<td style="text-align:center">^y</td>
+<td style="text-align:center">粘贴或者恢复上次删除</td>
+</tr>
+<tr>
+<td style="text-align:center">^s/^q</td>
+<td style="text-align:center">冻结shell/解冻</td>
+</tr>
+</tbody>
+</table>
+<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
+<blockquote>
+<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
+</blockquote>
+<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" />
+<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>ctrl</tag>
+      </tags>
+  </entry>
 </search>
