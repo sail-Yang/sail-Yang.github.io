@@ -2014,4 +2014,72 @@
         <tag>ctrl</tag>
       </tags>
   </entry>
+  <entry>
+    <title>王爽《汇编语言》实验二</title>
+    <url>/2021/10/03/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E4%BA%8C/</url>
+    <content><![CDATA[<h1 id="debug的使用"><a class="markdownIt-Anchor" href="#debug的使用"></a> Debug的使用</h1>
+<p>  在做实验任务之前，得学点相关的Debug的使用知识。</p>
+<span id="more"></span>
+<h2 id="d命令详解"><a class="markdownIt-Anchor" href="#d命令详解"></a> D命令详解</h2>
+<p>  我们现在知道D有两个作用：</p>
+<ul>
+<li>
+<p>查看内存单元：</p>
+</li>
+<li>
+<p>用<code>d 段地址：偏移地址</code>or <code>d 段地址：偏移地址 结束时的偏移地址</code>查看指定内存单元。</p>
+</li>
+</ul>
+<p>  那么，Debug是怎么执行D命令的呢？比如说，<code>D 1000:00</code>是怎么执行的呢？</p>
+<p>  在这一章我们学过，和指向指令地址的方式类似，也有指向数据地址的段地址和偏移地址，而段地址一般是放在段寄存器中，<strong>显然<code>D 1000:00</code>把1000H放到了段寄存器中，然后进行数据的查看</strong>。</p>
+<p>  8086的寄存器有CS、DS、SS、ES，CS，SS的用途我们都知道了，通过前面的学习也知道，我们一般用DS存放内存中数据地址的段地址。既然<code>D 1000:00</code>相当于把<code>1000H</code>存到DS，那么我们也可以直接这样来查看内存单元→ <code>D ds:00</code>，即<code>D 段寄存器：偏移地址</code>的模式。</p>
+<p>  下面是一些例子，很明显是对段寄存器通用的:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看从1000：10~1000：70的内存区域的内容</span></span></span><br><span class="line">-r ds</span><br><span class="line">:1000</span><br><span class="line">-d ds:10 70</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看当前代码段中的指令代码</span></span></span><br><span class="line">-d cs:0</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看当前栈段中的内容</span></span></span><br><span class="line">-d ss:0</span><br></pre></td></tr></table></figure>
+<p>​	当然，除了D命令，什么E、A、U命令都可以用段寄存器来表示内存单元的段地址。</p>
+<h2 id="初次邂逅中断机制"><a class="markdownIt-Anchor" href="#初次邂逅中断机制"></a> 初次邂逅“中断机制”</h2>
+<p>  我们来看一段小程序，我们用<code>A</code>命令输入:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mov ax,2000</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,10	//安排2000：00~2000：0F为栈空间，初始化栈顶</span><br><span class="line"></span><br><span class="line">mov ax,3123</span><br><span class="line">push ax</span><br><span class="line">mov ax,3366</span><br><span class="line">push ax		//在栈中压入两个数据</span><br></pre></td></tr></table></figure>
+<p>  现在我去执行一下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003180251.png" alt="image-20211003180243809" /></p>
+<p>  当我执行<code>mov ax,2000</code>时一切正常，但是执行完<code>mov ss ax</code>后，发生了一个有意思的现象：</p>
+<p>  **下一条语句不是<code>mov sp,10</code>而是其下一条指令<code>mov ax,3123</code>，并且<code>mov sp,10</code>已经执行了。**这是为啥呢？→ 其实只要是修改栈段寄存器SS的指令都会这样，比如<code>mov ss,ax</code> <code>mov ss,[0]</code>……</p>
+<p>  至于为什么会这样，在后面会讲，这里我们只要知道这么一个事实叫<strong>中断机制</strong>就好了。</p>
+<h1 id="实验"><a class="markdownIt-Anchor" href="#实验"></a> 实验</h1>
+<p>  这个实验主要由两部分组成，第一部分很简单，让你输一段代码，然后观察寄存器的变化；第二部分要回答一个问题：<strong>为什么2000:0~2000:f中的内容会发生改变</strong>？</p>
+<h2 id="第一部分"><a class="markdownIt-Anchor" href="#第一部分"></a> 第一部分</h2>
+<p>  第一部分其实是没有固定答案的，主要涉及FFFF：0~FFFF：7这块内存区域和栈段区域。首先看一下我的FFFF：0~FFFF：7这块内存区域：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003203015.png" alt="image-20211003203015114" /></p>
+<p>  这部分对应的区域是：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003203049.png" alt="image-20211003203049081" /></p>
+<p>  下面我执行了这两条指令：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003204658.png" alt="image-20211003204658860" /></p>
+<p>  </p>
+<p>  对应的栈段为:<br />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003204828.png" alt="image-20211003204828797" /></p>
+<p>  下面几个指令就不写了，大致就是让你直观感受一下，本章所提到的一些操作具体是怎么运行的。</p>
+<h2 id="第二部分"><a class="markdownIt-Anchor" href="#第二部分"></a> 第二部分</h2>
+<p>  作者给了一张图：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003213217.png" alt="image-20211003213217630" /></p>
+<p>  然后问了句：**为什么2000：0 ~f的值改变了？**还说“现在就想出来为什么，说明你悟性很高。现在想不出来也没关系，讲到后面就知道为什么了。”</p>
+<p>  一听这话，我可来神了，我这悟性，是吧，杠杠的，我就开始想，这是为什么？想了半天也不能很好地把道理说的明明白白，只能想出点零零星星的：</p>
+<ul>
+<li>
+<p>问题的关键就在于为什么-t命令遇到<code>mov ss,ax</code>就顺便把下面一句<code>mov sp,10</code>给执行了，这就涉及了-t的原理，可是现在还没讲……但这玩意肯定和栈有关</p>
+</li>
+<li>
+<p>观察一下最后一行，会发现这些数字很熟悉，我觉得可以这样划分：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003213801.png" alt="image-20211003213801691" /></p>
+<p>也就是<code>2000</code>、<code>0000</code>、<code>0108</code>、<code>0B39</code>,<code>059D</code>。这都是熟人啊，第一个不就是AX的值吗，第二个是BP，第三个是IP，第四个是CS？SS？还是ES？根据第三个是IP来看的话，第四个像是CS，第五个就不知道是什么鬼了。好像执行完<code>mov ss,ax</code> <code>mov sp,10</code>之后，这些寄存器的值都被压入这段栈里了……</p>
+<p>感觉也就能分析这么多，看了想充分地明白这一个问题，还是得看后面才行🤣</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+      </categories>
+      <tags>
+        <tag>王爽《汇编语言》</tag>
+      </tags>
+  </entry>
 </search>
