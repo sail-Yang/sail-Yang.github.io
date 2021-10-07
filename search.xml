@@ -2049,18 +2049,17 @@
 <p>  这个实验主要由两部分组成，第一部分很简单，让你输一段代码，然后观察寄存器的变化；第二部分要回答一个问题：<strong>为什么2000:0~2000:f中的内容会发生改变</strong>？</p>
 <h2 id="第一部分"><a class="markdownIt-Anchor" href="#第一部分"></a> 第一部分</h2>
 <p>  第一部分其实是没有固定答案的，主要涉及FFFF：0~FFFF：7这块内存区域和栈段区域。首先看一下我的FFFF：0~FFFF：7这块内存区域：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003203015.png" alt="image-20211003203015114" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211007120751.png" alt="image-20211007120751828" /></p>
 <p>  这部分对应的区域是：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003203049.png" alt="image-20211003203049081" /></p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211007120822.png" alt="image-20211007120822076" style="zoom:80%;" />
 <p>  下面我执行了这两条指令：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003204658.png" alt="image-20211003204658860" /></p>
-<p>  </p>
-<p>  对应的栈段为:<br />
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003204828.png" alt="image-20211003204828797" /></p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211007121006.png" alt="image-20211007121006740" style="zoom:80%;" />
+<p>  对应的栈段为:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211007120849.png" alt="image-20211007120849213" /></p>
 <p>  下面几个指令就不写了，大致就是让你直观感受一下，本章所提到的一些操作具体是怎么运行的。</p>
 <h2 id="第二部分"><a class="markdownIt-Anchor" href="#第二部分"></a> 第二部分</h2>
 <p>  作者给了一张图：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211003213217.png" alt="image-20211003213217630" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211007120928.png" alt="image-20211007120928286" /></p>
 <p>  然后问了句：**为什么2000：0 ~f的值改变了？**还说“现在就想出来为什么，说明你悟性很高。现在想不出来也没关系，讲到后面就知道为什么了。”</p>
 <p>  一听这话，我可来神了，我这悟性，是吧，杠杠的，我就开始想，这是为什么？想了半天也不能很好地把道理说的明明白白，只能想出点零零星星的：</p>
 <ul>
