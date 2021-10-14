@@ -2230,4 +2230,26 @@
         <tag>排序算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>新的开始</title>
+    <url>/2021/10/13/%E6%9D%82%E8%B0%88/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>王爽汇编语言实验四</title>
+    <url>/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/</url>
+    <content><![CDATA[<h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211014154815.png" alt="image-20211014154806883" /></p>
+<p>  这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。</p>
+<h1 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h1>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	mov ax,0020h</span><br><span class="line">	mov ds,ax</span><br><span class="line">	mov cx,64</span><br><span class="line">	mov bx,0</span><br><span class="line">	</span><br><span class="line">  s:mov ds:[bx],bx</span><br><span class="line">  	inc bx</span><br><span class="line">  	loop s</span><br><span class="line">  	</span><br><span class="line">  	mov ax,4c00h</span><br><span class="line">  	int 21h</span><br><span class="line">code ends</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>​	值得注意的一个问题是，0:200~0:23F等同于0200:0~0200:3f,推荐使用后面这种写法，<strong>后面这种写法使得我们用一个bx就能搞定偏移地址和数字的递增</strong>。</p>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+      </categories>
+      <tags>
+        <tag>王爽《汇编语言》</tag>
+      </tags>
+  </entry>
 </search>

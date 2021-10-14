@@ -24,23 +24,22 @@
     var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……">
+  <meta name="description" content="题目    这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。  解答 123456789101112131415assume cs:codecode segment	mov ax,0020h	mov ds,ax	mov cx,64	mov bx,0	  s:mov ds:[bx],bx  	inc bx  	loop s">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pta 1002 C解">
-<meta property="og:url" content="https://progsail.com/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/index.html">
+<meta property="og:title" content="王爽汇编语言实验四">
+<meta property="og:url" content="https://progsail.com/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/index.html">
 <meta property="og:site_name" content="sail Yang&#39;s Blog">
-<meta property="og:description" content="我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……">
+<meta property="og:description" content="题目    这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。  解答 123456789101112131415assume cs:codecode segment	mov ax,0020h	mov ds,ax	mov cx,64	mov bx,0	  s:mov ds:[bx],bx  	inc bx  	loop s">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png">
-<meta property="article:published_time" content="2021-07-21T15:12:30.000Z">
-<meta property="article:modified_time" content="2021-09-04T12:52:02.846Z">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211014154815.png">
+<meta property="article:published_time" content="2021-10-14T07:47:21.000Z">
+<meta property="article:modified_time" content="2021-10-14T07:59:00.406Z">
 <meta property="article:author" content="sail Yang">
-<meta property="article:tag" content="C">
-<meta property="article:tag" content="题解">
+<meta property="article:tag" content="王爽《汇编语言》">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211014154815.png">
 
-<link rel="canonical" href="https://progsail.com/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/">
+<link rel="canonical" href="https://progsail.com/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/">
 
 
 <script id="page-configurations">
@@ -53,7 +52,7 @@
   };
 </script>
 
-  <title>pta 1002 C解 | sail Yang's Blog</title>
+  <title>王爽汇编语言实验四 | sail Yang's Blog</title>
   
 
 
@@ -210,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -223,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          pta 1002 C解
+          王爽汇编语言实验四
         </h1>
 
         <div class="post-meta">
@@ -232,23 +231,17 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-07-21 23:12:30" itemprop="dateCreated datePublished" datetime="2021-07-21T23:12:30+08:00">2021-07-21</time>
+              <time title="创建时间：2021-10-14 15:47:21 / 修改时间：15:59:00" itemprop="dateCreated datePublished" datetime="2021-10-14T15:47:21+08:00">2021-10-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-04 20:52:02" itemprop="dateModified" datetime="2021-09-04T20:52:02+08:00">2021-09-04</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">汇编语言</span></a>
                 </span>
             </span>
 
@@ -268,8 +261,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -284,32 +277,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
-<span id="more"></span>
-<p>先来看看题目：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png" alt="image-20210721232151446" style="zoom:67%;" />
-<p>解题思路：（C）</p>
-<ul>
-<li>建立一个字符串数组zimu{“ling”,“yi”,“er”,“san”,“si”,“wu”,“liu”,“qi”,“ba”,“jiu”}，下标与拼音一一对应。</li>
-<li>计算n的各位数字之和sum。</li>
-<li>将sum各位存入数组。假设sum = 123,则存入数组为[3,2,1]</li>
-<li>将数组从后往前读，读到i,则输出zimu[i]</li>
-</ul>
-<p>注意点：</p>
-<ul>
-<li>可以看到输出样例很长很长，这个时候可能会想到用long long int，但是很明显是不行的，看看n的最大值可以是10^100(我一开始没注意)，所以<strong>用字符串来读入n比较合适</strong>。</li>
-<li>我们现在得到用字符串num[]表示的n，注意字符串一个单元存储（num[i]）的<strong>是字符而不是字符串</strong>。
-<ul>
-<li>将<u>字符</u>转化为int用num[i] - ‘0’,比如我现在想取n左边第一位的Int型，我们就可以用num[0] - ‘0’</li>
-<li>将<u>字符串</u>转化为int可以用&lt;stdlib.h&gt;头文件里的atoi()函数</li>
-</ul>
-</li>
-<li>后面一个切sum的时候可以采取和前面同样切的方法，我这里其实有点多此一举了，也就是不用切字符串的方法。</li>
-<li><strong>注意输出的空格问题</strong>。</li>
-</ul>
-<p>代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line">    </span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">    	k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    	sum += k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后在贴一点，<strong>pta报&quot;运行时错误&quot;的时候对于C语言来说，很可能是数组越界了</strong>。</p>
+        <h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211014154815.png" alt="image-20211014154806883" /></p>
+<p>  这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。</p>
+<h1 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	mov ax,0020h</span><br><span class="line">	mov ds,ax</span><br><span class="line">	mov cx,64</span><br><span class="line">	mov bx,0</span><br><span class="line">	</span><br><span class="line">  s:mov ds:[bx],bx</span><br><span class="line">  	inc bx</span><br><span class="line">  	loop s</span><br><span class="line">  	</span><br><span class="line">  	mov ax,4c00h</span><br><span class="line">  	int 21h</span><br><span class="line">code ends</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>​	值得注意的一个问题是，0:200~0:23F等同于0200:0~0200:3f,推荐使用后面这种写法，<strong>后面这种写法使得我们用一个bx就能搞定偏移地址和数字的递增</strong>。</p>
 
     </div>
 
@@ -319,8 +292,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/C/" rel="tag"># C</a>
-              <a href="/tags/%E9%A2%98%E8%A7%A3/" rel="tag"># 题解</a>
+              <a href="/tags/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B/" rel="tag"># 王爽《汇编语言》</a>
           </div>
 
         
@@ -329,13 +301,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/21/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/" rel="prev" title="从processon看边际收益">
-      <i class="fa fa-chevron-left"></i> 从processon看边际收益
+    <a href="/2021/10/13/%E6%9D%82%E8%B0%88/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/" rel="prev" title="新的开始">
+      <i class="fa fa-chevron-left"></i> 新的开始
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/22/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/" rel="next" title="相互依存和贸易的好处">
-      相互依存和贸易的好处 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -395,6 +364,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text"> 题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-text"> 解答</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
