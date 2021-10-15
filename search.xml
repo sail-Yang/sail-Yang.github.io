@@ -2262,4 +2262,115 @@
         <tag>王爽《汇编语言》</tag>
       </tags>
   </entry>
+  <entry>
+    <title>提问的艺术</title>
+    <url>/2021/10/15/%E6%9D%82%E8%B0%88/%E6%8F%90%E9%97%AE%E7%9A%84%E8%89%BA%E6%9C%AF/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211015113026.jpeg" alt="Questions" /></p>
+<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  在学习计算机技术时肯定会遇到各种各样的问题，而为了找到问题的答案，我们往往需要准确地描述出问题是什么，这样才能找到好的答案。而提问题也是有方法的，有一篇文章写得很好，我阅读后学到了很多，下面就是对这篇文章内容的整理。</p>
+<blockquote>
+<p>文章原文地址：<a href="http://www.catb.org/~esr/faqs/smart-questions.html">http://www.catb.org/~esr/faqs/smart-questions.html</a></p>
+<p>简体中文版：<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md">https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md</a></p>
+</blockquote>
+<span id="more"></span>
+<h1 id="回答者"><a class="markdownIt-Anchor" href="#回答者"></a> 回答者</h1>
+<p>  作者首先从回答者的角度来看问题和回答者。对于回答者来说（特别是作者这种黑客😅），喜欢**<u>有挑战性</u>**的问题，因为这些问题能激发他们思考，提高他们的理解力并且查漏补缺。但回答者也不是不愿意回答一些简单的问题，他们所不愿意回答的，<u>是那些不愿思考、或者在发问前不做他们该做的事的人的问题</u>。的确，我也有这种感觉，有些问题明明可以查到，但是却去问别人，这就是在无意义地消耗别人的时间。</p>
+<p>  作者在这一节最后说了两段话，可以很好地表明他的态度：</p>
+<blockquote>
+<p>  所以，你不必在技术上很在行才能吸引我们的注意，但你必须表现出能引导你变得在行的特质 —— <strong>机敏、有想法、善于观察、乐于主动参与解决问题</strong>。如果你做不到这些，我们建议你花点钱找家商业公司签个技术支持服务合同，而不是要求黑客个人无偿地帮助你。</p>
+<p>  如果你决定向我们求助，能立刻得到快速并有效答案的最好方法，就是像赢家（winner）那样提问 —— 聪明、自信、有解决问题的思路，只是偶尔在特定的问题上需要获得一点帮助。</p>
+</blockquote>
+<pre><code># 提问之前
+</code></pre>
+<p>  我现在还是初学者，大部分问题都不需要去提问就能解决，所以提问之前这一步也很重要，能够直接找到答案的，就不用去问专家了。</p>
+<p>  我们在这一步应该经过下面的步骤：</p>
+<ol>
+<li>
+<p>尝试自己调试和检查以解决问题。</p>
+</li>
+<li>
+<p>在常用论坛社区的旧文章里搜索解决方法。（推荐：<a href="https://www.csdn.net/">CSDN</a>（中文综合），<a href="https://stackoverflow.com/">StackOverflow</a>（程序相关），<a href="https://superuser.com/">Super User</a>(通用电脑问题)、<a href="https://serverfault.com/">Server Fault</a>（服务器和网管））</p>
+</li>
+<li>
+<p>在Google中搜索，比如各种错误信息等，即使没找到，<u>在提问时也可以注明你在Google下搜索过哪些问题并且没有答案</u>。</p>
+</li>
+<li>
+<p>阅读手册或者FAQ（常见问题文件）</p>
+</li>
+<li>
+<p>若是程序开发，可以阅读源码来解决问题。</p>
+</li>
+<li>
+<p>向身边的大佬请教。</p>
+<p>在做上面的步骤时，要注意思考自己的问题的发问方式，不要太过草率，否则也会得到一个草率的回答，毫无帮助。</p>
+<h1 id="开始提问"><a class="markdownIt-Anchor" href="#开始提问"></a> 开始提问</h1>
+</li>
+</ol>
+<h2 id="目标差异式标题"><a class="markdownIt-Anchor" href="#目标差异式标题"></a> 目标—差异式标题</h2>
+<p>  去一个有意义且目的明确的标题是十分重要的。一个好标题范例是<code>目标 —— 差异</code>式的描述，许多技术支持组织就是这样做的。<u>在<code>目标</code>部分指出是哪一个或哪一组东西有问题，在<code>差异</code>部分则描述与期望的行为不一致的地方</u>。下面，来看一个比较：</p>
+<blockquote>
+<ul>
+<li>救命啊！我的笔记本电脑不能显示了！（蠢得一批）</li>
+<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标会变形，某牌显卡MV1005芯片组。（比较聪明的问法）</li>
+<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标，在某牌显卡MV1005芯片组环境下—会变形。（最聪明的问法）</li>
+</ul>
+</blockquote>
+<h2 id="使用清晰-正确-精准且合乎语法的语句"><a class="markdownIt-Anchor" href="#使用清晰-正确-精准且合乎语法的语句"></a> 使用清晰、正确、精准且合乎语法的语句</h2>
+<p>  正确的拼写、标点符号和大小写是很重要的。一般来说，如果你觉得这样做很麻烦，不想在乎这些，那我们也觉得麻烦，不想在乎你的提问。花点额外的精力斟酌一下字句，用不着太僵硬与正式 —— 事实上，黑客文化很看重能准确地使用非正式、俚语和幽默的语句。但它<strong>必须很</strong>准确，而且有迹象表明你是在思考和关注问题。</p>
+<p>  像我这种英语属于外语的提问者，可以在问题描述中附加下面几句：</p>
+<blockquote>
+<p>English is not my native language；please excuse typing errors.</p>
+<p>I am familiar with the technical terms, but some slang expressions and idioms are difficult for me.（熟悉名词，但是不熟悉俚语）</p>
+</blockquote>
+<hr />
+<p>  下面就是重点了，<strong>我们该如何精准描述问题</strong>？</p>
+<blockquote>
+<ol>
+<li>仔细、清楚地描述你的问题或 Bug 的症状。（推荐文章：<a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html">如何有效地报告Bug</a>）</li>
+<li>描述问题发生的环境（机器配置、操作系统、应用程序、以及相关的信息），提供经销商的发行版和版本号</li>
+<li>描述在提问前你是怎样去研究和理解这个问题的。</li>
+<li>描述在提问前为确定问题而采取的诊断步骤。</li>
+<li>描述最近做过什么可能相关的硬件或软件变更。</li>
+<li>尽可能的提供一个可以<code>重现这个问题的可控环境</code>的方法。</li>
+</ol>
+</blockquote>
+<hr />
+<p>  除了上面这些之外，还要注意下面几点（md,黑客事这么多吗😅）：</p>
+<ul>
+<li>
+<p>不要用什么word,excel这些封闭格式编写的文档发送数据，这些黑客们这些嗤之以鼻。</p>
+</li>
+<li>
+<p>不要使用花哨的彩色文本和表情。</p>
+<h1 id="如何阅读答案"><a class="markdownIt-Anchor" href="#如何阅读答案"></a> 如何阅读答案</h1>
+</li>
+</ul>
+<h2 id="如何知道自己的问题是否很愚蠢"><a class="markdownIt-Anchor" href="#如何知道自己的问题是否很愚蠢"></a> 如何知道自己的问题是否很愚蠢</h2>
+<p>  如果你收到下面两种回应，说明你搞砸了：</p>
+<blockquote>
+<ul>
+<li>
+<p>RTFM：Read the Fucking Manual(读手册)</p>
+</li>
+<li>
+<p>STFW：Search the Fucking Web(查网页)</p>
+<p>通常，用这两句之一回答你的人会给你一份包含你需要内容的手册或者一个网址，而且他们打这些字的时候也正在读着。这些答复意味着回答者认为：</p>
+<ul>
+<li><strong>你需要的信息非常容易获得</strong>。</li>
+<li><strong>你自己去搜索这些信息比灌给你，能让你学到更多</strong>。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="如果还是搞不懂"><a class="markdownIt-Anchor" href="#如果还是搞不懂"></a> 如果还是搞不懂</h2>
+<p>  如果你看不懂回应，别立刻要求对方解释。像你以前试着自己解决问题时那样（利用手册，FAQ，网络，身边的高手），先试着去搞懂他的回应。如果你真的需要对方解释，记得表现出你已经从中学到了点什么。</p>
+<p>  比方说，如果我回答你：<code>看来似乎是 zentry 卡住了；你应该先清除它。</code>，然后，这是一个<strong>很糟的</strong>后续问题回应：<code>zentry 是什么？</code> <strong>好</strong>的问法应该是这样：<code>哦~~~我看过说明了但是只有 -z 和 -p 两个参数中提到了 zentries，而且还都没有清楚的解释如何清除它。你是指这两个中的哪一个吗？还是我看漏了什么？</code></p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
+      </tags>
+  </entry>
 </search>
