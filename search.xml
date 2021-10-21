@@ -26,6 +26,139 @@
       </tags>
   </entry>
   <entry>
+    <title>pta 1002 C解</title>
+    <url>/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/</url>
+    <content><![CDATA[<p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
+<span id="more"></span>
+<p>先来看看题目：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png" alt="image-20210721232151446" style="zoom:67%;" />
+<p>解题思路：（C）</p>
+<ul>
+<li>建立一个字符串数组zimu{“ling”,“yi”,“er”,“san”,“si”,“wu”,“liu”,“qi”,“ba”,“jiu”}，下标与拼音一一对应。</li>
+<li>计算n的各位数字之和sum。</li>
+<li>将sum各位存入数组。假设sum = 123,则存入数组为[3,2,1]</li>
+<li>将数组从后往前读，读到i,则输出zimu[i]</li>
+</ul>
+<p>注意点：</p>
+<ul>
+<li>可以看到输出样例很长很长，这个时候可能会想到用long long int，但是很明显是不行的，看看n的最大值可以是10^100(我一开始没注意)，所以<strong>用字符串来读入n比较合适</strong>。</li>
+<li>我们现在得到用字符串num[]表示的n，注意字符串一个单元存储（num[i]）的<strong>是字符而不是字符串</strong>。
+<ul>
+<li>将<u>字符</u>转化为int用num[i] - ‘0’,比如我现在想取n左边第一位的Int型，我们就可以用num[0] - ‘0’</li>
+<li>将<u>字符串</u>转化为int可以用&lt;stdlib.h&gt;头文件里的atoi()函数</li>
+</ul>
+</li>
+<li>后面一个切sum的时候可以采取和前面同样切的方法，我这里其实有点多此一举了，也就是不用切字符串的方法。</li>
+<li><strong>注意输出的空格问题</strong>。</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line">    </span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">    	k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    	sum += k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后在贴一点，<strong>pta报&quot;运行时错误&quot;的时候对于C语言来说，很可能是数组越界了</strong>。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>题解</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从processon看边际收益</title>
+    <url>/2021/07/21/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/</url>
+    <content><![CDATA[<p>在阅读《经济学原理》笔记中，我提到学习经济学的主要目的是运用经济学的知识，去做出更好的决策，而要达到这样的能力，就需要多做练习。这不，我今天就遇到个日常生活中经济学原理的运用。</p>
+<p>我有画什么思维导图，流程图的习惯，画这些图当然离不开得心应手的工具，我经常用的就是这个在线绘图网站——<a href="https://www.processon.com/">processon</a>.它的免费版是有存储空间限制的，只能存储几个图：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153402.png" alt="image-20210721153354921" /></p>
+<span id="more"></span>
+<p>上面这个是我<strong>扩容过</strong>的可存储文件个数，怎么扩容呢？我们点击这个<strong>免费扩容</strong>，看一下processon的策略：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153538.png" alt="image-20210721153538698" style="zoom:67%;" />
+<p>可以看到，我们只要邀请一个好友，它就送我一个空间。是不是感觉<u>只要邀请好友就给奖励</u>这个操作十分熟悉？没错，其实都是一个套路，我们运用学到的经济学十大原理的知识来分析一下：</p>
+<hr />
+<p>首先，假设processon后面的制作团队是理性人（尽自己最大可能去实现目标），他们的目标是<strong>想要有更多的用户</strong>，他们要想办法实现这个目标。</p>
+<p>根据第四原理：人们会对激励作出反应。对于免费用户来说，能激励他们的除了好用的功能就是<strong>增加存储量</strong>，因为免费版的用户的可存储文件太少了，所以这对他们来说增加存储量是个不错的激励。</p>
+<p>增加存储量对于processon是有成本的，因为这是云服务，<strong>免费增加的存储量就是机会成本</strong>（根据第二原理），每个人都增加一点，对于服务器来说肯定是不小的负担，平均成本也是不少的。那么processon就不该用送存储来换用户吗？</p>
+<p>答案是否定的，根据第三原理，<strong>理性人考虑边际量</strong>。<u>我们决策除了看平均成本，更要关注边际收益和边际成本</u>。proceeson只给用户加一个存储空间，就能换来一个用户(至于用户粘性怎么样，暂且不论)，这样的效率是很高的。并且边际成本（一个存储空间）是很低的，而边际收益（一个用户）是很高的。边际收益 远远大于 边际成本，这样是很划算的。</p>
+<p>从用户角度来说，邀请一个好友换一个文件，成本几乎为0，收益却永远是正的。也就是你邀请的人越多，你赚的越多，并且processon也赚得越多。这是一个双赢，何乐而不为。</p>
+<p>其它的什么邀请好友送点小奖励也都是一个逻辑，你别说，没学经济学之前还真没注意这回事。</p>
+<p>最后，贴一个我的邀请链接，看到的朋友可以点击这个注册一下<a href="https://www.processon.com/i/606544d0f346fb0aa97e043a">👉点我</a>，这个网站还是很好用的😏。</p>
+]]></content>
+      <categories>
+        <category>业余经济学</category>
+        <category>实践应用</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>供给与需求理论</title>
+    <url>/2021/07/24/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BE%9B%E7%BB%99%E4%B8%8E%E9%9C%80%E6%B1%82%E7%90%86%E8%AE%BA/</url>
+    <content><![CDATA[<p>供给与需求是市场经济运行的中坚力量，我们要想了解一项政策或者事件是如何影响经济的，我们就应该先考虑它将如何影响供给与需求。供给与需求理论将考虑：</p>
+<ul>
+<li>买者与卖者的行为</li>
+<li>他们之间的相互影响</li>
+</ul>
+<p>以说明：</p>
+<ul>
+<li>市场经济中供给与需求如何决定价格</li>
+<li>价格如何配置经济中的稀缺资源</li>
+</ul>
+<p>这一章的内容大多是一些概念上的东西，我会做一个简单记录。</p>
+<span id="more"></span>
+<h2 id="市场和竞争"><a class="markdownIt-Anchor" href="#市场和竞争"></a> 市场和竞争</h2>
+<p>供给与需求是人们再竞争市场上相互交易的行为。那么，我们有必要先来讨论他们交易时的环境——竞争市场</p>
+<ul>
+<li>市场：<u>由某种物品或服务的买者与卖者组成的一个群体</u>。买者作为一个群体决定了产品的需求；卖者作为一个群体决定了产品的供给。通常情况下，市场是没什么组织的。（像农产品市场这种是有组织的）</li>
+<li>大多数市场是高度竞争的：每个买者都知道自己有一些卖者可供选择；每个卖者也都知道他的产品和其他卖者提供的产品是类似的。因此，某件物品的价格和销售量，是由所有买者和卖者在市场上的相互交易决定的。</li>
+</ul>
+<p>这种<strong>许多卖者和买者组成并且每一个人对市场的价格的影响微乎其微的市场</strong>，我们称之为<strong>竞争市场</strong>。本章节中，我们假设市场是完全竞争的，这类市场具备两种特征：</p>
+<ol>
+<li>可供销售的物品是相同的。</li>
+<li>买者和卖者人数众多，没人能够影响市场的价格。</li>
+</ol>
+<h2 id="需求"><a class="markdownIt-Anchor" href="#需求"></a> 需求</h2>
+<h3 id="需求定理"><a class="markdownIt-Anchor" href="#需求定理"></a> 需求定理</h3>
+<p>在其他条件不变的情况下，一种物品的价格上升，对该物品的需求量减少；一种物品的价格下降，对该物品的需求量增加。</p>
+<h3 id="个人需求和市场需求"><a class="markdownIt-Anchor" href="#个人需求和市场需求"></a> 个人需求和市场需求</h3>
+<p>我们用需求表和需求曲线来反应需求定理。而我们分析一般选取市场需求来分析，也就是<strong>市场中，所有个人对某种特定物品或服务的需求的总和</strong>：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724151226.png" alt="image-20210724151218097" style="zoom: 67%;" />
+<h3 id="需求曲线的变动"><a class="markdownIt-Anchor" href="#需求曲线的变动"></a> 需求曲线的变动</h3>
+<p>我们将个人需求水平相加就可以得到市场需求的需求曲线。由于市场需求是极其不稳定的，如果某种因素改变了任何一种既定价格下的 需求量，需求曲线就会移动。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724151443.png" alt="image-20210724151443253" style="zoom: 50%;" />
+<p>那么，可以想想有什么会使需求量变化呢？</p>
+<p>第一个，收入。如果收入减少了，对一种物品的需求量减少了，这种物品就被称为<u>正常物品</u>；如果收入减少，需求量反而增加了，这种物品就是<u>低档物品</u>。（平常打的上班，没钱了，只能坐公交车，公交车就是低档物品）</p>
+<p>第二个，相关物品的价格。假设冷冻酸奶的价格下降，那么我们会多买冷冻酸奶。同时，我们也许会少买冰淇淋。因为冰淇淋和冷冻酸奶两者很类似，<strong>互为替代品</strong>。当一种物品价格下降引起另一种物品的需求量增加时，这两种物品被称为<strong>互补品</strong>。（比如汽油和汽车）</p>
+<p>第三个，也是最明显的，你的爱好。经济学家一般不考察爱好，因为爱好很主观。但是经济学家要考察爱好变动时会发生什么变化。</p>
+<p>第四个，预期。</p>
+<p>第五个，买者的数量。</p>
+<h2 id="供给跟上面差不多"><a class="markdownIt-Anchor" href="#供给跟上面差不多"></a> 供给（跟上面差不多）</h2>
+<h3 id="供给定理"><a class="markdownIt-Anchor" href="#供给定理"></a> 供给定理</h3>
+<p>在其他条件不变时，一种物品价格上升，该物品供给量增加；一种物品价格下降，该物品供给量下降。</p>
+<h3 id="个人供给与市场供给"><a class="markdownIt-Anchor" href="#个人供给与市场供给"></a> 个人供给与市场供给</h3>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153040.png" alt="image-20210724153040416" style="zoom:50%;" />
+<h3 id="需求曲线的变动-2"><a class="markdownIt-Anchor" href="#需求曲线的变动-2"></a> 需求曲线的变动</h3>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153132.png" alt="image-20210724153132076" style="zoom:50%;" />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153156.png" alt="image-20210724153156597" style="zoom:67%;" />
+<h2 id="供给与需求"><a class="markdownIt-Anchor" href="#供给与需求"></a> 供给与需求</h2>
+<h3 id="均衡"><a class="markdownIt-Anchor" href="#均衡"></a> 均衡</h3>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153344.png" alt="image-20210724153344553" /></p>
+<p>有意思的是，<strong>市场自己会向供给和需求的均衡变动</strong>。市场上的过剩与短缺都是暂时的。这种现象就被称为<strong>供求定理</strong>。至于解释就不解释了，很好理解。</p>
+<h2 id="价格如何配置资源"><a class="markdownIt-Anchor" href="#价格如何配置资源"></a> 价格如何配置资源</h2>
+<p>本章分析了<strong>单个市场上的供给与需求</strong>。尽管我们的讨论集中在冰淇淋市场上，但所得出的结论也适用于大多数其他市场。只要你到商店去买东西，你就对该物品的需求做出了贡献；只要你找工作，你就对劳动服务的供给做出了贡献。由于供给与需求是如此普遍的经济现象，所以，<strong>供求模型是一种十分有用的分析工具</strong>。</p>
+<p>第1章中讨论的经济学十大原理之一是，市场通常是一种组织经济活动的好方法。虽然要判断市场结果是好还是坏仍然为时过早，但在本章中，我们开始了解市场是如何运行的。在任何一种经济制度中，都不得不在各种竞争性的用途之间分配稀缺的资源。市场经济利用供给与需求的力量来实现这个目标。供给与需求共同决定了经济中许多不同物品与服务的价格，而价格又是引导资源配置的信号。</p>
+<p>例如，考虑一下海滩土地的配置。由于这种土地的数量有限，并不是每一个人都能享受到住在海边的奢华生活。谁会得到这种资源呢？答案是<u>任何一个愿意而且能够支付这种价格的人</u>。海滩土地的价格会不断调整，直到这种土地的需求量与供给量达到平衡。</p>
+<p>因此，在市场经济中，<strong>价格是配置稀缺资源的机制</strong>。同样，<strong>价格决定了谁生产哪种物品，以及生产多少</strong>。例如，考虑一下农业的情况。由于我们生存需要食物，所以必须要有一些人从事农业。什么因素决定了谁是农民，谁不是农民呢？在一个自由的社会中，并没有一个做出这种决策并确保食物供给充足的政府计划机构。相反，把一部分人配置到农业中是基于千百万人的工作决策。这种分散的决策制度运行良好，因为这些决策是根据价格做出的。食物的价格和农民的工资（他们劳动的价格）会不断调整，从而确保有足够的人选择从事农业。如果一个人从未见过运行中的市场经济，则上述整个思想看起来可能是荒谬的。</p>
+<p>经济是由许多从事各种相互依存活动的人组成的群体。用什么来避免分散决策陷入混乱呢？用什么来协调千百万有不同能力与欲望的人的行动呢？用什么来保证需要完成的事情实际上也得以完成呢？用一个词来回答，那就是<strong>价格</strong>。如果正如亚当·斯密的著名论断所说，有一只看不见的手引导着市场经济，那么，价格制度就是这只“看不见的手”用来指挥经济交响乐队的指挥棒。</p>
+]]></content>
+      <categories>
+        <category>业余经济学</category>
+        <category>理论学习</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言声明的问题</title>
     <url>/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。</p>
@@ -195,129 +328,9 @@
       </tags>
   </entry>
   <entry>
-    <title>pta 1002 C解</title>
-    <url>/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/</url>
-    <content><![CDATA[<p>我的入门是python，最近在学数据结构想用C实现实现，所以想找点C语言的题目做做，于是就找到pta了。第一题没出什么岔子，这第二题1002明明是很简单的一道题，我确花了半小时😫……其实思路很简单，但是tmd一些语言上的问题，导致我老出错……</p>
-<span id="more"></span>
-<p>先来看看题目：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721232151.png" alt="image-20210721232151446" style="zoom:67%;" />
-<p>解题思路：（C）</p>
-<ul>
-<li>建立一个字符串数组zimu{“ling”,“yi”,“er”,“san”,“si”,“wu”,“liu”,“qi”,“ba”,“jiu”}，下标与拼音一一对应。</li>
-<li>计算n的各位数字之和sum。</li>
-<li>将sum各位存入数组。假设sum = 123,则存入数组为[3,2,1]</li>
-<li>将数组从后往前读，读到i,则输出zimu[i]</li>
-</ul>
-<p>注意点：</p>
-<ul>
-<li>可以看到输出样例很长很长，这个时候可能会想到用long long int，但是很明显是不行的，看看n的最大值可以是10^100(我一开始没注意)，所以<strong>用字符串来读入n比较合适</strong>。</li>
-<li>我们现在得到用字符串num[]表示的n，注意字符串一个单元存储（num[i]）的<strong>是字符而不是字符串</strong>。
-<ul>
-<li>将<u>字符</u>转化为int用num[i] - ‘0’,比如我现在想取n左边第一位的Int型，我们就可以用num[0] - ‘0’</li>
-<li>将<u>字符串</u>转化为int可以用&lt;stdlib.h&gt;头文件里的atoi()函数</li>
-</ul>
-</li>
-<li>后面一个切sum的时候可以采取和前面同样切的方法，我这里其实有点多此一举了，也就是不用切字符串的方法。</li>
-<li><strong>注意输出的空格问题</strong>。</li>
-</ul>
-<p>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line">    </span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">    	k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    	sum += k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后在贴一点，<strong>pta报&quot;运行时错误&quot;的时候对于C语言来说，很可能是数组越界了</strong>。</p>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>题解</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从processon看边际收益</title>
-    <url>/2021/07/21/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/</url>
-    <content><![CDATA[<p>在阅读《经济学原理》笔记中，我提到学习经济学的主要目的是运用经济学的知识，去做出更好的决策，而要达到这样的能力，就需要多做练习。这不，我今天就遇到个日常生活中经济学原理的运用。</p>
-<p>我有画什么思维导图，流程图的习惯，画这些图当然离不开得心应手的工具，我经常用的就是这个在线绘图网站——<a href="https://www.processon.com/">processon</a>.它的免费版是有存储空间限制的，只能存储几个图：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153402.png" alt="image-20210721153354921" /></p>
-<span id="more"></span>
-<p>上面这个是我<strong>扩容过</strong>的可存储文件个数，怎么扩容呢？我们点击这个<strong>免费扩容</strong>，看一下processon的策略：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210721153538.png" alt="image-20210721153538698" style="zoom:67%;" />
-<p>可以看到，我们只要邀请一个好友，它就送我一个空间。是不是感觉<u>只要邀请好友就给奖励</u>这个操作十分熟悉？没错，其实都是一个套路，我们运用学到的经济学十大原理的知识来分析一下：</p>
-<hr />
-<p>首先，假设processon后面的制作团队是理性人（尽自己最大可能去实现目标），他们的目标是<strong>想要有更多的用户</strong>，他们要想办法实现这个目标。</p>
-<p>根据第四原理：人们会对激励作出反应。对于免费用户来说，能激励他们的除了好用的功能就是<strong>增加存储量</strong>，因为免费版的用户的可存储文件太少了，所以这对他们来说增加存储量是个不错的激励。</p>
-<p>增加存储量对于processon是有成本的，因为这是云服务，<strong>免费增加的存储量就是机会成本</strong>（根据第二原理），每个人都增加一点，对于服务器来说肯定是不小的负担，平均成本也是不少的。那么processon就不该用送存储来换用户吗？</p>
-<p>答案是否定的，根据第三原理，<strong>理性人考虑边际量</strong>。<u>我们决策除了看平均成本，更要关注边际收益和边际成本</u>。proceeson只给用户加一个存储空间，就能换来一个用户(至于用户粘性怎么样，暂且不论)，这样的效率是很高的。并且边际成本（一个存储空间）是很低的，而边际收益（一个用户）是很高的。边际收益 远远大于 边际成本，这样是很划算的。</p>
-<p>从用户角度来说，邀请一个好友换一个文件，成本几乎为0，收益却永远是正的。也就是你邀请的人越多，你赚的越多，并且processon也赚得越多。这是一个双赢，何乐而不为。</p>
-<p>其它的什么邀请好友送点小奖励也都是一个逻辑，你别说，没学经济学之前还真没注意这回事。</p>
-<p>最后，贴一个我的邀请链接，看到的朋友可以点击这个注册一下<a href="https://www.processon.com/i/606544d0f346fb0aa97e043a">👉点我</a>，这个网站还是很好用的😏。</p>
-]]></content>
-      <categories>
-        <category>业余经济学</category>
-        <category>实践应用</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>供给与需求理论</title>
-    <url>/2021/07/24/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BE%9B%E7%BB%99%E4%B8%8E%E9%9C%80%E6%B1%82%E7%90%86%E8%AE%BA/</url>
-    <content><![CDATA[<p>供给与需求是市场经济运行的中坚力量，我们要想了解一项政策或者事件是如何影响经济的，我们就应该先考虑它将如何影响供给与需求。供给与需求理论将考虑：</p>
-<ul>
-<li>买者与卖者的行为</li>
-<li>他们之间的相互影响</li>
-</ul>
-<p>以说明：</p>
-<ul>
-<li>市场经济中供给与需求如何决定价格</li>
-<li>价格如何配置经济中的稀缺资源</li>
-</ul>
-<p>这一章的内容大多是一些概念上的东西，我会做一个简单记录。</p>
-<span id="more"></span>
-<h2 id="市场和竞争"><a class="markdownIt-Anchor" href="#市场和竞争"></a> 市场和竞争</h2>
-<p>供给与需求是人们再竞争市场上相互交易的行为。那么，我们有必要先来讨论他们交易时的环境——竞争市场</p>
-<ul>
-<li>市场：<u>由某种物品或服务的买者与卖者组成的一个群体</u>。买者作为一个群体决定了产品的需求；卖者作为一个群体决定了产品的供给。通常情况下，市场是没什么组织的。（像农产品市场这种是有组织的）</li>
-<li>大多数市场是高度竞争的：每个买者都知道自己有一些卖者可供选择；每个卖者也都知道他的产品和其他卖者提供的产品是类似的。因此，某件物品的价格和销售量，是由所有买者和卖者在市场上的相互交易决定的。</li>
-</ul>
-<p>这种<strong>许多卖者和买者组成并且每一个人对市场的价格的影响微乎其微的市场</strong>，我们称之为<strong>竞争市场</strong>。本章节中，我们假设市场是完全竞争的，这类市场具备两种特征：</p>
-<ol>
-<li>可供销售的物品是相同的。</li>
-<li>买者和卖者人数众多，没人能够影响市场的价格。</li>
-</ol>
-<h2 id="需求"><a class="markdownIt-Anchor" href="#需求"></a> 需求</h2>
-<h3 id="需求定理"><a class="markdownIt-Anchor" href="#需求定理"></a> 需求定理</h3>
-<p>在其他条件不变的情况下，一种物品的价格上升，对该物品的需求量减少；一种物品的价格下降，对该物品的需求量增加。</p>
-<h3 id="个人需求和市场需求"><a class="markdownIt-Anchor" href="#个人需求和市场需求"></a> 个人需求和市场需求</h3>
-<p>我们用需求表和需求曲线来反应需求定理。而我们分析一般选取市场需求来分析，也就是<strong>市场中，所有个人对某种特定物品或服务的需求的总和</strong>：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724151226.png" alt="image-20210724151218097" style="zoom: 67%;" />
-<h3 id="需求曲线的变动"><a class="markdownIt-Anchor" href="#需求曲线的变动"></a> 需求曲线的变动</h3>
-<p>我们将个人需求水平相加就可以得到市场需求的需求曲线。由于市场需求是极其不稳定的，如果某种因素改变了任何一种既定价格下的 需求量，需求曲线就会移动。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724151443.png" alt="image-20210724151443253" style="zoom: 50%;" />
-<p>那么，可以想想有什么会使需求量变化呢？</p>
-<p>第一个，收入。如果收入减少了，对一种物品的需求量减少了，这种物品就被称为<u>正常物品</u>；如果收入减少，需求量反而增加了，这种物品就是<u>低档物品</u>。（平常打的上班，没钱了，只能坐公交车，公交车就是低档物品）</p>
-<p>第二个，相关物品的价格。假设冷冻酸奶的价格下降，那么我们会多买冷冻酸奶。同时，我们也许会少买冰淇淋。因为冰淇淋和冷冻酸奶两者很类似，<strong>互为替代品</strong>。当一种物品价格下降引起另一种物品的需求量增加时，这两种物品被称为<strong>互补品</strong>。（比如汽油和汽车）</p>
-<p>第三个，也是最明显的，你的爱好。经济学家一般不考察爱好，因为爱好很主观。但是经济学家要考察爱好变动时会发生什么变化。</p>
-<p>第四个，预期。</p>
-<p>第五个，买者的数量。</p>
-<h2 id="供给跟上面差不多"><a class="markdownIt-Anchor" href="#供给跟上面差不多"></a> 供给（跟上面差不多）</h2>
-<h3 id="供给定理"><a class="markdownIt-Anchor" href="#供给定理"></a> 供给定理</h3>
-<p>在其他条件不变时，一种物品价格上升，该物品供给量增加；一种物品价格下降，该物品供给量下降。</p>
-<h3 id="个人供给与市场供给"><a class="markdownIt-Anchor" href="#个人供给与市场供给"></a> 个人供给与市场供给</h3>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153040.png" alt="image-20210724153040416" style="zoom:50%;" />
-<h3 id="需求曲线的变动-2"><a class="markdownIt-Anchor" href="#需求曲线的变动-2"></a> 需求曲线的变动</h3>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153132.png" alt="image-20210724153132076" style="zoom:50%;" />
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153156.png" alt="image-20210724153156597" style="zoom:67%;" />
-<h2 id="供给与需求"><a class="markdownIt-Anchor" href="#供给与需求"></a> 供给与需求</h2>
-<h3 id="均衡"><a class="markdownIt-Anchor" href="#均衡"></a> 均衡</h3>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210724153344.png" alt="image-20210724153344553" /></p>
-<p>有意思的是，<strong>市场自己会向供给和需求的均衡变动</strong>。市场上的过剩与短缺都是暂时的。这种现象就被称为<strong>供求定理</strong>。至于解释就不解释了，很好理解。</p>
-<h2 id="价格如何配置资源"><a class="markdownIt-Anchor" href="#价格如何配置资源"></a> 价格如何配置资源</h2>
-<p>本章分析了<strong>单个市场上的供给与需求</strong>。尽管我们的讨论集中在冰淇淋市场上，但所得出的结论也适用于大多数其他市场。只要你到商店去买东西，你就对该物品的需求做出了贡献；只要你找工作，你就对劳动服务的供给做出了贡献。由于供给与需求是如此普遍的经济现象，所以，<strong>供求模型是一种十分有用的分析工具</strong>。</p>
-<p>第1章中讨论的经济学十大原理之一是，市场通常是一种组织经济活动的好方法。虽然要判断市场结果是好还是坏仍然为时过早，但在本章中，我们开始了解市场是如何运行的。在任何一种经济制度中，都不得不在各种竞争性的用途之间分配稀缺的资源。市场经济利用供给与需求的力量来实现这个目标。供给与需求共同决定了经济中许多不同物品与服务的价格，而价格又是引导资源配置的信号。</p>
-<p>例如，考虑一下海滩土地的配置。由于这种土地的数量有限，并不是每一个人都能享受到住在海边的奢华生活。谁会得到这种资源呢？答案是<u>任何一个愿意而且能够支付这种价格的人</u>。海滩土地的价格会不断调整，直到这种土地的需求量与供给量达到平衡。</p>
-<p>因此，在市场经济中，<strong>价格是配置稀缺资源的机制</strong>。同样，<strong>价格决定了谁生产哪种物品，以及生产多少</strong>。例如，考虑一下农业的情况。由于我们生存需要食物，所以必须要有一些人从事农业。什么因素决定了谁是农民，谁不是农民呢？在一个自由的社会中，并没有一个做出这种决策并确保食物供给充足的政府计划机构。相反，把一部分人配置到农业中是基于千百万人的工作决策。这种分散的决策制度运行良好，因为这些决策是根据价格做出的。食物的价格和农民的工资（他们劳动的价格）会不断调整，从而确保有足够的人选择从事农业。如果一个人从未见过运行中的市场经济，则上述整个思想看起来可能是荒谬的。</p>
-<p>经济是由许多从事各种相互依存活动的人组成的群体。用什么来避免分散决策陷入混乱呢？用什么来协调千百万有不同能力与欲望的人的行动呢？用什么来保证需要完成的事情实际上也得以完成呢？用一个词来回答，那就是<strong>价格</strong>。如果正如亚当·斯密的著名论断所说，有一只看不见的手引导着市场经济，那么，价格制度就是这只“看不见的手”用来指挥经济交响乐队的指挥棒。</p>
+    <title>停止更新这一主题</title>
+    <url>/2021/09/05/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%81%9C%E6%AD%A2%E6%9B%B4%E6%96%B0%E8%BF%99%E4%B8%80%E4%B8%BB%E9%A2%98/</url>
+    <content><![CDATA[<p>业余经济学这一主题的理论部分就不写在博客上了，接下来的内容全部放到语雀上。</p>
 ]]></content>
       <categories>
         <category>业余经济学</category>
@@ -328,9 +341,68 @@
       </tags>
   </entry>
   <entry>
-    <title>停止更新这一主题</title>
-    <url>/2021/09/05/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%81%9C%E6%AD%A2%E6%9B%B4%E6%96%B0%E8%BF%99%E4%B8%80%E4%B8%BB%E9%A2%98/</url>
-    <content><![CDATA[<p>业余经济学这一主题的理论部分就不写在博客上了，接下来的内容全部放到语雀上。</p>
+    <title>十大原理之整体性六大原理</title>
+    <url>/2021/07/17/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h3 id="人们如何相互影响"><a class="markdownIt-Anchor" href="#人们如何相互影响"></a> 人们如何相互影响</h3>
+<p>前四个原理讨论了个人如何做出决策。在我们的人生旅途中，我们的许多决策不仅影响我们自己，而且还会影响其他人。以下三个原理是关于人们如何相互交易的。</p>
+<span id="more"></span>
+<h4 id="五-贸易可以使每个人的状况都变得更好"><a class="markdownIt-Anchor" href="#五-贸易可以使每个人的状况都变得更好"></a> 五、贸易可以使每个人的状况都变得更好</h4>
+<p>我们先考虑贸易如何影响家庭。当家庭中的某个成员找工作时，她要与也在找工作的其他家庭的成员竞争。各个家庭在购物时也会相互竞争，因为每个家庭都想以最低的价格购买最好的东西。从某种意义上说，<strong>经济中每个家庭都在与所有其他家庭相竞争</strong>。</p>
+<p>尽管有这种竞争，但把你的家庭与所有其他家庭隔绝开来并不会使你的家庭过得更好。如果真的隔绝开来的话，你的家庭就必须自己种粮食、自己做衣服、自己盖房子。显然，你的家庭在与其他家庭的贸易中受益良多。<font color=purple>贸易使每个人都可以专门从事自己最擅长的活动，</font>无论它是耕种、做衣服还是盖房子。通过与其他人贸易，<strong>人们可以以较低的成本获得各种各样的物品与服务</strong>。</p>
+<p>国家和家庭一样，也能从相互贸易中获益。贸易使各国可以专门从事自己最擅长的活动，并享有种类更多的物品与服务。</p>
+<hr />
+<h4 id="六-市场通常是组织经济活动的一种好方法"><a class="markdownIt-Anchor" href="#六-市场通常是组织经济活动的一种好方法"></a> 六、市场通常是组织经济活动的一种好方法</h4>
+<p>苏联和上世纪我国建国初期都是实行中央计划经济体制的，显然最后的效果不大好。因为中央计划经济国家运行的<strong>前提假设</strong>是，<u>政府官员能够最佳地配置经济中的稀缺资源</u>。这些中央计划者决定，生产什么物品与服务、生产多少，以及谁生产和消费这些物品与服务。</p>
+<blockquote>
+<p>支撑中央计划的理论是，<font color=purple><strong>只有政府才能以促进整个社会经济福利的方式组织经济活动。</strong></font></p>
+</blockquote>
+<p>现在我国是计划经济和市场经济相结合。在市场经济中，<strong>价格和利己引导着企业和家庭进行决策</strong>。可以看到，市场经济是成功的，但这种成功就像亚当斯密所说的“看不见的手”一样是个谜。在市场经济中，没有一个人追求整个社会的经济福利，但是市场经济在促进总体经济福利的方式组织经济活动方面非常成功。</p>
+<p>关于这个问题，亚当斯密有一些经典的观点：</p>
+<ul>
+<li>价格会自发调整，指引单个买者和卖者达到某种结果，该结果在大多数情况下会实现整个社会福利的最大化。</li>
+<li>当政府阻止价格根据供求状况自发调整时，它就限制了看不见的手对组成经济的千百万家庭和企业的决策进行协调的能力。这可以解释为什么中央计划经济是失败的，因为它把“看不见的手”给绑起来了。</li>
+<li>经济参与者<strong>受利己心所驱动</strong>，而市场上这只看不见的手<strong>指引这种利己心去促进总体的经济福利</strong>。</li>
+</ul>
+<hr />
+<h4 id="七-政府有时可以改善市场结果"><a class="markdownIt-Anchor" href="#七-政府有时可以改善市场结果"></a> 七、政府有时可以改善市场结果</h4>
+<p>我们国家既有计划经济也有市场经济，两者是并存的。那么为什么需要计划经济，也就是政府干预经济呢？学习经济学的目的之一是<strong>提高我们对政府政策的适当作用与范围的认识</strong>。</p>
+<p>以下是两个主要原因：</p>
+<ol>
+<li>
+<p>只有在政府实施规则并维持对市场经济至关重要的制度时，“看不见的手”才能施展其魔力。什么意思呢？</p>
+<p>​		我问你，假如你是一个农民，你种了许多蔬菜，然后拿到集市上去卖，结果还没开始卖，就直接被人抢走了，你是一脸问号（？？？）。这个时候，你还想种蔬菜了吗？反正都会被抢走，我也去抢吧，要不然谁给我饭吃？这样，市场经济还能起作用吗？</p>
+<p>​		这就需要政府实施<strong>产权</strong>的制度（我理解为主持公道），目的是让人们有<strong>控制自己手中稀缺资源，维护自己权利的能力</strong>。我们依靠政府的警察和法庭获得自己生产物品的所有权，而“看不见的手”依靠我们维护自己权利的能力。</p>
+</li>
+<li>
+<p>“看不见的手”是强有力的，但并不是无所不能的。</p>
+<p>政府干预经济的目的只有两个：<u>促进效率（把蛋糕做大）</u>或<u>促进平等（主持分蛋糕）</u>。我们先来看看第一个：</p>
+<ul>
+<li>尽管市场经济可以自己<strong>有效配置资源</strong>，以使经济蛋糕最大化，但也有失灵的时候。（经济学家称之为市场失灵）这里说两个原因：
+<ul>
+<li>一是可能因为<strong>外部性</strong>，指的是一个人的行为对旁观者福利的影响。最经典的例子就是污染的问题，工厂产生了污染，对附近居民的健康造成了有害影响，市场本身是不会把这个成本考虑在内的。</li>
+<li>二是可能因为<strong>市场势力</strong>，指单个人或公司（或某个小群体）不适当地影响市场价格的能力。我觉得就是<strong>巨无霸垄断</strong>，会对市场造成不好的影响。</li>
+</ul>
+</li>
+<li>即使“看不见的手”带来了有效率的产出，它也不能消除经济福利上巨大的不对称。市场经济根据人们生产其他人愿意购买的东西的能力来给予其报酬。这个很好理解。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="整体经济如何运行"><a class="markdownIt-Anchor" href="#整体经济如何运行"></a> 整体经济如何运行</h3>
+<p>我们从讨论个人如何做出决策开始，然后考察人们如何相互影响。所有这些决策和相互影响共同组成了“经济”。最后三个原理涉及整体经济的运行。</p>
+<h4 id="八-一国的生活水平取决于它生产物品与服务的能力"><a class="markdownIt-Anchor" href="#八-一国的生活水平取决于它生产物品与服务的能力"></a> 八、一国的生活水平取决于它生产物品与服务的能力</h4>
+<p>用什么来解释各国之间和不同时期<strong>生活水平</strong>的巨大差别呢？</p>
+<p>各国**生产率（productivity）**的差别——即每一单位劳动投入所生产的物品与服务数量的差别。决定一个国家人民生活水平的最关键因素，不是什么和它国竞争，也不是政府提高什么最低工资标准，而是这个国家的生产率是多少。</p>
+<p>生产率与生活水平之间的关系对于公共政策也有深远的含义。在考虑任何一项政策如何影响生活水平时，关键问题是这项政策如何影响我们生产物品与服务的能力。为了提高生活水平，决策者需要通过让工人受到良好的教育、拥有生产物品与服务需要的工具以及获取最好的技术来提高生产率。</p>
+<h4 id="九-当政府发行了过多货币时物价会上升"><a class="markdownIt-Anchor" href="#九-当政府发行了过多货币时物价会上升"></a> 九、当政府发行了过多货币时，物价会上升</h4>
+<p>所谓的物价上升→通货膨胀。由于高通货膨胀会让社会付出各种成本，所以世界各国的经济政策制定者都把保持低通货膨胀作为目标之一。</p>
+<p>是什么引起了通货膨胀？</p>
+<p>在大多数严重或持续的通货膨胀情况下，罪魁祸首是货币量的增长。当一国政府发行了大量本国货币时，货币的价值就下降了。在20世纪20年代初的德国，当物价平均每月上升3倍时，货币量每月也增加了3倍。美国的情况虽然没有这么严重，但从美国的经济史中也可以得出类似的结论：20世纪70年代的高通货膨胀与货币量的迅速增长是相关的，而近年来经历的低通货膨胀与货币量的缓慢增长也是相关的。</p>
+<h4 id="十-社会面临通货膨胀与失业之间的短期权衡取舍"><a class="markdownIt-Anchor" href="#十-社会面临通货膨胀与失业之间的短期权衡取舍"></a> 十、社会面临通货膨胀与失业之间的短期权衡取舍</h4>
+<p>不解释了，累了。</p>
+<hr />
+<p>在下面的学习中，要始终牢记这十大原理：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717144413.png" alt="image-20210717144411615" style="zoom:50%;" />
 ]]></content>
       <categories>
         <category>业余经济学</category>
@@ -447,78 +519,6 @@
       </tags>
   </entry>
   <entry>
-    <title>十大原理之整体性六大原理</title>
-    <url>/2021/07/17/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<h3 id="人们如何相互影响"><a class="markdownIt-Anchor" href="#人们如何相互影响"></a> 人们如何相互影响</h3>
-<p>前四个原理讨论了个人如何做出决策。在我们的人生旅途中，我们的许多决策不仅影响我们自己，而且还会影响其他人。以下三个原理是关于人们如何相互交易的。</p>
-<span id="more"></span>
-<h4 id="五-贸易可以使每个人的状况都变得更好"><a class="markdownIt-Anchor" href="#五-贸易可以使每个人的状况都变得更好"></a> 五、贸易可以使每个人的状况都变得更好</h4>
-<p>我们先考虑贸易如何影响家庭。当家庭中的某个成员找工作时，她要与也在找工作的其他家庭的成员竞争。各个家庭在购物时也会相互竞争，因为每个家庭都想以最低的价格购买最好的东西。从某种意义上说，<strong>经济中每个家庭都在与所有其他家庭相竞争</strong>。</p>
-<p>尽管有这种竞争，但把你的家庭与所有其他家庭隔绝开来并不会使你的家庭过得更好。如果真的隔绝开来的话，你的家庭就必须自己种粮食、自己做衣服、自己盖房子。显然，你的家庭在与其他家庭的贸易中受益良多。<font color=purple>贸易使每个人都可以专门从事自己最擅长的活动，</font>无论它是耕种、做衣服还是盖房子。通过与其他人贸易，<strong>人们可以以较低的成本获得各种各样的物品与服务</strong>。</p>
-<p>国家和家庭一样，也能从相互贸易中获益。贸易使各国可以专门从事自己最擅长的活动，并享有种类更多的物品与服务。</p>
-<hr />
-<h4 id="六-市场通常是组织经济活动的一种好方法"><a class="markdownIt-Anchor" href="#六-市场通常是组织经济活动的一种好方法"></a> 六、市场通常是组织经济活动的一种好方法</h4>
-<p>苏联和上世纪我国建国初期都是实行中央计划经济体制的，显然最后的效果不大好。因为中央计划经济国家运行的<strong>前提假设</strong>是，<u>政府官员能够最佳地配置经济中的稀缺资源</u>。这些中央计划者决定，生产什么物品与服务、生产多少，以及谁生产和消费这些物品与服务。</p>
-<blockquote>
-<p>支撑中央计划的理论是，<font color=purple><strong>只有政府才能以促进整个社会经济福利的方式组织经济活动。</strong></font></p>
-</blockquote>
-<p>现在我国是计划经济和市场经济相结合。在市场经济中，<strong>价格和利己引导着企业和家庭进行决策</strong>。可以看到，市场经济是成功的，但这种成功就像亚当斯密所说的“看不见的手”一样是个谜。在市场经济中，没有一个人追求整个社会的经济福利，但是市场经济在促进总体经济福利的方式组织经济活动方面非常成功。</p>
-<p>关于这个问题，亚当斯密有一些经典的观点：</p>
-<ul>
-<li>价格会自发调整，指引单个买者和卖者达到某种结果，该结果在大多数情况下会实现整个社会福利的最大化。</li>
-<li>当政府阻止价格根据供求状况自发调整时，它就限制了看不见的手对组成经济的千百万家庭和企业的决策进行协调的能力。这可以解释为什么中央计划经济是失败的，因为它把“看不见的手”给绑起来了。</li>
-<li>经济参与者<strong>受利己心所驱动</strong>，而市场上这只看不见的手<strong>指引这种利己心去促进总体的经济福利</strong>。</li>
-</ul>
-<hr />
-<h4 id="七-政府有时可以改善市场结果"><a class="markdownIt-Anchor" href="#七-政府有时可以改善市场结果"></a> 七、政府有时可以改善市场结果</h4>
-<p>我们国家既有计划经济也有市场经济，两者是并存的。那么为什么需要计划经济，也就是政府干预经济呢？学习经济学的目的之一是<strong>提高我们对政府政策的适当作用与范围的认识</strong>。</p>
-<p>以下是两个主要原因：</p>
-<ol>
-<li>
-<p>只有在政府实施规则并维持对市场经济至关重要的制度时，“看不见的手”才能施展其魔力。什么意思呢？</p>
-<p>​		我问你，假如你是一个农民，你种了许多蔬菜，然后拿到集市上去卖，结果还没开始卖，就直接被人抢走了，你是一脸问号（？？？）。这个时候，你还想种蔬菜了吗？反正都会被抢走，我也去抢吧，要不然谁给我饭吃？这样，市场经济还能起作用吗？</p>
-<p>​		这就需要政府实施<strong>产权</strong>的制度（我理解为主持公道），目的是让人们有<strong>控制自己手中稀缺资源，维护自己权利的能力</strong>。我们依靠政府的警察和法庭获得自己生产物品的所有权，而“看不见的手”依靠我们维护自己权利的能力。</p>
-</li>
-<li>
-<p>“看不见的手”是强有力的，但并不是无所不能的。</p>
-<p>政府干预经济的目的只有两个：<u>促进效率（把蛋糕做大）</u>或<u>促进平等（主持分蛋糕）</u>。我们先来看看第一个：</p>
-<ul>
-<li>尽管市场经济可以自己<strong>有效配置资源</strong>，以使经济蛋糕最大化，但也有失灵的时候。（经济学家称之为市场失灵）这里说两个原因：
-<ul>
-<li>一是可能因为<strong>外部性</strong>，指的是一个人的行为对旁观者福利的影响。最经典的例子就是污染的问题，工厂产生了污染，对附近居民的健康造成了有害影响，市场本身是不会把这个成本考虑在内的。</li>
-<li>二是可能因为<strong>市场势力</strong>，指单个人或公司（或某个小群体）不适当地影响市场价格的能力。我觉得就是<strong>巨无霸垄断</strong>，会对市场造成不好的影响。</li>
-</ul>
-</li>
-<li>即使“看不见的手”带来了有效率的产出，它也不能消除经济福利上巨大的不对称。市场经济根据人们生产其他人愿意购买的东西的能力来给予其报酬。这个很好理解。</li>
-</ul>
-</li>
-</ol>
-<hr />
-<h3 id="整体经济如何运行"><a class="markdownIt-Anchor" href="#整体经济如何运行"></a> 整体经济如何运行</h3>
-<p>我们从讨论个人如何做出决策开始，然后考察人们如何相互影响。所有这些决策和相互影响共同组成了“经济”。最后三个原理涉及整体经济的运行。</p>
-<h4 id="八-一国的生活水平取决于它生产物品与服务的能力"><a class="markdownIt-Anchor" href="#八-一国的生活水平取决于它生产物品与服务的能力"></a> 八、一国的生活水平取决于它生产物品与服务的能力</h4>
-<p>用什么来解释各国之间和不同时期<strong>生活水平</strong>的巨大差别呢？</p>
-<p>各国**生产率（productivity）**的差别——即每一单位劳动投入所生产的物品与服务数量的差别。决定一个国家人民生活水平的最关键因素，不是什么和它国竞争，也不是政府提高什么最低工资标准，而是这个国家的生产率是多少。</p>
-<p>生产率与生活水平之间的关系对于公共政策也有深远的含义。在考虑任何一项政策如何影响生活水平时，关键问题是这项政策如何影响我们生产物品与服务的能力。为了提高生活水平，决策者需要通过让工人受到良好的教育、拥有生产物品与服务需要的工具以及获取最好的技术来提高生产率。</p>
-<h4 id="九-当政府发行了过多货币时物价会上升"><a class="markdownIt-Anchor" href="#九-当政府发行了过多货币时物价会上升"></a> 九、当政府发行了过多货币时，物价会上升</h4>
-<p>所谓的物价上升→通货膨胀。由于高通货膨胀会让社会付出各种成本，所以世界各国的经济政策制定者都把保持低通货膨胀作为目标之一。</p>
-<p>是什么引起了通货膨胀？</p>
-<p>在大多数严重或持续的通货膨胀情况下，罪魁祸首是货币量的增长。当一国政府发行了大量本国货币时，货币的价值就下降了。在20世纪20年代初的德国，当物价平均每月上升3倍时，货币量每月也增加了3倍。美国的情况虽然没有这么严重，但从美国的经济史中也可以得出类似的结论：20世纪70年代的高通货膨胀与货币量的迅速增长是相关的，而近年来经历的低通货膨胀与货币量的缓慢增长也是相关的。</p>
-<h4 id="十-社会面临通货膨胀与失业之间的短期权衡取舍"><a class="markdownIt-Anchor" href="#十-社会面临通货膨胀与失业之间的短期权衡取舍"></a> 十、社会面临通货膨胀与失业之间的短期权衡取舍</h4>
-<p>不解释了，累了。</p>
-<hr />
-<p>在下面的学习中，要始终牢记这十大原理：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717144413.png" alt="image-20210717144411615" style="zoom:50%;" />
-]]></content>
-      <categories>
-        <category>业余经济学</category>
-        <category>理论学习</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>学习经济学的理由以及方法</title>
     <url>/2021/07/15/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%AD%A6%E4%B9%A0%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E7%90%86%E7%94%B1%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h2 id="理由"><a class="markdownIt-Anchor" href="#理由"></a> 理由</h2>
@@ -544,6 +544,91 @@
 <p>​	额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
 <p>就下面这个工作流：</p>
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715180428.png" alt="image-20210715180428340" style="zoom: 67%;" />
+]]></content>
+      <categories>
+        <category>业余经济学</category>
+        <category>理论学习</category>
+      </categories>
+      <tags>
+        <tag>经济学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>经济学的方法论</title>
+    <url>/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
+    <content><![CDATA[<p>本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210720145206.jpg" alt="" /></p>
+<span id="more"></span>
+<h2 id="研究时科学家"><a class="markdownIt-Anchor" href="#研究时科学家"></a> 研究时—科学家</h2>
+<p>emmm,作者说经济学家其实和物理学家，生物学家的方法论差不多，研究在保证客观性的前提下，按照：观察 → 提出假设 → 搜集data → 分析data → 证明或否定假设，所以说经济学家是一种科学。作者接下来解释了<strong>为什么说经济学是一种科学</strong>：</p>
+<blockquote>
+<p>科学的本质是科学方法——冷静地建立并检验有关世界如何运行的各种理论。这种研究方法适用于研究一国经济，就像适用于研究地心引力或生物进化一样。正如阿尔伯特·爱因斯坦（Albert Einstein）曾经指出的：“所有科学不过是日常思考的不断完善而已。”</p>
+</blockquote>
+<p>为了进一步说明，作者选了点上面说的科学的方法论的流程，说了说经济学的特色：</p>
+<h3 id="观察提出假设"><a class="markdownIt-Anchor" href="#观察提出假设"></a> 观察，提出假设</h3>
+<p>经济学家会观察经济现象，这个不用多说。特别的是，物理学家想观察，获得数据，做做实验就好了；可是<strong>经济学家想进行实验几乎是不可能的</strong>。比如研究通货膨胀的经济学家绝不会被允许仅仅为了获得有用的数据而操控一国的货币政策。</p>
+<p>为此，经济学家<strong>只能求助于历史提供的实验</strong>。例如，当中东战争中断了原油运输时，全世界石油价格飞涨。对石油和石油产品的消费者来说，这个事件降低了他们的生活水平；对经济决策者来说，这个事件提出了如何做出最佳应对的难题。但对经济科学家来说，它提供了<u>研究一种重要的自然资源对世界经济影响的机会</u>。</p>
+<p>这就是为什么经济学家十分关注历史事件的原因。</p>
+<h3 id="建立模型"><a class="markdownIt-Anchor" href="#建立模型"></a> 建立模型</h3>
+<p>其实参加过数学建模比赛的uu就知道，题目中会有一道经济学相关的题目，也就是让你建立一个经济学模型来解决一个经济学问题。这个建模的过程和数学建模的过程是很像的。</p>
+<ul>
+<li>首先提出假设，去掉一些不重要的细节，建立一个初步的模型。</li>
+<li>再不断增加<strong>必要的</strong>复杂度。（注意，这是个由浅入深的过程）</li>
+<li>最后建立一个<strong>合适的</strong>模型。（针对不同的问题而言）</li>
+</ul>
+<p>经济由从事许多活动——购买、销售、工作、雇佣、制造等——的千百万人所组成。为了理解经济的运行方式，我们必须找到某种方法来<strong>简化</strong>我们对所有这些活动的思考。换句话说，我们需要一个模型从总体上来解释经济是如何组织起来的，并说明经济的参与者如何相互交易。</p>
+<p>然后作者列举了两个经济学的经典模型：</p>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/95971285">循环流量图</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E5%8F%AF%E8%83%BD%E6%80%A7%E6%9B%B2%E7%BA%BF">生产可能性边界—简单的数学经济模型</a>,我觉得可以这么理解：总共50块钱，你是买汽水喝还是买辣条，多买辣条一点你就少喝点汽水。想想这个模型和前面讲到的十大原理中哪些原理有关系？</li>
+</ol>
+<h3 id="研究领域宏观和微观"><a class="markdownIt-Anchor" href="#研究领域宏观和微观"></a> 研究领域：宏观和微观</h3>
+<p>经济学的研究和其它科学一样，是分为不同层次的，传统意义上划分为两个大方向：</p>
+<ul>
+<li>
+<p>微观经济学（microeconomics）：研究家庭和企业如何做出决策，以及它们如何在特定市场上相互交易。</p>
+<p>一个微观经济学家可能研究租金控制对上海住房的影响、外国竞争对我国汽车行业的影响，或者接受义务教育对工人收入的影响。</p>
+</li>
+<li>
+<p>宏观经济学（macroeconomics）：研究整体经济现象。</p>
+<p>一个宏观经济学家可能研究政府借债的影响、经济中失业率随时间推移的变动，或者提高一国生活水平的不同政策。</p>
+</li>
+</ul>
+<p>微观经济学和宏观经济学是密切相关的。由于整体经济的变动产生于千百万个人的决策，所以，不考虑相关的微观经济决策而要去理解宏观经济的发展是不可能的。例如，宏观经济学家可能研究个人所得税的减少对整个物品与服务生产的影响。但是为了分析这个问题，他必须考虑所得税减少会如何影响家庭把多少钱用于购买物品与服务的决策。</p>
+<p>尽管微观经济学与宏观经济学之间存在固有的联系，但这两个领域仍然是不同的。由于它们强调不同的问题，且每个领域都有自己的一套模型，所以通常在不同的课程中讲授。</p>
+<hr />
+<h2 id="政策顾问"><a class="markdownIt-Anchor" href="#政策顾问"></a> 政策顾问</h2>
+<p>这经济乃民生之本，经济学家可不能躲进小楼成一统啊，研究那么多，总得告诉别人怎么做吧。</p>
+<p>当经济学家试图去<font color=purple><strong>解释世界时</strong>，他们是<strong>科学家</strong></font>；当经济学家试图去<font color=green><strong>帮助改善世界</strong>时，他们是<strong>政策顾问。</strong></font></p>
+<p>这句话很重要，两种不同的身份，语言是不一样的，你拿做研究时的术语去告诉不是学经济学的人怎么做，不是对牛弹琴吗？对此经济学规定了两套不同的术语（这是我没想到的😥）：实证表述与规范表述。额，怎么说呢，具体内容去查资料就有了，我就作为一个小白来说一说这俩玩意啥意思啊？</p>
+<ul>
+<li>实证表述就是靠证据说话，去<strong>解释</strong>一个经济系统是怎么运作的，是站在科学家的角度上（严谨）。</li>
+<li>规范表述不仅仅要涉及事实，还要考虑到社会、国家的方方面面。毕竟确定什么是好政策或什么是坏政策不仅仅是一个科学问题，它还涉及我们对伦理、宗教和政治哲学的看法，是一种<strong>指导性的语言</strong>，是站在顾问的角度上。</li>
+</ul>
+<p>在学习经济学时，要<strong>记住实证表述与规范表述的区别</strong>，因为这有助于你将精力集中在手头的任务上。</p>
+<p>经济学的许多内容是实证的：它仅仅在努力解释世界如何运行。但那些运用经济学的经济学家们通常有规范的目的：他们想知道如何改善经济。当你听到经济学家做出规范表述时，你就可以知道，他们此时已经是站在政策顾问的立场上，而不是站在科学家的立场上了。</p>
+<hr />
+<h3 id="经济学家的影响"><a class="markdownIt-Anchor" href="#经济学家的影响"></a> 经济学家的影响</h3>
+<p>经济学家对政策的影响超出了他们作为顾问的作用：他们的研究和著作经常间接地影响政策。经济学家约翰·梅纳德·凯恩斯（John Maynard Keynes）提出了这种看法：</p>
+<blockquote>
+<p>经济学家和政治哲学家的思想，无论正确与否，实际上都要比一般所想象的更有力量。事实上，这个世界就是由它们统治的。那些自认为能够免于受经济学家思想影响的实干家往往是某些已故经济学家的俘虏。那些当权狂人信奉的其实也不过是若干年前某些末流文人狂妄思想的零碎而已。</p>
+</blockquote>
+<p>虽然这些文字写于1935年，但至今仍然正确。实际上，现在正影响公共政策的“末流文人”往往是凯恩斯本人。</p>
+<p>经济学家的建议很重要，也有许多的领袖愿意听经济学家的建议。</p>
+<p>但是，<strong>经济学家的建议总是不被采纳</strong>……这个为什么也很好理解，都说了，经济学家的研究是建立在假设之上的，是抽象的模型，虽来源于现实但是脱离于现实，因此<strong>实际上的经济政策制定和经济学研究是两码事</strong>。</p>
+<hr />
+<h2 id="经济学家经常意见不一"><a class="markdownIt-Anchor" href="#经济学家经常意见不一"></a> 经济学家经常意见不一</h2>
+<p>萧伯纳曾经这样嘲讽道：</p>
+<blockquote>
+<p>如果让所有的经济学家围坐在一起，他们不会达成任何一个共识。</p>
+</blockquote>
+<p>至于为什么，我不想写了。</p>
+<h2 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h2>
+<p>以上其实就是绪论部分的结束，下面的章节就是经济学的干货了。在开始之前，作者引用了下面这段话：</p>
+<blockquote>
+<p>经济学研究似乎并不需要任何极高的特殊天赋。与更高深的哲学或纯科学相比，经济学难道不是……一门极其容易的学科吗？它是一门容易的学科，但这个学科中很少有人能出类拔萃！对这个悖论的解释也许在于杰出的经济学家应该具有罕见的各种天赋的组合。在某种程度上，他应该是数学家、历史学家、政治家和哲学家。他必须了解符号并用文字将其表达出来。他必须根据一般性来深入思考特殊性，并在思绪奔放的同时触及抽象与具体。他必须根据过去、着眼未来而研究现在。他必须考虑到人性或人的制度的每一部分。他必须同时保持坚定而客观的情绪，要像艺术家一样超然而不流俗，但有时又要像政治家一样脚踏实地。</p>
+</blockquote>
+<p>这无疑是一个高标准。但通过实践，我们将会越来越习惯于像经济学家一样思考。（好家伙，还整个交叉学科😳）</p>
 ]]></content>
       <categories>
         <category>业余经济学</category>
@@ -705,466 +790,6 @@
       </categories>
       <tags>
         <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>经济学的方法论</title>
-    <url>/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
-    <content><![CDATA[<p>本章主要探讨的是经济学的方法论，了解经济学家是怎么思考的。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210720145206.jpg" alt="" /></p>
-<span id="more"></span>
-<h2 id="研究时科学家"><a class="markdownIt-Anchor" href="#研究时科学家"></a> 研究时—科学家</h2>
-<p>emmm,作者说经济学家其实和物理学家，生物学家的方法论差不多，研究在保证客观性的前提下，按照：观察 → 提出假设 → 搜集data → 分析data → 证明或否定假设，所以说经济学家是一种科学。作者接下来解释了<strong>为什么说经济学是一种科学</strong>：</p>
-<blockquote>
-<p>科学的本质是科学方法——冷静地建立并检验有关世界如何运行的各种理论。这种研究方法适用于研究一国经济，就像适用于研究地心引力或生物进化一样。正如阿尔伯特·爱因斯坦（Albert Einstein）曾经指出的：“所有科学不过是日常思考的不断完善而已。”</p>
-</blockquote>
-<p>为了进一步说明，作者选了点上面说的科学的方法论的流程，说了说经济学的特色：</p>
-<h3 id="观察提出假设"><a class="markdownIt-Anchor" href="#观察提出假设"></a> 观察，提出假设</h3>
-<p>经济学家会观察经济现象，这个不用多说。特别的是，物理学家想观察，获得数据，做做实验就好了；可是<strong>经济学家想进行实验几乎是不可能的</strong>。比如研究通货膨胀的经济学家绝不会被允许仅仅为了获得有用的数据而操控一国的货币政策。</p>
-<p>为此，经济学家<strong>只能求助于历史提供的实验</strong>。例如，当中东战争中断了原油运输时，全世界石油价格飞涨。对石油和石油产品的消费者来说，这个事件降低了他们的生活水平；对经济决策者来说，这个事件提出了如何做出最佳应对的难题。但对经济科学家来说，它提供了<u>研究一种重要的自然资源对世界经济影响的机会</u>。</p>
-<p>这就是为什么经济学家十分关注历史事件的原因。</p>
-<h3 id="建立模型"><a class="markdownIt-Anchor" href="#建立模型"></a> 建立模型</h3>
-<p>其实参加过数学建模比赛的uu就知道，题目中会有一道经济学相关的题目，也就是让你建立一个经济学模型来解决一个经济学问题。这个建模的过程和数学建模的过程是很像的。</p>
-<ul>
-<li>首先提出假设，去掉一些不重要的细节，建立一个初步的模型。</li>
-<li>再不断增加<strong>必要的</strong>复杂度。（注意，这是个由浅入深的过程）</li>
-<li>最后建立一个<strong>合适的</strong>模型。（针对不同的问题而言）</li>
-</ul>
-<p>经济由从事许多活动——购买、销售、工作、雇佣、制造等——的千百万人所组成。为了理解经济的运行方式，我们必须找到某种方法来<strong>简化</strong>我们对所有这些活动的思考。换句话说，我们需要一个模型从总体上来解释经济是如何组织起来的，并说明经济的参与者如何相互交易。</p>
-<p>然后作者列举了两个经济学的经典模型：</p>
-<ol>
-<li><a href="https://zhuanlan.zhihu.com/p/95971285">循环流量图</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E5%8F%AF%E8%83%BD%E6%80%A7%E6%9B%B2%E7%BA%BF">生产可能性边界—简单的数学经济模型</a>,我觉得可以这么理解：总共50块钱，你是买汽水喝还是买辣条，多买辣条一点你就少喝点汽水。想想这个模型和前面讲到的十大原理中哪些原理有关系？</li>
-</ol>
-<h3 id="研究领域宏观和微观"><a class="markdownIt-Anchor" href="#研究领域宏观和微观"></a> 研究领域：宏观和微观</h3>
-<p>经济学的研究和其它科学一样，是分为不同层次的，传统意义上划分为两个大方向：</p>
-<ul>
-<li>
-<p>微观经济学（microeconomics）：研究家庭和企业如何做出决策，以及它们如何在特定市场上相互交易。</p>
-<p>一个微观经济学家可能研究租金控制对上海住房的影响、外国竞争对我国汽车行业的影响，或者接受义务教育对工人收入的影响。</p>
-</li>
-<li>
-<p>宏观经济学（macroeconomics）：研究整体经济现象。</p>
-<p>一个宏观经济学家可能研究政府借债的影响、经济中失业率随时间推移的变动，或者提高一国生活水平的不同政策。</p>
-</li>
-</ul>
-<p>微观经济学和宏观经济学是密切相关的。由于整体经济的变动产生于千百万个人的决策，所以，不考虑相关的微观经济决策而要去理解宏观经济的发展是不可能的。例如，宏观经济学家可能研究个人所得税的减少对整个物品与服务生产的影响。但是为了分析这个问题，他必须考虑所得税减少会如何影响家庭把多少钱用于购买物品与服务的决策。</p>
-<p>尽管微观经济学与宏观经济学之间存在固有的联系，但这两个领域仍然是不同的。由于它们强调不同的问题，且每个领域都有自己的一套模型，所以通常在不同的课程中讲授。</p>
-<hr />
-<h2 id="政策顾问"><a class="markdownIt-Anchor" href="#政策顾问"></a> 政策顾问</h2>
-<p>这经济乃民生之本，经济学家可不能躲进小楼成一统啊，研究那么多，总得告诉别人怎么做吧。</p>
-<p>当经济学家试图去<font color=purple><strong>解释世界时</strong>，他们是<strong>科学家</strong></font>；当经济学家试图去<font color=green><strong>帮助改善世界</strong>时，他们是<strong>政策顾问。</strong></font></p>
-<p>这句话很重要，两种不同的身份，语言是不一样的，你拿做研究时的术语去告诉不是学经济学的人怎么做，不是对牛弹琴吗？对此经济学规定了两套不同的术语（这是我没想到的😥）：实证表述与规范表述。额，怎么说呢，具体内容去查资料就有了，我就作为一个小白来说一说这俩玩意啥意思啊？</p>
-<ul>
-<li>实证表述就是靠证据说话，去<strong>解释</strong>一个经济系统是怎么运作的，是站在科学家的角度上（严谨）。</li>
-<li>规范表述不仅仅要涉及事实，还要考虑到社会、国家的方方面面。毕竟确定什么是好政策或什么是坏政策不仅仅是一个科学问题，它还涉及我们对伦理、宗教和政治哲学的看法，是一种<strong>指导性的语言</strong>，是站在顾问的角度上。</li>
-</ul>
-<p>在学习经济学时，要<strong>记住实证表述与规范表述的区别</strong>，因为这有助于你将精力集中在手头的任务上。</p>
-<p>经济学的许多内容是实证的：它仅仅在努力解释世界如何运行。但那些运用经济学的经济学家们通常有规范的目的：他们想知道如何改善经济。当你听到经济学家做出规范表述时，你就可以知道，他们此时已经是站在政策顾问的立场上，而不是站在科学家的立场上了。</p>
-<hr />
-<h3 id="经济学家的影响"><a class="markdownIt-Anchor" href="#经济学家的影响"></a> 经济学家的影响</h3>
-<p>经济学家对政策的影响超出了他们作为顾问的作用：他们的研究和著作经常间接地影响政策。经济学家约翰·梅纳德·凯恩斯（John Maynard Keynes）提出了这种看法：</p>
-<blockquote>
-<p>经济学家和政治哲学家的思想，无论正确与否，实际上都要比一般所想象的更有力量。事实上，这个世界就是由它们统治的。那些自认为能够免于受经济学家思想影响的实干家往往是某些已故经济学家的俘虏。那些当权狂人信奉的其实也不过是若干年前某些末流文人狂妄思想的零碎而已。</p>
-</blockquote>
-<p>虽然这些文字写于1935年，但至今仍然正确。实际上，现在正影响公共政策的“末流文人”往往是凯恩斯本人。</p>
-<p>经济学家的建议很重要，也有许多的领袖愿意听经济学家的建议。</p>
-<p>但是，<strong>经济学家的建议总是不被采纳</strong>……这个为什么也很好理解，都说了，经济学家的研究是建立在假设之上的，是抽象的模型，虽来源于现实但是脱离于现实，因此<strong>实际上的经济政策制定和经济学研究是两码事</strong>。</p>
-<hr />
-<h2 id="经济学家经常意见不一"><a class="markdownIt-Anchor" href="#经济学家经常意见不一"></a> 经济学家经常意见不一</h2>
-<p>萧伯纳曾经这样嘲讽道：</p>
-<blockquote>
-<p>如果让所有的经济学家围坐在一起，他们不会达成任何一个共识。</p>
-</blockquote>
-<p>至于为什么，我不想写了。</p>
-<h2 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h2>
-<p>以上其实就是绪论部分的结束，下面的章节就是经济学的干货了。在开始之前，作者引用了下面这段话：</p>
-<blockquote>
-<p>经济学研究似乎并不需要任何极高的特殊天赋。与更高深的哲学或纯科学相比，经济学难道不是……一门极其容易的学科吗？它是一门容易的学科，但这个学科中很少有人能出类拔萃！对这个悖论的解释也许在于杰出的经济学家应该具有罕见的各种天赋的组合。在某种程度上，他应该是数学家、历史学家、政治家和哲学家。他必须了解符号并用文字将其表达出来。他必须根据一般性来深入思考特殊性，并在思绪奔放的同时触及抽象与具体。他必须根据过去、着眼未来而研究现在。他必须考虑到人性或人的制度的每一部分。他必须同时保持坚定而客观的情绪，要像艺术家一样超然而不流俗，但有时又要像政治家一样脚踏实地。</p>
-</blockquote>
-<p>这无疑是一个高标准。但通过实践，我们将会越来越习惯于像经济学家一样思考。（好家伙，还整个交叉学科😳）</p>
-]]></content>
-      <categories>
-        <category>业余经济学</category>
-        <category>理论学习</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux的ctrl+快捷键的功能</title>
-    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  额，最近在看《C++primer》，遇到一个很简单的循环输入：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(std::cin &gt;&gt; value)</span><br><span class="line">&#123;</span><br><span class="line">    sum += value </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都看了一遍，来这做个总结。</p>
-<span id="more"></span>
-<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" alt="image-20211002125045305" /></p>
-<p>  关于stty的详细内容，下面会说。</p>
-<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
-<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
-<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" />
-<p>我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" alt="image-20211002131411566" /></p>
-<p>等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851"  />
-<p>其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" alt="image-20211002131920966" /></p>
-<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" />
-<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
-<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
-<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
-<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
-<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" alt="image-20211002132722906" /></p>
-<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" alt="image-20211002133025989" /></p>
-<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" alt="image-20211002133243103" /></p>
-<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" alt="image-20211002133452812" /></p>
-<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">快捷键(ctrl用^表示)</th>
-<th style="text-align:center">功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">^l</td>
-<td style="text-align:center">相当于clear,清空终端</td>
-</tr>
-<tr>
-<td style="text-align:center">^s</td>
-<td style="text-align:center">中断输出</td>
-</tr>
-<tr>
-<td style="text-align:center">^q</td>
-<td style="text-align:center">继续输出</td>
-</tr>
-<tr>
-<td style="text-align:center">^a/^e</td>
-<td style="text-align:center">光标移到行首/行尾巴</td>
-</tr>
-<tr>
-<td style="text-align:center">^p</td>
-<td style="text-align:center">重复上次命令</td>
-</tr>
-<tr>
-<td style="text-align:center">^y</td>
-<td style="text-align:center">粘贴或者恢复上次删除</td>
-</tr>
-<tr>
-<td style="text-align:center">^s/^q</td>
-<td style="text-align:center">冻结shell/解冻</td>
-</tr>
-</tbody>
-</table>
-<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
-<blockquote>
-<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
-</blockquote>
-<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" />
-<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-        <tag>ctrl</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git基本命令汇总</title>
-    <url>/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg" alt="Git基本操作" /></p>
-<p>这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。</p>
-<span id="more"></span>
-<hr />
-<p>最近又发现一张github的pull request的步骤图，一块贴上来，好给我的processon腾点空间：<br />
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg" alt="Pull Request" /></p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>版本管理</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vscode使用指南</title>
-    <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>最近想学一下vscode,将vscode当作主要使用的编辑器。所以想专门写一篇，来记录一下使用和配置的过程，一开始不会有体系，只是遇到什么问题就记什么，当用得差不多时，可能会回头整理一下。</p>
-<span id="more"></span>
-<h1 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h1>
-<h2 id="全局快捷键"><a class="markdownIt-Anchor" href="#全局快捷键"></a> 全局快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">打开/关闭侧边栏</td>
-<td style="text-align:center">Ctrl+B</td>
-</tr>
-<tr>
-<td style="text-align:center">打开多个编辑器</td>
-<td style="text-align:center">Ctrl+\</td>
-</tr>
-<tr>
-<td style="text-align:center">聚焦到第n个编辑器</td>
-<td style="text-align:center">Ctrl+n(数字)</td>
-</tr>
-<tr>
-<td style="text-align:center">放大/缩小</td>
-<td style="text-align:center">Ctrl + +/-</td>
-</tr>
-<tr>
-<td style="text-align:center">进入专注模式</td>
-<td style="text-align:center">进：Ctrl+K再按M,退：Esc twice</td>
-</tr>
-</tbody>
-</table>
-<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">删除整行</td>
-<td style="text-align:center">Ctrl+Shift+K</td>
-</tr>
-<tr>
-<td style="text-align:center">删除光标之前的一个英文单词</td>
-<td style="text-align:center">Ctrl+backspace</td>
-</tr>
-<tr>
-<td style="text-align:center">删除光标之后的一个英文单词</td>
-<td style="text-align:center">Ctrl+delete</td>
-</tr>
-</tbody>
-</table>
-<h2 id="代码编辑快捷键"><a class="markdownIt-Anchor" href="#代码编辑快捷键"></a> 代码编辑快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">光标移动到开头/结尾</td>
-<td style="text-align:center">home/end</td>
-</tr>
-<tr>
-<td style="text-align:center">光标移动到文档开头/结尾</td>
-<td style="text-align:center">Ctrl+home/Ctrl+end</td>
-</tr>
-<tr>
-<td style="text-align:center">回到上一个光标的位置</td>
-<td style="text-align:center">Ctrl+U</td>
-</tr>
-<tr>
-<td style="text-align:center">代码上下换位</td>
-<td style="text-align:center">Alt+↑↓</td>
-</tr>
-<tr>
-<td style="text-align:center">代码复制并填充上/下</td>
-<td style="text-align:center">Alt+Shift+↑↓</td>
-</tr>
-<tr>
-<td style="text-align:center">快捷注释（单行）</td>
-<td style="text-align:center">Ctrl+/</td>
-</tr>
-<tr>
-<td style="text-align:center">全局代码格式化（根据语言）</td>
-<td style="text-align:center">Alt+shift+F</td>
-</tr>
-<tr>
-<td style="text-align:center">选中代码格式化</td>
-<td style="text-align:center">Ctrl+F</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<h2 id="快速跳转"><a class="markdownIt-Anchor" href="#快速跳转"></a> 快速跳转</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">快速打开文件</td>
-<td style="text-align:center">Ctrl+P</td>
-</tr>
-<tr>
-<td style="text-align:center">快速打开最近文件</td>
-<td style="text-align:center">Ctrl+R</td>
-</tr>
-<tr>
-<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
-<td style="text-align:center">Ctrl+G+行号</td>
-</tr>
-<tr>
-<td style="text-align:center">快速打开文件第n行</td>
-<td style="text-align:center">Ctrl+P，输入 :+行号</td>
-</tr>
-<tr>
-<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
-<td style="text-align:center">F12/Ctrl+F12</td>
-</tr>
-<tr>
-<td style="text-align:center">展现谁引用了函数或类</td>
-<td style="text-align:center">Shift+F12</td>
-</tr>
-<tr>
-<td style="text-align:center">代码重构（修改一个函数或者变量名）</td>
-<td style="text-align:center">光标移到修改处+F2</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<h2 id="自定义快捷键"><a class="markdownIt-Anchor" href="#自定义快捷键"></a> 自定义快捷键</h2>
-<p>vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" alt="image-20210903152109373" /></p>
-<h1 id="创建多层文件夹"><a class="markdownIt-Anchor" href="#创建多层文件夹"></a> 创建多层文件夹</h1>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152644.png" alt="image-20210903152636945" style="zoom:80%;" />
-<h1 id="vscode配置云同步"><a class="markdownIt-Anchor" href="#vscode配置云同步"></a> VScode配置云同步</h1>
-<p>我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。</p>
-<p>我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。</p>
-<p><strong>将自己本地的配置云同步到 GitHub</strong>：</p>
-<p>（1）安装插件 <code>settings-sync</code>。</p>
-<p>（2）安装完插件后，在插件里使用 GitHub 账号登录。</p>
-<p>（3）登录后在 vscode 的界面中，可以选择一个别人的 gist；也可以忽略掉，然后创建一个属于自己的 gist。</p>
-<p>（4）使用快捷键 「Command + Shift + P」，在弹出的命令框中输入 sync，并选择「更新/上传配置」，这样就可以把最新的配置上传到 GitHub。</p>
-<p><strong>我们如何将Gist中保存的配置同步到本地呢？</strong></p>
-<p>首先将gist ID更改为你想要的ID：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903155215.png" alt="image-20210903155208689" /></p>
-<p>打开命令面板，输入sync，选择高级选线，里面就可以更改你想要的gist ID，然后进行下载配置(shift + ALt + D)</p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>IDE/编辑器</category>
-      </categories>
-      <tags>
-        <tag>vs</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ubuntu解决apt-get报错问题</title>
-    <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
-<p>下面这个是报错的情况：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
-<p>貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
-<span id="more"></span>
-<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
-<p>我使用的是这个方法，就一条命令：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm /var/lib/dpkg/lock</span><br></pre></td></tr></table></figure>
-<p>其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm /var/lib/apt/lists/lock</span><br><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock-frontend</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
-<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
-<p>这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
-<p>我们直接执行下面这个命令：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo killall apt apt-get</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-        <tag>apt—get</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>powershell基础知识</title>
-    <url>/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU" alt="PowerShell" style="zoom:150%;" />
-<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>最近想学一下powershell,查了很多资料，于是想整合一下这些资料，所以本篇是对链接的一个整合，可能会记录一些我不熟悉但是比较有用的地方。</p>
-<p>这里先贴出比较详细的教程：</p>
-<ul>
-<li><a href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">微软官方文档</a></li>
-<li><a href="https://www.pstips.net/">powershell中文博客</a></li>
-</ul>
-<span id="more"></span>
-<h1 id="什么是powershell"><a class="markdownIt-Anchor" href="#什么是powershell"></a> 什么是PowerShell</h1>
-<p>这里直接给出一些介绍的链接：</p>
-<ul>
-<li><a href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">PowerShell官方文档介绍</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell-Wikipedia(要翻墙)</a></li>
-</ul>
-<h2 id="powershell和powershell-core的区别"><a class="markdownIt-Anchor" href="#powershell和powershell-core的区别"></a> powershell和powershell core的区别</h2>
-<p>注意，PowerShell 和PowerShell core是不同的，powershell core是微软发布的powershell的新版本（<a href="https://github.com/PowerShell/PowerShell/tags">下载地址</a>）。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911175705.png" alt="左边是powershell core,右边是Powershell" /></p>
-<p>那么两者有什么具体的区别呢？</p>
-<ul>
-<li>PowerShell core是跨平台的，可以在Windows、Linux和Macos上运行，而作为旧版本的PowerShell只能在Windows上运行。</li>
-<li>PowerShell使用的是 .NET Framework和 .NET Standard ; 作为新版本的PowerShell core使用的是 .NET Core和 .NET Standard 。（什么是.NET框架→<a href="https://docs.microsoft.com/zh-cn/dotnet/?view=aspnetcore-5.0">.NET官方文档</a>，<a href="https://blog.csdn.net/weixin_30435261/article/details/95944269?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163134856016780265456793%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=163134856016780265456793&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-95944269.first_rank_v2_pc_rank_v29&amp;utm_term=%E4%BB%80%E4%B9%88%E6%98%AF.NET&amp;spm=1018.2226.3001.4187">.NET简单介绍(csdn)</a>）</li>
-</ul>
-<p>现在使用的一般都是powershell core，下面的基础知识的介绍也是依托于powershell core.</p>
-<h1 id="cmdlet和别名"><a class="markdownIt-Anchor" href="#cmdlet和别名"></a> cmdlet和别名</h1>
-<h2 id="cmdlet简单介绍"><a class="markdownIt-Anchor" href="#cmdlet简单介绍"></a> cmdlet简单介绍</h2>
-<p>cmdlet 是本机 PowerShell 命令，而不是独立的可执行文件。 cmdlet 收集在 PowerShell 模块中，可按需加载。 可以用任何编译的 .NET 语言或 PowerShell 脚本语言本身来编写 cmdlet。</p>
-<p>PowerShell用”动词-名词“的方法来命名cmdlet命令，例如： <code>Get-Command</code> cmdlet 用于获取在命令行界面中注册的所有 cmdlet。 动词标识 cmdlet 执行的操作，名词标识该 cmdlet 执行其操作的所在资源。</p>
-<p>那么，我们如何查看一个<code>命令的使用说明</code>呢？</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查找某个命令的作用 → GetHelp name，后面加个<span class="literal">-Full</span>就是详细说明,加个<span class="literal">-examples</span>就是简略说明</span><br><span class="line"><span class="built_in">Get-Help</span> <span class="built_in">Get-VM</span></span><br><span class="line">//如果我们不知道命令的确切名字，可以使用<span class="built_in">Get-Command</span> *……*</span><br><span class="line"><span class="built_in">Get-Command</span> *VM*</span><br></pre></td></tr></table></figure>
-<p>在命令的详细介绍里，会出现下面这些格式，要能看懂：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911174724.png" alt="说明格式" style="zoom:80%;" />
-<p>以上就是获取cmdlet说明的介绍。</p>
-<h2 id="别名alias"><a class="markdownIt-Anchor" href="#别名alias"></a> 别名(Alias)</h2>
-<p>cmdlet命令的起名很清晰，但是对于熟练的使用者来说，每次都要打一个动词加名词肯定很费劲，所以powershell内部很多命令也有不同的<strong>别名</strong>，例如Get-ChildItem，列出当前的子文件或目录。它有两个别名：ls 和 dir，这两个别名来源于unix 的shell和windows的cmd。</p>
-<p>别名有两个作用：</p>
-<ul>
-<li><strong>继承</strong>：继承unix-shell和windows-cmd</li>
-<li><strong>方便</strong>：方便用户使用。</li>
-</ul>
-<p>那么，我们如何查找别名所指的真是cmdlet命令呢？</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;	//查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
-<h1 id="调用入口的优先级"><a class="markdownIt-Anchor" href="#调用入口的优先级"></a> 调用入口的优先级</h1>
-<p>如果我们输入的命令，powershell识别不了，就会报错：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911180921.png" alt="can't recognize" /></p>
-<p>那么，powershell是如何与我们输入的命令想匹配的呢？这是存在一个<strong>优先级顺序</strong>的：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911181453.png" alt="调用入口的优先级" /></p>
-]]></content>
-      <categories>
-        <category>工具使用</category>
-        <category>powershell</category>
-      </categories>
-      <tags>
-        <tag>powershell</tag>
-        <tag>windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1499,6 +1124,176 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux的ctrl+快捷键的功能</title>
+    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  额，最近在看《C++primer》，遇到一个很简单的循环输入：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(std::cin &gt;&gt; value)</span><br><span class="line">&#123;</span><br><span class="line">    sum += value </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都看了一遍，来这做个总结。</p>
+<span id="more"></span>
+<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" alt="image-20211002125045305" /></p>
+<p>  关于stty的详细内容，下面会说。</p>
+<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
+<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
+<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" />
+<p>我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" alt="image-20211002131411566" /></p>
+<p>等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851"  />
+<p>其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" alt="image-20211002131920966" /></p>
+<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" />
+<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
+<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
+<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
+<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
+<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" alt="image-20211002132722906" /></p>
+<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" alt="image-20211002133025989" /></p>
+<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" alt="image-20211002133243103" /></p>
+<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" alt="image-20211002133452812" /></p>
+<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">快捷键(ctrl用^表示)</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">^l</td>
+<td style="text-align:center">相当于clear,清空终端</td>
+</tr>
+<tr>
+<td style="text-align:center">^s</td>
+<td style="text-align:center">中断输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^q</td>
+<td style="text-align:center">继续输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^a/^e</td>
+<td style="text-align:center">光标移到行首/行尾巴</td>
+</tr>
+<tr>
+<td style="text-align:center">^p</td>
+<td style="text-align:center">重复上次命令</td>
+</tr>
+<tr>
+<td style="text-align:center">^y</td>
+<td style="text-align:center">粘贴或者恢复上次删除</td>
+</tr>
+<tr>
+<td style="text-align:center">^s/^q</td>
+<td style="text-align:center">冻结shell/解冻</td>
+</tr>
+</tbody>
+</table>
+<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
+<blockquote>
+<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
+</blockquote>
+<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" />
+<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>ctrl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git基本命令汇总</title>
+    <url>/2021/07/14/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/git%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg" alt="Git基本操作" /></p>
+<p>这张导图是git常见的一些操作，我把它汇总下来，方便之后用git命令的时候能够快一点找到想要的命令。</p>
+<span id="more"></span>
+<hr />
+<p>最近又发现一张github的pull request的步骤图，一块贴上来，好给我的processon腾点空间：<br />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210717182429.jpg" alt="Pull Request" /></p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>版本管理</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>powershell基础知识</title>
+    <url>/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU" alt="PowerShell" style="zoom:150%;" />
+<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>最近想学一下powershell,查了很多资料，于是想整合一下这些资料，所以本篇是对链接的一个整合，可能会记录一些我不熟悉但是比较有用的地方。</p>
+<p>这里先贴出比较详细的教程：</p>
+<ul>
+<li><a href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">微软官方文档</a></li>
+<li><a href="https://www.pstips.net/">powershell中文博客</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="什么是powershell"><a class="markdownIt-Anchor" href="#什么是powershell"></a> 什么是PowerShell</h1>
+<p>这里直接给出一些介绍的链接：</p>
+<ul>
+<li><a href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">PowerShell官方文档介绍</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell-Wikipedia(要翻墙)</a></li>
+</ul>
+<h2 id="powershell和powershell-core的区别"><a class="markdownIt-Anchor" href="#powershell和powershell-core的区别"></a> powershell和powershell core的区别</h2>
+<p>注意，PowerShell 和PowerShell core是不同的，powershell core是微软发布的powershell的新版本（<a href="https://github.com/PowerShell/PowerShell/tags">下载地址</a>）。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911175705.png" alt="左边是powershell core,右边是Powershell" /></p>
+<p>那么两者有什么具体的区别呢？</p>
+<ul>
+<li>PowerShell core是跨平台的，可以在Windows、Linux和Macos上运行，而作为旧版本的PowerShell只能在Windows上运行。</li>
+<li>PowerShell使用的是 .NET Framework和 .NET Standard ; 作为新版本的PowerShell core使用的是 .NET Core和 .NET Standard 。（什么是.NET框架→<a href="https://docs.microsoft.com/zh-cn/dotnet/?view=aspnetcore-5.0">.NET官方文档</a>，<a href="https://blog.csdn.net/weixin_30435261/article/details/95944269?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163134856016780265456793%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=163134856016780265456793&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-95944269.first_rank_v2_pc_rank_v29&amp;utm_term=%E4%BB%80%E4%B9%88%E6%98%AF.NET&amp;spm=1018.2226.3001.4187">.NET简单介绍(csdn)</a>）</li>
+</ul>
+<p>现在使用的一般都是powershell core，下面的基础知识的介绍也是依托于powershell core.</p>
+<h1 id="cmdlet和别名"><a class="markdownIt-Anchor" href="#cmdlet和别名"></a> cmdlet和别名</h1>
+<h2 id="cmdlet简单介绍"><a class="markdownIt-Anchor" href="#cmdlet简单介绍"></a> cmdlet简单介绍</h2>
+<p>cmdlet 是本机 PowerShell 命令，而不是独立的可执行文件。 cmdlet 收集在 PowerShell 模块中，可按需加载。 可以用任何编译的 .NET 语言或 PowerShell 脚本语言本身来编写 cmdlet。</p>
+<p>PowerShell用”动词-名词“的方法来命名cmdlet命令，例如： <code>Get-Command</code> cmdlet 用于获取在命令行界面中注册的所有 cmdlet。 动词标识 cmdlet 执行的操作，名词标识该 cmdlet 执行其操作的所在资源。</p>
+<p>那么，我们如何查看一个<code>命令的使用说明</code>呢？</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查找某个命令的作用 → GetHelp name，后面加个<span class="literal">-Full</span>就是详细说明,加个<span class="literal">-examples</span>就是简略说明</span><br><span class="line"><span class="built_in">Get-Help</span> <span class="built_in">Get-VM</span></span><br><span class="line">//如果我们不知道命令的确切名字，可以使用<span class="built_in">Get-Command</span> *……*</span><br><span class="line"><span class="built_in">Get-Command</span> *VM*</span><br></pre></td></tr></table></figure>
+<p>在命令的详细介绍里，会出现下面这些格式，要能看懂：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911174724.png" alt="说明格式" style="zoom:80%;" />
+<p>以上就是获取cmdlet说明的介绍。</p>
+<h2 id="别名alias"><a class="markdownIt-Anchor" href="#别名alias"></a> 别名(Alias)</h2>
+<p>cmdlet命令的起名很清晰，但是对于熟练的使用者来说，每次都要打一个动词加名词肯定很费劲，所以powershell内部很多命令也有不同的<strong>别名</strong>，例如Get-ChildItem，列出当前的子文件或目录。它有两个别名：ls 和 dir，这两个别名来源于unix 的shell和windows的cmd。</p>
+<p>别名有两个作用：</p>
+<ul>
+<li><strong>继承</strong>：继承unix-shell和windows-cmd</li>
+<li><strong>方便</strong>：方便用户使用。</li>
+</ul>
+<p>那么，我们如何查找别名所指的真是cmdlet命令呢？</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;	//查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
+<h1 id="调用入口的优先级"><a class="markdownIt-Anchor" href="#调用入口的优先级"></a> 调用入口的优先级</h1>
+<p>如果我们输入的命令，powershell识别不了，就会报错：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911180921.png" alt="can't recognize" /></p>
+<p>那么，powershell是如何与我们输入的命令想匹配的呢？这是存在一个<strong>优先级顺序</strong>的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911181453.png" alt="调用入口的优先级" /></p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>powershell</category>
+      </categories>
+      <tags>
+        <tag>powershell</tag>
+        <tag>windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构分析中使用的证明方法</title>
     <url>/2021/08/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%90%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84%E8%AF%81%E6%98%8E%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>我们证明数据结构分析的结果，一般有三个常用的方法：</p>
@@ -1548,6 +1343,211 @@
       </tags>
   </entry>
   <entry>
+    <title>vscode使用指南</title>
+    <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>最近想学一下vscode,将vscode当作主要使用的编辑器。所以想专门写一篇，来记录一下使用和配置的过程，一开始不会有体系，只是遇到什么问题就记什么，当用得差不多时，可能会回头整理一下。</p>
+<span id="more"></span>
+<h1 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h1>
+<h2 id="全局快捷键"><a class="markdownIt-Anchor" href="#全局快捷键"></a> 全局快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">打开/关闭侧边栏</td>
+<td style="text-align:center">Ctrl+B</td>
+</tr>
+<tr>
+<td style="text-align:center">打开多个编辑器</td>
+<td style="text-align:center">Ctrl+\</td>
+</tr>
+<tr>
+<td style="text-align:center">聚焦到第n个编辑器</td>
+<td style="text-align:center">Ctrl+n(数字)</td>
+</tr>
+<tr>
+<td style="text-align:center">放大/缩小</td>
+<td style="text-align:center">Ctrl + +/-</td>
+</tr>
+<tr>
+<td style="text-align:center">进入专注模式</td>
+<td style="text-align:center">进：Ctrl+K再按M,退：Esc twice</td>
+</tr>
+</tbody>
+</table>
+<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">删除整行</td>
+<td style="text-align:center">Ctrl+Shift+K</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之前的一个英文单词</td>
+<td style="text-align:center">Ctrl+backspace</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之后的一个英文单词</td>
+<td style="text-align:center">Ctrl+delete</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码编辑快捷键"><a class="markdownIt-Anchor" href="#代码编辑快捷键"></a> 代码编辑快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">光标移动到开头/结尾</td>
+<td style="text-align:center">home/end</td>
+</tr>
+<tr>
+<td style="text-align:center">光标移动到文档开头/结尾</td>
+<td style="text-align:center">Ctrl+home/Ctrl+end</td>
+</tr>
+<tr>
+<td style="text-align:center">回到上一个光标的位置</td>
+<td style="text-align:center">Ctrl+U</td>
+</tr>
+<tr>
+<td style="text-align:center">代码上下换位</td>
+<td style="text-align:center">Alt+↑↓</td>
+</tr>
+<tr>
+<td style="text-align:center">代码复制并填充上/下</td>
+<td style="text-align:center">Alt+Shift+↑↓</td>
+</tr>
+<tr>
+<td style="text-align:center">快捷注释（单行）</td>
+<td style="text-align:center">Ctrl+/</td>
+</tr>
+<tr>
+<td style="text-align:center">全局代码格式化（根据语言）</td>
+<td style="text-align:center">Alt+shift+F</td>
+</tr>
+<tr>
+<td style="text-align:center">选中代码格式化</td>
+<td style="text-align:center">Ctrl+F</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="快速跳转"><a class="markdownIt-Anchor" href="#快速跳转"></a> 快速跳转</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">快速打开文件</td>
+<td style="text-align:center">Ctrl+P</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开最近文件</td>
+<td style="text-align:center">Ctrl+R</td>
+</tr>
+<tr>
+<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
+<td style="text-align:center">Ctrl+G+行号</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开文件第n行</td>
+<td style="text-align:center">Ctrl+P，输入 :+行号</td>
+</tr>
+<tr>
+<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
+<td style="text-align:center">F12/Ctrl+F12</td>
+</tr>
+<tr>
+<td style="text-align:center">展现谁引用了函数或类</td>
+<td style="text-align:center">Shift+F12</td>
+</tr>
+<tr>
+<td style="text-align:center">代码重构（修改一个函数或者变量名）</td>
+<td style="text-align:center">光标移到修改处+F2</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="自定义快捷键"><a class="markdownIt-Anchor" href="#自定义快捷键"></a> 自定义快捷键</h2>
+<p>vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" alt="image-20210903152109373" /></p>
+<h1 id="创建多层文件夹"><a class="markdownIt-Anchor" href="#创建多层文件夹"></a> 创建多层文件夹</h1>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152644.png" alt="image-20210903152636945" style="zoom:80%;" />
+<h1 id="vscode配置云同步"><a class="markdownIt-Anchor" href="#vscode配置云同步"></a> VScode配置云同步</h1>
+<p>我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。</p>
+<p>我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。</p>
+<p><strong>将自己本地的配置云同步到 GitHub</strong>：</p>
+<p>（1）安装插件 <code>settings-sync</code>。</p>
+<p>（2）安装完插件后，在插件里使用 GitHub 账号登录。</p>
+<p>（3）登录后在 vscode 的界面中，可以选择一个别人的 gist；也可以忽略掉，然后创建一个属于自己的 gist。</p>
+<p>（4）使用快捷键 「Command + Shift + P」，在弹出的命令框中输入 sync，并选择「更新/上传配置」，这样就可以把最新的配置上传到 GitHub。</p>
+<p><strong>我们如何将Gist中保存的配置同步到本地呢？</strong></p>
+<p>首先将gist ID更改为你想要的ID：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903155215.png" alt="image-20210903155208689" /></p>
+<p>打开命令面板，输入sync，选择高级选线，里面就可以更改你想要的gist ID，然后进行下载配置(shift + ALt + D)</p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>IDE/编辑器</category>
+      </categories>
+      <tags>
+        <tag>vs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu解决apt-get报错问题</title>
+    <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
+<p>下面这个是报错的情况：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
+<p>貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
+<span id="more"></span>
+<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
+<p>我使用的是这个方法，就一条命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm /var/lib/dpkg/lock</span><br></pre></td></tr></table></figure>
+<p>其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm /var/lib/apt/lists/lock</span><br><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock-frontend</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
+<p>这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
+<p>我们直接执行下面这个命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo killall apt apt-get</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>apt—get</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2021/06/30/%E6%9D%82%E8%B0%88/Hello%20World/</url>
     <content><![CDATA[<h1 id="hello-world"><a class="markdownIt-Anchor" href="#hello-world"></a> Hello World</h1>
@@ -1560,6 +1560,31 @@
       </categories>
       <tags>
         <tag>序曲</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>整理欲的爆发</title>
+    <url>/2021/09/04/%E6%9D%82%E8%B0%88/%E6%95%B4%E7%90%86%E6%AC%B2%E7%9A%84%E7%88%86%E5%8F%91/</url>
+    <content><![CDATA[<p>最近这两天整理的欲望特别强烈，我老早就看我D盘里那些乱七八糟的文件不爽了，昨天把他们一个个小心翼翼地都删了，之所以小心翼翼是因为有些是可能正在用的软件的一部分，所以必须得一个个看过去。我发现很多是我正在用的软件的一部分，这都是当初安装路径没好好选的锅😥</p>
+<p>没办法，为了满足我那轻微的强迫症，我只能卸载一些软件，比如Node.js（搭建博客要用到的工具），VMware(正在用的虚拟机平台)……然后重新装；除此之外，我还卸载了以前专业要用到的工具—AutoCAD和solid works，这俩玩意占的内存太大了，看的有点不爽，于是就把他们给删了。说实话，还挺不舍得的😅</p>
+<span id="more"></span>
+<p>我昨天还把一些重要的个人文件、PDF书籍和一些配置文件全部上传到了云盘上，并且用onedrive代替坚果云，原因是坚果云有上传流量限制🤣，一次性上传不完让我有点不舒服。Onedrive的5GB可能不太够，可以上淘宝搜<u>onedrive扩容</u>，花个1块5扩到15G，原理是onedrive的邀请激励，是正规的。</p>
+<p>昨天收拾完之后，心情舒畅多了。不过呢，还没结束，今天又对笔记系统下手了。</p>
+<p>我记笔记一般都用语雀，这个是我换了无数平台后最终确立下来的笔记平台；计划管理用notion,有点大材小用了hh,主要是看它比较好看😁。今天主要对语雀的各个知识库进行一个全面的整理，这也没什么好说的，值得说说的是，<strong>我既然有了语雀这种知识库平台，那么我要用博客做什么呢</strong>？</p>
+<p>我想对这个博客的内容进行一次裁剪，对目录进行一个重新的编排。我觉得我的博客应该放的内容主要有下面几种：</p>
+<ol>
+<li>技术点：一些技术问题的解决，技术难度会随着学习程度的加深而不断加深。（意思为我现在很菜，还写不出很🐂🍺的博客）</li>
+<li>杂谈：就是平常没事吹吹🐂🍺，写些乱七八糟的东西。</li>
+<li>日常：比如游记，经历什么的。</li>
+</ol>
+<p>反观我现在博客里的内容，大多都是笔记，而且是体系化的笔记。这些笔记我为什么不放到语雀里面去呢？博客不是用来记笔记的地方，要分享笔记的话语雀也可以分享，并且更方便，所以我觉得我应该把博客里面占据多数的笔记都给删了。</p>
+<p>这样的结果可能是博客里的文章数量变得特别少，并且之后更新会变得很慢。但我觉得这也很正常，本来就不应该追求数量，而是质量，每一篇文章不求都很硬核，但一定是要认真写的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
       </tags>
   </entry>
   <entry>
@@ -1674,84 +1699,6 @@
       </tags>
   </entry>
   <entry>
-    <title>整理欲的爆发</title>
-    <url>/2021/09/04/%E6%9D%82%E8%B0%88/%E6%95%B4%E7%90%86%E6%AC%B2%E7%9A%84%E7%88%86%E5%8F%91/</url>
-    <content><![CDATA[<p>最近这两天整理的欲望特别强烈，我老早就看我D盘里那些乱七八糟的文件不爽了，昨天把他们一个个小心翼翼地都删了，之所以小心翼翼是因为有些是可能正在用的软件的一部分，所以必须得一个个看过去。我发现很多是我正在用的软件的一部分，这都是当初安装路径没好好选的锅😥</p>
-<p>没办法，为了满足我那轻微的强迫症，我只能卸载一些软件，比如Node.js（搭建博客要用到的工具），VMware(正在用的虚拟机平台)……然后重新装；除此之外，我还卸载了以前专业要用到的工具—AutoCAD和solid works，这俩玩意占的内存太大了，看的有点不爽，于是就把他们给删了。说实话，还挺不舍得的😅</p>
-<span id="more"></span>
-<p>我昨天还把一些重要的个人文件、PDF书籍和一些配置文件全部上传到了云盘上，并且用onedrive代替坚果云，原因是坚果云有上传流量限制🤣，一次性上传不完让我有点不舒服。Onedrive的5GB可能不太够，可以上淘宝搜<u>onedrive扩容</u>，花个1块5扩到15G，原理是onedrive的邀请激励，是正规的。</p>
-<p>昨天收拾完之后，心情舒畅多了。不过呢，还没结束，今天又对笔记系统下手了。</p>
-<p>我记笔记一般都用语雀，这个是我换了无数平台后最终确立下来的笔记平台；计划管理用notion,有点大材小用了hh,主要是看它比较好看😁。今天主要对语雀的各个知识库进行一个全面的整理，这也没什么好说的，值得说说的是，<strong>我既然有了语雀这种知识库平台，那么我要用博客做什么呢</strong>？</p>
-<p>我想对这个博客的内容进行一次裁剪，对目录进行一个重新的编排。我觉得我的博客应该放的内容主要有下面几种：</p>
-<ol>
-<li>技术点：一些技术问题的解决，技术难度会随着学习程度的加深而不断加深。（意思为我现在很菜，还写不出很🐂🍺的博客）</li>
-<li>杂谈：就是平常没事吹吹🐂🍺，写些乱七八糟的东西。</li>
-<li>日常：比如游记，经历什么的。</li>
-</ol>
-<p>反观我现在博客里的内容，大多都是笔记，而且是体系化的笔记。这些笔记我为什么不放到语雀里面去呢？博客不是用来记笔记的地方，要分享笔记的话语雀也可以分享，并且更方便，所以我觉得我应该把博客里面占据多数的笔记都给删了。</p>
-<p>这样的结果可能是博客里的文章数量变得特别少，并且之后更新会变得很慢。但我觉得这也很正常，本来就不应该追求数量，而是质量，每一篇文章不求都很硬核，但一定是要认真写的。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>新的开始</title>
-    <url>/2021/10/13/%E6%9D%82%E8%B0%88/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211015111602.jpg" alt="seaside" style="zoom: 50%;" />
-<span id="more"></span>
-<p>  13号我从东区搬到了西区，转专业的事务大部分也就结束了。可以说，13号这一天是真正意义上的新的开始了，我要在新的赛道上继续我的计算机修炼之行了。我很庆幸自己能在喜欢的专业学习，我之前时常迷茫自己以后要做什么，但随着对计算机科学的学习不断加深，这种迷茫出现的越来越少。对计算机科学各种底层的curiosity以及解决bug时的喜悦之情，都让我精神为之振奋，也许我以后会“移情别恋”，但是现在的我觉得，计算机科学是我的最爱。</p>
-<p>  希望我能规划好自己每阶段的学习，刻苦努力，踏踏实实精进自己的计算机科学知识和技术！</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>晾衣服中的第一性原理</title>
-    <url>/2021/08/03/%E6%9D%82%E8%B0%88/%E6%99%BE%E8%A1%A3%E6%9C%8D%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<p>晾衣服的时候挺无聊的，我只好瞎想想。我想起小时候晾衣服的时候，不管什么衣服裤子，上去就是拿一个夹子把衣服固定在衣架上，最后总是导致夹子不够。导致我现在养成一个习惯，能不用夹子夹的就不用夹子……总是要想办法用衣服自身把它给固定住，比如带纽扣的衣服，直接把最上面的扣子扣起来；牛仔裤的话把利用放腰带的那个地方固定住……</p>
-<span id="more"></span>
-<p>虽然晾衣服很无聊，也很普通，但是我觉得这背后就有第一性原理的运用。我第一次听说这第一性原理还是从特斯拉的老板musk那儿听到的，听起来还挺高大上的。在我看来，这第一性原理其实就是<strong>分解问题，抓住每一部分最基本的需求</strong>。</p>
-<p>比如说，在制造电动车特斯拉的过程中，最大的成本来源于电池组件。研发团队发现电池组件成本要600美元／千瓦时，但马斯克运用第一性原理思考，把电池分为各种金属元素以及其他成分，再对生产流程、产地、供应链每一部分进行优化，最终将电池组件成本降低到80美元／千瓦时，这就是第一性原理的运用。</p>
-<p>我觉得晾衣服也是一个道理，我的目的是把衣服固定住，那么夹子是必须的吗？当然不是必须的，我可以利用衣服本身的一些特点来把衣服固定在衣架上，而不用夹子，这样我就降低了成本。怎么说呢，<strong>我觉得就是遇到一个问题，一定要围绕这个问题进行解答，而不是被一个答案所束缚住</strong>。比如，我晾衣服全用夹子，最后发现夹子不够了，这个时候我想的却是如何找到更多的夹子，而不是利用衣服自身的纽扣什么的，来省出一点夹子。</p>
-<p>额，就随便吹吹🐂🍺，要不然也挺无聊的😅。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210803123444.png" alt="image-20210803123435521" style="zoom: 67%;" />
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>自省</title>
-    <url>/2021/09/14/%E6%9D%82%E8%B0%88/%E8%87%AA%E7%9C%81/</url>
-    <content><![CDATA[<p>最近社会上发生了许多热点事件，瓜都吃饱了，看到不同平台上不同的人对各种热点事件口诛笔伐，我不禁思考我自己对待这些热点事件是什么样的态度呢？</p>
-<span id="more"></span>
-<p>我可能刷B站的时侯看到几个相关的视频，点进去看一看，或是跟着视频的情绪义愤填膺，谴责当事人，又或是看到几句耍宝的话哈哈大笑，一笑置之。</p>
-<p>谴责和嘲讽当然有存在的必要，但是我觉得要从这些热点事件中看到的和认识到的，不仅仅是这些。我觉得我们更应该做的，是思考<strong>这一件事反映了什么问题，如果是我，我会不会这么做</strong>。比如某某官员贪污，如果把我们自己放到他那个位置上，我会不会也贪污，我能做到自己的清白吗？从而反映出了什么问题，我们应该怎么避免这种情况的发生。</p>
-<p>除了热点事件，平常生活中发生的种种事件也应该以这种自省的态度去对待。就像孔老头当年说的：</p>
-<blockquote>
-<p>见贤思齐焉，见不贤而内自省也。</p>
-</blockquote>
-<p>这句话虽然大多数人都背过，觉得不足为奇，但是这句话里面的道理是很多人没有注意到的，包括我自己。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>王爽《汇编语言》实验一</title>
     <url>/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E4%B8%80/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
@@ -1809,6 +1756,21 @@
       </categories>
       <tags>
         <tag>王爽《汇编语言》</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>新的开始</title>
+    <url>/2021/10/13/%E6%9D%82%E8%B0%88/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211015111602.jpg" alt="seaside" style="zoom: 50%;" />
+<span id="more"></span>
+<p>  13号我从东区搬到了西区，转专业的事务大部分也就结束了。可以说，13号这一天是真正意义上的新的开始了，我要在新的赛道上继续我的计算机修炼之行了。我很庆幸自己能在喜欢的专业学习，我之前时常迷茫自己以后要做什么，但随着对计算机科学的学习不断加深，这种迷茫出现的越来越少。对计算机科学各种底层的curiosity以及解决bug时的喜悦之情，都让我精神为之振奋，也许我以后会“移情别恋”，但是现在的我觉得，计算机科学是我的最爱。</p>
+<p>  希望我能规划好自己每阶段的学习，刻苦努力，踏踏实实精进自己的计算机科学知识和技术！</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
       </tags>
   </entry>
   <entry>
@@ -2013,105 +1975,6 @@
       </tags>
   </entry>
   <entry>
-    <title>计算机逻辑的历史</title>
-    <url>/2021/07/01/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%BB%E8%BE%91%E5%8E%86%E5%8F%B2/</url>
-    <content><![CDATA[<p>  这篇阅读记录是对《逻辑的引擎》一书的选抄，这本书主要讲述了计算机逻辑的源头，虽然只是科普类的书籍，但我还是感到有点枯燥。所以权把这本书的选抄当作这一思路的简要框架，当日后想看了，再顺着这个框架看一看也不错。</p>
-<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>  计算机实际上是逻辑机器，它的电路体现了几个世纪以来一大批逻辑学家所提出的观点之精华。当前，正当计算机技术以惊人的速度前进时，正当我们羡慕工程师们令人瞩目的成就之时，我们很容易忘记那些<u>逻辑学家</u>，正是他们的思想使得这一切成为可能。</p>
-<span id="more"></span>
-<h2 id="莱布尼茨之梦"><a class="markdownIt-Anchor" href="#莱布尼茨之梦"></a> 莱布尼茨之梦</h2>
-<p>  莱布尼茨为微积分运算而发明的符号沿用至今，这使得人们不用过多思考就可以很容易地进行复杂运算，实际进行工作的似乎就是那些符号。在莱布尼茨看来，我们对整个人类知识领域也可以实施类似的措施：</p>
-<ol>
-<li>
-<p>对一种普遍的人工数学语言和演算规则<strong>进行一种百科全书式的汇编</strong>；</p>
-</li>
-<li>
-<p><strong>知识的任何一个方面都可以用这种数学语言表达出来</strong>，而演算规则将揭示这些命题之间所有的逻辑关系；</p>
-</li>
-<li>
-<p>最后，<strong>创造出完成这些演算的机器</strong>。</p>
-<p>  这就是莱布尼茨之梦—找到一个人类思想的真正符号系统以及操纵这些符号的恰当的演算工具，即他自己所说的普遍文字。</p>
-</li>
-</ol>
-<h2 id="布尔把逻辑代数"><a class="markdownIt-Anchor" href="#布尔把逻辑代数"></a> 布尔把逻辑→代数</h2>
-<p>  当布尔在卫斯理学校教书 时，他星期天就研究数学，甚至做礼拜时也如此。他解释说，由于买书的钱十分有限，他发现数学书就很满足他的需求，因为数学书要看很长时间才能看完。正是在这样的学习过程中，布尔有一天灵感乍现：应该可以用代数形式来表达逻辑关系。从他学数学的劲头我们就可以看出布尔的一点性格特征：“<u>无所顾忌地沉溺于自己强烈的欲望和激情中</u>”。布尔不管在做什么，他都会抽出时间研究一些重要的数学文献。<br />
-  布尔相信代数的力量，符号似乎无须什么帮助就能奇迹般地产出问题的正确答案，而这一力量来源于：<strong>代表着量和运算的符号服从不多的几条基本规律或定律</strong>，这暗示着这也适用于形形色色的对象和运算，只要它们也符合某些同样的定理。</p>
-<h3 id="布尔的逻辑代数"><a class="markdownIt-Anchor" href="#布尔的逻辑代数"></a> 布尔的逻辑代数</h3>
-<p>  如果x,y表示两个类，布尔就用xy表示x与y的交集（现在的说法），可以看出他在将自己的逻辑表示方法与普通代数里的乘法进行类比。那么，在x表示一个数的普通代数时，什么时候方程xx=x为真？<br />
-  答案是：x为0或1时方程才为真→如果只限于0和1的两个值，那么逻辑代数就成为了普通代数。但是，要说明这一点，就必须把符号0和1解释成类。<br />
-  我们知道：0 x=0,1 x=x。即：0乘以任何数都等于0；1乘以任何数都等于那个数。那么0可以理解为没有任何东西属于它的类（空集），1可以理解为包含我们所考虑的每一个对象（全集）。<br />
-  为了把逻辑代数解释为普通代数，除了乘法，布尔还要解释加减符号代表什么意思。 即：<br />
-  x+(1-x)=1</p>
-<h3 id="用布尔代数证明三段论是否有效"><a class="markdownIt-Anchor" href="#用布尔代数证明三段论是否有效"></a> 用布尔代数证明三段论是否有效</h3>
-<p>  当时，研究逻辑的人普遍把整个学科等同于亚里士多德在许多个世纪前所做的工作。正如布尔所说，这等于坚持“逻辑科学不会像所有其他科学那样有不完美的地方，也不会像它们那样有所进步。”亚里士多德所研究的那部分逻辑处理是一种被称为三段论的非常特殊的受限推理：从一对被称为前提的命题出发，得出另一个被称为结论的命题。<br />
-  所有X都是Y，所有Y都是Z→所有X都是Z<br />
-  但是不是每一个三段论都是有效的，比如这样换：<br />
-  所有X都是Y, 所有X都是Z→所有Y都是Z<br />
-  三段论推理明显不是全部，布尔提出，许多日常推理都涉及他所谓的二级命题，即表达其他命题之间关系的命题，这种推理就不是三段论。</p>
-<h3 id="布尔代数的成就"><a class="markdownIt-Anchor" href="#布尔代数的成就"></a> 布尔代数的成就</h3>
-<p>  考虑下面这个句子：所有失败的学生或是糊涂的或是懒惰的。这句话可能会被认为是所有X都是Y，但这就不允许区分糊涂和懒惰了。下面我们会看到戈特洛布·弗雷格的逻辑体系解决这个问题。<br />
-  乔治布尔的伟大成就在于一劳永逸地证明了逻辑演绎可以成为数学的一个分支。从他开始，数理逻辑就一直处于连续不断的发展之中。</p>
-<h2 id="弗雷格从突破到绝望"><a class="markdownIt-Anchor" href="#弗雷格从突破到绝望"></a> 弗雷格：从突破到绝望</h2>
-<p>  弗雷格个人暂且不论，他是给纳粹分子。咱们今天只说他的学术贡献。弗雷格试图找到一个能包含数学实践中全部演绎逻辑的逻辑系统。布尔把普通代数作为出发点，用代数符号来表示逻辑关系；由于弗雷格想以他的逻辑为基础而把代数构造出来，所以引入自己的特殊符号来表示逻辑关系以避免混乱；布尔曾经认为用于表示其他命题之间关系的命题是二阶命题，弗雷格发现那些连接命题的关系也可被用于分析命题的结构，他把这些关系充当他的逻辑的基础。<br />
-  中学时，学了一点逻辑，我清清楚楚地记得，当时的表述都是“如果……那么……”“……且……”以及符号∈，∪，^等等这些都是弗雷格搞出来的。<br />
-  他的目标是表面一切数学如何可能建立在逻辑的基础上，为此他必须找到某种不用逻辑来发展他逻辑的方法→使用冷酷无情的精确的语法规则。弗雷格的逻辑已经成了在数学系、计算接科学系和哲学系教给本科生的标准逻辑。<br />
-  但是如果我们不能从弗雷格的系统中得到希望的结论，那么他还是没有实现莱布尼茨之梦，即算一下就可以知道结论是否可以导出。</p>
-<h3 id="弗雷格逻辑的局限性"><a class="markdownIt-Anchor" href="#弗雷格逻辑的局限性"></a> 弗雷格逻辑的局限性</h3>
-<p>  不能像莱布尼茨所期望的那样，自动包含科学和哲学的一切真理。当然，莱布尼茨之梦有点天真。<br />
-  在弗雷格的逻辑组，除了那些最简单的演绎，其余的情况都复杂的让人难以忍受。这些演绎过程不仅长的可怕，而且在弗雷格概念文字的逻辑中，他的规则也没有为判定某个结论是否可以从给定前提在推导出来而提供演算步骤。</p>
-<h2 id="康托尔在无限中摸索"><a class="markdownIt-Anchor" href="#康托尔在无限中摸索"></a> 康托尔：在无限中摸索</h2>
-<p>  自然数的序列永无尽头。无论一个数有多大，总能通过+1获得一个更大的数，这种不断超越如何有限界限的方法被亚里士多德成为潜无限。但亚里士多德认为这种无限是不合理的，他的思想也影响了后来的经院哲学家们。无限的本性问题一直困扰着人们。在18世纪，19世纪发展的微积分的极限过程就是一种潜无限。19世纪半叶之后，从当时人们所关注的问题中自然产生出来的数学问题似乎要求在其精确表述中使用完成了的无限。在解决这一问题的数学家中，只有康托尔不顾高斯的反对，去创造一种关于实无限的数学理论。莱布尼茨、弗雷格都表示了支持，而由康托尔的无限所引发的激烈的讨论、研究和争辩会为通用数字计算机的发展提供重要启发。</p>
-<h3 id="无穷集的大小是不同的"><a class="markdownIt-Anchor" href="#无穷集的大小是不同的"></a> 无穷集的大小是不同的</h3>
-<p>  即使我们认为把所有自然数1，2，3……所组成的集合当成一个完成了的实无限来处理是有意义的，如果我们问这个集合有多少个数，难道是有意义的吗？是否有无限大数来数这个集合呢？<br />
-  莱布尼茨的结论是：这种无限大的数并不存在，他的推理如下：<br />
-  只要一个集合的元素可以和另一个集合的元素一一对应起来，就可以说明这两个集合的元素数目是相等的，即使我们不知道数目是多少。比如自然数集和偶数集：1→2，2→4，3→6……，又如如果我们发现一个礼堂中既没有空座位又没有站着的人，那么就可以下结论礼堂中的人数与座位数是相等的。（这个是否有歧义）。但是依据欧几里得提出的：整体大于它的任何部分，自然数集怎么可能=偶数集呢？所以谈论一个无限集中元素的个数是没有意义的。<br />
-  康托尔也和莱布尼茨做了同样的推理，但是他选择了：某些无限集将与它的子集具有相同的元素数目。康托尔是怎么做的呢？<br />
-  康托尔找到一种分数集合，并把它和自然数集建立起一一对应的关系：<br />
-  首先是和为2的分数，然后是何为3的分数……由于从直观上来看，分数要比自然数多许多，所以这一证明可以给我们猜想：每一个无限集都可以与自然数之间建立其一一对应的关系，康托尔的伟大贡献就是说明了情况并非如此。<br />
-  可以用分数表示的数被称为有理数，如果有理数用小数表示，会有无限循环小数的出现，但如果小数不循环，则这些小数被称为无理数，无理数和有理数被统称为实数。而像根号2这样的数和所有的有理数被称为代数数（可以作为代数方程的根，而Π不能，所以Π这类的数被称为超越数）。<br />
-  在表明了分数可以与自然数之间建立一一对应的关系后，他又转向了由所有代数数组成的集合，结果可以一一对应，然后他又想知道对于实数是否也可行，最后康托尔得出：实数集无法与自然数集之间建立一一对应，无限集有两种大小。<br />
-  emmm，康托尔后面的数学内容就不写了吧🤣。</p>
-<h3 id="结束"><a class="markdownIt-Anchor" href="#结束"></a> 结束</h3>
-<p>  1918年康托尔去世，其时，一战的战火仍在蔓延。今天，尽管弗雷格在其隐喻的斗争中很是令人惊奇，但是并没有产生任何决定性的结果。这场斗争最令人称奇的副产品就是阿兰图灵关于通用计算机的数学模型。</p>
-<h2 id="哥德尔使计划落空"><a class="markdownIt-Anchor" href="#哥德尔使计划落空"></a> 哥德尔使计划落空</h2>
-<p>  哥德尔是爱因斯坦的好友，但两人的许多方面都大相径庭。比如爱因斯坦深受恩斯特·马赫怀疑论的实证主义的影响，游戏是马赫对康德先验时空观的批判。但是哥德尔从青年时就开始看康德的著作，他认为相对论可以被看作证实了康德某些关于时间的观点，正是通过拒斥这些思想，他才能看到其他人所忽视的联系，并且做出伟大的发现。<br />
-  虽然哥德尔最初打算学习物理学，但在听了一些数论课程之后，整数中所蕴含的那种样式之美使他意识到，数学才是自己真正的追求。哥德尔的的一个重要定理就是不完备定理。<br />
-如何在那些极其相似系统中用编码去发展出形式逻辑系统的元数学，这对哥德尔来说时不成问题的。但在实际过程中，这种想法是被维也纳学派严令禁止的。哥德尔认为：它们从系统外部看是真命题，但却无法从系统内部得到证明；但维也纳学派的许多人看来，除了可证明性，数学真理性的其它观念都是放屁。哥德尔反对这种观点，并得出了一个与之相反的重要结论：一种有意义的数学真理的观念不仅是存在的，而且其范围超过了任何给定的形式系统的证明能力。系统中存在可表达但不可证的真命题。<br />
-  剩下的不想写了，hhh。</p>
-<h2 id="图灵构想通用计算机"><a class="markdownIt-Anchor" href="#图灵构想通用计算机"></a> 图灵构想通用计算机</h2>
-<p>  图灵的生平就不多说了，之前看过图灵传。关于他的早年，我印象很深刻的一点就是他的童年好友：克里斯多弗·毛肯患肺结核去世，毛肯作为一个完美的符号永远存在于阿兰的心中。图灵接下来的部分值得好好记录，这时候离现代计算机的诞生已经很近了。</p>
-<h3 id="希尔伯特的判定问题"><a class="markdownIt-Anchor" href="#希尔伯特的判定问题"></a> 希尔伯特的判定问题</h3>
-<p>  希尔伯特和弗雷格他们一样，希望找到清楚明白的演算程序，只要用所谓一阶逻辑的符号系统写出的某些前提和所提出的结论给定，那么通过这些程序就总是可以判定，弗雷格的规则是否可以保证该结论能够从这些前提中导出，寻找程序的任务后来被称为希尔伯特的“判定问题”。从原则上讲，解决他的判定问题的算法将把人的一切演绎推理都还原为冷冰冰的演算，它在很大程度上将实现莱布尼茨之梦。</p>
-<h3 id="图灵对计算过程的分析"><a class="markdownIt-Anchor" href="#图灵对计算过程的分析"></a> 图灵对计算过程的分析</h3>
-<p>  算法是由一系列规则来描述的，人们可以按照这种精确的机械方式来遵循这些规则，就像看菜谱炒菜一样。但是图灵把注意力从算法本身移到了人们实际在做的事情。他将说明：<br />
-  在去掉非本质的细节后，人可以局限在少数几种十分基本的操作上，而不会改变操作结果。→人可以被执行这些基本操作的机器所替代。→证明仅仅这些执行基本操作的机器是不可能判定一个给定的结论是否可以用弗雷格的规则从前提中得出结论。→判定问题的算法是不存在的，除此之外他还得到一个副产品：图灵发现一个通用计算机的数学模型。<br />
-  回顾一下，你在做一个乘法的过程，去掉那些不值一提的小细节，然后分解做乘法的心理过程，就能明白任何计算所具有的本质特征，任何计算都可以看成下列的方式来进行：</p>
-<ol>
-<li>计算通过一条被划分成方格的纸带上写下符号来进行。</li>
-<li>执行计算的人在每步计算时，只注意到一个方格中的符号。</li>
-<li>计算的人下一步只取决于这个方格的符号以及他的心理状态。</li>
-<li>然后下一步是：在当前注意的方格写下符号，然后把注意力转向其邻格。</li>
-</ol>
-<p>  这一方式的重要性体现于：任何算法程序能计算的任何东西都可以通过图灵机来实现。因此，如果某项任务无法用图灵机来计算，我们就能说明没有算法程序能够解决这个任务，这就是图灵判定问题不存在算法的方法。</p>
-<h3 id="不理社会框架的图灵"><a class="markdownIt-Anchor" href="#不理社会框架的图灵"></a> 不理社会框架的图灵</h3>
-<p>  有一件事值得记录，从中我们可以看到他的思维方式：阿兰图灵之前参加了一个民兵组织，民兵团要求按时参加训练，但没过多久，阿兰认为这存粹浪费时间，就不去了。上校找到他，问他为什么不去，还质问他当初在填表格时难道没同意遵守军纪吗？有趣的是，这个本来应该不做思考就填“是”的问题，阿兰填了否，显然他认为填“是”对他没什么好处。<br />
-  阿兰不理睬我们大多数人所默认的社会框架，而是通过思考得出答案，从开头寻求最佳行动。</p>
-<h3 id="真空管技术"><a class="markdownIt-Anchor" href="#真空管技术"></a> 真空管技术</h3>
-<p>  20世纪30年代，大多数欧洲人，美国人都已经有了收音机。在那晶体管发明之前的时代，真空管是收音机主要的构件。他们像灯泡一样，会发光，变烫，并且很快就会被烧坏。真空管电路被应用于电话交换，图灵与这一运动的先锋——才华横溢的工程师弗劳尔斯展开了合作，到了1945年战争结束，图灵已经掌握了真空管电子学的应用知识。他坚信，使用真空管可以造出通用计算机。<br />
-  其实到这里，现代计算机产生的逻辑基础就大部分结束了，最后转化为工程的通用计算机研制我就不写了。</p>
-<h2 id="尾声"><a class="markdownIt-Anchor" href="#尾声"></a> 尾声</h2>
-<p>  本书中的故事强调了观念的力量以及预测他们的徒劳。汉诺威的公爵们知道莱布尼茨最应该干什么：为他们编写家族谱。今天的情况更是如此，那些为科学家提供条件的人们竭力想把科学家们引向那些很快可以出成果的方向。<br />
-  如果只重眼前利益，而不重视那些不会带来直接回报的研究，最终遭殃的还是我们的未来。</p>
-]]></content>
-      <categories>
-        <category>阅读笔记</category>
-      </categories>
-      <tags>
-        <tag>计算机逻辑</tag>
-        <tag>阅读记录</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数学之美</title>
     <url>/2021/07/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%A6%E4%B9%8B%E7%BE%8E/</url>
     <content><![CDATA[<h1 id="从规则到统计"><a class="markdownIt-Anchor" href="#从规则到统计"></a> 从规则到统计</h1>
@@ -2239,9 +2102,146 @@
         <category>阅读笔记</category>
       </categories>
       <tags>
-        <tag>阅读记录</tag>
         <tag>数学之美</tag>
         <tag>吴军</tag>
+        <tag>阅读记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机逻辑的历史</title>
+    <url>/2021/07/01/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%BB%E8%BE%91%E5%8E%86%E5%8F%B2/</url>
+    <content><![CDATA[<p>  这篇阅读记录是对《逻辑的引擎》一书的选抄，这本书主要讲述了计算机逻辑的源头，虽然只是科普类的书籍，但我还是感到有点枯燥。所以权把这本书的选抄当作这一思路的简要框架，当日后想看了，再顺着这个框架看一看也不错。</p>
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>  计算机实际上是逻辑机器，它的电路体现了几个世纪以来一大批逻辑学家所提出的观点之精华。当前，正当计算机技术以惊人的速度前进时，正当我们羡慕工程师们令人瞩目的成就之时，我们很容易忘记那些<u>逻辑学家</u>，正是他们的思想使得这一切成为可能。</p>
+<span id="more"></span>
+<h2 id="莱布尼茨之梦"><a class="markdownIt-Anchor" href="#莱布尼茨之梦"></a> 莱布尼茨之梦</h2>
+<p>  莱布尼茨为微积分运算而发明的符号沿用至今，这使得人们不用过多思考就可以很容易地进行复杂运算，实际进行工作的似乎就是那些符号。在莱布尼茨看来，我们对整个人类知识领域也可以实施类似的措施：</p>
+<ol>
+<li>
+<p>对一种普遍的人工数学语言和演算规则<strong>进行一种百科全书式的汇编</strong>；</p>
+</li>
+<li>
+<p><strong>知识的任何一个方面都可以用这种数学语言表达出来</strong>，而演算规则将揭示这些命题之间所有的逻辑关系；</p>
+</li>
+<li>
+<p>最后，<strong>创造出完成这些演算的机器</strong>。</p>
+<p>  这就是莱布尼茨之梦—找到一个人类思想的真正符号系统以及操纵这些符号的恰当的演算工具，即他自己所说的普遍文字。</p>
+</li>
+</ol>
+<h2 id="布尔把逻辑代数"><a class="markdownIt-Anchor" href="#布尔把逻辑代数"></a> 布尔把逻辑→代数</h2>
+<p>  当布尔在卫斯理学校教书 时，他星期天就研究数学，甚至做礼拜时也如此。他解释说，由于买书的钱十分有限，他发现数学书就很满足他的需求，因为数学书要看很长时间才能看完。正是在这样的学习过程中，布尔有一天灵感乍现：应该可以用代数形式来表达逻辑关系。从他学数学的劲头我们就可以看出布尔的一点性格特征：“<u>无所顾忌地沉溺于自己强烈的欲望和激情中</u>”。布尔不管在做什么，他都会抽出时间研究一些重要的数学文献。<br />
+  布尔相信代数的力量，符号似乎无须什么帮助就能奇迹般地产出问题的正确答案，而这一力量来源于：<strong>代表着量和运算的符号服从不多的几条基本规律或定律</strong>，这暗示着这也适用于形形色色的对象和运算，只要它们也符合某些同样的定理。</p>
+<h3 id="布尔的逻辑代数"><a class="markdownIt-Anchor" href="#布尔的逻辑代数"></a> 布尔的逻辑代数</h3>
+<p>  如果x,y表示两个类，布尔就用xy表示x与y的交集（现在的说法），可以看出他在将自己的逻辑表示方法与普通代数里的乘法进行类比。那么，在x表示一个数的普通代数时，什么时候方程xx=x为真？<br />
+  答案是：x为0或1时方程才为真→如果只限于0和1的两个值，那么逻辑代数就成为了普通代数。但是，要说明这一点，就必须把符号0和1解释成类。<br />
+  我们知道：0 x=0,1 x=x。即：0乘以任何数都等于0；1乘以任何数都等于那个数。那么0可以理解为没有任何东西属于它的类（空集），1可以理解为包含我们所考虑的每一个对象（全集）。<br />
+  为了把逻辑代数解释为普通代数，除了乘法，布尔还要解释加减符号代表什么意思。 即：<br />
+  x+(1-x)=1</p>
+<h3 id="用布尔代数证明三段论是否有效"><a class="markdownIt-Anchor" href="#用布尔代数证明三段论是否有效"></a> 用布尔代数证明三段论是否有效</h3>
+<p>  当时，研究逻辑的人普遍把整个学科等同于亚里士多德在许多个世纪前所做的工作。正如布尔所说，这等于坚持“逻辑科学不会像所有其他科学那样有不完美的地方，也不会像它们那样有所进步。”亚里士多德所研究的那部分逻辑处理是一种被称为三段论的非常特殊的受限推理：从一对被称为前提的命题出发，得出另一个被称为结论的命题。<br />
+  所有X都是Y，所有Y都是Z→所有X都是Z<br />
+  但是不是每一个三段论都是有效的，比如这样换：<br />
+  所有X都是Y, 所有X都是Z→所有Y都是Z<br />
+  三段论推理明显不是全部，布尔提出，许多日常推理都涉及他所谓的二级命题，即表达其他命题之间关系的命题，这种推理就不是三段论。</p>
+<h3 id="布尔代数的成就"><a class="markdownIt-Anchor" href="#布尔代数的成就"></a> 布尔代数的成就</h3>
+<p>  考虑下面这个句子：所有失败的学生或是糊涂的或是懒惰的。这句话可能会被认为是所有X都是Y，但这就不允许区分糊涂和懒惰了。下面我们会看到戈特洛布·弗雷格的逻辑体系解决这个问题。<br />
+  乔治布尔的伟大成就在于一劳永逸地证明了逻辑演绎可以成为数学的一个分支。从他开始，数理逻辑就一直处于连续不断的发展之中。</p>
+<h2 id="弗雷格从突破到绝望"><a class="markdownIt-Anchor" href="#弗雷格从突破到绝望"></a> 弗雷格：从突破到绝望</h2>
+<p>  弗雷格个人暂且不论，他是给纳粹分子。咱们今天只说他的学术贡献。弗雷格试图找到一个能包含数学实践中全部演绎逻辑的逻辑系统。布尔把普通代数作为出发点，用代数符号来表示逻辑关系；由于弗雷格想以他的逻辑为基础而把代数构造出来，所以引入自己的特殊符号来表示逻辑关系以避免混乱；布尔曾经认为用于表示其他命题之间关系的命题是二阶命题，弗雷格发现那些连接命题的关系也可被用于分析命题的结构，他把这些关系充当他的逻辑的基础。<br />
+  中学时，学了一点逻辑，我清清楚楚地记得，当时的表述都是“如果……那么……”“……且……”以及符号∈，∪，^等等这些都是弗雷格搞出来的。<br />
+  他的目标是表面一切数学如何可能建立在逻辑的基础上，为此他必须找到某种不用逻辑来发展他逻辑的方法→使用冷酷无情的精确的语法规则。弗雷格的逻辑已经成了在数学系、计算接科学系和哲学系教给本科生的标准逻辑。<br />
+  但是如果我们不能从弗雷格的系统中得到希望的结论，那么他还是没有实现莱布尼茨之梦，即算一下就可以知道结论是否可以导出。</p>
+<h3 id="弗雷格逻辑的局限性"><a class="markdownIt-Anchor" href="#弗雷格逻辑的局限性"></a> 弗雷格逻辑的局限性</h3>
+<p>  不能像莱布尼茨所期望的那样，自动包含科学和哲学的一切真理。当然，莱布尼茨之梦有点天真。<br />
+  在弗雷格的逻辑组，除了那些最简单的演绎，其余的情况都复杂的让人难以忍受。这些演绎过程不仅长的可怕，而且在弗雷格概念文字的逻辑中，他的规则也没有为判定某个结论是否可以从给定前提在推导出来而提供演算步骤。</p>
+<h2 id="康托尔在无限中摸索"><a class="markdownIt-Anchor" href="#康托尔在无限中摸索"></a> 康托尔：在无限中摸索</h2>
+<p>  自然数的序列永无尽头。无论一个数有多大，总能通过+1获得一个更大的数，这种不断超越如何有限界限的方法被亚里士多德成为潜无限。但亚里士多德认为这种无限是不合理的，他的思想也影响了后来的经院哲学家们。无限的本性问题一直困扰着人们。在18世纪，19世纪发展的微积分的极限过程就是一种潜无限。19世纪半叶之后，从当时人们所关注的问题中自然产生出来的数学问题似乎要求在其精确表述中使用完成了的无限。在解决这一问题的数学家中，只有康托尔不顾高斯的反对，去创造一种关于实无限的数学理论。莱布尼茨、弗雷格都表示了支持，而由康托尔的无限所引发的激烈的讨论、研究和争辩会为通用数字计算机的发展提供重要启发。</p>
+<h3 id="无穷集的大小是不同的"><a class="markdownIt-Anchor" href="#无穷集的大小是不同的"></a> 无穷集的大小是不同的</h3>
+<p>  即使我们认为把所有自然数1，2，3……所组成的集合当成一个完成了的实无限来处理是有意义的，如果我们问这个集合有多少个数，难道是有意义的吗？是否有无限大数来数这个集合呢？<br />
+  莱布尼茨的结论是：这种无限大的数并不存在，他的推理如下：<br />
+  只要一个集合的元素可以和另一个集合的元素一一对应起来，就可以说明这两个集合的元素数目是相等的，即使我们不知道数目是多少。比如自然数集和偶数集：1→2，2→4，3→6……，又如如果我们发现一个礼堂中既没有空座位又没有站着的人，那么就可以下结论礼堂中的人数与座位数是相等的。（这个是否有歧义）。但是依据欧几里得提出的：整体大于它的任何部分，自然数集怎么可能=偶数集呢？所以谈论一个无限集中元素的个数是没有意义的。<br />
+  康托尔也和莱布尼茨做了同样的推理，但是他选择了：某些无限集将与它的子集具有相同的元素数目。康托尔是怎么做的呢？<br />
+  康托尔找到一种分数集合，并把它和自然数集建立起一一对应的关系：<br />
+  首先是和为2的分数，然后是何为3的分数……由于从直观上来看，分数要比自然数多许多，所以这一证明可以给我们猜想：每一个无限集都可以与自然数之间建立其一一对应的关系，康托尔的伟大贡献就是说明了情况并非如此。<br />
+  可以用分数表示的数被称为有理数，如果有理数用小数表示，会有无限循环小数的出现，但如果小数不循环，则这些小数被称为无理数，无理数和有理数被统称为实数。而像根号2这样的数和所有的有理数被称为代数数（可以作为代数方程的根，而Π不能，所以Π这类的数被称为超越数）。<br />
+  在表明了分数可以与自然数之间建立一一对应的关系后，他又转向了由所有代数数组成的集合，结果可以一一对应，然后他又想知道对于实数是否也可行，最后康托尔得出：实数集无法与自然数集之间建立一一对应，无限集有两种大小。<br />
+  emmm，康托尔后面的数学内容就不写了吧🤣。</p>
+<h3 id="结束"><a class="markdownIt-Anchor" href="#结束"></a> 结束</h3>
+<p>  1918年康托尔去世，其时，一战的战火仍在蔓延。今天，尽管弗雷格在其隐喻的斗争中很是令人惊奇，但是并没有产生任何决定性的结果。这场斗争最令人称奇的副产品就是阿兰图灵关于通用计算机的数学模型。</p>
+<h2 id="哥德尔使计划落空"><a class="markdownIt-Anchor" href="#哥德尔使计划落空"></a> 哥德尔使计划落空</h2>
+<p>  哥德尔是爱因斯坦的好友，但两人的许多方面都大相径庭。比如爱因斯坦深受恩斯特·马赫怀疑论的实证主义的影响，游戏是马赫对康德先验时空观的批判。但是哥德尔从青年时就开始看康德的著作，他认为相对论可以被看作证实了康德某些关于时间的观点，正是通过拒斥这些思想，他才能看到其他人所忽视的联系，并且做出伟大的发现。<br />
+  虽然哥德尔最初打算学习物理学，但在听了一些数论课程之后，整数中所蕴含的那种样式之美使他意识到，数学才是自己真正的追求。哥德尔的的一个重要定理就是不完备定理。<br />
+如何在那些极其相似系统中用编码去发展出形式逻辑系统的元数学，这对哥德尔来说时不成问题的。但在实际过程中，这种想法是被维也纳学派严令禁止的。哥德尔认为：它们从系统外部看是真命题，但却无法从系统内部得到证明；但维也纳学派的许多人看来，除了可证明性，数学真理性的其它观念都是放屁。哥德尔反对这种观点，并得出了一个与之相反的重要结论：一种有意义的数学真理的观念不仅是存在的，而且其范围超过了任何给定的形式系统的证明能力。系统中存在可表达但不可证的真命题。<br />
+  剩下的不想写了，hhh。</p>
+<h2 id="图灵构想通用计算机"><a class="markdownIt-Anchor" href="#图灵构想通用计算机"></a> 图灵构想通用计算机</h2>
+<p>  图灵的生平就不多说了，之前看过图灵传。关于他的早年，我印象很深刻的一点就是他的童年好友：克里斯多弗·毛肯患肺结核去世，毛肯作为一个完美的符号永远存在于阿兰的心中。图灵接下来的部分值得好好记录，这时候离现代计算机的诞生已经很近了。</p>
+<h3 id="希尔伯特的判定问题"><a class="markdownIt-Anchor" href="#希尔伯特的判定问题"></a> 希尔伯特的判定问题</h3>
+<p>  希尔伯特和弗雷格他们一样，希望找到清楚明白的演算程序，只要用所谓一阶逻辑的符号系统写出的某些前提和所提出的结论给定，那么通过这些程序就总是可以判定，弗雷格的规则是否可以保证该结论能够从这些前提中导出，寻找程序的任务后来被称为希尔伯特的“判定问题”。从原则上讲，解决他的判定问题的算法将把人的一切演绎推理都还原为冷冰冰的演算，它在很大程度上将实现莱布尼茨之梦。</p>
+<h3 id="图灵对计算过程的分析"><a class="markdownIt-Anchor" href="#图灵对计算过程的分析"></a> 图灵对计算过程的分析</h3>
+<p>  算法是由一系列规则来描述的，人们可以按照这种精确的机械方式来遵循这些规则，就像看菜谱炒菜一样。但是图灵把注意力从算法本身移到了人们实际在做的事情。他将说明：<br />
+  在去掉非本质的细节后，人可以局限在少数几种十分基本的操作上，而不会改变操作结果。→人可以被执行这些基本操作的机器所替代。→证明仅仅这些执行基本操作的机器是不可能判定一个给定的结论是否可以用弗雷格的规则从前提中得出结论。→判定问题的算法是不存在的，除此之外他还得到一个副产品：图灵发现一个通用计算机的数学模型。<br />
+  回顾一下，你在做一个乘法的过程，去掉那些不值一提的小细节，然后分解做乘法的心理过程，就能明白任何计算所具有的本质特征，任何计算都可以看成下列的方式来进行：</p>
+<ol>
+<li>计算通过一条被划分成方格的纸带上写下符号来进行。</li>
+<li>执行计算的人在每步计算时，只注意到一个方格中的符号。</li>
+<li>计算的人下一步只取决于这个方格的符号以及他的心理状态。</li>
+<li>然后下一步是：在当前注意的方格写下符号，然后把注意力转向其邻格。</li>
+</ol>
+<p>  这一方式的重要性体现于：任何算法程序能计算的任何东西都可以通过图灵机来实现。因此，如果某项任务无法用图灵机来计算，我们就能说明没有算法程序能够解决这个任务，这就是图灵判定问题不存在算法的方法。</p>
+<h3 id="不理社会框架的图灵"><a class="markdownIt-Anchor" href="#不理社会框架的图灵"></a> 不理社会框架的图灵</h3>
+<p>  有一件事值得记录，从中我们可以看到他的思维方式：阿兰图灵之前参加了一个民兵组织，民兵团要求按时参加训练，但没过多久，阿兰认为这存粹浪费时间，就不去了。上校找到他，问他为什么不去，还质问他当初在填表格时难道没同意遵守军纪吗？有趣的是，这个本来应该不做思考就填“是”的问题，阿兰填了否，显然他认为填“是”对他没什么好处。<br />
+  阿兰不理睬我们大多数人所默认的社会框架，而是通过思考得出答案，从开头寻求最佳行动。</p>
+<h3 id="真空管技术"><a class="markdownIt-Anchor" href="#真空管技术"></a> 真空管技术</h3>
+<p>  20世纪30年代，大多数欧洲人，美国人都已经有了收音机。在那晶体管发明之前的时代，真空管是收音机主要的构件。他们像灯泡一样，会发光，变烫，并且很快就会被烧坏。真空管电路被应用于电话交换，图灵与这一运动的先锋——才华横溢的工程师弗劳尔斯展开了合作，到了1945年战争结束，图灵已经掌握了真空管电子学的应用知识。他坚信，使用真空管可以造出通用计算机。<br />
+  其实到这里，现代计算机产生的逻辑基础就大部分结束了，最后转化为工程的通用计算机研制我就不写了。</p>
+<h2 id="尾声"><a class="markdownIt-Anchor" href="#尾声"></a> 尾声</h2>
+<p>  本书中的故事强调了观念的力量以及预测他们的徒劳。汉诺威的公爵们知道莱布尼茨最应该干什么：为他们编写家族谱。今天的情况更是如此，那些为科学家提供条件的人们竭力想把科学家们引向那些很快可以出成果的方向。<br />
+  如果只重眼前利益，而不重视那些不会带来直接回报的研究，最终遭殃的还是我们的未来。</p>
+]]></content>
+      <categories>
+        <category>阅读笔记</category>
+      </categories>
+      <tags>
+        <tag>阅读记录</tag>
+        <tag>计算机逻辑</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>晾衣服中的第一性原理</title>
+    <url>/2021/08/03/%E6%9D%82%E8%B0%88/%E6%99%BE%E8%A1%A3%E6%9C%8D%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<p>晾衣服的时候挺无聊的，我只好瞎想想。我想起小时候晾衣服的时候，不管什么衣服裤子，上去就是拿一个夹子把衣服固定在衣架上，最后总是导致夹子不够。导致我现在养成一个习惯，能不用夹子夹的就不用夹子……总是要想办法用衣服自身把它给固定住，比如带纽扣的衣服，直接把最上面的扣子扣起来；牛仔裤的话把利用放腰带的那个地方固定住……</p>
+<span id="more"></span>
+<p>虽然晾衣服很无聊，也很普通，但是我觉得这背后就有第一性原理的运用。我第一次听说这第一性原理还是从特斯拉的老板musk那儿听到的，听起来还挺高大上的。在我看来，这第一性原理其实就是<strong>分解问题，抓住每一部分最基本的需求</strong>。</p>
+<p>比如说，在制造电动车特斯拉的过程中，最大的成本来源于电池组件。研发团队发现电池组件成本要600美元／千瓦时，但马斯克运用第一性原理思考，把电池分为各种金属元素以及其他成分，再对生产流程、产地、供应链每一部分进行优化，最终将电池组件成本降低到80美元／千瓦时，这就是第一性原理的运用。</p>
+<p>我觉得晾衣服也是一个道理，我的目的是把衣服固定住，那么夹子是必须的吗？当然不是必须的，我可以利用衣服本身的一些特点来把衣服固定在衣架上，而不用夹子，这样我就降低了成本。怎么说呢，<strong>我觉得就是遇到一个问题，一定要围绕这个问题进行解答，而不是被一个答案所束缚住</strong>。比如，我晾衣服全用夹子，最后发现夹子不够了，这个时候我想的却是如何找到更多的夹子，而不是利用衣服自身的纽扣什么的，来省出一点夹子。</p>
+<p>额，就随便吹吹🐂🍺，要不然也挺无聊的😅。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210803123444.png" alt="image-20210803123435521" style="zoom: 67%;" />
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自省</title>
+    <url>/2021/09/14/%E6%9D%82%E8%B0%88/%E8%87%AA%E7%9C%81/</url>
+    <content><![CDATA[<p>最近社会上发生了许多热点事件，瓜都吃饱了，看到不同平台上不同的人对各种热点事件口诛笔伐，我不禁思考我自己对待这些热点事件是什么样的态度呢？</p>
+<span id="more"></span>
+<p>我可能刷B站的时侯看到几个相关的视频，点进去看一看，或是跟着视频的情绪义愤填膺，谴责当事人，又或是看到几句耍宝的话哈哈大笑，一笑置之。</p>
+<p>谴责和嘲讽当然有存在的必要，但是我觉得要从这些热点事件中看到的和认识到的，不仅仅是这些。我觉得我们更应该做的，是思考<strong>这一件事反映了什么问题，如果是我，我会不会这么做</strong>。比如某某官员贪污，如果把我们自己放到他那个位置上，我会不会也贪污，我能做到自己的清白吗？从而反映出了什么问题，我们应该怎么避免这种情况的发生。</p>
+<p>除了热点事件，平常生活中发生的种种事件也应该以这种自省的态度去对待。就像孔老头当年说的：</p>
+<blockquote>
+<p>见贤思齐焉，见不贤而内自省也。</p>
+</blockquote>
+<p>这句话虽然大多数人都背过，觉得不足为奇，但是这句话里面的道理是很多人没有注意到的，包括我自己。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
       </tags>
   </entry>
   <entry>
