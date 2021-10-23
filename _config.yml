@@ -126,9 +126,10 @@ admin:
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repo: git@github.com:sail-Yang/sail-Yang.github.io.git
-  branch: main
+  type: 'git'
+  repo: 
+      github: git@github.com:sail-Yang/sail-Yang.github.io.git,main
+      gitee: git@gitee.com:sail-Yang/sail-Yang.git,master
 # Search
 search:
 path: search.xml
