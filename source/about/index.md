@@ -12,6 +12,8 @@ ID：sail Yang/邈山
 
 最喜欢的颜色：<font color=#c4adf7>#c4adf7</font>
 
+喜欢的歌：*[Killer Queen](https://music.163.com/#/song?id=27198673)—queen*、*[异乡人](https://music.163.com/#/song?id=463262368)*—李健
+
 博客名称：progsail.com（progress + sail,意味前进的风帆……😳）
 
 
