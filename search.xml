@@ -956,9 +956,153 @@
     <title>vscode使用指南</title>
     <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>最近想学一下vscode,将vscode当作主要使用的编辑器。所以想专门写一篇，来记录一下使用和配置的过程，一开始不会有体系，只是遇到什么问题就记什么，当用得差不多时，可能会回头整理一下。</p>
+<p>​	  最近在用VScode这款编辑器，为了最大化发挥这个工具的能力，需要记住一些不同的快捷键以及方法，这些玩意需要多用才能熟练掌握，为此，我想写个简易的对照手册，这样能够在我忘记的时候可以快速地查找到想要的命令，提高效率。</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211107172718.png" alt="Vscode" /></p>
 <span id="more"></span>
-<h1 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h1>
+<h1 id="vscode杂谈"><a class="markdownIt-Anchor" href="#vscode杂谈"></a> Vscode杂谈</h1>
+<p>  Vscode全名为<u>Visual Studio Code</u>,其是微软开发的一款<strong>免费的</strong>、<strong>开源的</strong>跨平台轻量编辑器。</p>
+<p>  注意，VScode不是IDE。IDE侧重的是开箱即用的编程体验、对代码往往有很好的智能理解，同时侧重于工程项目，为代码调试、测试、工作流等都有图形化界面的支持，所以比较笨重；而像VScode这种编辑器，<strong>侧重文件夹和文件，支持的语言丰富多样，十分自由</strong>。</p>
+<p>  VScode有个很显著的特点就是它是一种开放的平台，VS Code 的源代码以 MIT 协议开源。这不仅意味着大家能够免费获取到 VS Code 的核心代码，更意味着<u>社区能够基于 VS Code 的代码，开发自己的产品</u>，这一点十分重要。就是因为这个特点，我们才会看到vscode上的各种各样的插件，可以实现高度的定制化，打造专属于自己的编辑器。</p>
+<h1 id="写代码时"><a class="markdownIt-Anchor" href="#写代码时"></a> 写代码时</h1>
+<p>  我们首先来讲讲写代码时最常用的操作，熟记这些操作能帮助我们提高编写代码的效率。</p>
+<h2 id="光标移动"><a class="markdownIt-Anchor" href="#光标移动"></a> 光标移动</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">光标移动到一行（文档）的开头/结尾</td>
+<td style="text-align:center">home/end（Ctrl+home/Ctrl+end）</td>
+</tr>
+<tr>
+<td style="text-align:center">光标移动到当前单词的首和尾</td>
+<td style="text-align:center">ctrl+←(ctrl+→)</td>
+</tr>
+<tr>
+<td style="text-align:center">回到上一个光标的位置</td>
+<td style="text-align:center">Ctrl+U</td>
+</tr>
+<tr>
+<td style="text-align:center">代码块的移动（在一对花括号之间跳转）</td>
+<td style="text-align:center">Ctrl + Shift + \</td>
+</tr>
+<tr>
+<td style="text-align:center">文本选择</td>
+<td style="text-align:center">一直按着shift键，然后按方向键</td>
+</tr>
+</tbody>
+</table>
+<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">删除整行</td>
+<td style="text-align:center">Ctrl+Shift+K</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之前的一个英文单词</td>
+<td style="text-align:center">Ctrl+backspace</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之后的一个英文单词</td>
+<td style="text-align:center">Ctrl+delete</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码行编辑"><a class="markdownIt-Anchor" href="#代码行编辑"></a> 代码行编辑</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">在当前行上（下）快速插入一空行</td>
+<td style="text-align:center">Ctrl+Enter(Ctrl+Shift+Enter)</td>
+</tr>
+<tr>
+<td style="text-align:center">交换上下行的位置</td>
+<td style="text-align:center">按着alt键，然后按方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">复制本行代码到插入到下（上）一行</td>
+<td style="text-align:center">按着alt和shift键，然后按方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">快速注释一行（整段代码注释）</td>
+<td style="text-align:center">Ctrl+/（Alt+Ctrl+/）</td>
+</tr>
+<tr>
+<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
+<td style="text-align:center">Ctrl+G+行号</td>
+</tr>
+<tr>
+<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
+<td style="text-align:center">F12/Ctrl+F12</td>
+</tr>
+<tr>
+<td style="text-align:center">展现谁引用了函数或类</td>
+<td style="text-align:center">Shift+F12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码跳转和查看引用"><a class="markdownIt-Anchor" href="#代码跳转和查看引用"></a> 代码跳转和查看引用</h2>
+<p>  有时候我们需要查看一个函数的定义是什么样的或者查看一个函数在哪些地方被引用，这个时候我们就需要一些快捷操作：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">查看当前函数定义</td>
+<td style="text-align:center">(按住ctrl键，然后鼠标左键) 或者 (移动光标到待查看函数，然后按F12)</td>
+</tr>
+<tr>
+<td style="text-align:center">查看当前函数被引用情况</td>
+<td style="text-align:center">shift+F12</td>
+</tr>
+</tbody>
+</table>
+<h1 id="文件之间"><a class="markdownIt-Anchor" href="#文件之间"></a> 文件之间</h1>
+<p>​	有时候我们需要在不同的文件之间切换以及进行一些操作，下面讲讲关于这些的操作。</p>
+<h2 id="文件级操作"><a class="markdownIt-Anchor" href="#文件级操作"></a> 文件级操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">快速打开文件</td>
+<td style="text-align:center">Ctrl+P进入文件查找列表（<strong>如果按下ctrl+Enter会在新的编辑器打开</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开最近文件</td>
+<td style="text-align:center">Ctrl+R</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开文件第n行</td>
+<td style="text-align:center">Ctrl+g，输入行号</td>
+</tr>
+</tbody>
+</table>
 <h2 id="全局快捷键"><a class="markdownIt-Anchor" href="#全局快捷键"></a> 全局快捷键</h2>
 <table>
 <thead>
@@ -990,124 +1134,9 @@
 </tr>
 </tbody>
 </table>
-<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">删除整行</td>
-<td style="text-align:center">Ctrl+Shift+K</td>
-</tr>
-<tr>
-<td style="text-align:center">删除光标之前的一个英文单词</td>
-<td style="text-align:center">Ctrl+backspace</td>
-</tr>
-<tr>
-<td style="text-align:center">删除光标之后的一个英文单词</td>
-<td style="text-align:center">Ctrl+delete</td>
-</tr>
-</tbody>
-</table>
-<h2 id="代码编辑快捷键"><a class="markdownIt-Anchor" href="#代码编辑快捷键"></a> 代码编辑快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">光标移动到开头/结尾</td>
-<td style="text-align:center">home/end</td>
-</tr>
-<tr>
-<td style="text-align:center">光标移动到文档开头/结尾</td>
-<td style="text-align:center">Ctrl+home/Ctrl+end</td>
-</tr>
-<tr>
-<td style="text-align:center">回到上一个光标的位置</td>
-<td style="text-align:center">Ctrl+U</td>
-</tr>
-<tr>
-<td style="text-align:center">代码上下换位</td>
-<td style="text-align:center">Alt+↑↓</td>
-</tr>
-<tr>
-<td style="text-align:center">代码复制并填充上/下</td>
-<td style="text-align:center">Alt+Shift+↑↓</td>
-</tr>
-<tr>
-<td style="text-align:center">快捷注释（单行）</td>
-<td style="text-align:center">Ctrl+/</td>
-</tr>
-<tr>
-<td style="text-align:center">全局代码格式化（根据语言）</td>
-<td style="text-align:center">Alt+shift+F</td>
-</tr>
-<tr>
-<td style="text-align:center">选中代码格式化</td>
-<td style="text-align:center">Ctrl+F</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<h2 id="快速跳转"><a class="markdownIt-Anchor" href="#快速跳转"></a> 快速跳转</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">快速打开文件</td>
-<td style="text-align:center">Ctrl+P</td>
-</tr>
-<tr>
-<td style="text-align:center">快速打开最近文件</td>
-<td style="text-align:center">Ctrl+R</td>
-</tr>
-<tr>
-<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
-<td style="text-align:center">Ctrl+G+行号</td>
-</tr>
-<tr>
-<td style="text-align:center">快速打开文件第n行</td>
-<td style="text-align:center">Ctrl+P，输入 :+行号</td>
-</tr>
-<tr>
-<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
-<td style="text-align:center">F12/Ctrl+F12</td>
-</tr>
-<tr>
-<td style="text-align:center">展现谁引用了函数或类</td>
-<td style="text-align:center">Shift+F12</td>
-</tr>
-<tr>
-<td style="text-align:center">代码重构（修改一个函数或者变量名）</td>
-<td style="text-align:center">光标移到修改处+F2</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
 <h2 id="自定义快捷键"><a class="markdownIt-Anchor" href="#自定义快捷键"></a> 自定义快捷键</h2>
 <p>vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" alt="image-20210903152109373" /></p>
-<h1 id="创建多层文件夹"><a class="markdownIt-Anchor" href="#创建多层文件夹"></a> 创建多层文件夹</h1>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152644.png" alt="image-20210903152636945" style="zoom:80%;" />
 <h1 id="vscode配置云同步"><a class="markdownIt-Anchor" href="#vscode配置云同步"></a> VScode配置云同步</h1>
 <p>我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。</p>
 <p>我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。</p>
