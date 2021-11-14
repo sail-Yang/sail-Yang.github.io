@@ -24,27 +24,30 @@
     var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言 最近想学一下powershell,查了很多资料，于是想整合一下这些资料，所以本篇是对链接的一个整合，可能会记录一些我不熟悉但是比较有用的地方。 这里先贴出比较详细的教程：  微软官方文档 powershell中文博客">
+  <meta name="description" content="前言   实验八、九是一起放在第九章：转移指令的原理这一章里面的，所以放在一块说。这一章主要讲了jmp指令的不同形式，但也涉及导论其他的一些跳转指令：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="powershell基础知识">
-<meta property="og:url" content="https://progsail.com/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:title" content="王爽汇编语言实验八、九">
+<meta property="og:url" content="https://progsail.com/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C8%E3%80%819/index.html">
 <meta property="og:site_name" content="sail Yang&#39;s Blog">
-<meta property="og:description" content="前言 最近想学一下powershell,查了很多资料，于是想整合一下这些资料，所以本篇是对链接的一个整合，可能会记录一些我不熟悉但是比较有用的地方。 这里先贴出比较详细的教程：  微软官方文档 powershell中文博客">
+<meta property="og:description" content="前言   实验八、九是一起放在第九章：转移指令的原理这一章里面的，所以放在一块说。这一章主要讲了jmp指令的不同形式，但也涉及导论其他的一些跳转指令：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU">
-<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911175705.png">
-<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911174724.png">
-<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911180921.png">
-<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911181453.png">
-<meta property="article:published_time" content="2021-09-11T08:02:41.000Z">
-<meta property="article:modified_time" content="2021-09-11T10:15:02.975Z">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114145114.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114150252.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%961.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%962.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%963.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp1.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp2.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114155857.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114200916.png">
+<meta property="article:published_time" content="2021-11-14T06:45:53.000Z">
+<meta property="article:modified_time" content="2021-11-14T12:10:39.983Z">
 <meta property="article:author" content="sail Yang">
-<meta property="article:tag" content="powershell">
-<meta property="article:tag" content="windows">
+<meta property="article:tag" content="王爽《汇编语言》">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114145114.png">
 
-<link rel="canonical" href="https://progsail.com/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/">
+<link rel="canonical" href="https://progsail.com/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C8%E3%80%819/">
 
 
 <script id="page-configurations">
@@ -57,7 +60,7 @@
   };
 </script>
 
-  <title>powershell基础知识 | sail Yang's Blog</title>
+  <title>王爽汇编语言实验八、九 | sail Yang's Blog</title>
   
 
 
@@ -214,7 +217,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C8%E3%80%819/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -227,7 +230,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          powershell基础知识
+          王爽汇编语言实验八、九
         </h1>
 
         <div class="post-meta">
@@ -238,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-09-11 16:02:41 / 修改时间：18:15:02" itemprop="dateCreated datePublished" datetime="2021-09-11T16:02:41+08:00">2021-09-11</time>
+              <time title="创建时间：2021-11-14 14:45:53 / 修改时间：20:10:39" itemprop="dateCreated datePublished" datetime="2021-11-14T14:45:53+08:00">2021-11-14</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,11 +249,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工具使用</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell/" itemprop="url" rel="index"><span itemprop="name">powershell</span></a>
+                  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">汇编语言</span></a>
                 </span>
             </span>
 
@@ -270,8 +269,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/powershell%E5%9F%BA%E7%A1%80/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C8%E3%80%819/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C8%E3%80%819/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -286,53 +285,46 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU" alt="PowerShell" style="zoom:150%;" />
-<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>最近想学一下powershell,查了很多资料，于是想整合一下这些资料，所以本篇是对链接的一个整合，可能会记录一些我不熟悉但是比较有用的地方。</p>
-<p>这里先贴出比较详细的教程：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">微软官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.pstips.net/">powershell中文博客</a></li>
-</ul>
+        <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  实验八、九是一起放在<mark>第九章：转移指令的原理</mark>这一章里面的，所以放在一块说。这一章主要讲了jmp指令的不同形式，但也涉及导论其他的一些跳转指令：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114145114.png" alt="本章主要内容" /></p>
 <span id="more"></span>
-<h1 id="什么是powershell"><a class="markdownIt-Anchor" href="#什么是powershell"></a> 什么是PowerShell</h1>
-<p>这里直接给出一些介绍的链接：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/powershell/scripting/overview?view=powershell-7.1">PowerShell官方文档介绍</a></li>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell-Wikipedia(要翻墙)</a></li>
-</ul>
-<h2 id="powershell和powershell-core的区别"><a class="markdownIt-Anchor" href="#powershell和powershell-core的区别"></a> powershell和powershell core的区别</h2>
-<p>注意，PowerShell 和PowerShell core是不同的，powershell core是微软发布的powershell的新版本（<a target="_blank" rel="noopener" href="https://github.com/PowerShell/PowerShell/tags">下载地址</a>）。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911175705.png" alt="左边是powershell core,右边是Powershell" /></p>
-<p>那么两者有什么具体的区别呢？</p>
-<ul>
-<li>PowerShell core是跨平台的，可以在Windows、Linux和Macos上运行，而作为旧版本的PowerShell只能在Windows上运行。</li>
-<li>PowerShell使用的是 .NET Framework和 .NET Standard ; 作为新版本的PowerShell core使用的是 .NET Core和 .NET Standard 。（什么是.NET框架→<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/?view=aspnetcore-5.0">.NET官方文档</a>，<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30435261/article/details/95944269?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163134856016780265456793%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=163134856016780265456793&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-95944269.first_rank_v2_pc_rank_v29&amp;utm_term=%E4%BB%80%E4%B9%88%E6%98%AF.NET&amp;spm=1018.2226.3001.4187">.NET简单介绍(csdn)</a>）</li>
-</ul>
-<p>现在使用的一般都是powershell core，下面的基础知识的介绍也是依托于powershell core.</p>
-<h1 id="cmdlet和别名"><a class="markdownIt-Anchor" href="#cmdlet和别名"></a> cmdlet和别名</h1>
-<h2 id="cmdlet简单介绍"><a class="markdownIt-Anchor" href="#cmdlet简单介绍"></a> cmdlet简单介绍</h2>
-<p>cmdlet 是本机 PowerShell 命令，而不是独立的可执行文件。 cmdlet 收集在 PowerShell 模块中，可按需加载。 可以用任何编译的 .NET 语言或 PowerShell 脚本语言本身来编写 cmdlet。</p>
-<p>PowerShell用”动词-名词“的方法来命名cmdlet命令，例如： <code>Get-Command</code> cmdlet 用于获取在命令行界面中注册的所有 cmdlet。 动词标识 cmdlet 执行的操作，名词标识该 cmdlet 执行其操作的所在资源。</p>
-<p>那么，我们如何查看一个<code>命令的使用说明</code>呢？</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//查找某个命令的作用 → GetHelp name，后面加个<span class="literal">-Full</span>就是详细说明,加个<span class="literal">-examples</span>就是简略说明</span><br><span class="line"><span class="built_in">Get-Help</span> <span class="built_in">Get-VM</span></span><br><span class="line">//如果我们不知道命令的确切名字，可以使用<span class="built_in">Get-Command</span> *……*</span><br><span class="line"><span class="built_in">Get-Command</span> *VM*</span><br></pre></td></tr></table></figure>
-<p>在命令的详细介绍里，会出现下面这些格式，要能看懂：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911174724.png" alt="说明格式" style="zoom:80%;" />
-<p>以上就是获取cmdlet说明的介绍。</p>
-<h2 id="别名alias"><a class="markdownIt-Anchor" href="#别名alias"></a> 别名(Alias)</h2>
-<p>cmdlet命令的起名很清晰，但是对于熟练的使用者来说，每次都要打一个动词加名词肯定很费劲，所以powershell内部很多命令也有不同的<strong>别名</strong>，例如Get-ChildItem，列出当前的子文件或目录。它有两个别名：ls 和 dir，这两个别名来源于unix 的shell和windows的cmd。</p>
-<p>别名有两个作用：</p>
-<ul>
-<li><strong>继承</strong>：继承unix-shell和windows-cmd</li>
-<li><strong>方便</strong>：方便用户使用。</li>
-</ul>
-<p>那么，我们如何查找别名所指的真是cmdlet命令呢？</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;	//查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
-<h1 id="调用入口的优先级"><a class="markdownIt-Anchor" href="#调用入口的优先级"></a> 调用入口的优先级</h1>
-<p>如果我们输入的命令，powershell识别不了，就会报错：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911180921.png" alt="can't recognize" /></p>
-<p>那么，powershell是如何与我们输入的命令想匹配的呢？这是存在一个<strong>优先级顺序</strong>的：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911181453.png" alt="调用入口的优先级" /></p>
+<h1 id="实验八"><a class="markdownIt-Anchor" href="#实验八"></a> 实验八</h1>
+<h2 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h2>
+<p>  分析下面的程序，在运行前思考：这个程序可以正确返回吗？</p>
+<p>  运行后思考：为什么是这种结果？</p>
+<p>  通过这个程序加深对相关内容的理解。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line">codesg segment</span><br><span class="line">		mov ax,4c00h</span><br><span class="line">		int 21h</span><br><span class="line">		</span><br><span class="line">start:	mov ax,0</span><br><span class="line">    s:	nop</span><br><span class="line">    	nop</span><br><span class="line">    	</span><br><span class="line">    	mov di,offset s</span><br><span class="line">    	mov si,offset s2</span><br><span class="line">    	mov ax,cx:[si]</span><br><span class="line">    	mov cs:[di],ax</span><br><span class="line">    	</span><br><span class="line">   s0:	jmp short s</span><br><span class="line">   s1:	mov ax,0</span><br><span class="line">   		int 21h</span><br><span class="line">   		mov ax,0</span><br><span class="line">   </span><br><span class="line">   s2:	jmp short s1</span><br><span class="line">   		nop</span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></table></figure>
+<h2 id="分析"><a class="markdownIt-Anchor" href="#分析"></a> 分析</h2>
+<p>  这个程序究竟干了啥？<br />
+  从<code>di,offset s</code>到<code>mov cs:[di],ax</code>这一段干的事就是把s2标号处的代码复制到s标号处，然后下面就是一系列跳转。</p>
+<p>  在实际操作之前，我们先简单复习一下：上面这个程序所使用的jmp指令都是短转移<code>jmp short 标号</code>，意味着<strong>这些jmp指令不会实际给出要转移到的目的地址，而是给出要转移的位移量</strong>。那么这个位移量是怎么算的呢？如下图所示：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114150252.png" alt="" /></p>
+<p>  如果不是很懂，就先去把书上第九章先看一下吧。下面我们来实际操作一下：</p>
+<h2 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h2>
+<p>  我们首先用debug的<code>-u</code>命令查看反汇编格式：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%961.png" alt="" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%962.png" alt="" /></p>
+<p>  观察一下<code>076A:0016</code>和<code>076A:0020</code>的两处jmp短转移指令，分别对应了<code>s0:	jmp short s</code>和<code>s2:	jmp short s1</code>,它们两的机器码分别是<code>EBF0</code>和<code>EBF6</code>。我们来验证一下短转移指令是不是上面所说的原理：</p>
+<blockquote>
+<p><code>s0:	jmp short s</code>这条指令是要跳转到s处，s标号处所在的地址是<code>076A:0008</code>，而<code>s0:jmp short s</code>这条指令所在的地址是<code>076A:0016</code>,根据上面所说的转移位移的计算方法：<u><code>s0:jmp short s</code>下一条指令的地址是<code>076A:0018</code>,而目标地址是s标号处所在的<code>076A:0008</code>，两点的距离为08H-18H = -10H （十进制为-16）,其补码表示为F0</u>。<code>s0:	jmp short s</code>这条指令显示的机器码是<code>EBF0</code>，可以看到和我们刚刚算出来的F0是一样的。</p>
+<p><code>s2:	jmp short s1</code>也是一个道理，就不细说了。</p>
+</blockquote>
+<p>  现在我们开始执行程序，<strong>注意由于start标号是在<code>076A:0005</code>,所以程序执行是从这个地址开始，而不是在<code>076A:0000</code></strong>。在s0之前的这段代码做的事情就是把s2标号处的代码复制到s处，我们可以看看执行到s0标号这一步的反汇编格式：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%963.png" alt="" /></p>
+<p>  我们可以看到<strong>s标号处（<code>076A:0008</code>）原本的nop指令被s2标号处的<code>EBF6</code>给取代了</strong>。这里就是<u>问题的关键</u>，<font color=purple>注意短转移指令只提供要转移的位移，而不是目的地址，<strong>EBF6的含义是：转移到与当前这个jmp指令的下一条指令距离为<code>F6</code>,也就是-A</strong>。</font></p>
+<p>  现在我们继续执行代码，现在<code>CS:IP</code>应该指向s0处，执行后，跳转到标号s处，这个时候就开始执行<code>EBF6</code>了,首先IP+=2，IP = 001A，然后指令缓冲器开始执行<code>EBF6</code>，向前跳转-A,到<code>076A：0000</code>,也就是<code>mov ax,4c00</code>处，下面程序就可以正常返回了。我们来验证一下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp1.png" alt="image-20211114155423057" /></p>
+<p>  可以看到现在已经跳转到s标号处了，指令已经显示为<code>JMP 0000</code>。我们再执行一次:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp2.png" alt="image-20211114155558123" /></p>
+<p>  程序已经开始返回了，说明我们之前说的是对的。实验8到这也就结束了。</p>
+<h1 id="实验九"><a class="markdownIt-Anchor" href="#实验九"></a> 实验九</h1>
+<h2 id="分析-2"><a class="markdownIt-Anchor" href="#分析-2"></a> 分析</h2>
+<p>  额，这个实验好像是给我们一段材料，然后写出一个程序来，目标是实现：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114155857.png" alt="" /></p>
+<p>  作者说了要根据材料，材料上已经讲得很好了，我这就贴上我的拙作，仅供参考：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg,ds:data</span><br><span class="line">data segment</span><br><span class="line">        dw 0277H,0265H,026cH,0263H,026fH,026dH,0265H,0220H,0274H,026fH,0220H,026dH,0261H,0273H,026dh,0221H</span><br><span class="line">        dw 2477h,2465h,246ch,2463h,246fh,246dh,2465h,2420h,2474h,246fh,2420h,246dh,2461h,2473h,246dh,2421h</span><br><span class="line">        dw 7177h,7165h,716ch,7163h,716fh,716dh,7165h,7120h,7174h,716fh,7120h,716dh,7161h,7173h,716dh,7121h</span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">codesg segment</span><br><span class="line"> start: mov ax,data</span><br><span class="line">        mov ds,ax</span><br><span class="line">        mov ax,0B800h</span><br><span class="line">        mov es,ax</span><br><span class="line">        mov bx,0640h</span><br><span class="line">        mov dx,4</span><br><span class="line">        mov di,0</span><br><span class="line"></span><br><span class="line">    s0: dec dx</span><br><span class="line">        mov cx,dx</span><br><span class="line">        jcxz stop</span><br><span class="line">        add bx,0a0h</span><br><span class="line">        mov si,0</span><br><span class="line">        mov cx,16</span><br><span class="line"></span><br><span class="line">     s: mov ax,[di]</span><br><span class="line">        add di,2</span><br><span class="line">        mov es:[bx+3eh+si],ax</span><br><span class="line">        add si,2</span><br><span class="line">        loop s</span><br><span class="line">        jcxz s0</span><br><span class="line"></span><br><span class="line">  stop: mov ax,4c00h</span><br><span class="line">        int 21h</span><br><span class="line"></span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114200916.png" alt="RESULT" /></p>
 
     </div>
 
@@ -342,8 +334,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/powershell/" rel="tag"># powershell</a>
-              <a href="/tags/windows/" rel="tag"># windows</a>
+              <a href="/tags/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B/" rel="tag"># 王爽《汇编语言》</a>
           </div>
 
         
@@ -352,13 +343,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/09/05/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%81%9C%E6%AD%A2%E6%9B%B4%E6%96%B0%E8%BF%99%E4%B8%80%E4%B8%BB%E9%A2%98/" rel="prev" title="停止更新这一主题">
-      <i class="fa fa-chevron-left"></i> 停止更新这一主题
+    <a href="/2021/10/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E4%BA%94/" rel="prev" title="王爽《汇编语言》实验五">
+      <i class="fa fa-chevron-left"></i> 王爽《汇编语言》实验五
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/09/14/%E6%9D%82%E8%B0%88/%E8%87%AA%E7%9C%81/" rel="next" title="自省">
-      自省 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -418,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text"> 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFpowershell"><span class="nav-text"> 什么是PowerShell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#powershell%E5%92%8Cpowershell-core%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text"> powershell和powershell core的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cmdlet%E5%92%8C%E5%88%AB%E5%90%8D"><span class="nav-text"> cmdlet和别名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cmdlet%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="nav-text"> cmdlet简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AB%E5%90%8Dalias"><span class="nav-text"> 别名(Alias)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%85%A5%E5%8F%A3%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text"> 调用入口的优先级</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text"> 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%85%AB"><span class="nav-text"> 实验八</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text"> 题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-text"> 分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-text"> 解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%B9%9D"><span class="nav-text"> 实验九</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90-2"><span class="nav-text"> 分析</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

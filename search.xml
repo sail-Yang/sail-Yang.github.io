@@ -2501,4 +2501,55 @@
         <tag>王爽《汇编语言》</tag>
       </tags>
   </entry>
+  <entry>
+    <title>王爽汇编语言实验八、九</title>
+    <url>/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C8%E3%80%819/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  实验八、九是一起放在<mark>第九章：转移指令的原理</mark>这一章里面的，所以放在一块说。这一章主要讲了jmp指令的不同形式，但也涉及导论其他的一些跳转指令：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114145114.png" alt="本章主要内容" /></p>
+<span id="more"></span>
+<h1 id="实验八"><a class="markdownIt-Anchor" href="#实验八"></a> 实验八</h1>
+<h2 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h2>
+<p>  分析下面的程序，在运行前思考：这个程序可以正确返回吗？</p>
+<p>  运行后思考：为什么是这种结果？</p>
+<p>  通过这个程序加深对相关内容的理解。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line">codesg segment</span><br><span class="line">		mov ax,4c00h</span><br><span class="line">		int 21h</span><br><span class="line">		</span><br><span class="line">start:	mov ax,0</span><br><span class="line">    s:	nop</span><br><span class="line">    	nop</span><br><span class="line">    	</span><br><span class="line">    	mov di,offset s</span><br><span class="line">    	mov si,offset s2</span><br><span class="line">    	mov ax,cx:[si]</span><br><span class="line">    	mov cs:[di],ax</span><br><span class="line">    	</span><br><span class="line">   s0:	jmp short s</span><br><span class="line">   s1:	mov ax,0</span><br><span class="line">   		int 21h</span><br><span class="line">   		mov ax,0</span><br><span class="line">   </span><br><span class="line">   s2:	jmp short s1</span><br><span class="line">   		nop</span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></table></figure>
+<h2 id="分析"><a class="markdownIt-Anchor" href="#分析"></a> 分析</h2>
+<p>  这个程序究竟干了啥？<br />
+  从<code>di,offset s</code>到<code>mov cs:[di],ax</code>这一段干的事就是把s2标号处的代码复制到s标号处，然后下面就是一系列跳转。</p>
+<p>  在实际操作之前，我们先简单复习一下：上面这个程序所使用的jmp指令都是短转移<code>jmp short 标号</code>，意味着<strong>这些jmp指令不会实际给出要转移到的目的地址，而是给出要转移的位移量</strong>。那么这个位移量是怎么算的呢？如下图所示：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114150252.png" alt="" /></p>
+<p>  如果不是很懂，就先去把书上第九章先看一下吧。下面我们来实际操作一下：</p>
+<h2 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h2>
+<p>  我们首先用debug的<code>-u</code>命令查看反汇编格式：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%961.png" alt="" /></p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%962.png" alt="" /></p>
+<p>  观察一下<code>076A:0016</code>和<code>076A:0020</code>的两处jmp短转移指令，分别对应了<code>s0:	jmp short s</code>和<code>s2:	jmp short s1</code>,它们两的机器码分别是<code>EBF0</code>和<code>EBF6</code>。我们来验证一下短转移指令是不是上面所说的原理：</p>
+<blockquote>
+<p><code>s0:	jmp short s</code>这条指令是要跳转到s处，s标号处所在的地址是<code>076A:0008</code>，而<code>s0:jmp short s</code>这条指令所在的地址是<code>076A:0016</code>,根据上面所说的转移位移的计算方法：<u><code>s0:jmp short s</code>下一条指令的地址是<code>076A:0018</code>,而目标地址是s标号处所在的<code>076A:0008</code>，两点的距离为08H-18H = -10H （十进制为-16）,其补码表示为F0</u>。<code>s0:	jmp short s</code>这条指令显示的机器码是<code>EBF0</code>，可以看到和我们刚刚算出来的F0是一样的。</p>
+<p><code>s2:	jmp short s1</code>也是一个道理，就不细说了。</p>
+</blockquote>
+<p>  现在我们开始执行程序，<strong>注意由于start标号是在<code>076A:0005</code>,所以程序执行是从这个地址开始，而不是在<code>076A:0000</code></strong>。在s0之前的这段代码做的事情就是把s2标号处的代码复制到s处，我们可以看看执行到s0标号这一步的反汇编格式：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%963.png" alt="" /></p>
+<p>  我们可以看到<strong>s标号处（<code>076A:0008</code>）原本的nop指令被s2标号处的<code>EBF6</code>给取代了</strong>。这里就是<u>问题的关键</u>，<font color=purple>注意短转移指令只提供要转移的位移，而不是目的地址，<strong>EBF6的含义是：转移到与当前这个jmp指令的下一条指令距离为<code>F6</code>,也就是-A</strong>。</font></p>
+<p>  现在我们继续执行代码，现在<code>CS:IP</code>应该指向s0处，执行后，跳转到标号s处，这个时候就开始执行<code>EBF6</code>了,首先IP+=2，IP = 001A，然后指令缓冲器开始执行<code>EBF6</code>，向前跳转-A,到<code>076A：0000</code>,也就是<code>mov ax,4c00</code>处，下面程序就可以正常返回了。我们来验证一下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp1.png" alt="image-20211114155423057" /></p>
+<p>  可以看到现在已经跳转到s标号处了，指令已经显示为<code>JMP 0000</code>。我们再执行一次:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp2.png" alt="image-20211114155558123" /></p>
+<p>  程序已经开始返回了，说明我们之前说的是对的。实验8到这也就结束了。</p>
+<h1 id="实验九"><a class="markdownIt-Anchor" href="#实验九"></a> 实验九</h1>
+<h2 id="分析-2"><a class="markdownIt-Anchor" href="#分析-2"></a> 分析</h2>
+<p>  额，这个实验好像是给我们一段材料，然后写出一个程序来，目标是实现：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114155857.png" alt="" /></p>
+<p>  作者说了要根据材料，材料上已经讲得很好了，我这就贴上我的拙作，仅供参考：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">assume cs:codesg,ds:data</span><br><span class="line">data segment</span><br><span class="line">        dw 0277H,0265H,026cH,0263H,026fH,026dH,0265H,0220H,0274H,026fH,0220H,026dH,0261H,0273H,026dh,0221H</span><br><span class="line">        dw 2477h,2465h,246ch,2463h,246fh,246dh,2465h,2420h,2474h,246fh,2420h,246dh,2461h,2473h,246dh,2421h</span><br><span class="line">        dw 7177h,7165h,716ch,7163h,716fh,716dh,7165h,7120h,7174h,716fh,7120h,716dh,7161h,7173h,716dh,7121h</span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">codesg segment</span><br><span class="line"> start: mov ax,data</span><br><span class="line">        mov ds,ax</span><br><span class="line">        mov ax,0B800h</span><br><span class="line">        mov es,ax</span><br><span class="line">        mov bx,0640h</span><br><span class="line">        mov dx,4</span><br><span class="line">        mov di,0</span><br><span class="line"></span><br><span class="line">    s0: dec dx</span><br><span class="line">        mov cx,dx</span><br><span class="line">        jcxz stop</span><br><span class="line">        add bx,0a0h</span><br><span class="line">        mov si,0</span><br><span class="line">        mov cx,16</span><br><span class="line"></span><br><span class="line">     s: mov ax,[di]</span><br><span class="line">        add di,2</span><br><span class="line">        mov es:[bx+3eh+si],ax</span><br><span class="line">        add si,2</span><br><span class="line">        loop s</span><br><span class="line">        jcxz s0</span><br><span class="line"></span><br><span class="line">  stop: mov ax,4c00h</span><br><span class="line">        int 21h</span><br><span class="line"></span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114200916.png" alt="RESULT" /></p>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+      </categories>
+      <tags>
+        <tag>王爽《汇编语言》</tag>
+      </tags>
+  </entry>
 </search>
