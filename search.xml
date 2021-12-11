@@ -2607,4 +2607,50 @@
         <tag>王爽《汇编语言》</tag>
       </tags>
   </entry>
+  <entry>
+    <title>小数取指定精度.md</title>
+    <url>/2021/12/11/C_C++/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？</p>
+<p>  这个问题虽小，但是的确是我之前没有想过的。</p>
+<span id="more"></span>
+<h1 id="解决方法"><a class="markdownIt-Anchor" href="#解决方法"></a> 解决方法</h1>
+<p>  我们先来观察一下<strong>一个double型的浮点数强制转换成int型后会输出什么</strong>:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211161734.png" alt="image-20211211161725653" /></p>
+<p>  可以发现<u><strong>不管小数点后一位是&gt;5还是&lt;5都是直接舍弃取整</strong></u>。如果把double型的数据赋值给int型的数据，结果也是一样的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211162005.png" alt="image-20211211162004999" /></p>
+<p>  如果我们想<strong>让强制转换的结果是四舍五入后的结果</strong>怎么办？比如说将<code>123.456</code>转换成<code>123</code>,将<code>123.756</code>转换成<code>124</code>。</p>
+<p>  很简单，我们加个0.5就行了,这样<code>x.0~x.4</code>的数据就变成了<code>x.5~x.9</code>,强制转化后还是x;<code>x.5~x.9</code>的数据会变成<code>(x+1).0~(x+1).4</code>，强制转化后就变成了<code>x+1</code>，这就达到了进位的效果。</p>
+<hr />
+<p>  知道这个方法后，我们想想该怎么利用这一特性来解决我们的问题：<strong>将浮点数四舍五入后保留到小数点第三位</strong>。</p>
+<p>  举个例子，假如我们现在有个double类型的数<code>123.45676</code>，要求四舍五入保留小数点后3位，也就是最后的结果是<code>123.457000000</code>。为了说清楚这个问题，我们先上代码，在来说明：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> x = <span class="number">123.45676</span>;</span><br><span class="line"><span class="keyword">int</span> temp;</span><br><span class="line">temp = (x + <span class="number">0.0005</span>)*<span class="number">1000</span>;	<span class="comment">//x+0.0005=123.45726,*1000后就是123457.26，因为是赋值给int型变量，所以0.26被舍去，最后temp=123457</span></span><br><span class="line">x = temp/<span class="number">1000.0</span>;			<span class="comment">//x = 123.457</span></span><br></pre></td></tr></table></figure>
+<p>​	可以看到我们完成了将浮点数经过四舍五入后保留到了小数点后3位，这个过程是怎样的呢？我们来描述一下。</p>
+<blockquote>
+<p>  <code>x</code>为double型，值为123.45676。我们首先让它+了0.0005，(这在之前讲过了，是<strong>为了四舍五入进位</strong>)，此时<code>x = 123.45726</code>。然后我们将它×1000然后赋值给一个<code>int</code>变量<code>temp</code>，这样小数点第3位之后的数据就会被舍弃掉，此时<code>temp=123457</code>，我们要的答案是<code>123.457</code>，显然再除个1000赋值给<code>double</code>型变量就是我们要的答案了。</p>
+</blockquote>
+<p>  但是我们注意<strong>第4行为什么是<code>x = temp/1000.0</code>,<code>x = temp/1000</code>可以吗</strong>？我们可以实际运行一下:</p>
+<p>  首先是除<code>1000.0</code>的结果:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165732.png" alt="image-20211211165732481" /></p>
+<p>  然后是除<code>1000</code>的结果:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165828.png" alt="image-20211211165828026" /></p>
+<p>  显然<code>/1000</code>的结果是错的，因为**<code>/1000</code>是把这个表达式当成了int型的计算；而<code>/1000.0</code>是把这个表达式当作浮点数的运算**，要注意这个区别。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>  现在我们知道了将浮点数经过四舍五入转化成指定位数的方法了，我们来稍微总结一下：</p>
+<blockquote>
+<p>  假设我们现在有一个n位的<code>浮点数x</code>,要将它经过四舍五入保留到m位（m&lt;=n），那么我们就可以使用下列步骤:</p>
+<ol>
+<li>x = x + 5.0/(m+1)</li>
+<li>int temp = x*<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">10^m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">m</span></span></span></span></span></span></span></span></span></span></span></li>
+<li>x = temp / <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">10^m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">m</span></span></span></span></span></span></span></span></span></span></span><strong>.0</strong></li>
+</ol>
+</blockquote>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
 </search>

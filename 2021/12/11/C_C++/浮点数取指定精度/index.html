@@ -24,17 +24,25 @@
     var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="与怠惰作斗争，与溃散抗争到底">
-<meta property="og:type" content="website">
-<meta property="og:title" content="sail Yang&#39;s Blog">
-<meta property="og:url" content="https://progsail.com/archives/2021/07/index.html">
+  <meta name="description" content="前言   今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？   这个问题虽小，但是的确是我之前没有想过的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小数取指定精度.md">
+<meta property="og:url" content="https://progsail.com/2021/12/11/C_C++/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/index.html">
 <meta property="og:site_name" content="sail Yang&#39;s Blog">
-<meta property="og:description" content="与怠惰作斗争，与溃散抗争到底">
+<meta property="og:description" content="前言   今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？   这个问题虽小，但是的确是我之前没有想过的。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211161734.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211162005.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165732.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165828.png">
+<meta property="article:published_time" content="2021-12-11T08:11:11.000Z">
+<meta property="article:modified_time" content="2021-12-11T09:05:14.539Z">
 <meta property="article:author" content="sail Yang">
+<meta property="article:tag" content="C">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211161734.png">
 
-<link rel="canonical" href="https://progsail.com/archives/2021/07/">
+<link rel="canonical" href="https://progsail.com/2021/12/11/C_C++/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/">
 
 
 <script id="page-configurations">
@@ -42,12 +50,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | sail Yang's Blog</title>
+  <title>小数取指定精度.md | sail Yang's Blog</title>
   
 
 
@@ -197,240 +205,151 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/12/11/C_C++/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="sail Yang">
+      <meta itemprop="description" content="与怠惰作斗争，与溃散抗争到底">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sail Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          小数取指定精度.md
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-11 16:11:11 / 修改时间：17:05:14" itemprop="dateCreated datePublished" datetime="2021-12-11T16:11:11+08:00">2021-12-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">还行! 目前共计 38 篇日志。 继续努力。</span>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/11/C_C++/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/11/C_C++/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-24T14:50:31+08:00"
-              content="2021-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/24/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BE%9B%E7%BB%99%E4%B8%8E%E9%9C%80%E6%B1%82%E7%90%86%E8%AE%BA/" itemprop="url">
-            <span itemprop="name">供给与需求理论</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-22T08:17:46+08:00"
-              content="2021-07-22">
-          07-22
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/22/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%9B%B8%E4%BA%92%E4%BE%9D%E5%AD%98%E5%92%8C%E8%B4%B8%E6%98%93%E7%9A%84%E5%A5%BD%E5%A4%84/" itemprop="url">
-            <span itemprop="name">相互依存和贸易的好处</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-21T23:12:30+08:00"
-              content="2021-07-21">
-          07-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/21/C_C++/pta-1002-C%E8%A7%A3/" itemprop="url">
-            <span itemprop="name">pta 1002 C解</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-21T15:27:29+08:00"
-              content="2021-07-21">
-          07-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/21/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E4%BB%8Eprocesson%E7%9C%8B%E8%BE%B9%E9%99%85%E6%94%B6%E7%9B%8A/" itemprop="url">
-            <span itemprop="name">从processon看边际收益</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-20T09:55:50+08:00"
-              content="2021-07-20">
-          07-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/20/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA/" itemprop="url">
-            <span itemprop="name">经济学的方法论</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-17T12:30:17+08:00"
-              content="2021-07-17">
-          07-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/17/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E5%89%A9%E4%B8%8B%E5%85%AD%E5%A4%A7%E5%8E%9F%E7%90%86/" itemprop="url">
-            <span itemprop="name">十大原理之整体性六大原理</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-16T18:31:08+08:00"
-              content="2021-07-16">
-          07-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E7%BB%AA%E8%AE%BA/" itemprop="url">
-            <span itemprop="name">数据结构与算法绪论</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-16T09:19:30+08:00"
-              content="2021-07-16">
-          07-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/16/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E4%B8%AA%E4%BA%BA%E5%86%B3%E7%AD%96%E5%9B%9B%E5%A4%A7%E5%8E%9F%E7%90%86/" itemprop="url">
-            <span itemprop="name">十大原理之个人决策四大原理</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-15T18:05:29+08:00"
-              content="2021-07-15">
-          07-15
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/15/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%AD%A6%E4%B9%A0%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E7%90%86%E7%94%B1%E4%BB%A5%E5%8F%8A%E6%96%B9%E6%B3%95/" itemprop="url">
-            <span itemprop="name">学习经济学的理由以及方法</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-07-14T09:13:11+08:00"
-              content="2021-07-14">
-          07-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/07/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%A6%E4%B9%8B%E7%BE%8E/" itemprop="url">
-            <span itemprop="name">数学之美</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？</p>
+<p>  这个问题虽小，但是的确是我之前没有想过的。</p>
+<span id="more"></span>
+<h1 id="解决方法"><a class="markdownIt-Anchor" href="#解决方法"></a> 解决方法</h1>
+<p>  我们先来观察一下<strong>一个double型的浮点数强制转换成int型后会输出什么</strong>:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211161734.png" alt="image-20211211161725653" /></p>
+<p>  可以发现<u><strong>不管小数点后一位是&gt;5还是&lt;5都是直接舍弃取整</strong></u>。如果把double型的数据赋值给int型的数据，结果也是一样的：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211162005.png" alt="image-20211211162004999" /></p>
+<p>  如果我们想<strong>让强制转换的结果是四舍五入后的结果</strong>怎么办？比如说将<code>123.456</code>转换成<code>123</code>,将<code>123.756</code>转换成<code>124</code>。</p>
+<p>  很简单，我们加个0.5就行了,这样<code>x.0~x.4</code>的数据就变成了<code>x.5~x.9</code>,强制转化后还是x;<code>x.5~x.9</code>的数据会变成<code>(x+1).0~(x+1).4</code>，强制转化后就变成了<code>x+1</code>，这就达到了进位的效果。</p>
+<hr />
+<p>  知道这个方法后，我们想想该怎么利用这一特性来解决我们的问题：<strong>将浮点数四舍五入后保留到小数点第三位</strong>。</p>
+<p>  举个例子，假如我们现在有个double类型的数<code>123.45676</code>，要求四舍五入保留小数点后3位，也就是最后的结果是<code>123.457000000</code>。为了说清楚这个问题，我们先上代码，在来说明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> x = <span class="number">123.45676</span>;</span><br><span class="line"><span class="keyword">int</span> temp;</span><br><span class="line">temp = (x + <span class="number">0.0005</span>)*<span class="number">1000</span>;	<span class="comment">//x+0.0005=123.45726,*1000后就是123457.26，因为是赋值给int型变量，所以0.26被舍去，最后temp=123457</span></span><br><span class="line">x = temp/<span class="number">1000.0</span>;			<span class="comment">//x = 123.457</span></span><br></pre></td></tr></table></figure>
+<p>​	可以看到我们完成了将浮点数经过四舍五入后保留到了小数点后3位，这个过程是怎样的呢？我们来描述一下。</p>
+<blockquote>
+<p>  <code>x</code>为double型，值为123.45676。我们首先让它+了0.0005，(这在之前讲过了，是<strong>为了四舍五入进位</strong>)，此时<code>x = 123.45726</code>。然后我们将它×1000然后赋值给一个<code>int</code>变量<code>temp</code>，这样小数点第3位之后的数据就会被舍弃掉，此时<code>temp=123457</code>，我们要的答案是<code>123.457</code>，显然再除个1000赋值给<code>double</code>型变量就是我们要的答案了。</p>
+</blockquote>
+<p>  但是我们注意<strong>第4行为什么是<code>x = temp/1000.0</code>,<code>x = temp/1000</code>可以吗</strong>？我们可以实际运行一下:</p>
+<p>  首先是除<code>1000.0</code>的结果:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165732.png" alt="image-20211211165732481" /></p>
+<p>  然后是除<code>1000</code>的结果:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165828.png" alt="image-20211211165828026" /></p>
+<p>  显然<code>/1000</code>的结果是错的，因为**<code>/1000</code>是把这个表达式当成了int型的计算；而<code>/1000.0</code>是把这个表达式当作浮点数的运算**，要注意这个区别。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>  现在我们知道了将浮点数经过四舍五入转化成指定位数的方法了，我们来稍微总结一下：</p>
+<blockquote>
+<p>  假设我们现在有一个n位的<code>浮点数x</code>,要将它经过四舍五入保留到m位（m&lt;=n），那么我们就可以使用下列步骤:</p>
+<ol>
+<li>x = x + 5.0/(m+1)</li>
+<li>int temp = x*<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">10^m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">m</span></span></span></span></span></span></span></span></span></span></span></li>
+<li>x = temp / <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">10^m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">m</span></span></span></span></span></span></span></span></span></span></span><strong>.0</strong></li>
+</ol>
+</blockquote>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/15/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%8D%81/" rel="prev" title="王爽《汇编语言》实验十">
+      <i class="fa fa-chevron-left"></i> 王爽《汇编语言》实验十
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2021/07/page/2/">2</a><a class="extend next" rel="next" href="/archives/2021/07/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  
+  
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -477,6 +396,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text"> 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-text"> 解决方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text"> 总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
