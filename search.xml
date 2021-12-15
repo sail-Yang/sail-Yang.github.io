@@ -183,15 +183,15 @@
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165732.png" alt="image-20211211165732481" /></p>
 <p>然后是除<code>1000</code>的结果:</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120447.png" alt="image-20211211165828026" /></p>
-<p>显然<code>/1000</code>的结果是错的，因为**<code>/1000</code>是把这个表达式当成了int型的计算；而<code>/1000.0</code>是把这个表达式当作浮点数的运算**，要注意这个区别。</p>
+<p>显然<code>/1000</code>的结果是错的，<strong>因为<code>/1000</code>是把这个表达式当成了int型的计算；而<code>/1000.0</code>是把这个表达式当作浮点数的运算</strong>，要注意这个区别。</p>
 <h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
 <p>现在我们知道了将浮点数经过四舍五入转化成指定位数的方法了，我们来稍微总结一下：</p>
 <blockquote>
 <p>假设我们现在有一个n位的<code>浮点数x</code>,要将它经过四舍五入保留到m位（m&lt;=n），那么我们就可以使用下列步骤:</p>
 <ol>
 <li>x = x + 5.0/(m+1)</li>
-<li>int temp = x*10^m</li>
-<li>x = temp / 10^m**.0**</li>
+<li>int temp = x*（10^m）</li>
+<li>x = temp / （10^m）<strong>.0</strong></li>
 </ol>
 </blockquote>
 ]]></content>
