@@ -2397,11 +2397,11 @@
 </ul>
 <h2 id="进阶"><a class="markdownIt-Anchor" href="#进阶"></a> 进阶</h2>
 <h3 id="贪心"><a class="markdownIt-Anchor" href="#贪心"></a> 贪心</h3>
-<p>  如果现在有一段html:<code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;p&gt;this is content&lt;/p&gt;</code>。我们想匹配&lt;h1&gt;里的内容，我们就可以写正则表达式<code>&lt;h1&gt;.*&lt;/h1&gt;</code>，注意我们这个表达式写了两次h1,我们能不能不重复呢？</p>
+<p>  如果现在有一段html:<code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;p&gt;this is content&lt;/p&gt;</code>。我们想匹配<code>&lt;h1&gt;</code>里的内容，我们就可以写正则表达式<code>&lt;h1&gt;.*&lt;/h1&gt;</code>，注意我们这个表达式写了两次<code>h1</code>,我们能不能不重复呢？</p>
 <p>  假设我们现在这么写：<code>&lt;h1&gt;.*&gt;</code>,结果会是：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225221852.png" alt="示例一" /></p>
-<p>  可以看到正则引擎直接匹配到了最后一个<code>&gt;</code>,而不是在<code>&lt;/h1&gt;</code>的<code>&gt;</code>处停下，这就反映了正则引擎的特性：**正则表达式默认使用贪心模式，一次性匹配尽可能长的内容。所以在找到/h1后面的&gt;之后还会继续向前找。**那么有没有取消这种机制的方法呢？</p>
-<p>  我们可以将可以将正则改为<code>&lt;h1&gt;.*?&gt;</code>，这样引擎就会在第一次遇到&gt;的地方停下来。<font color=purple><strong>这里的<code>?</code>跟之前说的&quot;出现零次或一次&quot;不是一个意思，跟在<code>*</code>后面表示非贪心模式。</strong></font>(为了避免引入太多的特殊符号，所以复用了<code>?</code>。)</p>
+<p>  可以看到正则引擎直接匹配到了最后一个<code>&gt;</code>,而不是在<code>&lt;/h1&gt;</code>的<code>&gt;</code>处停下，这就反映了正则引擎的特性：**正则表达式默认使用贪心模式，一次性匹配尽可能长的内容。所以在找到<code>/h1</code>后面的<code>&gt;</code>之后还会继续向前找。**那么有没有取消这种机制的方法呢？</p>
+<p>  我们可以将可以将正则改为<code>&lt;h1&gt;.*?&gt;</code>，这样引擎就会在第一次遇到<code>&gt;</code>的地方停下来。<font color=purple><strong>这里的<code>?</code>跟之前说的&quot;出现零次或一次&quot;不是一个意思，跟在<code>*</code>后面表示非贪心模式。</strong></font>(为了避免引入太多的特殊符号，所以复用了<code>?</code>。)</p>
 <h3 id="引用"><a class="markdownIt-Anchor" href="#引用"></a> 引用</h3>
 <p>  现在给定一段 html <code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;h1&gt;this is content&lt;/h2&gt;</code>。这里第二个<code>&lt;h1&gt;</code>没有闭合，结束标签写成了<code>h2</code>。如果只想匹配正常结束的<code>h1</code>，那可以写成<code>&lt;(h1)&gt;.*&lt;/\1&gt;</code>。</p>
 <p>  这里有两点。</p>
