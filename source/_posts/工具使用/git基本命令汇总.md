@@ -5,7 +5,7 @@ tags:
     - git
 categories:
     - 工具使用
-    - 版本管理
+    - 杂项
 ---
 
 ![Git基本操作](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714084654.jpg)

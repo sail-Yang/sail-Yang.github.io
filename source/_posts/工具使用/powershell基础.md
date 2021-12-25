@@ -6,7 +6,7 @@ tags:
 - windows
 categories:
 - 工具使用
-- powershell
+- 杂项
 ---
 
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Vs-v110BqzY5lHywvBA7kRVJdJ6iCn5ESY0rpfjramokPTHI0ab2Zoejr2_9e3OWbFY&usqp=CAU" alt="PowerShell" style="zoom:150%;" />
