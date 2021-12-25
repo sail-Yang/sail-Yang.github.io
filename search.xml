@@ -2442,12 +2442,11 @@
 ]]></content>
       <categories>
         <category>工具使用</category>
-        <category>网络</category>
+        <category>杂项</category>
       </categories>
       <tags>
         <tag>正则表达式</tag>
-        <tag>爬虫</tag>
-        <tag>python</tag>
+        <tag>文本处理</tag>
       </tags>
   </entry>
 </search>
