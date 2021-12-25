@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="hg_BqBmE8KFJhGYegh31p8S8aqiv2WW50JhX1JsUj30" />
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Ma Shan Zheng:300,300italic,400,400italic,700,700italic|ZCOOL XiaoWei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"progsail.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="正则表达式的简单介绍   **正则表达式(regular expression)使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。**正则表达式在文本编辑器中广泛使用，其可以提供以下功能：  检查文本中是否含有指定的特征词 找出文中匹配特征词的位置 从文本中提取信息，比如：字符串的子串 修改文本    几乎所有的高级编程语言都支持正则表达式，一些编程语言（比如Perl，JavaScrip">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="https://progsail.com/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="sail Yang&#39;s Blog">
+<meta property="og:description" content="正则表达式的简单介绍   **正则表达式(regular expression)使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。**正则表达式在文本编辑器中广泛使用，其可以提供以下功能：  检查文本中是否含有指定的特征词 找出文中匹配特征词的位置 从文本中提取信息，比如：字符串的子串 修改文本    几乎所有的高级编程语言都支持正则表达式，一些编程语言（比如Perl，JavaScrip">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225212139.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225213745.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225214619.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225213038.png">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225221852.png">
+<meta property="article:published_time" content="2021-12-26T00:42:49.000Z">
+<meta property="article:modified_time" content="2021-12-25T14:43:13.199Z">
+<meta property="article:author" content="sail Yang">
+<meta property="article:tag" content="正则表达式">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225212139.png">
+
+<link rel="canonical" href="https://progsail.com/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>正则表达式 | sail Yang's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b39039cf0480fc7ace0048fd5a806193";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sail Yang's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://progsail.com/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="sail Yang">
+      <meta itemprop="description" content="与怠惰作斗争，与溃散抗争到底">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sail Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          正则表达式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-26 08:42:49" itemprop="dateCreated datePublished" datetime="2021-12-26T08:42:49+08:00">2021-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-25 22:43:13" itemprop="dateModified" datetime="2021-12-25T22:43:13+08:00">2021-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工具使用</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">网络</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="正则表达式的简单介绍"><a class="markdownIt-Anchor" href="#正则表达式的简单介绍"></a> 正则表达式的简单介绍</h2>
+<p>  **<code>正则表达式(regular expression)</code>使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。**正则表达式在文本编辑器中广泛使用，其可以提供以下功能：</p>
+<ul>
+<li>检查文本中是否含有指定的特征词</li>
+<li>找出文中匹配特征词的位置</li>
+<li>从文本中提取信息，比如：字符串的子串</li>
+<li>修改文本</li>
+</ul>
+<p>  几乎所有的高级编程语言都支持正则表达式，一些编程语言（比如Perl，JavaScript）还会检查正则表达式的语法。</p>
+<span id="more"></span>
+<h2 id="核心语法"><a class="markdownIt-Anchor" href="#核心语法"></a> 核心语法</h2>
+<p>  正则表达式中包含了一系列的字符，这些字符只能匹配它们本身。有一些被称为<code>元字符</code>的特殊字符，可以匹配一些特殊规则。我们先来讲讲普通字符。</p>
+<h3 id="字符"><a class="markdownIt-Anchor" href="#字符"></a> 字符</h3>
+<h4 id="普通字符"><a class="markdownIt-Anchor" href="#普通字符"></a> 普通字符</h4>
+<p>  <code>普通字符</code>包括没有显式指定为元字符的所有可打印和不可打印字符。这包括所有大写和小写字母、所有数字、所有标点符号和一些其他符号。为了下面说明方便，会进行一系列测试，我先贴出我的测试用例和<a target="_blank" rel="noopener" href="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225212139.png">测试工具</a>：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225212139.png" alt="image-20211225212131809" /></p>
+<ul>
+<li><code>[abcdefg]</code>：匹配[……]中所有字符，比如<code>[Bco]</code>会匹配<code>welcome to my Blog</code>中的所有的<code>c、o、B</code>。</li>
+<li><code>[^abcdefg]</code>：和第一个刚好相反，这个是除了<code>[……]</code>中的所有字符。</li>
+<li><code>[A-Z]</code>/<code>a-z</code>：匹配所有字母，第一个是大写字母，第二个是小写字母</li>
+<li><code>[\s\S]</code>：匹配所有字符，<code>\s</code>是所有空白字符（包括换行符），<code>\S</code>是所有非空白字符（不包括换行符）。</li>
+<li><code>\w</code>：匹配所有字母、数字和下划线，等价于<code>[a-zA-Z0-9_]</code></li>
+<li>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225213745.png" alt="图片来源会在最后注明" style="zoom:67%;" />
+</li>
+</ul>
+<h4 id="元字符"><a class="markdownIt-Anchor" href="#元字符"></a> 元字符</h4>
+<p>  元字符往往有着特殊的匹配规则，如果想要匹配它们的原义，可以使用<code>\</code>来转义，比如<code>\.</code>、<code>\?</code>等等。</p>
+<ul>
+<li><code>$</code>：匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 <code>\n</code>或 <code>\r</code></li>
+<li><code>( )</code>：标记一个子字符串的开始与结束，比如：</li>
+</ul>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225214619.png" alt="image-20211225214619664" /></p>
+<ul>
+<li><code>.</code>：匹配除了<code>\n,\r</code>之外的<strong>单个字符</strong>，其功能相当于<code>[^\n\r]</code>,测试如下：</li>
+</ul>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225213038.png" alt="image-20211225213038283" /></p>
+<ul>
+<li><code>|</code>：指明两项之间的一个选择，具有最低的优先级。</li>
+<li><code>[</code>/<code>&#123;</code>：标记中括号/大括号的开始</li>
+<li><code>^</code>：不在方括号中时，表示输入字符串开始的位置，和<code>$</code>对应；在方括号中时，表示不接受该方括号内字符的集合。</li>
+<li><code>*</code>/<code>+</code>/<code>?</code>:<code>*</code>匹配前面的字表达式0次或多次，<code>+</code>是1次或多次；<code>?</code>是1次或0次。这个是要重点说一下的，要不然容易云里雾里：
+<ul>
+<li><code>*</code>表示前面一个字符可以出现1次或多次，也可以不出现。比如<code>0*42</code>的重点就是0,可以是<code>42</code>、<code>042</code>,<code>00000042</code>。</li>
+<li><code>+</code>表示前面一个字符至少出现1次，比如<code>go+gle</code>，可以是<code>google</code>、<code>gooooogle</code>，但是不能是<code>ggle</code>。</li>
+<li><code>?</code>表示前面一个字符最多出现1次，比如<code>go+gle</code>，可以是<code>google</code>、<code>ggle</code>、但是不能是<code>gooooogle</code>。</li>
+</ul>
+</li>
+<li>像上面这三个叫<strong>限定符</strong>，其实还有一些限定符：
+<ul>
+<li><code>&#123;n&#125;</code>：n 是一个非负整数。匹配确定的 n 次。例如，‘o{2}’ 不能匹配 “Bob” 中的 ‘o’，但是能匹配 “food” 中的两个 o。</li>
+<li><code>&#123;n,&#125;</code>：至少匹配确定的 n 次。<code>o&#123;1,&#125;</code>等价于<code>o+</code></li>
+<li><code>&#123;n,m&#125;</code>：至少匹配n次，至多匹配m次。</li>
+</ul>
+</li>
+</ul>
+<h2 id="进阶"><a class="markdownIt-Anchor" href="#进阶"></a> 进阶</h2>
+<h3 id="贪心"><a class="markdownIt-Anchor" href="#贪心"></a> 贪心</h3>
+<p>  如果现在有一段html:<code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;p&gt;this is content&lt;/p&gt;</code>。我们想匹配<h1>里的内容，我们就可以写正则表达式<code>&lt;h1&gt;.*&lt;/h1&gt;</code>，注意我们这个表达式写了两次h1,我们能不能不重复呢？</p>
+<p>  假设我们现在这么写：<code>&lt;h1&gt;.*&gt;</code>,结果会是：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225221852.png" alt="示例一" /></p>
+<p>  可以看到正则引擎直接匹配到了最后一个<code>&gt;</code>,而不是在<code>&lt;/h1&gt;</code>的<code>&gt;</code>处停下，这就反映了正则引擎的特性：**正则表达式默认使用贪心模式，一次性匹配尽可能长的内容。所以在找到/h1后面的&gt;之后还会继续向前找。**那么有没有取消这种机制的方法呢？</p>
+<p>  我们可以将可以将正则改为<code>&lt;h1&gt;.*?&gt;</code>，这样引擎就会在第一次遇到&gt;的地方停下来。<font color=purple><strong>这里的<code>?</code>跟之前说的&quot;出现零次或一次&quot;不是一个意思，跟在<code>*</code>后面表示非贪心模式。</strong></font>(为了避免引入太多的特殊符号，所以复用了<code>?</code>。)</p>
+<h3 id="引用"><a class="markdownIt-Anchor" href="#引用"></a> 引用</h3>
+<p>  现在给定一段 html <code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;h1&gt;this is content&lt;/h2&gt;</code>。这里第二个<code>&lt;h1&gt;</code>没有闭合，结束标签写成了<code>h2</code>。如果只想匹配正常结束的<code>h1</code>，那可以写成<code>&lt;(h1)&gt;.*&lt;/\1&gt;</code>。</p>
+<p>  这里有两点。</p>
+<ul>
+<li>
+<p>前面的<code>h1</code>两边加了括号。</p>
+</li>
+<li>
+<p>在结尾的地方使用了<code>\1</code>来<strong>引用</strong>前面加括号的内容。</p>
+</li>
+</ul>
+<p> ** 正则引擎会为每个括号分配一个编号（从1开始记数），并记录括号的内容，可以使用<code>\+数字</code>的方式来引用。**这样的正则等价于<code>&lt;h1&gt;.*&lt;/h1&gt;</code>。</p>
+<p>  如果要匹配很多成对标签的话，引用的优势就体现出来了。例如<code>&lt;(h1|p|artice|div)&gt;.*?&lt;/\1&gt;</code>可以匹配<code>h1</code>、<code>p</code>、<code>article</code>和<code>div</code>四种闭合标签。</p>
+<h3 id="环视断言"><a class="markdownIt-Anchor" href="#环视断言"></a> 环视（断言）</h3>
+<p>  比如我们有字符串<code>foobarbarfoo</code>。下面将用大写字母表示想要匹配的内容。为了跟英语原文对应，我们规定当前字符<strong>右边为前</strong>（未处理），<strong>左边为后</strong>（已处理）。</p>
+<p>  如果只想匹配第一个出现的<code>bar</code>，也就是<code>fooBARbarfoo</code>。肯定不能只写成<code>bar</code>，因为第二个<code>bar</code>也会匹配到。我们希望正则引擎在每碰到一个<code>bar</code>的时候<strong>继续向前（右）看看</strong>还有没有<code>bar</code>，如果<strong>还有</strong>则说明不是第一个。所以，需要写成bar(?=bar)。 括号里以?开头，=表示检查是否<strong>出现</strong>， 因为是继续<strong>向前（右）看</strong>，所以叫做<strong>前向肯定环视</strong>（Look ahead positive）。</p>
+<p>  如果想匹配第二个<code>bar</code>也就是<code>foobarBARfoo</code>，则需要写成<code>bar(?!bar)</code>。也就是说查到<code>bar</code>只后还要继续<strong>向前（右）看</strong>，没有<code>bar</code>才算匹配到。因为是没有，所以叫<strong>前向否定环视</strong>（Look ahead negative）。</p>
+<p>  我还可以通过<strong>向后（左）看</strong>的办法来解决类似的问题。</p>
+<p>  如果想匹配第一个<code>bar</code>,也就是<code>fooBARbarfoo</code>，我们可以写成<code>(?&lt;=foo)bar</code>，这是告诉正则引擎在找到<code>bar</code>之后还要回顾一下有没有遇到<code>foo</code>，只有碰到才算匹配成功。因为需向**后（左）*<em>确定匹配成功，所以叫*<em>后向肯定环视</em></em>（Look behind positive）。</p>
+<p>  如果想匹配第二个<code>bar</code>，也就是<code>foobarBARfoo</code>，我们可以写成<code>(?&lt;!foo)bar</code>，这是让引擎在找到<code>bar</code>之后回顾一下有没有遇到过<code>foo</code>，没有碰到才算匹配成功。因为需要向**后（左）*<em>确定匹配不成功，所以叫*<em>后向否定环视</em></em>（Look behind negative）。</p>
+<p>  我们稍微回顾一下。所有的环视都需要用括号括起来，以<code>?</code>开始。匹配之后继续向<strong>前（右）*<em>检查叫前*<em>叫前向环视</em></em>，如果需要确保另一模式也匹配，叫</strong>肯定环视**，用=，否则是<strong>否定环视</strong>，用<code>!</code>；匹配之后继续向**后（左）*<em>检查叫*<em>后向环视</em></em>，为了跟前向有所区别，所以在<code>?</code>之后加了一个<code>&lt;</code>，为大家指明方向，肯定和否标记则跟前向一样。</p>
+<hr />
+<p>  理解了环视，我们还可以做一些更有意思的事情。</p>
+<p>  <strong>第一个，可以匹配单词的边界</strong>。一个单词两边都有空格。单词的左边界是一个虚拟的位置，它右边的字符肯定是匹配<code>\w</code>，它左边的内容肯定匹配<code>\W</code>。我们可以要求正则引擎<strong>同时向前看和向后看</strong>。所以可以写成<code>(?&lt;=\W)(?=\w)</code>。这里两个括号之间是空的，表示只匹配位置，不消耗内容。同样的，右边的边界也是个虚拟位置，它左边的字符肯定是匹配<code>\w</code>，它右边的字符肯定匹配<code>\W</code>的位置，所以可以写成<code>(?&lt;=\w)(?=\W)</code>。把这两个正则使用并集规则合到一起就是<code>(?&lt;=\W)(?=\w)|(?&lt;=\w)(?=\W)</code>，就可以匹配单词的左右边界。同样因为常用，人们把它简化成了<code>\b</code>。</p>
+<p>  也就是说\b匹配单词边界。正则\bbar只会匹配字符串foo bar中的bar，而不会匹配foobar中的bar。</p>
+<p>  <strong>第二个，可以匹配一行的开始和结束</strong>。一行的开始，顾名思义，就是第一个字符之前的位置，在它之前没有字符，在它之后是任意字符，所以我们可以写成<code>(?&lt;!.)(?=.)</code>。对于一行的结束，我们可以如法炮制，写成<code>(?&lt;=.)(?!.)</code>。同样因为常用，此二者被分别简化成了^和$。</p>
+<blockquote>
+<p>因为一行的开始跟结束非常特殊，正则引擎可以直接标记，根本用不到环视这样的大招。 我将它们放到一起讲只是为了逻辑上的统一。</p>
+</blockquote>
+<h2 id="参考文章"><a class="markdownIt-Anchor" href="#参考文章"></a> 参考文章</h2>
+<p>  以上内容是对一些文章的整理，只是一些基础的内容，详细内容可以去阅读下列引用的文章：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://taoshu.in/hello-regexp.html">正则表达式入门</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">正则表达式—维基百科</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2973436/regex-lookahead-lookbehind-and-atomic-groups/2973495#2973495">环视—StackOverflow</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/regexp/regexp-syntax.html">正则表达式教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://tool.oschina.net/regex/">开源中国—在线正则表达式测试</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag"># 正则表达式</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/24/%E6%9D%82%E8%B0%88/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3%E3%80%8A%E5%BF%83%E3%80%8B/" rel="prev" title="夏目漱石《心》">
+      <i class="fa fa-chevron-left"></i> 夏目漱石《心》
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="nav-text"> 正则表达式的简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%AF%AD%E6%B3%95"><span class="nav-text"> 核心语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6"><span class="nav-text"> 字符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%AD%97%E7%AC%A6"><span class="nav-text"> 普通字符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6"><span class="nav-text"> 元字符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6"><span class="nav-text"> 进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%BF%83"><span class="nav-text"> 贪心</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">里的内容，我们就可以写正则表达式&lt;h1&gt;.*&lt;&#x2F;h1&gt;，注意我们这个表达式写了两次h1,我们能不能不重复呢？
+  假设我们现在这么写：&lt;h1&gt;.*&gt;,结果会是：
+
+  可以看到正则引擎直接匹配到了最后一个&gt;,而不是在&lt;&#x2F;h1&gt;的&gt;处停下，这就反映了正则引擎的特性：**正则表达式默认使用贪心模式，一次性匹配尽可能长的内容。所以在找到&#x2F;h1后面的&gt;之后还会继续向前找。**那么有没有取消这种机制的方法呢？
+  我们可以将可以将正则改为&lt;h1&gt;.*?&gt;，这样引擎就会在第一次遇到&gt;的地方停下来。这里的?跟之前说的&quot;出现零次或一次&quot;不是一个意思，跟在*后面表示非贪心模式。(为了避免引入太多的特殊符号，所以复用了?。)
+ 引用
+  现在给定一段 html &lt;h1&gt;this is a title&lt;&#x2F;h1&gt;&lt;h1&gt;this is content&lt;&#x2F;h2&gt;。这里第二个&lt;h1&gt;没有闭合，结束标签写成了h2。如果只想匹配正常结束的h1，那可以写成&lt;(h1)&gt;.*&lt;&#x2F;\1&gt;。
+  这里有两点。
+
+
+前面的h1两边加了括号。
+
+
+在结尾的地方使用了\1来引用前面加括号的内容。
+
+
+ ** 正则引擎会为每个括号分配一个编号（从1开始记数），并记录括号的内容，可以使用\+数字的方式来引用。**这样的正则等价于&lt;h1&gt;.*&lt;&#x2F;h1&gt;。
+  如果要匹配很多成对标签的话，引用的优势就体现出来了。例如&lt;(h1|p|artice|div)&gt;.*?&lt;&#x2F;\1&gt;可以匹配h1、p、article和div四种闭合标签。
+ 环视（断言）
+  比如我们有字符串foobarbarfoo。下面将用大写字母表示想要匹配的内容。为了跟英语原文对应，我们规定当前字符右边为前（未处理），左边为后（已处理）。
+  如果只想匹配第一个出现的bar，也就是fooBARbarfoo。肯定不能只写成bar，因为第二个bar也会匹配到。我们希望正则引擎在每碰到一个bar的时候继续向前（右）看看还有没有bar，如果还有则说明不是第一个。所以，需要写成bar(?&#x3D;bar)。 括号里以?开头，&#x3D;表示检查是否出现， 因为是继续向前（右）看，所以叫做前向肯定环视（Look ahead positive）。
+  如果想匹配第二个bar也就是foobarBARfoo，则需要写成bar(?!bar)。也就是说查到bar只后还要继续向前（右）看，没有bar才算匹配到。因为是没有，所以叫前向否定环视（Look ahead negative）。
+  我还可以通过向后（左）看的办法来解决类似的问题。
+  如果想匹配第一个bar,也就是fooBARbarfoo，我们可以写成(?&lt;&#x3D;foo)bar，这是告诉正则引擎在找到bar之后还要回顾一下有没有遇到foo，只有碰到才算匹配成功。因为需向**后（左）*确定匹配成功，所以叫*后向肯定环视（Look behind positive）。
+  如果想匹配第二个bar，也就是foobarBARfoo，我们可以写成(?&lt;!foo)bar，这是让引擎在找到bar之后回顾一下有没有遇到过foo，没有碰到才算匹配成功。因为需要向**后（左）*确定匹配不成功，所以叫*后向否定环视（Look behind negative）。
+  我们稍微回顾一下。所有的环视都需要用括号括起来，以?开始。匹配之后继续向前（右）*检查叫前*叫前向环视，如果需要确保另一模式也匹配，叫肯定环视**，用&#x3D;，否则是否定环视，用!；匹配之后继续向**后（左）*检查叫*后向环视，为了跟前向有所区别，所以在?之后加了一个&lt;，为大家指明方向，肯定和否标记则跟前向一样。
+
+  理解了环视，我们还可以做一些更有意思的事情。
+  第一个，可以匹配单词的边界。一个单词两边都有空格。单词的左边界是一个虚拟的位置，它右边的字符肯定是匹配\w，它左边的内容肯定匹配\W。我们可以要求正则引擎同时向前看和向后看。所以可以写成(?&lt;&#x3D;\W)(?&#x3D;\w)。这里两个括号之间是空的，表示只匹配位置，不消耗内容。同样的，右边的边界也是个虚拟位置，它左边的字符肯定是匹配\w，它右边的字符肯定匹配\W的位置，所以可以写成(?&lt;&#x3D;\w)(?&#x3D;\W)。把这两个正则使用并集规则合到一起就是(?&lt;&#x3D;\W)(?&#x3D;\w)|(?&lt;&#x3D;\w)(?&#x3D;\W)，就可以匹配单词的左右边界。同样因为常用，人们把它简化成了\b。
+  也就是说\b匹配单词边界。正则\bbar只会匹配字符串foo bar中的bar，而不会匹配foobar中的bar。
+  第二个，可以匹配一行的开始和结束。一行的开始，顾名思义，就是第一个字符之前的位置，在它之前没有字符，在它之后是任意字符，所以我们可以写成(?&lt;!.)(?&#x3D;.)。对于一行的结束，我们可以如法炮制，写成(?&lt;&#x3D;.)(?!.)。同样因为常用，此二者被分别简化成了^和$。
+
+因为一行的开始跟结束非常特殊，正则引擎可以直接标记，根本用不到环视这样的大招。 我将它们放到一起讲只是为了逻辑上的统一。
+
+ 参考文章
+  以上内容是对一些文章的整理，只是一些基础的内容，详细内容可以去阅读下列引用的文章：
+
+正则表达式入门
+正则表达式—维基百科
+环视—StackOverflow
+正则表达式教程
+开源中国—在线正则表达式测试
+
+</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text"> 引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E8%A7%86%E6%96%AD%E8%A8%80"><span class="nav-text"> 环视（断言）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-text"> 参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="sail Yang"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">sail Yang</p>
+  <div class="site-description" itemprop="description">与怠惰作斗争，与溃散抗争到底</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sail-Yang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sail-Yang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1186599081@qq.com" title="E-Mail → mailto:1186599081@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-block">
+        <div class="links-of-blogroll-title">
+          <!-- modify icon to fire by szw -->
+          <i class="fa fa-history fa-" aria-hidden="true"></i>
+          近期文章
+        </div>
+        <ul class="links-of-blogroll-list">
+          
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+            <li class="recent_posts_li">
+              <a href="/" title="" target="_blank"></a>
+            </li>
+          
+        </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sail Yang</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'ACXvwk7p217craOCxA2G4PjX-MdYXbMMI',
+      appKey     : 'lBCQXXu3bCQ5MocqBE0V6rHa',
+      placeholder: "请举手发言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"moblie":{"show":true}});</script></body>
+</html>

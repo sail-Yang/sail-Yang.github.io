@@ -290,7 +290,7 @@
 ]]></content>
       <categories>
         <category>工具使用</category>
-        <category>版本管理</category>
+        <category>杂项</category>
       </categories>
       <tags>
         <tag>git</tag>
@@ -441,7 +441,7 @@
 ]]></content>
       <categories>
         <category>工具使用</category>
-        <category>powershell</category>
+        <category>杂项</category>
       </categories>
       <tags>
         <tag>powershell</tag>
@@ -2333,6 +2333,121 @@
       <tags>
         <tag>文学</tag>
         <tag>读后感</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>正则表达式</title>
+    <url>/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="正则表达式的简单介绍"><a class="markdownIt-Anchor" href="#正则表达式的简单介绍"></a> 正则表达式的简单介绍</h2>
+<p>  **<code>正则表达式(regular expression)</code>使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。**正则表达式在文本编辑器中广泛使用，其可以提供以下功能：</p>
+<ul>
+<li>检查文本中是否含有指定的特征词</li>
+<li>找出文中匹配特征词的位置</li>
+<li>从文本中提取信息，比如：字符串的子串</li>
+<li>修改文本</li>
+</ul>
+<p>  几乎所有的高级编程语言都支持正则表达式，一些编程语言（比如Perl，JavaScript）还会检查正则表达式的语法。</p>
+<span id="more"></span>
+<h2 id="核心语法"><a class="markdownIt-Anchor" href="#核心语法"></a> 核心语法</h2>
+<p>  正则表达式中包含了一系列的字符，这些字符只能匹配它们本身。有一些被称为<code>元字符</code>的特殊字符，可以匹配一些特殊规则。我们先来讲讲普通字符。</p>
+<h3 id="字符"><a class="markdownIt-Anchor" href="#字符"></a> 字符</h3>
+<h4 id="普通字符"><a class="markdownIt-Anchor" href="#普通字符"></a> 普通字符</h4>
+<p>  <code>普通字符</code>包括没有显式指定为元字符的所有可打印和不可打印字符。这包括所有大写和小写字母、所有数字、所有标点符号和一些其他符号。为了下面说明方便，会进行一系列测试，我先贴出我的测试用例和<a href="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225212139.png">测试工具</a>：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225212139.png" alt="image-20211225212131809" /></p>
+<ul>
+<li><code>[abcdefg]</code>：匹配[……]中所有字符，比如<code>[Bco]</code>会匹配<code>welcome to my Blog</code>中的所有的<code>c、o、B</code>。</li>
+<li><code>[^abcdefg]</code>：和第一个刚好相反，这个是除了<code>[……]</code>中的所有字符。</li>
+<li><code>[A-Z]</code>/<code>a-z</code>：匹配所有字母，第一个是大写字母，第二个是小写字母</li>
+<li><code>[\s\S]</code>：匹配所有字符，<code>\s</code>是所有空白字符（包括换行符），<code>\S</code>是所有非空白字符（不包括换行符）。</li>
+<li><code>\w</code>：匹配所有字母、数字和下划线，等价于<code>[a-zA-Z0-9_]</code></li>
+<li>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225213745.png" alt="图片来源会在最后注明" style="zoom:67%;" />
+</li>
+</ul>
+<h4 id="元字符"><a class="markdownIt-Anchor" href="#元字符"></a> 元字符</h4>
+<p>  元字符往往有着特殊的匹配规则，如果想要匹配它们的原义，可以使用<code>\</code>来转义，比如<code>\.</code>、<code>\?</code>等等。</p>
+<ul>
+<li><code>$</code>：匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 <code>\n</code>或 <code>\r</code></li>
+<li><code>( )</code>：标记一个子字符串的开始与结束，比如：</li>
+</ul>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225214619.png" alt="image-20211225214619664" /></p>
+<ul>
+<li><code>.</code>：匹配除了<code>\n,\r</code>之外的<strong>单个字符</strong>，其功能相当于<code>[^\n\r]</code>,测试如下：</li>
+</ul>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225213038.png" alt="image-20211225213038283" /></p>
+<ul>
+<li><code>|</code>：指明两项之间的一个选择，具有最低的优先级。</li>
+<li><code>[</code>/<code>&#123;</code>：标记中括号/大括号的开始</li>
+<li><code>^</code>：不在方括号中时，表示输入字符串开始的位置，和<code>$</code>对应；在方括号中时，表示不接受该方括号内字符的集合。</li>
+<li><code>*</code>/<code>+</code>/<code>?</code>:<code>*</code>匹配前面的字表达式0次或多次，<code>+</code>是1次或多次；<code>?</code>是1次或0次。这个是要重点说一下的，要不然容易云里雾里：
+<ul>
+<li><code>*</code>表示前面一个字符可以出现1次或多次，也可以不出现。比如<code>0*42</code>的重点就是0,可以是<code>42</code>、<code>042</code>,<code>00000042</code>。</li>
+<li><code>+</code>表示前面一个字符至少出现1次，比如<code>go+gle</code>，可以是<code>google</code>、<code>gooooogle</code>，但是不能是<code>ggle</code>。</li>
+<li><code>?</code>表示前面一个字符最多出现1次，比如<code>go+gle</code>，可以是<code>google</code>、<code>ggle</code>、但是不能是<code>gooooogle</code>。</li>
+</ul>
+</li>
+<li>像上面这三个叫<strong>限定符</strong>，其实还有一些限定符：
+<ul>
+<li><code>&#123;n&#125;</code>：n 是一个非负整数。匹配确定的 n 次。例如，‘o{2}’ 不能匹配 “Bob” 中的 ‘o’，但是能匹配 “food” 中的两个 o。</li>
+<li><code>&#123;n,&#125;</code>：至少匹配确定的 n 次。<code>o&#123;1,&#125;</code>等价于<code>o+</code></li>
+<li><code>&#123;n,m&#125;</code>：至少匹配n次，至多匹配m次。</li>
+</ul>
+</li>
+</ul>
+<h2 id="进阶"><a class="markdownIt-Anchor" href="#进阶"></a> 进阶</h2>
+<h3 id="贪心"><a class="markdownIt-Anchor" href="#贪心"></a> 贪心</h3>
+<p>  如果现在有一段html:<code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;p&gt;this is content&lt;/p&gt;</code>。我们想匹配<h1>里的内容，我们就可以写正则表达式<code>&lt;h1&gt;.*&lt;/h1&gt;</code>，注意我们这个表达式写了两次h1,我们能不能不重复呢？</p>
+<p>  假设我们现在这么写：<code>&lt;h1&gt;.*&gt;</code>,结果会是：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225221852.png" alt="示例一" /></p>
+<p>  可以看到正则引擎直接匹配到了最后一个<code>&gt;</code>,而不是在<code>&lt;/h1&gt;</code>的<code>&gt;</code>处停下，这就反映了正则引擎的特性：**正则表达式默认使用贪心模式，一次性匹配尽可能长的内容。所以在找到/h1后面的&gt;之后还会继续向前找。**那么有没有取消这种机制的方法呢？</p>
+<p>  我们可以将可以将正则改为<code>&lt;h1&gt;.*?&gt;</code>，这样引擎就会在第一次遇到&gt;的地方停下来。<font color=purple><strong>这里的<code>?</code>跟之前说的&quot;出现零次或一次&quot;不是一个意思，跟在<code>*</code>后面表示非贪心模式。</strong></font>(为了避免引入太多的特殊符号，所以复用了<code>?</code>。)</p>
+<h3 id="引用"><a class="markdownIt-Anchor" href="#引用"></a> 引用</h3>
+<p>  现在给定一段 html <code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;h1&gt;this is content&lt;/h2&gt;</code>。这里第二个<code>&lt;h1&gt;</code>没有闭合，结束标签写成了<code>h2</code>。如果只想匹配正常结束的<code>h1</code>，那可以写成<code>&lt;(h1)&gt;.*&lt;/\1&gt;</code>。</p>
+<p>  这里有两点。</p>
+<ul>
+<li>
+<p>前面的<code>h1</code>两边加了括号。</p>
+</li>
+<li>
+<p>在结尾的地方使用了<code>\1</code>来<strong>引用</strong>前面加括号的内容。</p>
+</li>
+</ul>
+<p> ** 正则引擎会为每个括号分配一个编号（从1开始记数），并记录括号的内容，可以使用<code>\+数字</code>的方式来引用。**这样的正则等价于<code>&lt;h1&gt;.*&lt;/h1&gt;</code>。</p>
+<p>  如果要匹配很多成对标签的话，引用的优势就体现出来了。例如<code>&lt;(h1|p|artice|div)&gt;.*?&lt;/\1&gt;</code>可以匹配<code>h1</code>、<code>p</code>、<code>article</code>和<code>div</code>四种闭合标签。</p>
+<h3 id="环视断言"><a class="markdownIt-Anchor" href="#环视断言"></a> 环视（断言）</h3>
+<p>  比如我们有字符串<code>foobarbarfoo</code>。下面将用大写字母表示想要匹配的内容。为了跟英语原文对应，我们规定当前字符<strong>右边为前</strong>（未处理），<strong>左边为后</strong>（已处理）。</p>
+<p>  如果只想匹配第一个出现的<code>bar</code>，也就是<code>fooBARbarfoo</code>。肯定不能只写成<code>bar</code>，因为第二个<code>bar</code>也会匹配到。我们希望正则引擎在每碰到一个<code>bar</code>的时候<strong>继续向前（右）看看</strong>还有没有<code>bar</code>，如果<strong>还有</strong>则说明不是第一个。所以，需要写成bar(?=bar)。 括号里以?开头，=表示检查是否<strong>出现</strong>， 因为是继续<strong>向前（右）看</strong>，所以叫做<strong>前向肯定环视</strong>（Look ahead positive）。</p>
+<p>  如果想匹配第二个<code>bar</code>也就是<code>foobarBARfoo</code>，则需要写成<code>bar(?!bar)</code>。也就是说查到<code>bar</code>只后还要继续<strong>向前（右）看</strong>，没有<code>bar</code>才算匹配到。因为是没有，所以叫<strong>前向否定环视</strong>（Look ahead negative）。</p>
+<p>  我还可以通过<strong>向后（左）看</strong>的办法来解决类似的问题。</p>
+<p>  如果想匹配第一个<code>bar</code>,也就是<code>fooBARbarfoo</code>，我们可以写成<code>(?&lt;=foo)bar</code>，这是告诉正则引擎在找到<code>bar</code>之后还要回顾一下有没有遇到<code>foo</code>，只有碰到才算匹配成功。因为需向**后（左）*<em>确定匹配成功，所以叫*<em>后向肯定环视</em></em>（Look behind positive）。</p>
+<p>  如果想匹配第二个<code>bar</code>，也就是<code>foobarBARfoo</code>，我们可以写成<code>(?&lt;!foo)bar</code>，这是让引擎在找到<code>bar</code>之后回顾一下有没有遇到过<code>foo</code>，没有碰到才算匹配成功。因为需要向**后（左）*<em>确定匹配不成功，所以叫*<em>后向否定环视</em></em>（Look behind negative）。</p>
+<p>  我们稍微回顾一下。所有的环视都需要用括号括起来，以<code>?</code>开始。匹配之后继续向<strong>前（右）*<em>检查叫前*<em>叫前向环视</em></em>，如果需要确保另一模式也匹配，叫</strong>肯定环视**，用=，否则是<strong>否定环视</strong>，用<code>!</code>；匹配之后继续向**后（左）*<em>检查叫*<em>后向环视</em></em>，为了跟前向有所区别，所以在<code>?</code>之后加了一个<code>&lt;</code>，为大家指明方向，肯定和否标记则跟前向一样。</p>
+<hr />
+<p>  理解了环视，我们还可以做一些更有意思的事情。</p>
+<p>  <strong>第一个，可以匹配单词的边界</strong>。一个单词两边都有空格。单词的左边界是一个虚拟的位置，它右边的字符肯定是匹配<code>\w</code>，它左边的内容肯定匹配<code>\W</code>。我们可以要求正则引擎<strong>同时向前看和向后看</strong>。所以可以写成<code>(?&lt;=\W)(?=\w)</code>。这里两个括号之间是空的，表示只匹配位置，不消耗内容。同样的，右边的边界也是个虚拟位置，它左边的字符肯定是匹配<code>\w</code>，它右边的字符肯定匹配<code>\W</code>的位置，所以可以写成<code>(?&lt;=\w)(?=\W)</code>。把这两个正则使用并集规则合到一起就是<code>(?&lt;=\W)(?=\w)|(?&lt;=\w)(?=\W)</code>，就可以匹配单词的左右边界。同样因为常用，人们把它简化成了<code>\b</code>。</p>
+<p>  也就是说\b匹配单词边界。正则\bbar只会匹配字符串foo bar中的bar，而不会匹配foobar中的bar。</p>
+<p>  <strong>第二个，可以匹配一行的开始和结束</strong>。一行的开始，顾名思义，就是第一个字符之前的位置，在它之前没有字符，在它之后是任意字符，所以我们可以写成<code>(?&lt;!.)(?=.)</code>。对于一行的结束，我们可以如法炮制，写成<code>(?&lt;=.)(?!.)</code>。同样因为常用，此二者被分别简化成了^和$。</p>
+<blockquote>
+<p>因为一行的开始跟结束非常特殊，正则引擎可以直接标记，根本用不到环视这样的大招。 我将它们放到一起讲只是为了逻辑上的统一。</p>
+</blockquote>
+<h2 id="参考文章"><a class="markdownIt-Anchor" href="#参考文章"></a> 参考文章</h2>
+<p>  以上内容是对一些文章的整理，只是一些基础的内容，详细内容可以去阅读下列引用的文章：</p>
+<ol>
+<li><a href="https://taoshu.in/hello-regexp.html">正则表达式入门</a></li>
+<li><a href="https://zh.wikipedia.org/zh-hans/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">正则表达式—维基百科</a></li>
+<li><a href="https://stackoverflow.com/questions/2973436/regex-lookahead-lookbehind-and-atomic-groups/2973495#2973495">环视—StackOverflow</a></li>
+<li><a href="https://www.runoob.com/regexp/regexp-syntax.html">正则表达式教程</a></li>
+<li><a href="https://tool.oschina.net/regex/">开源中国—在线正则表达式测试</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+        <category>网络</category>
+      </categories>
+      <tags>
+        <tag>正则表达式</tag>
+        <tag>爬虫</tag>
+        <tag>python</tag>
       </tags>
   </entry>
 </search>
