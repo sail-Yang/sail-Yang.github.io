@@ -2339,7 +2339,8 @@
     <title>正则表达式</title>
     <url>/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="正则表达式的简单介绍"><a class="markdownIt-Anchor" href="#正则表达式的简单介绍"></a> 正则表达式的简单介绍</h2>
-<p>  **<code>正则表达式(regular expression)</code>使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。**正则表达式在文本编辑器中广泛使用，其可以提供以下功能：</p>
+<p>  <code>正则表达式(regular expression)</code>使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。<br />
+  正则表达式在文本编辑器中广泛使用，其可以提供以下功能：</p>
 <ul>
 <li>检查文本中是否含有指定的特征词</li>
 <li>找出文中匹配特征词的位置</li>
@@ -2396,7 +2397,7 @@
 </ul>
 <h2 id="进阶"><a class="markdownIt-Anchor" href="#进阶"></a> 进阶</h2>
 <h3 id="贪心"><a class="markdownIt-Anchor" href="#贪心"></a> 贪心</h3>
-<p>  如果现在有一段html:<code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;p&gt;this is content&lt;/p&gt;</code>。我们想匹配<h1>里的内容，我们就可以写正则表达式<code>&lt;h1&gt;.*&lt;/h1&gt;</code>，注意我们这个表达式写了两次h1,我们能不能不重复呢？</p>
+<p>  如果现在有一段html:<code>&lt;h1&gt;this is a title&lt;/h1&gt;&lt;p&gt;this is content&lt;/p&gt;</code>。我们想匹配&lt;h1&gt;里的内容，我们就可以写正则表达式<code>&lt;h1&gt;.*&lt;/h1&gt;</code>，注意我们这个表达式写了两次h1,我们能不能不重复呢？</p>
 <p>  假设我们现在这么写：<code>&lt;h1&gt;.*&gt;</code>,结果会是：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211225221852.png" alt="示例一" /></p>
 <p>  可以看到正则引擎直接匹配到了最后一个<code>&gt;</code>,而不是在<code>&lt;/h1&gt;</code>的<code>&gt;</code>处停下，这就反映了正则引擎的特性：**正则表达式默认使用贪心模式，一次性匹配尽可能长的内容。所以在找到/h1后面的&gt;之后还会继续向前找。**那么有没有取消这种机制的方法呢？</p>
