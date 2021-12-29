@@ -96,19 +96,6 @@
       </tags>
   </entry>
   <entry>
-    <title>停止更新这一主题</title>
-    <url>/2021/09/05/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%81%9C%E6%AD%A2%E6%9B%B4%E6%96%B0%E8%BF%99%E4%B8%80%E4%B8%BB%E9%A2%98/</url>
-    <content><![CDATA[<p>业余经济学这一主题的理论部分就不写在博客上了，接下来的内容全部放到语雀上。</p>
-]]></content>
-      <categories>
-        <category>业余经济学</category>
-        <category>理论学习</category>
-      </categories>
-      <tags>
-        <tag>经济学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>十大原理之个人决策四大原理</title>
     <url>/2021/07/16/%E4%B8%9A%E4%BD%99%E7%BB%8F%E6%B5%8E%E5%AD%A6/%E5%8D%81%E5%A4%A7%E5%8E%9F%E7%90%86%E4%B9%8B%E4%B8%AA%E4%BA%BA%E5%86%B3%E7%AD%96%E5%9B%9B%E5%A4%A7%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<h2 id="什么是经济"><a class="markdownIt-Anchor" href="#什么是经济"></a> 什么是经济</h2>
@@ -304,12 +291,12 @@
 </li>
 <li>
 <p>方便搞钱（这个不是曼昆说的）</p>
-<p>​																																																																——曼昆</p>
+<p>​                                                                                                                                                                                                                                                                ——曼昆</p>
 </li>
 </ol>
 <p>总之，我了解经济学的主要目的是<strong>使用经济学的工具去指导我进行更好地决策，破除一些常见误区</strong>。看了知乎老铁的建议，熟读曼昆的《经济学原理》差不多就行了。</p>
 <h2 id="方法"><a class="markdownIt-Anchor" href="#方法"></a> 方法</h2>
-<p>​	额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
+<p>​    额，上面说了，我想用经济学去指导我的生活实践，而不是系统地学习，了解很多很多理论之类的，因此重点在于运用，而不是记忆一些专有名词，那么掌握这种能力，怎么做才好呢？</p>
 <p>就下面这个工作流：</p>
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715180428.png" alt="image-20210715180428340" style="zoom: 67%;" />
 ]]></content>
@@ -622,7 +609,7 @@
 <li><strong>方便</strong>：方便用户使用。</li>
 </ul>
 <p>那么，我们如何查找别名所指的真是cmdlet命令呢？</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;	//查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">//查看真名</span><br><span class="line"><span class="built_in">Get-Alias</span> <span class="literal">-name</span> <span class="built_in">ls</span></span><br><span class="line">//查看可用的别名，介绍两种方法</span><br><span class="line"><span class="built_in">dir</span> alias: | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Definition.Startswith(<span class="string">&quot;Get&quot;</span>)&#125;    //查找以Get开头命令的可用别名</span><br><span class="line"><span class="built_in">ls</span> alias: | <span class="built_in">Group-Object</span> definition | <span class="built_in">sort</span> <span class="literal">-Descending</span> Count</span><br></pre></td></tr></table></figure>
 <h1 id="调用入口的优先级"><a class="markdownIt-Anchor" href="#调用入口的优先级"></a> 调用入口的优先级</h1>
 <p>如果我们输入的命令，powershell识别不了，就会报错：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210911180921.png" alt="can't recognize" /></p>
@@ -757,7 +744,7 @@
     <title>vscode使用指南</title>
     <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>​	  最近在用VScode这款编辑器，为了最大化发挥这个工具的能力，需要记住一些不同的快捷键以及方法，这些玩意需要多用才能熟练掌握，为此，我想写个简易的对照手册，这样能够在我忘记的时候可以快速地查找到想要的命令，提高效率。</p>
+<p>​      最近在用VScode这款编辑器，为了最大化发挥这个工具的能力，需要记住一些不同的快捷键以及方法，这些玩意需要多用才能熟练掌握，为此，我想写个简易的对照手册，这样能够在我忘记的时候可以快速地查找到想要的命令，提高效率。</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211107172718.png" alt="Vscode" /></p>
 <span id="more"></span>
 <h1 id="vscode杂谈"><a class="markdownIt-Anchor" href="#vscode杂谈"></a> Vscode杂谈</h1>
@@ -880,7 +867,7 @@
 </tbody>
 </table>
 <h1 id="文件之间"><a class="markdownIt-Anchor" href="#文件之间"></a> 文件之间</h1>
-<p>​	有时候我们需要在不同的文件之间切换以及进行一些操作，下面讲讲关于这些的操作。</p>
+<p>​    有时候我们需要在不同的文件之间切换以及进行一些操作，下面讲讲关于这些的操作。</p>
 <h2 id="文件级操作"><a class="markdownIt-Anchor" href="#文件级操作"></a> 文件级操作</h2>
 <table>
 <thead>
@@ -964,7 +951,7 @@
     <url>/2021/08/10/C_C++/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。</p>
 <blockquote>
-<p>C语言声明的语法有时会带来严重的问题。						——K&amp;R</p>
+<p>C语言声明的语法有时会带来严重的问题。                        ——K&amp;R</p>
 </blockquote>
 <span id="more"></span>
 <h2 id="c语言声明模型如此晦涩的原因"><a class="markdownIt-Anchor" href="#c语言声明模型如此晦涩的原因"></a> C语言声明模型如此晦涩的原因</h2>
@@ -975,14 +962,14 @@
 </li>
 <li>
 <p>C出现一种设计哲学：<font color=purple><strong>要求对象的声明形式与它的使用形式尽可能相似</strong></font>。</p>
-<p>​		举个例子：int *p[3]声明了一个指向int的指针数组，并以*p[i]这样的表达式引用或使用指针所指向的int数据，所以它的声明形式和使用形式非常相似。这样设计的好处是：<font color=orange>操作符的优先级</font>在声明和使用时是一样的；缺点为它是在一个缺点上进行的改进，<font color=orange>操作符的优先级</font>也是C设计不当和复杂之处。</p>
-<p>​	“声明的形式和使用的形式相似”这种用法可能是C语言的独创，其他语言并没有采取这种方法。放在上个世纪6、70年代，这种设计都是不合理的，<strong>把两种截然不同的东西做成一个样子真的有必要吗</strong>？</p>
+<p>​        举个例子：int *p[3]声明了一个指向int的指针数组，并以*p[i]这样的表达式引用或使用指针所指向的int数据，所以它的声明形式和使用形式非常相似。这样设计的好处是：<font color=orange>操作符的优先级</font>在声明和使用时是一样的；缺点为它是在一个缺点上进行的改进，<font color=orange>操作符的优先级</font>也是C设计不当和复杂之处。</p>
+<p>​    “声明的形式和使用的形式相似”这种用法可能是C语言的独创，其他语言并没有采取这种方法。放在上个世纪6、70年代，这种设计都是不合理的，<strong>把两种截然不同的东西做成一个样子真的有必要吗</strong>？</p>
 </li>
 <li>
 <p>C声明最大的问题：<font color=purple><strong>无法以一种人们所习惯的自然方式从左向右阅读一个声明。</strong></font>特别是const,volatile出现之后，情况更糟了。举个例子：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*涉及指针和const的声明可能会出现几种不同的顺序*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> * i;			<span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> i_jelly;	<span class="comment">/*指针是只读的*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * <span class="keyword">const</span> i_jam;<span class="comment">/*指针和其所指的对象都是只读的*/</span></span><br></pre></td></tr></table></figure>
-<p>​		除此之外，C中风格似声明，但却没有标识符的情况，例如强制类型转换，形式参数声明显得没有必要，我们来看一个例子：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*强制转换成指向数组的指针*/</span></span><br><span class="line"><span class="keyword">char</span> (*j)[<span class="number">20</span>];</span><br><span class="line">j = (<span class="keyword">char</span> (*)[<span class="number">20</span>]) <span class="built_in">malloc</span>[<span class="number">20</span>];	<span class="comment">//作者所诟病的就是(*)的括号，显得十分多余</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*涉及指针和const的声明可能会出现几种不同的顺序*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * i;            <span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> * i;            <span class="comment">/*指针所指的对象是只读的*/</span></span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> i_jelly;    <span class="comment">/*指针是只读的*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * <span class="keyword">const</span> i_jam;<span class="comment">/*指针和其所指的对象都是只读的*/</span></span><br></pre></td></tr></table></figure>
+<p>​        除此之外，C中风格似声明，但却没有标识符的情况，例如强制类型转换，形式参数声明显得没有必要，我们来看一个例子：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*强制转换成指向数组的指针*/</span></span><br><span class="line"><span class="keyword">char</span> (*j)[<span class="number">20</span>];</span><br><span class="line">j = (<span class="keyword">char</span> (*)[<span class="number">20</span>]) <span class="built_in">malloc</span>[<span class="number">20</span>];    <span class="comment">//作者所诟病的就是(*)的括号，显得十分多余</span></span><br></pre></td></tr></table></figure>
 <p>这一节是这一章的开篇，作者指出了C语言声明设计不合理的地方，<strong>下面会详细介绍C语言声明相关知识，并且给出面对这种复杂声明的方法。</strong></p>
 </li>
 </ul>
@@ -1070,11 +1057,11 @@
 <ul>
 <li>
 <p>可以用其他类型说明符对宏类型名进行扩展，但对typedef所定义的类型名却不能这样做。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> apple int</span></span><br><span class="line">unsighed apple i;	<span class="comment">/*legal*/</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> peach;</span><br><span class="line">unsighed peach i;	<span class="comment">/*illeagl,你在想桃子吃*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> apple int</span></span><br><span class="line">unsighed apple i;    <span class="comment">/*legal*/</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> peach;</span><br><span class="line">unsighed peach i;    <span class="comment">/*illeagl,你在想桃子吃*/</span></span><br></pre></td></tr></table></figure>
 </li>
 <li>
 <p>在连续几个变量的声明中，用typedef定义的类型能够保证声明中所有的变量均为同一种类型，而用#define定义的类型则无法保证。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int_ptr int *</span></span><br><span class="line">int_ptr a,b;		<span class="comment">/*我们展开：int * a,b;其实只有a 为int*型，而b只是一个int类型。*/</span></span><br><span class="line"><span class="meta">#typedef int * int_ptr;</span></span><br><span class="line">int_ptr a,b			<span class="comment">/*这个时候a,b的类型都是指向int的指针*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int_ptr int *</span></span><br><span class="line">int_ptr a,b;        <span class="comment">/*我们展开：int * a,b;其实只有a 为int*型，而b只是一个int类型。*/</span></span><br><span class="line"><span class="meta">#typedef int * int_ptr;</span></span><br><span class="line">int_ptr a,b            <span class="comment">/*这个时候a,b的类型都是指向int的指针*/</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>这些就是typedef和define的区别。</p>
@@ -1124,7 +1111,7 @@
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
 <p>  额，最近在看《C++primer》，遇到一个很简单的循环输入：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(std::cin &gt;&gt; value)</span><br><span class="line">&#123;</span><br><span class="line">    sum += value </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都看了一遍，来这做个总结。</p>
+<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都一遍，来这做个总结。</p>
 <span id="more"></span>
 <p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" alt="image-20211002125045305" /></p>
@@ -1198,7 +1185,7 @@
 </blockquote>
 <p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" />
-<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
+<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。********</p>
 ]]></content>
       <categories>
         <category>操作系统</category>
@@ -1262,7 +1249,7 @@
 <li><strong>注意输出的空格问题</strong>。</li>
 </ul>
 <p>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line">    </span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">    	k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    	sum += k;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SIZE 1000</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *zimu[] = &#123;<span class="string">&quot;ling&quot;</span>,<span class="string">&quot;yi&quot;</span>,<span class="string">&quot;er&quot;</span>,<span class="string">&quot;san&quot;</span>,<span class="string">&quot;si&quot;</span>,<span class="string">&quot;wu&quot;</span>,<span class="string">&quot;liu&quot;</span>,<span class="string">&quot;qi&quot;</span>,<span class="string">&quot;ba&quot;</span>,<span class="string">&quot;jiu&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> num[MAX_SIZE];</span><br><span class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i,count,k,sum_arr[<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line">    gets(num);</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(num);i++)&#123;</span><br><span class="line">        k = num[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        sum += k;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        k = sum%<span class="number">10</span>;</span><br><span class="line">        sum_arr[count]=k;</span><br><span class="line">        sum = sum / <span class="number">10</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(k = count<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,zimu[sum_arr[k]]);</span><br><span class="line">        <span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后在贴一点，<strong>pta报&quot;运行时错误&quot;的时候对于C语言来说，很可能是数组越界了</strong>。</p>
 ]]></content>
       <categories>
@@ -1276,13 +1263,13 @@
   <entry>
     <title>结构体变量作为函数参数调用</title>
     <url>/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>​	在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
+    <content><![CDATA[<p>​    在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
 <p>我们先来声明一些变量：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> my_struct</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">double</span> j;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <span id="more"></span>
 <h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
 <p>如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">(my_struct struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    struct1.i = <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    my_struct struct2;</span><br><span class="line">    struct2.i = <span class="number">17</span>;</span><br><span class="line">    func1(struct2);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2.i);	</span><br><span class="line">    <span class="comment">/*result is 17*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">(my_struct struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    struct1.i = <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    my_struct struct2;</span><br><span class="line">    struct2.i = <span class="number">17</span>;</span><br><span class="line">    func1(struct2);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2.i);    </span><br><span class="line">    <span class="comment">/*result is 17*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变实参结构体的成员值怎么办</strong>？</p>
 <h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
 <h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
@@ -1292,7 +1279,7 @@
 <p>函数的参数传递类似于赋值，直接赋变量的值却不返回，肯定不会改变实参的值；但是，我们把指针作为参数呢？那就不一样了。</p>
 <p>我目前的理解是，用指针作为参数的确还是赋值，只不过赋的是指针的值（也就是地址）。（个人理解，未确定过正确与否）</p>
 <p>于是我们可以这么写：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(my_struct *struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*注意两种引用的书写方式*/</span></span><br><span class="line">    struct1-&gt;i = <span class="number">6</span>;	<span class="comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span></span><br><span class="line">    (*struct).i=<span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">my_struct *struct2,struct1;</span><br><span class="line">    struct2 = &amp;struct1;			<span class="comment">//一定要让指针有个归处(doge)</span></span><br><span class="line">struct1.i = <span class="number">17</span>;</span><br><span class="line">    func2(struct2);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2-&gt;i);	<span class="comment">/*result is 6*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(my_struct *struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*注意两种引用的书写方式*/</span></span><br><span class="line">    struct1-&gt;i = <span class="number">6</span>;    <span class="comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span></span><br><span class="line">    (*struct).i=<span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">my_struct *struct2,struct1;</span><br><span class="line">    struct2 = &amp;struct1;            <span class="comment">//一定要让指针有个归处(doge)</span></span><br><span class="line">struct1.i = <span class="number">17</span>;</span><br><span class="line">    func2(struct2);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct2-&gt;i);    <span class="comment">/*result is 6*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="总结结构体变量作为函数参数传递的3种方法"><a class="markdownIt-Anchor" href="#总结结构体变量作为函数参数传递的3种方法"></a> 总结：结构体变量作为函数参数传递的3种方法</h2>
 <p>我们来做一个小总结，其实将一个结构体变量中的数据传递给另一个函数就3种方法：</p>
 <h3 id="1-用结构体变量名直接作为参数值传递"><a class="markdownIt-Anchor" href="#1-用结构体变量名直接作为参数值传递"></a> 1、用结构体变量名直接作为参数（值传递）</h3>
@@ -1302,7 +1289,7 @@
 <h3 id="3-将结构体变量的地址作为实参"><a class="markdownIt-Anchor" href="#3-将结构体变量的地址作为实参"></a> 3、将结构体变量的地址作为实参</h3>
 <p>实际上思想和第二种一样，<strong>不同的地方在于传递地址的方式</strong>。这种方法是直接使用取地址符&amp;来获取结构体变量的地址，而不是第二种的做法：创建一个指针，指向结构体，然后传指针。</p>
 <p>下面是代码的具体实现：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(my_struct *struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*注意两种引用的书写方式*/</span></span><br><span class="line">    struct1-&gt;i = <span class="number">6</span>;		<span class="comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span></span><br><span class="line">    (*struct).i=<span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">	my_struct struct1;</span><br><span class="line">	struct1.i = <span class="number">17</span>;</span><br><span class="line">    func2(&amp;struct1);		<span class="comment">//这里是重点，注意与第二钟方法这里的对比</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct1.i);	<span class="comment">/*result is 6*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">(my_struct *struct1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*注意两种引用的书写方式*/</span></span><br><span class="line">    struct1-&gt;i = <span class="number">6</span>;        <span class="comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span></span><br><span class="line">    (*struct).i=<span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">    my_struct struct1;</span><br><span class="line">    struct1.i = <span class="number">17</span>;</span><br><span class="line">    func2(&amp;struct1);        <span class="comment">//这里是重点，注意与第二钟方法这里的对比</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,struct1.i);    <span class="comment">/*result is 6*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>C/C++</category>
@@ -1328,7 +1315,7 @@
 <hr />
 <p>知道这个方法后，我们想想该怎么利用这一特性来解决我们的问题：<strong>将浮点数四舍五入后保留到小数点第三位</strong>。</p>
 <p>举个例子，假如我们现在有个double类型的数<code>123.45676</code>，要求四舍五入保留小数点后3位，也就是最后的结果是<code>123.457000000</code>。为了说清楚这个问题，我们先上代码，在来说明：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">double x = 123.45676;</span><br><span class="line">int temp;</span><br><span class="line">temp = (x + 0.0005)*1000;	//x+0.0005=123.45726,*1000后就是123457.26，因为是赋值给int型变量，所以0.26被舍去，最后temp=123457</span><br><span class="line">x = temp/1000.0;			//x = 123.457</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">double x = 123.45676;</span><br><span class="line">int temp;</span><br><span class="line">temp = (x + 0.0005)*1000;    //x+0.0005=123.45726,*1000后就是123457.26，因为是赋值给int型变量，所以0.26被舍去，最后temp=123457</span><br><span class="line">x = temp/1000.0;            //x = 123.457</span><br></pre></td></tr></table></figure>
 <p>可以看到我们完成了将浮点数经过四舍五入后保留到了小数点后3位，这个过程是怎样的呢？我们来描述一下。</p>
 <blockquote>
 <p><code>x</code>为double型，值为123.45676。我们首先让它+了0.0005，(这在之前讲过了，是<strong>为了四舍五入进位</strong>)，此时<code>x = 123.45726</code>。然后我们将它×1000然后赋值给一个<code>int</code>变量<code>temp</code>，这样小数点第3位之后的数据就会被舍弃掉，此时<code>temp=123457</code>，我们要的答案是<code>123.457</code>，显然再除个1000赋值给<code>double</code>型变量就是我们要的答案了。</p>
@@ -1496,7 +1483,7 @@
 <li><code>Get_Pre(LinkList L,Node p)</code>返回输入结点的上一个结点。</li>
 </ul>
 <p>  下面我们来实现冒泡排序：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_Sort</span><span class="params">(LinkList L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,len;</span><br><span class="line">    len = Get_Len(L)		<span class="comment">//获得链表长度（不算头结点）</span></span><br><span class="line">    Node p,p_next,pre_p;</span><br><span class="line">    p = L-&gt;next;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;len<span class="number">-1</span>;i++)	<span class="comment">//设链表长度为6，最后一个不用操作，所以咱们5次就够了，</span></span><br><span class="line">    &#123;</span><br><span class="line">        j = len - i <span class="number">-1</span>;		<span class="comment">//每循环一次，我们就可以少比较一个元素，因为每次大的都会被拍到后面，没必要在比较</span></span><br><span class="line">        <span class="keyword">while</span>(p-&gt;next != <span class="literal">NULL</span> &amp;&amp; j!=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            j--;</span><br><span class="line">            p_next = p-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(p-&gt;data &gt; p_next-&gt;data)</span><br><span class="line">            &#123;</span><br><span class="line">                pre_p = GetPreNode(L,p);</span><br><span class="line">                pre_p-&gt;next = p_next;</span><br><span class="line">                p-&gt;next = p_next-&gt;next;</span><br><span class="line">                p_next-&gt;next = p;</span><br><span class="line">            &#125;<span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                p = p_next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        p = L-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_Sort</span><span class="params">(LinkList L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,len;</span><br><span class="line">    len = Get_Len(L)        <span class="comment">//获得链表长度（不算头结点）</span></span><br><span class="line">    Node p,p_next,pre_p;</span><br><span class="line">    p = L-&gt;next;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;len<span class="number">-1</span>;i++)    <span class="comment">//设链表长度为6，最后一个不用操作，所以咱们5次就够了，</span></span><br><span class="line">    &#123;</span><br><span class="line">        j = len - i <span class="number">-1</span>;        <span class="comment">//每循环一次，我们就可以少比较一个元素，因为每次大的都会被拍到后面，没必要在比较</span></span><br><span class="line">        <span class="keyword">while</span>(p-&gt;next != <span class="literal">NULL</span> &amp;&amp; j!=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            j--;</span><br><span class="line">            p_next = p-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(p-&gt;data &gt; p_next-&gt;data)</span><br><span class="line">            &#123;</span><br><span class="line">                pre_p = GetPreNode(L,p);</span><br><span class="line">                pre_p-&gt;next = p_next;</span><br><span class="line">                p-&gt;next = p_next-&gt;next;</span><br><span class="line">                p_next-&gt;next = p;</span><br><span class="line">            &#125;<span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                p = p_next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        p = L-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>数据结构和算法</category>
@@ -1632,7 +1619,7 @@
 <h4 id="链式存储结构"><a class="markdownIt-Anchor" href="#链式存储结构"></a> 链式存储结构</h4>
 <p>现实是不会像顺序存储结构这样想的这么简单和美好的，总会有人插队，也会有人要上厕所……卖你独自合约时常需要变化的结构，顺序存储是不科学的。现在如银行，餐厅都设置了排队系统，也就是每个人去了，先领一个号，等着叫号，叫到了去办理业务或者看病。在等待时，你爱干嘛就干嘛，只要及时回来就行，你需要关注的仅仅是前一个有没有被叫到，叫到了，下一个就是你，这就是链式存储结构。</p>
 <p>链式存储结构：把数据元素放到任意的存储单元里没这组存储单元可以是连续的，也可以是不连续的。数据元素的存储关系并不能反映其逻辑关系，因此<strong>需要用一个指针存放数据元素的地址</strong>，这样通过地址就饿可以找到相关联的数据元素的位置。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" />
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" />e</p>
 <h3 id="数据类型"><a class="markdownIt-Anchor" href="#数据类型"></a> 数据类型</h3>
 <p>数据类型：一组性质相同的值的集合及定义在此集合上的一些操作的总称。</p>
 <p>我们可以想想<strong>当初设计计算机语言的人为什么要考虑到数据类型</strong>呢？</p>
@@ -1640,7 +1627,7 @@
 <p>不同的计算机有不同的硬件系统，这就要求程序语言最终通过编译器或解释器转换成底层语言。可事实上，高绩语言的编程者不管最终程序运行在什么计算机上，他的目的是为了实现两个整型数字的运算，他才不关心整数在计算机内部是怎么表示的，这些操作是如何实现的，对高级语言开发者来说根本不重要。于是，我们就考虑不管什么样的计算机，什么计算机语言最终都会面临诸如整数运算、实数运算、字符运算等操作，我们可以考虑<strong>抽象出来</strong>。</p>
 <p>抽象是抽出问题的特征而忽略非本质的细节，是对具体事务的一个概括，这是一种思考问题的方式。我们对已有的数据类型进行抽象，就得到了抽象数据类型（ADT）。ADT不仅仅☞那些已有的数据类型，还可以是编程者自己定义的数据类型。</p>
 <p>事实上，抽象数据类型体现了程序设计中问题分解、抽象和信息隐藏的特性。ADT把实际问题中的问题分解为小规模且容易处理的问题，然后建立一个计算机能处理的数据类型，并把每个功能模块实现细节作为一个独立的单元，从而使具体实现过程隐藏起来。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">	数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">	操作1</span><br><span class="line">		初始条件</span><br><span class="line">		操作结果描述</span><br><span class="line">	操作2</span><br><span class="line">		…………</span><br><span class="line">	操作n</span><br><span class="line">		…………</span><br><span class="line">endADT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">    数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">    操作1</span><br><span class="line">        初始条件</span><br><span class="line">        操作结果描述</span><br><span class="line">    操作2</span><br><span class="line">        …………</span><br><span class="line">    操作n</span><br><span class="line">        …………</span><br><span class="line">endADT</span><br></pre></td></tr></table></figure>
 <h2 id="算法绪论"><a class="markdownIt-Anchor" href="#算法绪论"></a> 算法绪论</h2>
 <h3 id="算法和数据结构的关系"><a class="markdownIt-Anchor" href="#算法和数据结构的关系"></a> 算法和数据结构的关系</h3>
 <p>没了算法数据结构也能学，只不过算法会涉及数据结构的应用，在算法的学习中，反过来会加深对数据结构的理解。<strong>在数据结构的课程中，算法的出现是为了更好地理解数据结构，并不会详细谈及算法的方方面面，这也是本书的原则</strong>。</p>
@@ -1721,8 +1708,8 @@
 <li>机器执行指令的速度。（看硬件性能）</li>
 </ol>
 <p>抛开计算机硬件、软件的客观因素，我们发现一个程序运行的时间，依赖于<strong>算法的好坏</strong>和<strong>问题的输入规模（输入量的多少）</strong>。我们拿出之前高斯求和的两个算法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;			<span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;        <span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;            <span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);            <span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;        <span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;        <span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);            <span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
 <p>其实首尾都是一样的，我们只要看中间就行，孰优孰劣不言自明。我们可以发现，测定运行时间最可靠的方法就是<strong>计算对运行时间有消耗的基本操作的执行次数</strong>。<font color=purple>在分析程序的运行时间时，关键是把程序看作独立于程序设计语言的一种算法或者一系列步骤。</font></p>
 <p>我们举个小例子：算法A的输入规模是4n+8，算法B的输入规模是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2n^2+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。当n &lt;= 3时，A要差于B，但是n &gt; 3时，后面A的优势就越来越明显了，这里我们就引出一个函数渐进增长的例子：</p>
 <blockquote>
@@ -1777,7 +1764,7 @@
 <hr />
 <p>  当先生看到自己的好友K生活贫困，知道他脾气倔，不肯接受施舍，于是让他住到自己的住所，<strong>这是善</strong>；当K的利益与他的利益冲突时，他又用先告白这一手段击溃自己的朋友，<strong>这是恶</strong>。此时的先生，<strong>发觉自己已然成了像叔父那样的恶人</strong>！这就是作者想要表达的一个观点，也是先生之后与我的对话中体现过的观点：</p>
 <blockquote>
-<p>​	<strong>社会上并没有天生的坏人，很多人都是关键时刻突然变成坏人，因此不可不提防。</strong></p>
+<p>​    <strong>社会上并没有天生的坏人，很多人都是关键时刻突然变成坏人，因此不可不提防。</strong></p>
 </blockquote>
 <p>  这就体现了小说的标题《心》，人心的复杂性与自我的矛盾。K自杀后，先生惭愧至极，有一种强烈的负罪感。这罪恶感的枷锁此后束缚了先生数十年，让先生始终陷在孤寂与罪恶的泥潭之中，之所以没有早早自杀，也全是因为需要给小姐（也就是妻）依靠的臂膀。（因为小姐的母亲临终前将妻托付给了他）</p>
 <p>  我觉得先生和K这两人有许多地方相似，比如把自己封闭起来，K很少像他人吐露心声，即使是先生；先生自从被叔父背叛的事之后，也对别人不信任，一直把自己封闭起来（全文都有体现），即使是自己的妻子也是只字未露。**这两人的死又都是因为负罪感和自我矛盾，而又因为“自闭”，不断折磨自己，最终走向自杀的路，可见两人多么地相似！！！**两人的遗书结尾都是一句话：</p>

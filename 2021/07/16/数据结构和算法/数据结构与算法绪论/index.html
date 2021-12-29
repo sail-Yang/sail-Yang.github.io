@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181618.png">
 <meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210716181633.png">
 <meta property="article:published_time" content="2021-07-16T10:31:08.000Z">
-<meta property="article:modified_time" content="2021-09-04T12:59:09.725Z">
+<meta property="article:modified_time" content="2021-12-27T05:01:04.893Z">
 <meta property="article:author" content="sail Yang">
 <meta property="article:tag" content="DS">
 <meta name="twitter:card" content="summary">
@@ -246,7 +246,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-04 20:59:09" itemprop="dateModified" datetime="2021-09-04T20:59:09+08:00">2021-09-04</time>
+                <time title="修改时间：2021-12-27 13:01:04" itemprop="dateModified" datetime="2021-12-27T13:01:04+08:00">2021-12-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -350,7 +350,7 @@
 <h4 id="链式存储结构"><a class="markdownIt-Anchor" href="#链式存储结构"></a> 链式存储结构</h4>
 <p>现实是不会像顺序存储结构这样想的这么简单和美好的，总会有人插队，也会有人要上厕所……卖你独自合约时常需要变化的结构，顺序存储是不科学的。现在如银行，餐厅都设置了排队系统，也就是每个人去了，先领一个号，等着叫号，叫到了去办理业务或者看病。在等待时，你爱干嘛就干嘛，只要及时回来就行，你需要关注的仅仅是前一个有没有被叫到，叫到了，下一个就是你，这就是链式存储结构。</p>
 <p>链式存储结构：把数据元素放到任意的存储单元里没这组存储单元可以是连续的，也可以是不连续的。数据元素的存储关系并不能反映其逻辑关系，因此<strong>需要用一个指针存放数据元素的地址</strong>，这样通过地址就饿可以找到相关联的数据元素的位置。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" />
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210715155924.png" alt="image-20210715155924813" style="zoom:80%;" />e</p>
 <h3 id="数据类型"><a class="markdownIt-Anchor" href="#数据类型"></a> 数据类型</h3>
 <p>数据类型：一组性质相同的值的集合及定义在此集合上的一些操作的总称。</p>
 <p>我们可以想想<strong>当初设计计算机语言的人为什么要考虑到数据类型</strong>呢？</p>
@@ -358,7 +358,7 @@
 <p>不同的计算机有不同的硬件系统，这就要求程序语言最终通过编译器或解释器转换成底层语言。可事实上，高绩语言的编程者不管最终程序运行在什么计算机上，他的目的是为了实现两个整型数字的运算，他才不关心整数在计算机内部是怎么表示的，这些操作是如何实现的，对高级语言开发者来说根本不重要。于是，我们就考虑不管什么样的计算机，什么计算机语言最终都会面临诸如整数运算、实数运算、字符运算等操作，我们可以考虑<strong>抽象出来</strong>。</p>
 <p>抽象是抽出问题的特征而忽略非本质的细节，是对具体事务的一个概括，这是一种思考问题的方式。我们对已有的数据类型进行抽象，就得到了抽象数据类型（ADT）。ADT不仅仅☞那些已有的数据类型，还可以是编程者自己定义的数据类型。</p>
 <p>事实上，抽象数据类型体现了程序设计中问题分解、抽象和信息隐藏的特性。ADT把实际问题中的问题分解为小规模且容易处理的问题，然后建立一个计算机能处理的数据类型，并把每个功能模块实现细节作为一个独立的单元，从而使具体实现过程隐藏起来。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">	数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">	操作1</span><br><span class="line">		初始条件</span><br><span class="line">		操作结果描述</span><br><span class="line">	操作2</span><br><span class="line">		…………</span><br><span class="line">	操作n</span><br><span class="line">		…………</span><br><span class="line">endADT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ADT 抽象数据类型名</span><br><span class="line">Data</span><br><span class="line">    数据元素之间逻辑关系的定义</span><br><span class="line">Operation</span><br><span class="line">    操作1</span><br><span class="line">        初始条件</span><br><span class="line">        操作结果描述</span><br><span class="line">    操作2</span><br><span class="line">        …………</span><br><span class="line">    操作n</span><br><span class="line">        …………</span><br><span class="line">endADT</span><br></pre></td></tr></table></figure>
 <h2 id="算法绪论"><a class="markdownIt-Anchor" href="#算法绪论"></a> 算法绪论</h2>
 <h3 id="算法和数据结构的关系"><a class="markdownIt-Anchor" href="#算法和数据结构的关系"></a> 算法和数据结构的关系</h3>
 <p>没了算法数据结构也能学，只不过算法会涉及数据结构的应用，在算法的学习中，反过来会加深对数据结构的理解。<strong>在数据结构的课程中，算法的出现是为了更好地理解数据结构，并不会详细谈及算法的方方面面，这也是本书的原则</strong>。</p>
@@ -439,8 +439,8 @@
 <li>机器执行指令的速度。（看硬件性能）</li>
 </ol>
 <p>抛开计算机硬件、软件的客观因素，我们发现一个程序运行的时间，依赖于<strong>算法的好坏</strong>和<strong>问题的输入规模（输入量的多少）</strong>。我们拿出之前高斯求和的两个算法：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;			<span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;		<span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;		<span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);			<span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> c, sum =<span class="number">0</span>;n = <span class="number">100</span>;        <span class="comment">//执行1次</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>;i &lt; = n;i++)&#123;</span><br><span class="line">    sum = sum + i;            <span class="comment">//执行n次</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);            <span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, n = <span class="number">100</span>;        <span class="comment">//执行1次</span></span><br><span class="line">sum = (<span class="number">1</span> + n) * n/<span class="number">2</span>;        <span class="comment">//执行1次</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,sum);            <span class="comment">//执行1次</span></span><br></pre></td></tr></table></figure>
 <p>其实首尾都是一样的，我们只要看中间就行，孰优孰劣不言自明。我们可以发现，测定运行时间最可靠的方法就是<strong>计算对运行时间有消耗的基本操作的执行次数</strong>。<font color=purple>在分析程序的运行时间时，关键是把程序看作独立于程序设计语言的一种算法或者一系列步骤。</font></p>
 <p>我们举个小例子：算法A的输入规模是4n+8，算法B的输入规模是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2n^2+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。当n &lt;= 3时，A要差于B，但是n &gt; 3时，后面A的优势就越来越明显了，这里我们就引出一个函数渐进增长的例子：</p>
 <blockquote>
@@ -562,7 +562,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
