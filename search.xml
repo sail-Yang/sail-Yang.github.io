@@ -1387,13 +1387,45 @@
     <title>2022</title>
     <url>/2022/01/01/%E6%9D%82%E8%B0%88/2022/</url>
     <content><![CDATA[<p>  2022我对自己的期望只有一句话：保持谦卑的心，潜心钻研自己感兴趣的技术。</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220101191242.png" alt="" /></p>
 ]]></content>
       <categories>
         <category>杂谈</category>
       </categories>
       <tags>
         <tag>record</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C的程序设计风格和效率问题</title>
+    <url>/2022/01/15/C_C++/C%E8%AF%AD%E8%A8%80%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AE%9E%E7%8E%B0%E2%80%94%E5%BC%95%E8%A8%80/</url>
+    <content><![CDATA[<h1 id="程序设计风格"><a class="markdownIt-Anchor" href="#程序设计风格"></a> 程序设计风格</h1>
+<p>  程序设计风格规则的目的是<strong>力求最大限度地增加程序的可读性和可理解性</strong>，如果改变惯例有助于让复杂代码变得更可读，完全可以违反“规则”。</p>
+<span id="more"></span>
+<ul>
+<li>
+<p>局部变量的命名应该尽量短一点，全局变量和函数名可以长一点。</p>
+</li>
+<li>
+<p>变量的声明最好放在变量第一次使用的地方的附近。</p>
+</li>
+<li>
+<p>过程和函数名应该尽量反映出完成的工作和返回值。</p>
+</li>
+<li>
+<p>变量或者函数例程起名时，每个单词的首字母最好大写。</p>
+</li>
+<li>
+<p>设计良好的程序其实并不需要太多的注释，因为围绕对应代码块的正文代替了注释，所以<strong>推荐最低限度地使用注释</strong>。仅当进行解释时（解释数据结构的细节、算法的特例和异常情况），再使用<strong>清晰的</strong>注释。</p>
+</li>
+</ul>
+<h1 id="效率问题"><a class="markdownIt-Anchor" href="#效率问题"></a> 效率问题</h1>
+<p> 我们经常想让程序变得更快，于是不断地对代码进行微调，以此来让程序变得quicker。但是这实际上没什么必要，因为要让程序更快，难免要让程序变得更大，更复杂，这会给维护与修改带来困难。除非程序特别慢，否则<strong>我们只要让足够快就行，而不一定要尽可能快。</strong><br />  那么我们什么时候进行微调呢？<br />  如果<strong>我们要修改的地方占总运行时间的占比较大的时候就可以进行微调</strong>，这样收益比较大；如果不是，微调就没有什么意义。比如说<strong>I/O占了程序运行总时间的60%,在搜索例程中节省1%是无意义的</strong>。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
       </tags>
   </entry>
 </search>
