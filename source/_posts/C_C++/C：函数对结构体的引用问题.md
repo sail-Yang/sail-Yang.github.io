@@ -7,7 +7,7 @@ categories:
   - C/C++
 ---
 
-​	在学DS的时候，编写函数遇到点小问题，就是关于**结构体变量作为函数参数调用**的，所以我想写一篇来总结一下。
+​    在学DS的时候，编写函数遇到点小问题，就是关于**结构体变量作为函数参数调用**的，所以我想写一篇来总结一下。
 
 我们先来声明一些变量：
 
@@ -35,7 +35,7 @@ int main()
     my_struct struct2;
     struct2.i = 17;
     func1(struct2);
-    printf("%d",struct2.i);	
+    printf("%d",struct2.i);    
     /*result is 17*/
 }
 ```
@@ -62,17 +62,17 @@ int main()
 void func2(my_struct *struct1)
 {
     /*注意两种引用的书写方式*/
-    struct1->i = 6;	//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i
+    struct1->i = 6;    //可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i
     (*struct).i=6;
 }
 int main()
 {
     int num;
 my_struct *struct2,struct1;
-    struct2 = &struct1;			//一定要让指针有个归处(doge)
+    struct2 = &struct1;            //一定要让指针有个归处(doge)
 struct1.i = 17;
     func2(struct2);
-printf("%d",struct2->i);	/*result is 6*/
+printf("%d",struct2->i);    /*result is 6*/
     return 0;
 }
 ```
@@ -99,17 +99,16 @@ printf("%d",struct2->i);	/*result is 6*/
 void func2(my_struct *struct1)
 {
     /*注意两种引用的书写方式*/
-    struct1->i = 6;		//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i
+    struct1->i = 6;        //可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i
     (*struct).i=6;
 }
 int main()
 {
     int num;
-	my_struct struct1;
-	struct1.i = 17;
-    func2(&struct1);		//这里是重点，注意与第二钟方法这里的对比
-	printf("%d",struct1.i);	/*result is 6*/
+    my_struct struct1;
+    struct1.i = 17;
+    func2(&struct1);        //这里是重点，注意与第二钟方法这里的对比
+    printf("%d",struct1.i);    /*result is 6*/
     return 0;
 }
 ```
-

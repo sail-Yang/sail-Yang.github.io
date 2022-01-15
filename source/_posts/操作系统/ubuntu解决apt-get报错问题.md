@@ -38,7 +38,7 @@ sudo dpkg --configure -a
 sudo apt update
 ```
 
-##  解决方法2(未亲测)
+## 解决方法2(未亲测)
 
 这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？
 
@@ -47,4 +47,3 @@ sudo apt update
 ```shell
 sudo killall apt apt-get
 ```
-

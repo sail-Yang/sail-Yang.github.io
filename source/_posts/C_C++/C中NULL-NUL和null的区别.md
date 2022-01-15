@@ -37,4 +37,3 @@ categories:
 我们知道，万物皆可对象，null在有些语言里就<font color=red>**表示对象还未赋值，对象为空，可以理解为"没有对象"**</font>。
 
 Do you understand?😲
-
