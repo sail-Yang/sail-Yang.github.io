@@ -11,11 +11,11 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="SailYang,"> 
     <meta name="description" content="为者常成，行者常至, 前言
-  今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？
+今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？
   这个问题虽小，但是的确是我之前没有想过的。
 
  解决方法
-  ,"> 
+我们先来,"> 
     <meta name="author" content="sail Yang"> 
     <link rel="alternative" href="atom.xml" title="sail Yang&#39;s Blog" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.ico"> 
@@ -27,11 +27,11 @@
     <meta name="twitter:card" content="summary"/>
     <meta name="twitter:title" content="浮点数取指定精度 - sail Yang&#39;s Blog"/>
     <meta name="twitter:description" content="为者常成，行者常至, 前言
-  今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？
+今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？
   这个问题虽小，但是的确是我之前没有想过的。
 
  解决方法
-  ,"/>
+我们先来,"/>
     
     
     
@@ -40,11 +40,11 @@
     <meta property="og:type" content="object"/>
     <meta property="og:title" content="浮点数取指定精度 - sail Yang&#39;s Blog"/>
     <meta property="og:description" content="为者常成，行者常至, 前言
-  今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？
+今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？
   这个问题虽小，但是的确是我之前没有想过的。
 
  解决方法
-  ,"/>
+我们先来,"/>
     
 <link rel="stylesheet" href="/css/diaspora.css">
 
@@ -83,16 +83,17 @@
         </div>
         <div class="content markdown">
             <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？<br />
+<p>今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？<br />
   这个问题虽小，但是的确是我之前没有想过的。</p>
 <span id="more"></span>
 <h1 id="解决方法"><a class="markdownIt-Anchor" href="#解决方法"></a> 解决方法</h1>
-<p>  我们先来观察一下<strong>一个double型的浮点数强制转换成int型后会输出什么</strong>:</p>
+<p>我们先来观察一下<strong>一个double型的浮点数强制转换成int型后会输出什么</strong>:</p>
 <img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120458.png" title="" alt="image-20211211161725653" data-align="center">
-<p>  可以发现<strong>不管小数点后一位是&gt;5还是&lt;5都是直接舍弃取整</strong>。如果把double型的数据赋值给int型的数据，结果也是一样的：</p>
+<p>可以发现<strong>不管小数点后一位是&gt;5还是&lt;5都是直接舍弃取整</strong>。如果把double型的数据赋值给int型的数据，结果也是一样的：</p>
 <img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120527.png" alt="image-20211215120527831" style="zoom:80%;" data-align="center" width="574">
-<p>  如果我们想<strong>让强制转换的结果是四舍五入后的结果</strong>怎么办？比如说将<code>123.456</code>转换成<code>123</code>,将<code>123.756</code>转换成<code>124</code>。<br />
+<p>如果我们想<strong>让强制转换的结果是四舍五入后的结果</strong>怎么办？比如说将<code>123.456</code>转换成<code>123</code>,将<code>123.756</code>转换成<code>124</code>。<br />
   很简单，我们加个0.5就行了,这样<code>x.0~x.4</code>的数据就变成了<code>x.5~x.9</code>,强制转化后还是x;<code>x.5~x.9</code>的数据会变成<code>(x+1).0~(x+1).4</code>，强制转化后就变成了<code>x+1</code>，这就达到了进位的效果。</p>
+<hr />
 <hr />
 <p>  知道这个方法后，我们想想该怎么利用这一特性来解决我们的问题：<strong>将浮点数四舍五入后保留到小数点第三位</strong>。</p>
 <p>  举个例子，假如我们现在有个double类型的数<code>123.45676</code>，要求四舍五入保留小数点后3位，也就是最后的结果是<code>123.457000000</code>。为了说清楚这个问题，我们先上代码，在来说明：</p>
