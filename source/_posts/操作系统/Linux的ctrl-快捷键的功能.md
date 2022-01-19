@@ -4,17 +4,18 @@ date: 2021-10-02 12:41:13
 tags:
 - Linux
 - Ubuntu
-- ctrl
+- 教程
 categories:
 - 操作系统
 - Linux
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220116200808.png
 ---
 
 # 前言
 
-&emsp;&emsp;额，最近在看《C++primer》，遇到一个很简单的循环输入：
+&emsp;&emsp;最近在看《C++primer》，遇到一个很简单的循环输入：
 
-```c++
+```cpp
 while(std::cin >> value)
 {
     sum += value 
@@ -27,7 +28,7 @@ while(std::cin >> value)
 
 &emsp;&emsp;首先说明一下，在Linux中可以用`stty -a`命令查看终端的快捷键配置，效果如下：
 
-![image-20211002125045305](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" title="" alt="image-20211002125045305" data-align="center">
 
 &emsp;&emsp;关于stty的详细内容，下面会说。
 
@@ -37,23 +38,23 @@ while(std::cin >> value)
 
 &emsp;&emsp;这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" />
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" data-align="center">
 
-我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用`Ctrl+Z`，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：
+&emsp;&emsp;我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用`Ctrl+Z`，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：
 
-![image-20211002131411566](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" title="" alt="image-20211002131411566" data-align="center">
 
-等我想继续执行这个程序的时候呢，输入`fg`，就可以回到这个程序：
+&emsp;&emsp;等我想继续执行这个程序的时候呢，输入`fg`，就可以回到这个程序：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851"  />
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851" data-align="center">
 
-其实`Ctrl Z`就是把当前这个进程挂到后台，我们可以用`fg %编号`来把这个进程重新召回到前台来，比如说我们输入`fg %2`就是把编号为2的进程召回到前台：
+&emsp;&emsp;其实`Ctrl Z`就是把当前这个进程挂到后台，我们可以用`fg %编号`来把这个进程重新召回到前台来，比如说我们输入`fg %2`就是把编号为2的进程召回到前台：
 
-![image-20211002131920966](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" title="" alt="image-20211002131920966" data-align="center">
 
 `fg`既然是召回前台，那么有没有后台命令呢？当然有，后台就是`bg`，我们可以用`bg`命令查看后台的情况：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" />
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" data-align="center">
 
 ## Ctrl + C
 
@@ -65,19 +66,19 @@ while(std::cin >> value)
 
 &emsp;&emsp;我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：
 
-![image-20211002132722906](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" title="" alt="image-20211002132722906" data-align="center">
 
 &emsp;&emsp;请问我现在如何<font color=purple>**优雅地结束输入？**</font>按下`ctrl D`就行了。
 
-![image-20211002133025989](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" title="" alt="image-20211002133025989" data-align="center">
 
 &emsp;&emsp;其实`ctrl D`就发送了一个`exit`信号，我们可以用它来退出root权限。比如我现在登入root:
 
-![image-20211002133243103](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" title="" alt="image-20211002133243103" data-align="center">
 
 &emsp;&emsp;按下`ctrl D`，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:
 
-![image-20211002133452812](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png)
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" title="" alt="image-20211002133452812" data-align="center">
 
 ## 其它的ctrl快捷键
 
@@ -97,6 +98,6 @@ while(std::cin >> value)
 
 &emsp;&emsp;如果想查看目前终端快捷键的配置，可以使用`stty -a`：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" />
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" data-align="center">
 
-&emsp;&emsp;一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：`eof = ^D`的意思就是`ctrl D`会执行`eof`命令。那么，我们怎么修改命令呢？可以使用 `stty 命令名 快捷键`来更改。********
+&emsp;&emsp;一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：`eof = ^D`的意思就是`ctrl D`会执行`eof`命令。那么，我们怎么修改命令呢？可以使用 `stty 命令名 快捷键`来更改。
