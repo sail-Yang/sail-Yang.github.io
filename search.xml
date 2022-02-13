@@ -40,6 +40,31 @@
       </tags>
   </entry>
   <entry>
+    <title>C中NULL,NUL和null的区别</title>
+    <url>/2021/08/07/CppAndC/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>  之前在看别人代码时，看到别人用了个NUL，我心里纳闷：C语言中空指针不是用NULL表示吗？NUL是什么鬼西东？我把他的代码运行一下，发现根本运行不了……心里在想这家伙是不是少打了一个L🤣，看到他后面都这么写，我心里就产生了疑惑……</p>
+<span id="more"></span>
+<p>  今天在看书的时候，看到了这么一段话：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210807211918.png" alt="image-20210807211917816" style="zoom:67%;" />
+<p>  我擦，还真有NUL这种写法……我又去查了一下，<strong>发现NUL其实就是’\0’的意思😅，其本质是字符</strong>（character）。</p>
+<p>  而我们的老熟人NULL呢，其实是宏定义，展开之后呢是<strong>空指针常量</strong>。在C语言中，NULL常常被下面这样定义：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">NULL</span>    <span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token number">0</span><span class="token punctuation">)</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>  也就是说NULL 是一个 void *类型的指针(pointers)。</p>
+<p>  注意，NULL和null又是不一样的，null是一种概念的统称，不是C标准里的指针常量或者字符。</p>
+<hr />
+<p>  最后，再来说一个骚气的隐喻😏：</p>
+<p><font color=purple><strong>当有人给你发null是什么意思呢？</strong></font></p>
+<p>  我们知道，万物皆可对象，null在有些语言里就<font color=red><strong>表示对象还未赋值，对象为空，可以理解为&quot;没有对象&quot;</strong></font>。</p>
+<p>Do you understand?😲</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言声明的问题</title>
     <url>/2021/08/10/CppAndC/C%E8%AF%AD%E8%A8%80%E5%A3%B0%E6%98%8E%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>  这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。</p>
@@ -266,182 +291,6 @@ struct1<span class="token punctuation">.</span>i <span class="token operator">=<
       </tags>
   </entry>
   <entry>
-    <title>内存越界引用和缓冲区溢出问题</title>
-    <url>/2022/01/24/CppAndC/%E5%86%85%E5%AD%98%E8%B6%8A%E7%95%8C%E5%BC%95%E7%94%A8%E5%92%8C%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  今天在看CSAPP 3.10节的时候看到了一个熟悉的问题:</p>
-<blockquote>
-<p>如果gets()函数读入的字符数超过了字符数组的界的时候，会发生什么呢？</p>
-</blockquote>
-<p>  我在昨天整理以前的C语言笔记的时候刚刚好试验了一下，试验的过程如下：</p>
-<blockquote>
-<p>假如我执行下面这段代码:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  分别输入下面这些数据:</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">abcde
-abcdef
-abcdefghijk
-abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  <code>puts</code>输出的都是全的，说明C的gets()和puts()根本就没有检查机制，<code>gets()</code><strong>写入的字符串肯定覆盖了str后面的内容</strong>。</p>
-</blockquote>
-<p>  昨天也就调试了一下，并没有细想，比如gets()的实现是什么，覆盖的内容会是什么？会不会造成什么严重的后果？</p>
-<p>  今天看CSAPP的时候刚好看到差不多的内容，并且作者指出这种越界问题会导致缓冲区溢出，有许多病毒就是利用缓冲区溢出进行攻击的。</p>
-<p>  所以今天想好好思考思考这个问题。</p>
-<hr />
-<blockquote>
-<p>  在这里插一句，最好不要使用<code>gets()</code>，而是使用<code>fgets()</code>,其函数原型为：<code>char * fgets(char *_Buffer, int _MaxCount, FILE *_Stream)</code>。</p>
-<p>  连gcc都会提示这么做🤣:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124114756.png" title="" alt="" width="631">
-</blockquote>
-<hr />
-<h1 id="缓冲区溢出"><a class="markdownIt-Anchor" href="#缓冲区溢出"></a> 缓冲区溢出</h1>
-<p> 我们首先来简单看下C语言过程调用中的通用栈帧结构（详细内容见CSAPP）:</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124120906.png" alt="" data-align="center" width="246">
-<p>  现在有这样一段程序:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
-<span class="token keyword">void</span> <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-	<span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  我们用<code>objdump -d</code>来反汇编一下，看看程序给<code>gets()</code> 分配了多少空间:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122123.png" alt="" /></p>
-<p>  <code>sub $0x10,%rsp</code>告诉我们，分配了<strong>16个字节的空间</strong>。用CSAPP中的方式，我们可以列出安全区域和危险区域：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122641.png" alt="" /></p>
-<p>  也就是说，只要输入15个字符以内，不会有严重后果，但是<strong>如果超过了，没有保护机制的话，存储的返回地址就会被破坏。返回的时候就会跳转到一个莫名其妙的地方。</strong></p>
-<hr />
-<h1 id="缓冲区溢出的攻击与对抗全部来自csapp"><a class="markdownIt-Anchor" href="#缓冲区溢出的攻击与对抗全部来自csapp"></a> 缓冲区溢出的攻击与对抗（全部来自CSAPP）</h1>
-<blockquote>
-<p>  一些病毒就使用缓冲区溢出来<strong>让程序执行它本来不愿意执行的函数</strong>。比如输入给程序一个字符串，这个字符串中包含了可执行代码的字节编码（被称为<code>exploit code</code>），另外，还有一些字节会用一个指向攻击代码的指针覆盖返回地址。那么，执行<code>ret</code>就会跳转到攻击代码。</p>
-<p>比如说1988.11的Internet蠕虫病毒（详细见CSAPP）</p>
-</blockquote>
-<hr />
-<p>  下面重点介绍<strong>GCC对于缓冲区溢出的保护机制</strong>。</p>
-<h2 id="栈随机化"><a class="markdownIt-Anchor" href="#栈随机化"></a> 栈随机化</h2>
-<p>  前面提到了攻击者除了注入<code>exploit code</code>，还要插入指向这段code的指针，这显然需要知道存放这个字符串的栈地址。之所以能够实现，就是<strong>因为以前栈地址是非常容易预测的，在不同机器里，栈的位置都差不多</strong>。这也是为什么<strong>1988年的蠕虫病毒</strong>只要确定一个Web服务器所使用的栈空间，就能对许多机器进行攻击。这种现象叫作<code>安全单一化</code>。</p>
-<p>  栈随机化的思想就是<strong>使得栈的位置在每次程序运行的时候都有变化</strong>。其实现方法是：</p>
-<blockquote>
-<p>  程序开始时在栈上分配随机的空间，然后程序使用这段空间之后的空间，这样就能起到随机的作用。</p>
-</blockquote>
-<p>  在64位Linux上，不断运行下面这个程序，就能看到这种栈地址变化:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">long</span> local<span class="token punctuation">;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"local at %p\n"</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>local<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124125125.png" alt="" /></p>
-<blockquote>
-<p>这种方法属于更大的一类技术，这类技术叫ASLR（地址空间布局随机化）。但是也有办法对付ASLR，比如一种操作叫<a href="https://en.wikipedia.org/wiki/NOP_slide">nop sled</a>.</p>
-</blockquote>
-<h2 id="栈破坏检测"><a class="markdownIt-Anchor" href="#栈破坏检测"></a> 栈破坏检测</h2>
-<p>  GCC在产生的代码中加入了一种机制来检测缓冲区越界，其思想也很简单，就是在局部缓冲区和状态区之间放一个哨兵值（不知道为什么叫<code>canary</code>,金丝雀😅），这个是随机产生的。</p>
-<p>  在恢复寄存器状态和返回之前，程序会检查这个值是否被改变了，如果是，就直接中止。如果我们想取消这种检测，可以加参数<code>-fno-stack-protector</code>。</p>
-<blockquote>
-<p>  我们选三组不同长度的字符串进行测试，看看结果如何:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124121426.png" alt="" /></p>
-<p><code>stack smashing detected</code>:在程序函数中，数组越界访问，在程序运行时没出现问题，但当函数return的时候就会出现上面的错误。</p>
-<p>我感觉这个就是那个&quot;金丝雀&quot;检测。</p>
-</blockquote>
-<h2 id="限制可执行代码的区域"><a class="markdownIt-Anchor" href="#限制可执行代码的区域"></a> 限制可执行代码的区域</h2>
-<p>  就不细讲了，之后应该会学到。</p>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Buffer Overflow</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C中NULL,NUL和null的区别</title>
-    <url>/2021/08/07/CppAndC/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<p>  之前在看别人代码时，看到别人用了个NUL，我心里纳闷：C语言中空指针不是用NULL表示吗？NUL是什么鬼西东？我把他的代码运行一下，发现根本运行不了……心里在想这家伙是不是少打了一个L🤣，看到他后面都这么写，我心里就产生了疑惑……</p>
-<span id="more"></span>
-<p>  今天在看书的时候，看到了这么一段话：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210807211918.png" alt="image-20210807211917816" style="zoom:67%;" />
-<p>  我擦，还真有NUL这种写法……我又去查了一下，<strong>发现NUL其实就是’\0’的意思😅，其本质是字符</strong>（character）。</p>
-<p>  而我们的老熟人NULL呢，其实是宏定义，展开之后呢是<strong>空指针常量</strong>。在C语言中，NULL常常被下面这样定义：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">NULL</span>    <span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token number">0</span><span class="token punctuation">)</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>  也就是说NULL 是一个 void *类型的指针(pointers)。</p>
-<p>  注意，NULL和null又是不一样的，null是一种概念的统称，不是C标准里的指针常量或者字符。</p>
-<hr />
-<p>  最后，再来说一个骚气的隐喻😏：</p>
-<p><font color=purple><strong>当有人给你发null是什么意思呢？</strong></font></p>
-<p>  我们知道，万物皆可对象，null在有些语言里就<font color=red><strong>表示对象还未赋值，对象为空，可以理解为&quot;没有对象&quot;</strong></font>。</p>
-<p>Do you understand?😲</p>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>浮点数取指定精度</title>
-    <url>/2021/12/11/CppAndC/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？<br />
-  这个问题虽小，但是的确是我之前没有想过的。</p>
-<span id="more"></span>
-<h1 id="解决方法"><a class="markdownIt-Anchor" href="#解决方法"></a> 解决方法</h1>
-<p>我们先来观察一下<strong>一个double型的浮点数强制转换成int型后会输出什么</strong>:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120458.png" title="" alt="image-20211211161725653" data-align="center">
-<p>可以发现<strong>不管小数点后一位是&gt;5还是&lt;5都是直接舍弃取整</strong>。如果把double型的数据赋值给int型的数据，结果也是一样的：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120527.png" alt="image-20211215120527831" style="zoom:80%;" data-align="center" width="574">
-<p>如果我们想<strong>让强制转换的结果是四舍五入后的结果</strong>怎么办？比如说将<code>123.456</code>转换成<code>123</code>,将<code>123.756</code>转换成<code>124</code>。<br />
-  很简单，我们加个0.5就行了,这样<code>x.0~x.4</code>的数据就变成了<code>x.5~x.9</code>,强制转化后还是x;<code>x.5~x.9</code>的数据会变成<code>(x+1).0~(x+1).4</code>，强制转化后就变成了<code>x+1</code>，这就达到了进位的效果。</p>
-<hr />
-<p>  知道这个方法后，我们想想该怎么利用这一特性来解决我们的问题：<strong>将浮点数四舍五入后保留到小数点第三位</strong>。</p>
-<p>  举个例子，假如我们现在有个double类型的数<code>123.45676</code>，要求四舍五入保留小数点后3位，也就是最后的结果是<code>123.457000000</code>。为了说清楚这个问题，我们先上代码，在来说明：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">double</span> x <span class="token operator">=</span> <span class="token number">123.45676</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> temp<span class="token punctuation">;</span>
-temp <span class="token operator">=</span> <span class="token punctuation">(</span>x <span class="token operator">+</span> <span class="token number">0.0005</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">1000</span><span class="token punctuation">;</span>    <span class="token comment">//x+0.0005=123.45726,*1000后就是123457.26，因为是赋值给int型变量，所以0.26被舍去，最后temp=123457</span>
-x <span class="token operator">=</span> temp<span class="token operator">/</span><span class="token number">1000.0</span><span class="token punctuation">;</span>            <span class="token comment">//x = 123.457</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  可以看到我们完成了将浮点数经过四舍五入后保留到了小数点后3位，这个过程是怎样的呢？我们来描述一下。</p>
-<blockquote>
-<p><code>x</code>为double型，值为123.45676。我们首先让它+了0.0005，(这在之前讲过了，是<strong>为了四舍五入进位</strong>)，此时<code>x = 123.45726</code>。然后我们将它×1000然后赋值给一个<code>int</code>变量<code>temp</code>，这样小数点第3位之后的数据就会被舍弃掉，此时<code>temp=123457</code>，我们要的答案是<code>123.457</code>，显然再除个1000赋值给<code>double</code>型变量就是我们要的答案了。</p>
-</blockquote>
-<p>  但是我们注意<strong>第4行为什么是<code>x = temp/1000.0</code>,<code>x = temp/1000</code>可以吗</strong>？我们可以实际运行一下:</p>
-<p>  首先是除<code>1000.0</code>的结果:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165732.png" title="" alt="image-20211211165732481" data-align="center">
-<p>  然后是除<code>1000</code>的结果:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120447.png" title="" alt="image-20211211165828026" data-align="center">
-<p>  显然<code>/1000</code>的结果是错的，<strong>因为<code>/1000</code>是把这个表达式当成了int型的计算；而<code>/1000.0</code>是把这个表达式当作浮点数的运算</strong>，要注意这个区别。</p>
-<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
-<p>  现在我们知道了将浮点数经过四舍五入转化成指定位数的方法了，我们来稍微总结一下：</p>
-<blockquote>
-<p>  假设我们现在有一个n位的<code>浮点数x</code>,要将它经过四舍五入保留到m位（m&lt;=n），那么我们就可以使用下列步骤:</p>
-<ol>
-<li>x = x + 5.0/(m+1)</li>
-<li>int temp = x*（10^m）</li>
-<li>x = temp / （10^m）<strong>.0</strong></li>
-</ol>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Programming Language</category>
-        <category>C</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>无符号数和有符号数的类型转换问题</title>
     <url>/2022/01/17/CppAndC/%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0%E4%B8%8E%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
     <content><![CDATA[<h1 id="有符号数转为无符号数"><a class="markdownIt-Anchor" href="#有符号数转为无符号数"></a> 有符号数转为无符号数</h1>
@@ -523,332 +372,154 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
       </tags>
   </entry>
   <entry>
-    <title>Masters of Doom</title>
-    <url>/2022/01/21/Talk/Masters%20of%20Doom/</url>
-    <content><![CDATA[<p>  今天看完了一本传记——<a href="https://book.douban.com/subject/1152971/">Doom启世录（Masters of Doom）</a>，这本书主要讲述了两个约翰（<a href="https://www.zhihu.com/topic/19633003/hot">约翰·卡马克</a>和<a href="https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E7%BD%97%E6%A2%85%E6%B4%9B/317162">约翰·罗梅洛</a>）及其伙伴们一起制作游戏的故事，包括他们的少时经历、创办<code>id Software</code>公司以及制作无数重量级游戏的故事。</p>
-<hr />
-<h1 id="two-johns"><a class="markdownIt-Anchor" href="#two-johns"></a> Two Johns</h1>
-<p>  这本书重点围绕卡马克和罗梅洛展开，他们是id Software公司的核心人物，也是截然不同的两个人。</p>
-<p>  卡神是技术大神，id Software公司一系列引起游戏文化浪潮的重量级游戏，比如一开始的危险的戴夫、指挥官基恩、德军总部3D，还有经典的<strong>Doom、Quake</strong>等这些游戏都是依托于卡神的<strong>游戏引擎</strong>，正是卡神那犹入无人之境的<strong>图像编程技术</strong>，创造出了一个个领先于行业水平的引擎，甚至带动了显卡的发展。<br />
-  为什么卡神能这么🐂🍺呢？我稍微总结了一下：</p>
-<ul>
-<li>
-<p>第一点，毫无疑问是对图像编程的热爱，正是这一点驱动他不断地深入学习编程技术。</p>
-</li>
-<li>
-<p>卡神极度自律和专注，他的生活可以说和机器人差不多，十分的规律。在写引擎的时候，卡神的注意力十分集中，比如说一次有人故意在旁边放🐱片，卡神都没什么反应……还有就是他新婚度蜜月都要带上电脑，因为还要工作……</p>
-</li>
-<li>
-<p>活在当下，卡神从来不回去怀念过去的作品和成就，而是勇攀高峰，不断超越自己。一开始，当他做出了平滑卷轴效果，这已经是行业领先的了，他却没有满足，而是继续研发2.5D，3D的游戏引擎，以及逼真的光影效果，纵观全书，可以看见他的这么一个过程，真的是不断超越自己，把过去的成就看得一文不值。在觉得自己已经达到图形编程的禅宗境界时（已经没有什么好创新的了，只剩下不断的优化），他又跑去造火箭了，最近好像在搞VR。</p>
-</li>
-</ul>
-<p>  卡神还真是让人敬仰的偶像啊😆😆😆😆😆</p>
-<hr />
-<p>  那个时期，id Software公司之所以那么成功是因为创造出了许多重量级的游戏，而游戏光靠一个游戏引擎是不够的，还需要设计师、画师等一系列人去创作，而另一位约翰——罗梅洛就是一个顶尖的游戏设计师和游戏玩家，他也是一个程序员，因此经常和卡神讨论引擎。  罗梅洛也是id Software的灵魂人物，他与卡神是一种两者不能缺其一的关系，罗梅洛能够让卡马克的游戏引擎发挥最大的性能和特点，而卡马克的游戏引擎能让罗梅洛实现那些天才的游戏设计。除此之外，两人的性格也是互补的，卡神低调，对成就视若不见；罗梅洛喜欢造势，喜欢在媒体面前大肆宣扬，吹牛皮。</p>
-<p>  当罗梅洛因为过于投入在玩游戏和当明星而被其公司的兄弟们解雇后，id SoftWare公司也渐渐走了下坡路。</p>
-<hr />
-<h1 id="id之梦"><a class="markdownIt-Anchor" href="#id之梦"></a> id之梦</h1>
-<p>  id Software 就如许多创业神话一样已然是过眼烟云，我也不想去论这个公司的是非成败，比如什么公司管理问题，为什么走下坡路等等。</p>
-<p>  这本书之所以打动我，是因为这群年轻人，为了自己的游戏梦想，奉献自己的青春。一个公司里，大家有着共同的兴趣和爱好，大家一同工作与玩游戏，每个人都知道自己要什么，要干什么。在书里能充分感受到这种氛围。</p>
-<p>  我们不如问问自己，我们知道自己最喜欢什么吗？知道什么是值得我们去努力奋斗的吗？<strong>如今世上又有多少人所做的工作或者所学习的知识&quot;不是自己选&quot;的</strong>。</p>
-<p>  我觉得这是值得思考的。</p>
-]]></content>
-      <categories>
-        <category>Let&#39;s Talk</category>
-      </categories>
-      <tags>
-        <tag>传记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>对书后习题的态度</title>
-    <url>/2022/01/22/Talk/%E5%AF%B9%E4%B9%A6%E5%90%8E%E4%B9%A0%E9%A2%98%E7%9A%84%E6%80%81%E5%BA%A6/</url>
-    <content><![CDATA[<p>  我接受信息的方式主要是看文章和书，而专业书中每一章结尾都有习题或者实验，之前我的学习方式都是看完每章的正文内容之后就写个笔记，然后就直接跳到下一章了。我现在觉得这种方式的学习效率十分低下，因为整个过程几乎都是被动地接受信息，学习效果不是很好。<br />
-  理想的学习方式当然是学完一章的内容后，去用本章知识解决问题，达到巩固知识的作用，除此之外还可以根据本章主题拓展一下。</p>
-<p>  我之前也是这么想的，可是为什么没这么做呢？</p>
-<ol>
-<li>
-<p>许多书的习题是不在书中提供的，而是要到资源网站上下载，我老是懒得去找。</p>
-</li>
-<li>
-<p>大多数专业书习题特别多，还难，我有种畏难心理，并且觉得没啥用。</p>
-</li>
-<li>
-<p>专业书每章的信息量特别大，看完正文内容就没心思写题目了。我又喜欢多线程操作，觉得没有必要花太多时间在习题上。</p>
-</li>
-</ol>
-<hr />
-<p>  首先要做的就是认识到习题的重要性，学习计算机和数学最好的方式就是实践，习题又是作者故意设置的有针对性的实践，所以是值得一做的。其次，接下来每次开始给自己造坑时，都把习题答案准备好：</p>
-<ol>
-<li>
-<p>不在书里的去官网上下载到云盘里，如果不提供去网上找找。</p>
-</li>
-<li>
-<p>在书里的，做好PDF的标签。</p>
-</li>
-</ol>
-<p>  正文内容看完可能会觉得很累，可以另一个时间段再写题目，这样能起到一个回顾与巩固的作用。</p>
-<p>  我看书有点太过被动，应该更加灵活一点，特别是要注意下面几点：</p>
-<blockquote>
-<p>  不仅要知道这个知识是什么，还要会用这个知识去解决问题。</p>
-<p>  解决某个具体问题的方法可能不是最重要的，而是解决这类问题的方法。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Let&#39;s Talk</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何提一个技术问题？</title>
-    <url>/2021/10/15/Talk/%E6%8F%90%E9%97%AE%E7%9A%84%E8%89%BA%E6%9C%AF/</url>
+    <title>内存越界引用和缓冲区溢出问题</title>
+    <url>/2022/01/24/CppAndC/%E5%86%85%E5%AD%98%E8%B6%8A%E7%95%8C%E5%BC%95%E7%94%A8%E5%92%8C%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  在学习计算机技术时肯定会遇到各种各样的问题，而为了找到问题的答案，我们往往需要准确地描述出问题是什么，这样才能找到好的答案。而提问题也是有方法的，有一篇文章写得很好，我阅读后学到了很多，下面就是对这篇文章内容的整理。</p>
+<p>  今天在看CSAPP 3.10节的时候看到了一个熟悉的问题:</p>
 <blockquote>
-<p><a href="http://www.catb.org/~esr/faqs/smart-questions.html">文章原文地址</a><br />
-<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md">简体中文版</a></p>
+<p>如果gets()函数读入的字符数超过了字符数组的界的时候，会发生什么呢？</p>
 </blockquote>
-<span id="more"></span>
-<h1 id="回答者的角度"><a class="markdownIt-Anchor" href="#回答者的角度"></a> 回答者的角度</h1>
-<p>  作者首先从回答者的角度来看问题。对于回答者来说（特别是作者这种黑客😅），喜欢<strong>有挑战性</strong>的问题，因为<u>这些问题能激发他们思考，提高他们的理解力并且查漏补缺</u>。但回答者也不是不愿意回答一些简单的问题，他们所不愿意回答的，<strong><u>是那些不愿思考、或者在发问前不做他们该做的事的人的问题</u></strong>。</p>
-<p>  作者在这一节最后说了两段话，可以很好地表明他的态度：</p>
+<p>  我在昨天整理以前的C语言笔记的时候刚刚好试验了一下，试验的过程如下：</p>
 <blockquote>
-<p>  你不必在技术上很在行才能吸引我们的注意，但你必须表现出能引导你变得在行的特质 —— <strong>机敏、有想法、善于观察、乐于主动参与解决问题</strong>。如果你做不到这些，我们建议你花点钱找家商业公司签个技术支持服务合同，而不是要求黑客个人无偿地帮助你。</p>
-<p>  如果你决定向我们求助，能立刻得到快速并有效答案的最好方法，就是像赢家（winner）那样提问 —— <strong>聪明、自信、有解决问题的思路</strong>，只是偶尔在特定的问题上需要获得一点帮助。</p>
-</blockquote>
-<hr />
-<h1 id="提问之前"><a class="markdownIt-Anchor" href="#提问之前"></a> 提问之前</h1>
-<p>  在我们提问之前，哪些事是要做的呢？</p>
-<blockquote>
-<ol>
-<li>
-<p>尝试自己调试和检查以解决问题。</p>
-</li>
-<li>
-<p>在常用论坛社区的旧文章里搜索解决方法。（推荐：<a href="https://www.csdn.net/">CSDN</a>（中文综合），<a href="https://stackoverflow.com/">StackOverflow</a>（程序相关），<a href="https://superuser.com/">Super User</a>(通用电脑问题)、<a href="https://serverfault.com/">Server Fault</a>（服务器和网管））</p>
-</li>
-<li>
-<p>在Google中搜索，比如各种错误信息等，即使没找到，<u>在提问时也可以注明你在Google下搜索过哪些问题并且没有答案</u>。</p>
-</li>
-<li>
-<p>阅读手册或者FAQ（常见问题文件）</p>
-</li>
-<li>
-<p>若是程序开发，可以阅读源码来解决问题。</p>
-</li>
-<li>
-<p>向身边的大佬请教。</p>
-</li>
-</ol>
-</blockquote>
-<hr />
-<h1 id="开始提问"><a class="markdownIt-Anchor" href="#开始提问"></a> 开始提问</h1>
-<h2 id="目标差异式标题"><a class="markdownIt-Anchor" href="#目标差异式标题"></a> 目标—差异式标题</h2>
-<p>  取一个有意义且目的明确的标题是十分重要的。一个好标题范例是<strong>目标 — 差异</strong>式的描述，许多技术支持组织就是这样做的。</p>
-<p>  <u>在<code>目标</code>部分指出是哪一个或哪一组东西有问题，在<code>差异</code>部分则描述与期望的行为不一致的地方</u>。下面，来看一个比较：</p>
-<blockquote>
-<ul>
-<li>救命啊！我的笔记本电脑不能显示了！（蠢得一批）</li>
-<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标会变形，某牌显卡MV1005芯片组。（比较聪明的问法）</li>
-<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标，在某牌显卡MV1005芯片组环境下—会变形。（最聪明的问法）</li>
-</ul>
-</blockquote>
-<h2 id="使用清晰-正确-精准且合乎语法的语句"><a class="markdownIt-Anchor" href="#使用清晰-正确-精准且合乎语法的语句"></a> 使用清晰、正确、精准且合乎语法的语句</h2>
-<p>  正确的拼写、标点符号和大小写是很重要的。一般来说，如果你觉得这样做很麻烦，不想在乎这些，那我们也觉得麻烦，不想在乎你的提问。花点额外的精力斟酌一下字句，用不着太僵硬与正式 —— 事实上，黑客文化很看重能准确地使用非正式、俚语和幽默的语句。但它<strong>必须很</strong>准确，而且有迹象表明你是在思考和关注问题。</p>
-<p>  像我这种母语不是英语的提问者，可以在问题描述中附加下面几句：</p>
-<blockquote>
-<p>English is not my native language；please excuse typing errors.</p>
-<p>I am familiar with the technical terms, but some slang expressions and idioms are difficult for me.（熟悉名词，但是不熟悉俚语）</p>
-</blockquote>
-<hr />
-<p>  下面就是重点了，<strong>我们该如何精准描述问题</strong>？</p>
-<blockquote>
-<ol>
-<li>仔细、清楚地描述你的问题或 Bug 的症状。（推荐文章：<a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html">如何有效地报告Bug</a>）</li>
-<li>描述问题发生的环境（机器配置、操作系统、应用程序、以及相关的信息），提供经销商的发行版和版本号</li>
-<li>描述在提问前你是怎样去研究和理解这个问题的。</li>
-<li>描述在提问前为确定问题而采取的诊断步骤。</li>
-<li>描述最近做过什么可能相关的硬件或软件变更。</li>
-<li>尽可能的提供一个可以<code>重现这个问题的可控环境</code>的方法。</li>
-</ol>
-</blockquote>
-<hr />
-<p>  除了上面这些之外，还要注意下面几点（md,黑客事这么多吗😅）：</p>
-<ul>
-<li>
-<p>不要用什么word,excel这些封闭格式编写的文档发送数据，这些黑客们这些嗤之以鼻。</p>
-</li>
-<li>
-<p>不要使用花哨的彩色文本和表情。</p>
-</li>
-</ul>
-<h1 id="收到回答后"><a class="markdownIt-Anchor" href="#收到回答后"></a> 收到回答后</h1>
-<h2 id="如何知道自己的问题是否很愚蠢"><a class="markdownIt-Anchor" href="#如何知道自己的问题是否很愚蠢"></a> 如何知道自己的问题是否很愚蠢</h2>
-<p>  如果你收到下面两种回应，说明你搞砸了：</p>
-<blockquote>
-<ul>
-<li>
-<p>RTFM：Read the Fucking Manual(读手册)</p>
-</li>
-<li>
-<p>STFW：Search the Fucking Web(查网页)</p>
-<p>通常，用这两句之一回答你的人会给你一份包含你需要内容的手册或者一个网址，而且他们打这些字的时候也正在读着。这些答复意味着回答者认为：</p>
-<ul>
-<li><strong>你需要的信息非常容易获得</strong>。</li>
-<li><strong>你自己去搜索这些信息比灌给你，能让你学到更多</strong>。</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<h2 id="如果还是搞不懂"><a class="markdownIt-Anchor" href="#如果还是搞不懂"></a> 如果还是搞不懂</h2>
-<p>  如果看不懂回应，别立刻要求对方解释。像你以前试着自己解决问题时那样（利用手册，FAQ，网络，身边的高手），先试着去搞懂他的回应。如果你真的需要对方解释，记得<strong>表现出你已经从中学到了点什么</strong>。</p>
-<p>  比方说，如果我回答你：</p>
-<blockquote>
-<p>看来似乎是 zentry 卡住了；你应该先清除它。</p>
-</blockquote>
-<p>  像下面这种文法是很糟糕的：</p>
-<blockquote>
-<p>zentry 是什么？</p>
-</blockquote>
-<p>  好的问法应该是这样的：</p>
-<blockquote>
-<p>哦~~~我看过说明了但是只有 -z 和 -p 两个参数中提到了 zentries，而且还都没有清楚的解释如何清除它。你是指这两个中的哪一个吗？还是我看漏了什么？</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Let&#39;s Talk</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux的ctrl+快捷键的功能</title>
-    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  最近在看《C++primer》，遇到一个很简单的循环输入：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">while</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span>cin <span class="token operator">>></span> value<span class="token punctuation">)</span>
+<p>假如我执行下面这段代码:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">&#123;</span>
-    sum <span class="token operator">+=</span> value 
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都一遍，来这做个总结。</p>
-<span id="more"></span>
-<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" title="" alt="image-20211002125045305" data-align="center">
-<p>  关于stty的详细内容，下面会说。</p>
-<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
-<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
-<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" data-align="center">
-<p>  我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" title="" alt="image-20211002131411566" data-align="center">
-<p>  等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851" data-align="center">
-<p>  其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" title="" alt="image-20211002131920966" data-align="center">
-<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" data-align="center">
-<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
-<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
-<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
-<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
-<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" title="" alt="image-20211002132722906" data-align="center">
-<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" title="" alt="image-20211002133025989" data-align="center">
-<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" title="" alt="image-20211002133243103" data-align="center">
-<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" title="" alt="image-20211002133452812" data-align="center">
-<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">快捷键(ctrl用^表示)</th>
-<th style="text-align:center">功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">^l</td>
-<td style="text-align:center">相当于clear,清空终端</td>
-</tr>
-<tr>
-<td style="text-align:center">^s</td>
-<td style="text-align:center">中断输出</td>
-</tr>
-<tr>
-<td style="text-align:center">^q</td>
-<td style="text-align:center">继续输出</td>
-</tr>
-<tr>
-<td style="text-align:center">^a/^e</td>
-<td style="text-align:center">光标移到行首/行尾巴</td>
-</tr>
-<tr>
-<td style="text-align:center">^p</td>
-<td style="text-align:center">重复上次命令</td>
-</tr>
-<tr>
-<td style="text-align:center">^y</td>
-<td style="text-align:center">粘贴或者恢复上次删除</td>
-</tr>
-<tr>
-<td style="text-align:center">^s/^q</td>
-<td style="text-align:center">冻结shell/解冻</td>
-</tr>
-</tbody>
-</table>
-<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
-<blockquote>
-<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
+    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  分别输入下面这些数据:</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">abcde
+abcdef
+abcdefghijk
+abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  <code>puts</code>输出的都是全的，说明C的gets()和puts()根本就没有检查机制，<code>gets()</code><strong>写入的字符串肯定覆盖了str后面的内容</strong>。</p>
 </blockquote>
-<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" data-align="center">
-<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
+<p>  昨天也就调试了一下，并没有细想，比如gets()的实现是什么，覆盖的内容会是什么？会不会造成什么严重的后果？</p>
+<p>  今天看CSAPP的时候刚好看到差不多的内容，并且作者指出这种越界问题会导致缓冲区溢出，有许多病毒就是利用缓冲区溢出进行攻击的。</p>
+<p>  所以今天想好好思考思考这个问题。</p>
+<hr />
+<blockquote>
+<p>  在这里插一句，最好不要使用<code>gets()</code>，而是使用<code>fgets()</code>,其函数原型为：<code>char * fgets(char *_Buffer, int _MaxCount, FILE *_Stream)</code>。</p>
+<p>  连gcc都会提示这么做🤣:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124114756.png" title="" alt="" width="631">
+</blockquote>
+<hr />
+<h1 id="缓冲区溢出"><a class="markdownIt-Anchor" href="#缓冲区溢出"></a> 缓冲区溢出</h1>
+<p> 我们首先来简单看下C语言过程调用中的通用栈帧结构（详细内容见CSAPP）:</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124120906.png" alt="" data-align="center" width="246">
+<p>  现在有这样一段程序:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">void</span> <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  我们用<code>objdump -d</code>来反汇编一下，看看程序给<code>gets()</code> 分配了多少空间:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122123.png" alt="" /></p>
+<p>  <code>sub $0x10,%rsp</code>告诉我们，分配了<strong>16个字节的空间</strong>。用CSAPP中的方式，我们可以列出安全区域和危险区域：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122641.png" alt="" /></p>
+<p>  也就是说，只要输入15个字符以内，不会有严重后果，但是<strong>如果超过了，没有保护机制的话，存储的返回地址就会被破坏。返回的时候就会跳转到一个莫名其妙的地方。</strong></p>
+<hr />
+<h1 id="缓冲区溢出的攻击与对抗全部来自csapp"><a class="markdownIt-Anchor" href="#缓冲区溢出的攻击与对抗全部来自csapp"></a> 缓冲区溢出的攻击与对抗（全部来自CSAPP）</h1>
+<blockquote>
+<p>  一些病毒就使用缓冲区溢出来<strong>让程序执行它本来不愿意执行的函数</strong>。比如输入给程序一个字符串，这个字符串中包含了可执行代码的字节编码（被称为<code>exploit code</code>），另外，还有一些字节会用一个指向攻击代码的指针覆盖返回地址。那么，执行<code>ret</code>就会跳转到攻击代码。</p>
+<p>比如说1988.11的Internet蠕虫病毒（详细见CSAPP）</p>
+</blockquote>
+<hr />
+<p>  下面重点介绍<strong>GCC对于缓冲区溢出的保护机制</strong>。</p>
+<h2 id="栈随机化"><a class="markdownIt-Anchor" href="#栈随机化"></a> 栈随机化</h2>
+<p>  前面提到了攻击者除了注入<code>exploit code</code>，还要插入指向这段code的指针，这显然需要知道存放这个字符串的栈地址。之所以能够实现，就是<strong>因为以前栈地址是非常容易预测的，在不同机器里，栈的位置都差不多</strong>。这也是为什么<strong>1988年的蠕虫病毒</strong>只要确定一个Web服务器所使用的栈空间，就能对许多机器进行攻击。这种现象叫作<code>安全单一化</code>。</p>
+<p>  栈随机化的思想就是<strong>使得栈的位置在每次程序运行的时候都有变化</strong>。其实现方法是：</p>
+<blockquote>
+<p>  程序开始时在栈上分配随机的空间，然后程序使用这段空间之后的空间，这样就能起到随机的作用。</p>
+</blockquote>
+<p>  在64位Linux上，不断运行下面这个程序，就能看到这种栈地址变化:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">long</span> local<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"local at %p\n"</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>local<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124125125.png" alt="" /></p>
+<blockquote>
+<p>这种方法属于更大的一类技术，这类技术叫ASLR（地址空间布局随机化）。但是也有办法对付ASLR，比如一种操作叫<a href="https://en.wikipedia.org/wiki/NOP_slide">nop sled</a>.</p>
+</blockquote>
+<h2 id="栈破坏检测"><a class="markdownIt-Anchor" href="#栈破坏检测"></a> 栈破坏检测</h2>
+<p>  GCC在产生的代码中加入了一种机制来检测缓冲区越界，其思想也很简单，就是在局部缓冲区和状态区之间放一个哨兵值（不知道为什么叫<code>canary</code>,金丝雀😅），这个是随机产生的。</p>
+<p>  在恢复寄存器状态和返回之前，程序会检查这个值是否被改变了，如果是，就直接中止。如果我们想取消这种检测，可以加参数<code>-fno-stack-protector</code>。</p>
+<blockquote>
+<p>  我们选三组不同长度的字符串进行测试，看看结果如何:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124121426.png" alt="" /></p>
+<p><code>stack smashing detected</code>:在程序函数中，数组越界访问，在程序运行时没出现问题，但当函数return的时候就会出现上面的错误。</p>
+<p>我感觉这个就是那个&quot;金丝雀&quot;检测。</p>
+</blockquote>
+<h2 id="限制可执行代码的区域"><a class="markdownIt-Anchor" href="#限制可执行代码的区域"></a> 限制可执行代码的区域</h2>
+<p>  就不细讲了，之后应该会学到。</p>
 ]]></content>
       <categories>
-        <category>操作系统</category>
-        <category>Linux</category>
+        <category>计算机系统</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-        <tag>教程</tag>
+        <tag>C</tag>
+        <tag>Buffer Overflow</tag>
       </tags>
   </entry>
   <entry>
-    <title>ubuntu解决apt-get报错问题</title>
-    <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>  最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
-<p>  下面这个是报错的情况：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
-<p>  貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
+    <title>浮点数取指定精度</title>
+    <url>/2021/12/11/CppAndC/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>今天遇到个小问题，就是运算结果需要指定精度的浮点数，比如运算结果必须保留3位小数。如果不用现成的库函数，请问怎么实现？<br />
+  这个问题虽小，但是的确是我之前没有想过的。</p>
 <span id="more"></span>
-<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
-<p>  我使用的是这个方法，就一条命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>  其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock
-sudo rm &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F;lock
-sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend
-sudo dpkg --configure -a
-sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
-<p>  这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
-<p>  我们直接执行下面这个命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo killall apt apt-get<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="解决方法"><a class="markdownIt-Anchor" href="#解决方法"></a> 解决方法</h1>
+<p>我们先来观察一下<strong>一个double型的浮点数强制转换成int型后会输出什么</strong>:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120458.png" title="" alt="image-20211211161725653" data-align="center">
+<p>可以发现<strong>不管小数点后一位是&gt;5还是&lt;5都是直接舍弃取整</strong>。如果把double型的数据赋值给int型的数据，结果也是一样的：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120527.png" alt="image-20211215120527831" style="zoom:80%;" data-align="center" width="574">
+<p>如果我们想<strong>让强制转换的结果是四舍五入后的结果</strong>怎么办？比如说将<code>123.456</code>转换成<code>123</code>,将<code>123.756</code>转换成<code>124</code>。<br />
+  很简单，我们加个0.5就行了,这样<code>x.0~x.4</code>的数据就变成了<code>x.5~x.9</code>,强制转化后还是x;<code>x.5~x.9</code>的数据会变成<code>(x+1).0~(x+1).4</code>，强制转化后就变成了<code>x+1</code>，这就达到了进位的效果。</p>
+<hr />
+<p>  知道这个方法后，我们想想该怎么利用这一特性来解决我们的问题：<strong>将浮点数四舍五入后保留到小数点第三位</strong>。</p>
+<p>  举个例子，假如我们现在有个double类型的数<code>123.45676</code>，要求四舍五入保留小数点后3位，也就是最后的结果是<code>123.457000000</code>。为了说清楚这个问题，我们先上代码，在来说明：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">double</span> x <span class="token operator">=</span> <span class="token number">123.45676</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> temp<span class="token punctuation">;</span>
+temp <span class="token operator">=</span> <span class="token punctuation">(</span>x <span class="token operator">+</span> <span class="token number">0.0005</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">1000</span><span class="token punctuation">;</span>    <span class="token comment">//x+0.0005=123.45726,*1000后就是123457.26，因为是赋值给int型变量，所以0.26被舍去，最后temp=123457</span>
+x <span class="token operator">=</span> temp<span class="token operator">/</span><span class="token number">1000.0</span><span class="token punctuation">;</span>            <span class="token comment">//x = 123.457</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  可以看到我们完成了将浮点数经过四舍五入后保留到了小数点后3位，这个过程是怎样的呢？我们来描述一下。</p>
+<blockquote>
+<p><code>x</code>为double型，值为123.45676。我们首先让它+了0.0005，(这在之前讲过了，是<strong>为了四舍五入进位</strong>)，此时<code>x = 123.45726</code>。然后我们将它×1000然后赋值给一个<code>int</code>变量<code>temp</code>，这样小数点第3位之后的数据就会被舍弃掉，此时<code>temp=123457</code>，我们要的答案是<code>123.457</code>，显然再除个1000赋值给<code>double</code>型变量就是我们要的答案了。</p>
+</blockquote>
+<p>  但是我们注意<strong>第4行为什么是<code>x = temp/1000.0</code>,<code>x = temp/1000</code>可以吗</strong>？我们可以实际运行一下:</p>
+<p>  首先是除<code>1000.0</code>的结果:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211211165732.png" title="" alt="image-20211211165732481" data-align="center">
+<p>  然后是除<code>1000</code>的结果:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211215120447.png" title="" alt="image-20211211165828026" data-align="center">
+<p>  显然<code>/1000</code>的结果是错的，<strong>因为<code>/1000</code>是把这个表达式当成了int型的计算；而<code>/1000.0</code>是把这个表达式当作浮点数的运算</strong>，要注意这个区别。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>  现在我们知道了将浮点数经过四舍五入转化成指定位数的方法了，我们来稍微总结一下：</p>
+<blockquote>
+<p>  假设我们现在有一个n位的<code>浮点数x</code>,要将它经过四舍五入保留到m位（m&lt;=n），那么我们就可以使用下列步骤:</p>
+<ol>
+<li>x = x + 5.0/(m+1)</li>
+<li>int temp = x*（10^m）</li>
+<li>x = temp / （10^m）<strong>.0</strong></li>
+</ol>
+</blockquote>
 ]]></content>
       <categories>
-        <category>操作系统</category>
-        <category>Linux</category>
+        <category>Programming Language</category>
+        <category>C</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-        <tag>指令</tag>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -1056,6 +727,38 @@ sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><
       </tags>
   </entry>
   <entry>
+    <title>ubuntu解决apt-get报错问题</title>
+    <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>  最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
+<p>  下面这个是报错的情况：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
+<p>  貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
+<span id="more"></span>
+<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
+<p>  我使用的是这个方法，就一条命令：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>  其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock
+sudo rm &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F;lock
+sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend
+sudo dpkg --configure -a
+sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
+<p>  这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
+<p>  我们直接执行下面这个命令：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo killall apt apt-get<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>指令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>正则表达式入门</title>
     <url>/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="正则表达式的简单介绍"><a class="markdownIt-Anchor" href="#正则表达式的简单介绍"></a> 正则表达式的简单介绍</h2>
@@ -1165,9 +868,376 @@ sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><
         <category>工具</category>
       </categories>
       <tags>
-        <tag>教程</tag>
         <tag>正则表达式</tag>
         <tag>文本处理</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Masters of Doom</title>
+    <url>/2022/01/21/Talk/Masters%20of%20Doom/</url>
+    <content><![CDATA[<p>  今天看完了一本传记——<a href="https://book.douban.com/subject/1152971/">Doom启世录（Masters of Doom）</a>，这本书主要讲述了两个约翰（<a href="https://www.zhihu.com/topic/19633003/hot">约翰·卡马克</a>和<a href="https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E7%BD%97%E6%A2%85%E6%B4%9B/317162">约翰·罗梅洛</a>）及其伙伴们一起制作游戏的故事，包括他们的少时经历、创办<code>id Software</code>公司以及制作无数重量级游戏的故事。</p>
+<hr />
+<h1 id="two-johns"><a class="markdownIt-Anchor" href="#two-johns"></a> Two Johns</h1>
+<p>  这本书重点围绕卡马克和罗梅洛展开，他们是id Software公司的核心人物，也是截然不同的两个人。</p>
+<p>  卡神是技术大神，id Software公司一系列引起游戏文化浪潮的重量级游戏，比如一开始的危险的戴夫、指挥官基恩、德军总部3D，还有经典的<strong>Doom、Quake</strong>等这些游戏都是依托于卡神的<strong>游戏引擎</strong>，正是卡神那犹入无人之境的<strong>图像编程技术</strong>，创造出了一个个领先于行业水平的引擎，甚至带动了显卡的发展。<br />
+  为什么卡神能这么🐂🍺呢？我稍微总结了一下：</p>
+<ul>
+<li>
+<p>第一点，毫无疑问是对图像编程的热爱，正是这一点驱动他不断地深入学习编程技术。</p>
+</li>
+<li>
+<p>卡神极度自律和专注，他的生活可以说和机器人差不多，十分的规律。在写引擎的时候，卡神的注意力十分集中，比如说一次有人故意在旁边放🐱片，卡神都没什么反应……还有就是他新婚度蜜月都要带上电脑，因为还要工作……</p>
+</li>
+<li>
+<p>活在当下，卡神从来不回去怀念过去的作品和成就，而是勇攀高峰，不断超越自己。一开始，当他做出了平滑卷轴效果，这已经是行业领先的了，他却没有满足，而是继续研发2.5D，3D的游戏引擎，以及逼真的光影效果，纵观全书，可以看见他的这么一个过程，真的是不断超越自己，把过去的成就看得一文不值。在觉得自己已经达到图形编程的禅宗境界时（已经没有什么好创新的了，只剩下不断的优化），他又跑去造火箭了，最近好像在搞VR。</p>
+</li>
+</ul>
+<p>  卡神还真是让人敬仰的偶像啊😆😆😆😆😆</p>
+<hr />
+<p>  那个时期，id Software公司之所以那么成功是因为创造出了许多重量级的游戏，而游戏光靠一个游戏引擎是不够的，还需要设计师、画师等一系列人去创作，而另一位约翰——罗梅洛就是一个顶尖的游戏设计师和游戏玩家，他也是一个程序员，因此经常和卡神讨论引擎。  罗梅洛也是id Software的灵魂人物，他与卡神是一种两者不能缺其一的关系，罗梅洛能够让卡马克的游戏引擎发挥最大的性能和特点，而卡马克的游戏引擎能让罗梅洛实现那些天才的游戏设计。除此之外，两人的性格也是互补的，卡神低调，对成就视若不见；罗梅洛喜欢造势，喜欢在媒体面前大肆宣扬，吹牛皮。</p>
+<p>  当罗梅洛因为过于投入在玩游戏和当明星而被其公司的兄弟们解雇后，id SoftWare公司也渐渐走了下坡路。</p>
+<hr />
+<h1 id="id之梦"><a class="markdownIt-Anchor" href="#id之梦"></a> id之梦</h1>
+<p>  id Software 就如许多创业神话一样已然是过眼烟云，我也不想去论这个公司的是非成败，比如什么公司管理问题，为什么走下坡路等等。</p>
+<p>  这本书之所以打动我，是因为这群年轻人，为了自己的游戏梦想，奉献自己的青春。一个公司里，大家有着共同的兴趣和爱好，大家一同工作与玩游戏，每个人都知道自己要什么，要干什么。在书里能充分感受到这种氛围。</p>
+<p>  我们不如问问自己，我们知道自己最喜欢什么吗？知道什么是值得我们去努力奋斗的吗？<strong>如今世上又有多少人所做的工作或者所学习的知识&quot;不是自己选&quot;的</strong>。</p>
+<p>  我觉得这是值得思考的。</p>
+]]></content>
+      <categories>
+        <category>Let&#39;s Talk</category>
+      </categories>
+      <tags>
+        <tag>传记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux的ctrl+快捷键的功能</title>
+    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  最近在看《C++primer》，遇到一个很简单的循环输入：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">while</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span>cin <span class="token operator">>></span> value<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    sum <span class="token operator">+=</span> value 
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都一遍，来这做个总结。</p>
+<span id="more"></span>
+<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" title="" alt="image-20211002125045305" data-align="center">
+<p>  关于stty的详细内容，下面会说。</p>
+<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
+<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
+<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" data-align="center">
+<p>  我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" title="" alt="image-20211002131411566" data-align="center">
+<p>  等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851" data-align="center">
+<p>  其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" title="" alt="image-20211002131920966" data-align="center">
+<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" data-align="center">
+<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
+<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
+<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
+<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
+<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" title="" alt="image-20211002132722906" data-align="center">
+<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" title="" alt="image-20211002133025989" data-align="center">
+<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" title="" alt="image-20211002133243103" data-align="center">
+<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" title="" alt="image-20211002133452812" data-align="center">
+<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">快捷键(ctrl用^表示)</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">^l</td>
+<td style="text-align:center">相当于clear,清空终端</td>
+</tr>
+<tr>
+<td style="text-align:center">^s</td>
+<td style="text-align:center">中断输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^q</td>
+<td style="text-align:center">继续输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^a/^e</td>
+<td style="text-align:center">光标移到行首/行尾巴</td>
+</tr>
+<tr>
+<td style="text-align:center">^p</td>
+<td style="text-align:center">重复上次命令</td>
+</tr>
+<tr>
+<td style="text-align:center">^y</td>
+<td style="text-align:center">粘贴或者恢复上次删除</td>
+</tr>
+<tr>
+<td style="text-align:center">^s/^q</td>
+<td style="text-align:center">冻结shell/解冻</td>
+</tr>
+</tbody>
+</table>
+<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
+<blockquote>
+<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
+</blockquote>
+<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" data-align="center">
+<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何提一个技术问题？</title>
+    <url>/2021/10/15/Talk/%E6%8F%90%E9%97%AE%E7%9A%84%E8%89%BA%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  在学习计算机技术时肯定会遇到各种各样的问题，而为了找到问题的答案，我们往往需要准确地描述出问题是什么，这样才能找到好的答案。而提问题也是有方法的，有一篇文章写得很好，我阅读后学到了很多，下面就是对这篇文章内容的整理。</p>
+<blockquote>
+<p><a href="http://www.catb.org/~esr/faqs/smart-questions.html">文章原文地址</a><br />
+<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md">简体中文版</a></p>
+</blockquote>
+<span id="more"></span>
+<h1 id="回答者的角度"><a class="markdownIt-Anchor" href="#回答者的角度"></a> 回答者的角度</h1>
+<p>  作者首先从回答者的角度来看问题。对于回答者来说（特别是作者这种黑客😅），喜欢<strong>有挑战性</strong>的问题，因为<u>这些问题能激发他们思考，提高他们的理解力并且查漏补缺</u>。但回答者也不是不愿意回答一些简单的问题，他们所不愿意回答的，<strong><u>是那些不愿思考、或者在发问前不做他们该做的事的人的问题</u></strong>。</p>
+<p>  作者在这一节最后说了两段话，可以很好地表明他的态度：</p>
+<blockquote>
+<p>  你不必在技术上很在行才能吸引我们的注意，但你必须表现出能引导你变得在行的特质 —— <strong>机敏、有想法、善于观察、乐于主动参与解决问题</strong>。如果你做不到这些，我们建议你花点钱找家商业公司签个技术支持服务合同，而不是要求黑客个人无偿地帮助你。</p>
+<p>  如果你决定向我们求助，能立刻得到快速并有效答案的最好方法，就是像赢家（winner）那样提问 —— <strong>聪明、自信、有解决问题的思路</strong>，只是偶尔在特定的问题上需要获得一点帮助。</p>
+</blockquote>
+<hr />
+<h1 id="提问之前"><a class="markdownIt-Anchor" href="#提问之前"></a> 提问之前</h1>
+<p>  在我们提问之前，哪些事是要做的呢？</p>
+<blockquote>
+<ol>
+<li>
+<p>尝试自己调试和检查以解决问题。</p>
+</li>
+<li>
+<p>在常用论坛社区的旧文章里搜索解决方法。（推荐：<a href="https://www.csdn.net/">CSDN</a>（中文综合），<a href="https://stackoverflow.com/">StackOverflow</a>（程序相关），<a href="https://superuser.com/">Super User</a>(通用电脑问题)、<a href="https://serverfault.com/">Server Fault</a>（服务器和网管））</p>
+</li>
+<li>
+<p>在Google中搜索，比如各种错误信息等，即使没找到，<u>在提问时也可以注明你在Google下搜索过哪些问题并且没有答案</u>。</p>
+</li>
+<li>
+<p>阅读手册或者FAQ（常见问题文件）</p>
+</li>
+<li>
+<p>若是程序开发，可以阅读源码来解决问题。</p>
+</li>
+<li>
+<p>向身边的大佬请教。</p>
+</li>
+</ol>
+</blockquote>
+<hr />
+<h1 id="开始提问"><a class="markdownIt-Anchor" href="#开始提问"></a> 开始提问</h1>
+<h2 id="目标差异式标题"><a class="markdownIt-Anchor" href="#目标差异式标题"></a> 目标—差异式标题</h2>
+<p>  取一个有意义且目的明确的标题是十分重要的。一个好标题范例是<strong>目标 — 差异</strong>式的描述，许多技术支持组织就是这样做的。</p>
+<p>  <u>在<code>目标</code>部分指出是哪一个或哪一组东西有问题，在<code>差异</code>部分则描述与期望的行为不一致的地方</u>。下面，来看一个比较：</p>
+<blockquote>
+<ul>
+<li>救命啊！我的笔记本电脑不能显示了！（蠢得一批）</li>
+<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标会变形，某牌显卡MV1005芯片组。（比较聪明的问法）</li>
+<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标，在某牌显卡MV1005芯片组环境下—会变形。（最聪明的问法）</li>
+</ul>
+</blockquote>
+<h2 id="使用清晰-正确-精准且合乎语法的语句"><a class="markdownIt-Anchor" href="#使用清晰-正确-精准且合乎语法的语句"></a> 使用清晰、正确、精准且合乎语法的语句</h2>
+<p>  正确的拼写、标点符号和大小写是很重要的。一般来说，如果你觉得这样做很麻烦，不想在乎这些，那我们也觉得麻烦，不想在乎你的提问。花点额外的精力斟酌一下字句，用不着太僵硬与正式 —— 事实上，黑客文化很看重能准确地使用非正式、俚语和幽默的语句。但它<strong>必须很</strong>准确，而且有迹象表明你是在思考和关注问题。</p>
+<p>  像我这种母语不是英语的提问者，可以在问题描述中附加下面几句：</p>
+<blockquote>
+<p>English is not my native language；please excuse typing errors.</p>
+<p>I am familiar with the technical terms, but some slang expressions and idioms are difficult for me.（熟悉名词，但是不熟悉俚语）</p>
+</blockquote>
+<hr />
+<p>  下面就是重点了，<strong>我们该如何精准描述问题</strong>？</p>
+<blockquote>
+<ol>
+<li>仔细、清楚地描述你的问题或 Bug 的症状。（推荐文章：<a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html">如何有效地报告Bug</a>）</li>
+<li>描述问题发生的环境（机器配置、操作系统、应用程序、以及相关的信息），提供经销商的发行版和版本号</li>
+<li>描述在提问前你是怎样去研究和理解这个问题的。</li>
+<li>描述在提问前为确定问题而采取的诊断步骤。</li>
+<li>描述最近做过什么可能相关的硬件或软件变更。</li>
+<li>尽可能的提供一个可以<code>重现这个问题的可控环境</code>的方法。</li>
+</ol>
+</blockquote>
+<hr />
+<p>  除了上面这些之外，还要注意下面几点（md,黑客事这么多吗😅）：</p>
+<ul>
+<li>
+<p>不要用什么word,excel这些封闭格式编写的文档发送数据，这些黑客们这些嗤之以鼻。</p>
+</li>
+<li>
+<p>不要使用花哨的彩色文本和表情。</p>
+</li>
+</ul>
+<h1 id="收到回答后"><a class="markdownIt-Anchor" href="#收到回答后"></a> 收到回答后</h1>
+<h2 id="如何知道自己的问题是否很愚蠢"><a class="markdownIt-Anchor" href="#如何知道自己的问题是否很愚蠢"></a> 如何知道自己的问题是否很愚蠢</h2>
+<p>  如果你收到下面两种回应，说明你搞砸了：</p>
+<blockquote>
+<ul>
+<li>
+<p>RTFM：Read the Fucking Manual(读手册)</p>
+</li>
+<li>
+<p>STFW：Search the Fucking Web(查网页)</p>
+<p>通常，用这两句之一回答你的人会给你一份包含你需要内容的手册或者一个网址，而且他们打这些字的时候也正在读着。这些答复意味着回答者认为：</p>
+<ul>
+<li><strong>你需要的信息非常容易获得</strong>。</li>
+<li><strong>你自己去搜索这些信息比灌给你，能让你学到更多</strong>。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="如果还是搞不懂"><a class="markdownIt-Anchor" href="#如果还是搞不懂"></a> 如果还是搞不懂</h2>
+<p>  如果看不懂回应，别立刻要求对方解释。像你以前试着自己解决问题时那样（利用手册，FAQ，网络，身边的高手），先试着去搞懂他的回应。如果你真的需要对方解释，记得<strong>表现出你已经从中学到了点什么</strong>。</p>
+<p>  比方说，如果我回答你：</p>
+<blockquote>
+<p>看来似乎是 zentry 卡住了；你应该先清除它。</p>
+</blockquote>
+<p>  像下面这种文法是很糟糕的：</p>
+<blockquote>
+<p>zentry 是什么？</p>
+</blockquote>
+<p>  好的问法应该是这样的：</p>
+<blockquote>
+<p>哦~~~我看过说明了但是只有 -z 和 -p 两个参数中提到了 zentries，而且还都没有清楚的解释如何清除它。你是指这两个中的哪一个吗？还是我看漏了什么？</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Let&#39;s Talk</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>上海之行</title>
+    <url>/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
+    <content><![CDATA[<p>  8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
+<span id="more"></span>
+<p>  我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711121722.png" title="" alt="image-20210711121714205" data-align="center">
+<p>  😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122613.jpg" alt="waic展1" style="zoom: 67%;" data-align="center" width="500">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122641.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
+<p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123403.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="510">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123438.png" alt="image-20210711123438317" style="zoom: 67%;" data-align="center" width="513">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123509.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="494">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123544.png" alt="image-20210711123544385" style="zoom: 67%;" data-align="center" width="514">
+<p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082011.png" alt="image-20210714082002960" data-align="center" width="536">
+<p>  虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
+<h4 id="上海历史博物馆"><a class="markdownIt-Anchor" href="#上海历史博物馆"></a> 上海历史博物馆</h4>
+<p>  这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125429.png" alt="image-20210711125428826" style="zoom:67%;" data-align="center">
+<p>  《中国共产党宣言》，这个是真迹。这是中国共产党的源头了。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125816.png" alt="image-20210711125815779" style="zoom:67%;" data-align="center">
+<p>  好家伙，还有这个。</p>
+<h4 id="武康路愚园路"><a class="markdownIt-Anchor" href="#武康路愚园路"></a> 武康路，愚园路</h4>
+<p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
+<h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
+<p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082110.png" title="" alt="image-20210714082110471" data-align="center">
+<p>  这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711233913.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="341">
+<p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234050.png" alt="image-20210711234049822" style="zoom:50%;" data-align="center" width="366">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234132.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="379">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234152.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="367">
+<p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234304.png" alt="image-20210711234303508" style="zoom:50%;" data-align="center" width="373">
+<p>  这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234349.png" alt="image-20210711234348837" style="zoom:67%;" data-align="center" width="373">
+<p>  这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234537.png" alt="image-20210711234536757" style="zoom:50%;" data-align="center" width="386">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234552.png" alt="image-20210711234551826" style="zoom:67%;" data-align="center" width="410">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234618.png" alt="image-20210711234617641" style="zoom:67%;" data-align="center" width="431">
+<p>  这个馆里有很多精美的陶瓷制品，我最喜欢的花纹就是最后一张这种裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234753.png" alt="image-20210711234752559" style="zoom:50%;" data-align="center" width="435">
+<p>  这种颜色也是我很喜欢的。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234826.png" alt="image-20210711234825706" style="zoom:67%;" data-align="center" width="446">
+<p>  这个简直神了。。。</p>
+<p>  剩下的就不贴上来了，总的来说上博之旅还是很满意的。</p>
+<h4 id="外滩南京东路"><a class="markdownIt-Anchor" href="#外滩南京东路"></a> 外滩，南京东路</h4>
+<p>  来上海，除了老洋房，当然要看看其繁华的一面，当仁不让的当然是外滩，陆家嘴这一带。刚出地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235248.png" alt="image-20210711235248113" style="zoom:67%;" data-align="center">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235314.png" alt="image-20210711235314082" style="zoom:67%;" data-align="center">
+<p>  再来看看黄浦江对面的陆家嘴，浦东最繁华的地方：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235457.png" title="" alt="image-20210711235457234" data-align="center">
+<h4 id="waic论坛"><a class="markdownIt-Anchor" href="#waic论坛"></a> WAIC论坛</h4>
+<p>  额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000357.png" alt="image-20210712000357612" /></p>
+<p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000558.png" alt="image-20210712000558320" style="zoom:67%;" />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000617.png" alt="image-20210712000617839" style="zoom:67%;" />
+<p>  就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
+]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>游记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>对书后习题的态度</title>
+    <url>/2022/01/22/Talk/%E5%AF%B9%E4%B9%A6%E5%90%8E%E4%B9%A0%E9%A2%98%E7%9A%84%E6%80%81%E5%BA%A6/</url>
+    <content><![CDATA[<p>  我接受信息的方式主要是看文章和书，而专业书中每一章结尾都有习题或者实验，之前我的学习方式都是看完每章的正文内容之后就写个笔记，然后就直接跳到下一章了。我现在觉得这种方式的学习效率十分低下，因为整个过程几乎都是被动地接受信息，学习效果不是很好。<br />
+  理想的学习方式当然是学完一章的内容后，去用本章知识解决问题，达到巩固知识的作用，除此之外还可以根据本章主题拓展一下。</p>
+<p>  我之前也是这么想的，可是为什么没这么做呢？</p>
+<ol>
+<li>
+<p>许多书的习题是不在书中提供的，而是要到资源网站上下载，我老是懒得去找。</p>
+</li>
+<li>
+<p>大多数专业书习题特别多，还难，我有种畏难心理，并且觉得没啥用。</p>
+</li>
+<li>
+<p>专业书每章的信息量特别大，看完正文内容就没心思写题目了。我又喜欢多线程操作，觉得没有必要花太多时间在习题上。</p>
+</li>
+</ol>
+<hr />
+<p>  首先要做的就是认识到习题的重要性，学习计算机和数学最好的方式就是实践，习题又是作者故意设置的有针对性的实践，所以是值得一做的。其次，接下来每次开始给自己造坑时，都把习题答案准备好：</p>
+<ol>
+<li>
+<p>不在书里的去官网上下载到云盘里，如果不提供去网上找找。</p>
+</li>
+<li>
+<p>在书里的，做好PDF的标签。</p>
+</li>
+</ol>
+<p>  正文内容看完可能会觉得很累，可以另一个时间段再写题目，这样能起到一个回顾与巩固的作用。</p>
+<p>  我看书有点太过被动，应该更加灵活一点，特别是要注意下面几点：</p>
+<blockquote>
+<p>  不仅要知道这个知识是什么，还要会用这个知识去解决问题。</p>
+<p>  解决某个具体问题的方法可能不是最重要的，而是解决这类问题的方法。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Let&#39;s Talk</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
       </tags>
   </entry>
   <entry>
@@ -1352,54 +1422,6 @@ push <span class="token register variable">ax</span>        <span class="token o
 <p>感觉也就能分析这么多，看了想充分地明白这一个问题，还是得看后面才行🤣</p>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>汇编语言</category>
-        <category>8086实验</category>
-      </categories>
-      <tags>
-        <tag>8086</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>王爽《汇编语言》实验环境搭建</title>
-    <url>/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  这一学期学校的课程里有汇编语言，要求是掌握8086的，我上网搜了一下，网评比较好的教材是<a href="https://book.douban.com/subject/35038473/">王爽的《汇编语言（第四版）》</a>，于是我就选择了这本书作为我的主力教材，而学校的教材准备考试前用一用。</p>
-<blockquote>
-<p>教材的电子版推荐去<a href="https://sg1lib.org/">Z-Library</a>下载，这个真的好用，我的书全是这个上面下的。</p>
-</blockquote>
-<p>  这个专题主要是存放王爽《汇编语言》这本书里的一些实验记录以及汇编语言的使用问题等等，至于笔记什么的，我都放到我的语雀里了，就不展示了，网上有很多关于这本书的笔记。</p>
-<span id="more"></span>
-<h1 id="实验环境的搭建"><a class="markdownIt-Anchor" href="#实验环境的搭建"></a> 实验环境的搭建</h1>
-<p>  首先我们要知道要实践8086汇编语言的学习，最好的学习环境是DOS操作系统，Windows10是不支持DOS的，我选择的方案是Dosbox + MASM,当然也可以用VMware搭个虚拟机，我这里就稍微介绍一下Dosbox+MASM搭建实验环境的方法。</p>
-<p>  首先，我们要知道Dosbox和MASM是什么，咱们长话短说，简单说一说。</p>
-<p><strong>Dosbox</strong>是一个模拟器，模拟的是老古董：ms-Dos系统，它能为本地的Dos程序提供执行环境，其早期主要是为了玩Dos游戏设计的，用C++编写。<strong>MASM</strong> 是 <strong>Microsoft Macro Assembler</strong> 的缩写，它是微软为 x86 微处理器家族所写的一套宏汇编器。它最初是用来发展在 MS-DOS上面运行的软件。</p>
-<blockquote>
-<p>DosBox0.74 + MASM资源包下载链接：<a href="https://pan.baidu.com/s/1VGrXUrf1fXMaG97-imm60g">https://pan.baidu.com/s/1VGrXUrf1fXMaG97-imm60g</a><br />
-提取码：dya5</p>
-</blockquote>
-<p>  安装应该不用多说了，就正常安装，实在不会搜一下就知道了，没什么好说的。值得说的是<strong>配置工作</strong>：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923202109.png" alt="image-20210923202109171" style="zoom:80%;" data-align="center">
-<p>  我们打开DosBox的exe文件，会看到下面这个画面：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923202515.png" alt="image-20210923202515597" style="zoom:80%;" data-align="center">
-<p>  这个时候我们需要做的工作是<strong>虚拟C盘</strong>，我们使用命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">mount c e:\DosBox\my_c        \\虚拟C盘,my_c是我指定的文件夹，作为虚拟C盘
-c:                             \\转到c盘<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>  在这个虚拟C盘里我们可以存放我们的汇编语言程序和之前的MASM工具包,当出现下图这种情况时，说明我们的虚拟化成功了：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203130.png" alt="image-20210923203130144" style="zoom:80%;" data-align="center">
-<p>  但是，当我们第二次登入时，就会发现我们每次登入DosBox都要重新虚拟化，这显得很麻烦，因此我们需要改一个脚本文件：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203637.png" alt="image-20210923203637235" style="zoom:80%;" data-align="center">
-<p>  打开DosBox的安装目录，<strong>双击打开</strong>图示高亮的文件（不要用什么记事本打开），找到下面这个部分应该在底部;</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203832.png" alt="image-20210923203832406" style="zoom:80%;" data-align="center">
-<p>  然后这段后面加上我们之前进行虚拟化的命令：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204157.png" alt="image-20210923204157864" style="zoom:80%;" data-align="center">
-<p>  下次我们打开的时候就会自动执行我们之前输入的命令，如果想自动执行什么命令，可以在刚才那个文件里加。</p>
-<p>  现在我们进入第二部分，我们现在要做的就是把之前下载好的MASM文件夹打开，里面会有各种工具：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204436.png" alt="image-20210923204436152" style="zoom:67%;" data-align="center">
-<p>  我们把需要的工具全部放进我们之前指定的虚拟C盘中，这样我们就能使用了：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204546.png" alt="image-20210923204546371" style="zoom: 67%;" data-align="center">
-<p>  到这，我们实验环境的搭建基本上就完成了，之后想要在DosBox运行的文件以及DosBox生成的文件都会在我们的虚拟C盘里。至于这些工具的使用，网上的教材很多，这里就不赘述了。</p>
 ]]></content>
       <categories>
         <category>汇编语言</category>
@@ -1751,98 +1773,44 @@ end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
       </tags>
   </entry>
   <entry>
-    <title>上海之行</title>
-    <url>/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
-    <content><![CDATA[<p>  8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
+    <title>王爽《汇编语言》实验环境搭建</title>
+    <url>/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  这一学期学校的课程里有汇编语言，要求是掌握8086的，我上网搜了一下，网评比较好的教材是<a href="https://book.douban.com/subject/35038473/">王爽的《汇编语言（第四版）》</a>，于是我就选择了这本书作为我的主力教材，而学校的教材准备考试前用一用。</p>
+<blockquote>
+<p>教材的电子版推荐去<a href="https://sg1lib.org/">Z-Library</a>下载，这个真的好用，我的书全是这个上面下的。</p>
+</blockquote>
+<p>  这个专题主要是存放王爽《汇编语言》这本书里的一些实验记录以及汇编语言的使用问题等等，至于笔记什么的，我都放到我的语雀里了，就不展示了，网上有很多关于这本书的笔记。</p>
 <span id="more"></span>
-<p>  我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711121722.png" title="" alt="image-20210711121714205" data-align="center">
-<p>  😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122613.jpg" alt="waic展1" style="zoom: 67%;" data-align="center" width="500">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122641.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
-<p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123403.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="510">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123438.png" alt="image-20210711123438317" style="zoom: 67%;" data-align="center" width="513">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123509.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="494">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123544.png" alt="image-20210711123544385" style="zoom: 67%;" data-align="center" width="514">
-<p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082011.png" alt="image-20210714082002960" data-align="center" width="536">
-<p>  虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
-<h4 id="上海历史博物馆"><a class="markdownIt-Anchor" href="#上海历史博物馆"></a> 上海历史博物馆</h4>
-<p>  这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125429.png" alt="image-20210711125428826" style="zoom:67%;" data-align="center">
-<p>  《中国共产党宣言》，这个是真迹。这是中国共产党的源头了。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125816.png" alt="image-20210711125815779" style="zoom:67%;" data-align="center">
-<p>  好家伙，还有这个。</p>
-<h4 id="武康路愚园路"><a class="markdownIt-Anchor" href="#武康路愚园路"></a> 武康路，愚园路</h4>
-<p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
-<h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
-<p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082110.png" title="" alt="image-20210714082110471" data-align="center">
-<p>  这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711233913.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="341">
-<p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234050.png" alt="image-20210711234049822" style="zoom:50%;" data-align="center" width="366">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234132.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="379">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234152.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="367">
-<p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234304.png" alt="image-20210711234303508" style="zoom:50%;" data-align="center" width="373">
-<p>  这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234349.png" alt="image-20210711234348837" style="zoom:67%;" data-align="center" width="373">
-<p>  这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234537.png" alt="image-20210711234536757" style="zoom:50%;" data-align="center" width="386">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234552.png" alt="image-20210711234551826" style="zoom:67%;" data-align="center" width="410">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234618.png" alt="image-20210711234617641" style="zoom:67%;" data-align="center" width="431">
-<p>  这个馆里有很多精美的陶瓷制品，我最喜欢的花纹就是最后一张这种裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234753.png" alt="image-20210711234752559" style="zoom:50%;" data-align="center" width="435">
-<p>  这种颜色也是我很喜欢的。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234826.png" alt="image-20210711234825706" style="zoom:67%;" data-align="center" width="446">
-<p>  这个简直神了。。。</p>
-<p>  剩下的就不贴上来了，总的来说上博之旅还是很满意的。</p>
-<h4 id="外滩南京东路"><a class="markdownIt-Anchor" href="#外滩南京东路"></a> 外滩，南京东路</h4>
-<p>  来上海，除了老洋房，当然要看看其繁华的一面，当仁不让的当然是外滩，陆家嘴这一带。刚出地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235248.png" alt="image-20210711235248113" style="zoom:67%;" data-align="center">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235314.png" alt="image-20210711235314082" style="zoom:67%;" data-align="center">
-<p>  再来看看黄浦江对面的陆家嘴，浦东最繁华的地方：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235457.png" title="" alt="image-20210711235457234" data-align="center">
-<h4 id="waic论坛"><a class="markdownIt-Anchor" href="#waic论坛"></a> WAIC论坛</h4>
-<p>  额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000357.png" alt="image-20210712000357612" /></p>
-<p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000558.png" alt="image-20210712000558320" style="zoom:67%;" />
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000617.png" alt="image-20210712000617839" style="zoom:67%;" />
-<p>  就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
-]]></content>
-      <categories>
-        <category>生活记录</category>
-      </categories>
-      <tags>
-        <tag>游记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>王爽《汇编语言》实验四</title>
-    <url>/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/</url>
-    <content><![CDATA[<h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211014154815.png" alt="image-20211014154806883" /></p>
-<p>  这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。</p>
-<h1 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h1>
-<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:code
-code segment
-    mov <span class="token register variable">ax</span>,<span class="token number">0020h</span>
-    mov <span class="token register variable">ds</span>,<span class="token register variable">ax</span>
-    mov <span class="token register variable">cx</span>,<span class="token number">64</span>
-    mov <span class="token register variable">bx</span>,<span class="token number">0</span>
-
-  <span class="token label function">s:</span>mov <span class="token register variable">ds</span>:<span class="token operator">[</span><span class="token register variable">bx</span><span class="token operator">]</span>,<span class="token register variable">bx</span>
-      inc <span class="token register variable">bx</span>
-      loop s
-
-      mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
-      int <span class="token number">21h</span>
-code ends
-end<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>​    值得注意的一个问题是，0:200~0:23F等同于0200:0~0200:3f,推荐使用后面这种写法，<strong>后面这种写法使得我们用一个bx就能搞定偏移地址和数字的递增</strong>。</p>
+<h1 id="实验环境的搭建"><a class="markdownIt-Anchor" href="#实验环境的搭建"></a> 实验环境的搭建</h1>
+<p>  首先我们要知道要实践8086汇编语言的学习，最好的学习环境是DOS操作系统，Windows10是不支持DOS的，我选择的方案是Dosbox + MASM,当然也可以用VMware搭个虚拟机，我这里就稍微介绍一下Dosbox+MASM搭建实验环境的方法。</p>
+<p>  首先，我们要知道Dosbox和MASM是什么，咱们长话短说，简单说一说。</p>
+<p><strong>Dosbox</strong>是一个模拟器，模拟的是老古董：ms-Dos系统，它能为本地的Dos程序提供执行环境，其早期主要是为了玩Dos游戏设计的，用C++编写。<strong>MASM</strong> 是 <strong>Microsoft Macro Assembler</strong> 的缩写，它是微软为 x86 微处理器家族所写的一套宏汇编器。它最初是用来发展在 MS-DOS上面运行的软件。</p>
+<blockquote>
+<p>DosBox0.74 + MASM资源包下载链接：<a href="https://pan.baidu.com/s/1VGrXUrf1fXMaG97-imm60g">https://pan.baidu.com/s/1VGrXUrf1fXMaG97-imm60g</a><br />
+提取码：dya5</p>
+</blockquote>
+<p>  安装应该不用多说了，就正常安装，实在不会搜一下就知道了，没什么好说的。值得说的是<strong>配置工作</strong>：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923202109.png" alt="image-20210923202109171" style="zoom:80%;" data-align="center">
+<p>  我们打开DosBox的exe文件，会看到下面这个画面：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923202515.png" alt="image-20210923202515597" style="zoom:80%;" data-align="center">
+<p>  这个时候我们需要做的工作是<strong>虚拟C盘</strong>，我们使用命令：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">mount c e:\DosBox\my_c        \\虚拟C盘,my_c是我指定的文件夹，作为虚拟C盘
+c:                             \\转到c盘<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>  在这个虚拟C盘里我们可以存放我们的汇编语言程序和之前的MASM工具包,当出现下图这种情况时，说明我们的虚拟化成功了：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203130.png" alt="image-20210923203130144" style="zoom:80%;" data-align="center">
+<p>  但是，当我们第二次登入时，就会发现我们每次登入DosBox都要重新虚拟化，这显得很麻烦，因此我们需要改一个脚本文件：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203637.png" alt="image-20210923203637235" style="zoom:80%;" data-align="center">
+<p>  打开DosBox的安装目录，<strong>双击打开</strong>图示高亮的文件（不要用什么记事本打开），找到下面这个部分应该在底部;</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923203832.png" alt="image-20210923203832406" style="zoom:80%;" data-align="center">
+<p>  然后这段后面加上我们之前进行虚拟化的命令：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204157.png" alt="image-20210923204157864" style="zoom:80%;" data-align="center">
+<p>  下次我们打开的时候就会自动执行我们之前输入的命令，如果想自动执行什么命令，可以在刚才那个文件里加。</p>
+<p>  现在我们进入第二部分，我们现在要做的就是把之前下载好的MASM文件夹打开，里面会有各种工具：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204436.png" alt="image-20210923204436152" style="zoom:67%;" data-align="center">
+<p>  我们把需要的工具全部放进我们之前指定的虚拟C盘中，这样我们就能使用了：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210923204546.png" alt="image-20210923204546371" style="zoom: 67%;" data-align="center">
+<p>  到这，我们实验环境的搭建基本上就完成了，之后想要在DosBox运行的文件以及DosBox生成的文件都会在我们的虚拟C盘里。至于这些工具的使用，网上的教材很多，这里就不赘述了。</p>
 ]]></content>
       <categories>
         <category>汇编语言</category>
@@ -2116,6 +2084,38 @@ code segment
 
 code ends
 end main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+        <category>8086实验</category>
+      </categories>
+      <tags>
+        <tag>8086</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>王爽《汇编语言》实验四</title>
+    <url>/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/</url>
+    <content><![CDATA[<h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211014154815.png" alt="image-20211014154806883" /></p>
+<p>  这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。</p>
+<h1 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h1>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:code
+code segment
+    mov <span class="token register variable">ax</span>,<span class="token number">0020h</span>
+    mov <span class="token register variable">ds</span>,<span class="token register variable">ax</span>
+    mov <span class="token register variable">cx</span>,<span class="token number">64</span>
+    mov <span class="token register variable">bx</span>,<span class="token number">0</span>
+
+  <span class="token label function">s:</span>mov <span class="token register variable">ds</span>:<span class="token operator">[</span><span class="token register variable">bx</span><span class="token operator">]</span>,<span class="token register variable">bx</span>
+      inc <span class="token register variable">bx</span>
+      loop s
+
+      mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
+      int <span class="token number">21h</span>
+code ends
+end<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    值得注意的一个问题是，0:200~0:23F等同于0200:0~0200:3f,推荐使用后面这种写法，<strong>后面这种写法使得我们用一个bx就能搞定偏移地址和数字的递增</strong>。</p>
 ]]></content>
       <categories>
         <category>汇编语言</category>
