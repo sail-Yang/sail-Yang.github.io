@@ -26,104 +26,42 @@
       </tags>
   </entry>
   <entry>
-    <title>内存越界引用和缓冲区溢出问题</title>
-    <url>/2022/01/24/C_C++/%E5%86%85%E5%AD%98%E8%B6%8A%E7%95%8C%E5%BC%95%E7%94%A8%E5%92%8C%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  今天在看CSAPP 3.10节的时候看到了一个熟悉的问题:</p>
-<blockquote>
-<p>如果gets()函数读入的字符数超过了字符数组的界的时候，会发生什么呢？</p>
-</blockquote>
-<p>  我在昨天整理以前的C语言笔记的时候刚刚好试验了一下，试验的过程如下：</p>
-<blockquote>
-<p>假如我执行下面这段代码:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <title>C++中指针和引用的区别</title>
+    <url>/2022/02/13/C_C++/C++%E4%B8%AD%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>  C和C<ins>都有指针，不过C</ins>比C多了一个引用(reference)，一般书里都会说<strong>引用是变量的别名（alias）</strong>，但这种定义太过模糊。</p>
+<p>  下面就来说说C++中的引用到底是什么，以及它和指针有什么区别。</p>
+<h1 id="引用是什么"><a class="markdownIt-Anchor" href="#引用是什么"></a> 引用是什么</h1>
+<p>引用的确是已经存在的变量的别名，但别名这种说法太过笼统。<strong>事实上，引用就是一个常量指针</strong>。为了证明这一点，我们进行一个小实验：</p>
+<p>  现在有一段代码：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">&#123;</span>
-    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> num1 <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>pointer_num1 <span class="token operator">=</span> <span class="token operator">&amp;</span>num1<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> <span class="token operator">&amp;</span>ref_num1 <span class="token operator">=</span> num1<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  分别输入下面这些数据:</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">abcde
-abcdef
-abcdefghijk
-abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  <code>puts</code>输出的都是全的，说明C的gets()和puts()根本就没有检查机制，<code>gets()</code><strong>写入的字符串肯定覆盖了str后面的内容</strong>。</p>
-</blockquote>
-<p>  昨天也就调试了一下，并没有细想，比如gets()的实现是什么，覆盖的内容会是什么？会不会造成什么严重的后果？</p>
-<p>  今天看CSAPP的时候刚好看到差不多的内容，并且作者指出这种越界问题会导致缓冲区溢出，有许多病毒就是利用缓冲区溢出进行攻击的。</p>
-<p>  所以今天想好好思考思考这个问题。</p>
-<hr />
+<p>  下面我们把这段代码转化成汇编代码：</p>
 <blockquote>
-<p>  在这里插一句，最好不要使用<code>gets()</code>，而是使用<code>fgets()</code>,其函数原型为：<code>char * fgets(char *_Buffer, int _MaxCount, FILE *_Stream)</code>。</p>
-<p>  连gcc都会提示这么做🤣:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124114756.png" title="" alt="" width="631">
+<p>我们会使用<a href="https://godbolt.org/">godbolt.org</a>这个网站来查看C++代码的x86-64汇编代码，这个网站还能查看每句对应的汇编，十分方便。</p>
+</blockquote>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213132527.png" title="" alt="" width="670">
+<p>  我已经把对应的代码用不同颜色的笔标出来了，可以很清楚地看到指针和引用的行为是一模一样的，这充分说明了指针和引用的基本原理是一样的。</p>
+<p>  既然引用和指针一样，那么怎么体现是const指针呢，这汇编代码里也看不出来啊。</p>
+<p>  首先要说明，像const这种存取的控制是实现在编译器这一层的，也就是C++底层的机制，在汇编代码这一层是不存在什么const的（我们可以用内存级工具修改任何一个变量）。</p>
+<p>  在C++中，<strong>引用一旦绑定初始化对象之后，是不能修改其绑定对象的，这和const指针的行为是一模一样的</strong>。</p>
+<blockquote>
+<p>  引用只是一种<strong>抽象</strong>，一种概念，具体怎么实现，可能每个编译器都不一样。上面的汇编只是用来了解引用到底是什么东西，但是不能用汇编代码去解释引用！</p>
 </blockquote>
 <hr />
-<h1 id="缓冲区溢出"><a class="markdownIt-Anchor" href="#缓冲区溢出"></a> 缓冲区溢出</h1>
-<p> 我们首先来简单看下C语言过程调用中的通用栈帧结构（详细内容见CSAPP）:</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124120906.png" alt="" data-align="center" width="246">
-<p>  现在有这样一段程序:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
-<span class="token keyword">void</span> <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-	<span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  我们用<code>objdump -d</code>来反汇编一下，看看程序给<code>gets()</code> 分配了多少空间:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122123.png" alt="" /></p>
-<p>  <code>sub $0x10,%rsp</code>告诉我们，分配了<strong>16个字节的空间</strong>。用CSAPP中的方式，我们可以列出安全区域和危险区域：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122641.png" alt="" /></p>
-<p>  也就是说，只要输入15个字符以内，不会有严重后果，但是<strong>如果超过了，没有保护机制的话，存储的返回地址就会被破坏。返回的时候就会跳转到一个莫名其妙的地方。</strong></p>
-<hr />
-<h1 id="缓冲区溢出的攻击与对抗全部来自csapp"><a class="markdownIt-Anchor" href="#缓冲区溢出的攻击与对抗全部来自csapp"></a> 缓冲区溢出的攻击与对抗（全部来自CSAPP）</h1>
-<blockquote>
-<p>  一些病毒就使用缓冲区溢出来<strong>让程序执行它本来不愿意执行的函数</strong>。比如输入给程序一个字符串，这个字符串中包含了可执行代码的字节编码（被称为<code>exploit code</code>），另外，还有一些字节会用一个指向攻击代码的指针覆盖返回地址。那么，执行<code>ret</code>就会跳转到攻击代码。</p>
-<p>比如说1988.11的Internet蠕虫病毒（详细见CSAPP）</p>
-</blockquote>
-<hr />
-<p>  下面重点介绍<strong>GCC对于缓冲区溢出的保护机制</strong>。</p>
-<h2 id="栈随机化"><a class="markdownIt-Anchor" href="#栈随机化"></a> 栈随机化</h2>
-<p>  前面提到了攻击者除了注入<code>exploit code</code>，还要插入指向这段code的指针，这显然需要知道存放这个字符串的栈地址。之所以能够实现，就是<strong>因为以前栈地址是非常容易预测的，在不同机器里，栈的位置都差不多</strong>。这也是为什么<strong>1988年的蠕虫病毒</strong>只要确定一个Web服务器所使用的栈空间，就能对许多机器进行攻击。这种现象叫作<code>安全单一化</code>。</p>
-<p>  栈随机化的思想就是<strong>使得栈的位置在每次程序运行的时候都有变化</strong>。其实现方法是：</p>
-<blockquote>
-<p>  程序开始时在栈上分配随机的空间，然后程序使用这段空间之后的空间，这样就能起到随机的作用。</p>
-</blockquote>
-<p>  在64位Linux上，不断运行下面这个程序，就能看到这种栈地址变化:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">long</span> local<span class="token punctuation">;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"local at %p\n"</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>local<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124125125.png" alt="" /></p>
-<blockquote>
-<p>这种方法属于更大的一类技术，这类技术叫ASLR（地址空间布局随机化）。但是也有办法对付ASLR，比如一种操作叫<a href="https://en.wikipedia.org/wiki/NOP_slide">nop sled</a>.</p>
-</blockquote>
-<h2 id="栈破坏检测"><a class="markdownIt-Anchor" href="#栈破坏检测"></a> 栈破坏检测</h2>
-<p>  GCC在产生的代码中加入了一种机制来检测缓冲区越界，其思想也很简单，就是在局部缓冲区和状态区之间放一个哨兵值（不知道为什么叫<code>canary</code>,金丝雀😅），这个是随机产生的。</p>
-<p>  在恢复寄存器状态和返回之前，程序会检查这个值是否被改变了，如果是，就直接中止。如果我们想取消这种检测，可以加参数<code>-fno-stack-protector</code>。</p>
-<blockquote>
-<p>  我们选三组不同长度的字符串进行测试，看看结果如何:</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124121426.png" alt="" /></p>
-<p><code>stack smashing detected</code>:在程序函数中，数组越界访问，在程序运行时没出现问题，但当函数return的时候就会出现上面的错误。</p>
-<p>我感觉这个就是那个&quot;金丝雀&quot;检测。</p>
-</blockquote>
-<h2 id="限制可执行代码的区域"><a class="markdownIt-Anchor" href="#限制可执行代码的区域"></a> 限制可执行代码的区域</h2>
-<p>  就不细讲了，之后应该会学到。</p>
+<h1 id="引用和普通指针的区别"><a class="markdownIt-Anchor" href="#引用和普通指针的区别"></a> 引用和普通指针的区别</h1>
+<p>  上面只是对引用这个概念底层的一点探索，日常使用肯定还是注重引用的特性和使用。下面就对引用和普通指针行为上做一个对比：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213135045.png" alt="" /></p>
 ]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
       <tags>
-        <tag>C</tag>
-        <tag>Buffer Overflow</tag>
+        <tag>C++</tag>
+        <tag>指针和引用</tag>
       </tags>
   </entry>
   <entry>
@@ -271,6 +209,189 @@ int_ptr a<span class="token punctuation">,</span>b            <span class="token
       </tags>
   </entry>
   <entry>
+    <title>内存越界引用和缓冲区溢出问题</title>
+    <url>/2022/01/24/C_C++/%E5%86%85%E5%AD%98%E8%B6%8A%E7%95%8C%E5%BC%95%E7%94%A8%E5%92%8C%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  今天在看CSAPP 3.10节的时候看到了一个熟悉的问题:</p>
+<blockquote>
+<p>如果gets()函数读入的字符数超过了字符数组的界的时候，会发生什么呢？</p>
+</blockquote>
+<p>  我在昨天整理以前的C语言笔记的时候刚刚好试验了一下，试验的过程如下：</p>
+<blockquote>
+<p>假如我执行下面这段代码:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  分别输入下面这些数据:</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">abcde
+abcdef
+abcdefghijk
+abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  <code>puts</code>输出的都是全的，说明C的gets()和puts()根本就没有检查机制，<code>gets()</code><strong>写入的字符串肯定覆盖了str后面的内容</strong>。</p>
+</blockquote>
+<p>  昨天也就调试了一下，并没有细想，比如gets()的实现是什么，覆盖的内容会是什么？会不会造成什么严重的后果？</p>
+<p>  今天看CSAPP的时候刚好看到差不多的内容，并且作者指出这种越界问题会导致缓冲区溢出，有许多病毒就是利用缓冲区溢出进行攻击的。</p>
+<p>  所以今天想好好思考思考这个问题。</p>
+<hr />
+<blockquote>
+<p>  在这里插一句，最好不要使用<code>gets()</code>，而是使用<code>fgets()</code>,其函数原型为：<code>char * fgets(char *_Buffer, int _MaxCount, FILE *_Stream)</code>。</p>
+<p>  连gcc都会提示这么做🤣:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124114756.png" title="" alt="" width="631">
+</blockquote>
+<hr />
+<h1 id="缓冲区溢出"><a class="markdownIt-Anchor" href="#缓冲区溢出"></a> 缓冲区溢出</h1>
+<p> 我们首先来简单看下C语言过程调用中的通用栈帧结构（详细内容见CSAPP）:</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124120906.png" alt="" data-align="center" width="246">
+<p>  现在有这样一段程序:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">void</span> <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token function">gets</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">puts</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  我们用<code>objdump -d</code>来反汇编一下，看看程序给<code>gets()</code> 分配了多少空间:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122123.png" alt="" /></p>
+<p>  <code>sub $0x10,%rsp</code>告诉我们，分配了<strong>16个字节的空间</strong>。用CSAPP中的方式，我们可以列出安全区域和危险区域：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122641.png" alt="" /></p>
+<p>  也就是说，只要输入15个字符以内，不会有严重后果，但是<strong>如果超过了，没有保护机制的话，存储的返回地址就会被破坏。返回的时候就会跳转到一个莫名其妙的地方。</strong></p>
+<hr />
+<h1 id="缓冲区溢出的攻击与对抗全部来自csapp"><a class="markdownIt-Anchor" href="#缓冲区溢出的攻击与对抗全部来自csapp"></a> 缓冲区溢出的攻击与对抗（全部来自CSAPP）</h1>
+<blockquote>
+<p>  一些病毒就使用缓冲区溢出来<strong>让程序执行它本来不愿意执行的函数</strong>。比如输入给程序一个字符串，这个字符串中包含了可执行代码的字节编码（被称为<code>exploit code</code>），另外，还有一些字节会用一个指向攻击代码的指针覆盖返回地址。那么，执行<code>ret</code>就会跳转到攻击代码。</p>
+<p>比如说1988.11的Internet蠕虫病毒（详细见CSAPP）</p>
+</blockquote>
+<hr />
+<p>  下面重点介绍<strong>GCC对于缓冲区溢出的保护机制</strong>。</p>
+<h2 id="栈随机化"><a class="markdownIt-Anchor" href="#栈随机化"></a> 栈随机化</h2>
+<p>  前面提到了攻击者除了注入<code>exploit code</code>，还要插入指向这段code的指针，这显然需要知道存放这个字符串的栈地址。之所以能够实现，就是<strong>因为以前栈地址是非常容易预测的，在不同机器里，栈的位置都差不多</strong>。这也是为什么<strong>1988年的蠕虫病毒</strong>只要确定一个Web服务器所使用的栈空间，就能对许多机器进行攻击。这种现象叫作<code>安全单一化</code>。</p>
+<p>  栈随机化的思想就是<strong>使得栈的位置在每次程序运行的时候都有变化</strong>。其实现方法是：</p>
+<blockquote>
+<p>  程序开始时在栈上分配随机的空间，然后程序使用这段空间之后的空间，这样就能起到随机的作用。</p>
+</blockquote>
+<p>  在64位Linux上，不断运行下面这个程序，就能看到这种栈地址变化:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">long</span> local<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"local at %p\n"</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>local<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124125125.png" alt="" /></p>
+<blockquote>
+<p>这种方法属于更大的一类技术，这类技术叫ASLR（地址空间布局随机化）。但是也有办法对付ASLR，比如一种操作叫<a href="https://en.wikipedia.org/wiki/NOP_slide">nop sled</a>.</p>
+</blockquote>
+<h2 id="栈破坏检测"><a class="markdownIt-Anchor" href="#栈破坏检测"></a> 栈破坏检测</h2>
+<p>  GCC在产生的代码中加入了一种机制来检测缓冲区越界，其思想也很简单，就是在局部缓冲区和状态区之间放一个哨兵值（不知道为什么叫<code>canary</code>,金丝雀😅），这个是随机产生的。</p>
+<p>  在恢复寄存器状态和返回之前，程序会检查这个值是否被改变了，如果是，就直接中止。如果我们想取消这种检测，可以加参数<code>-fno-stack-protector</code>。</p>
+<blockquote>
+<p>  我们选三组不同长度的字符串进行测试，看看结果如何:</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124121426.png" alt="" /></p>
+<p><code>stack smashing detected</code>:在程序函数中，数组越界访问，在程序运行时没出现问题，但当函数return的时候就会出现上面的错误。</p>
+<p>我感觉这个就是那个&quot;金丝雀&quot;检测。</p>
+</blockquote>
+<h2 id="限制可执行代码的区域"><a class="markdownIt-Anchor" href="#限制可执行代码的区域"></a> 限制可执行代码的区域</h2>
+<p>  就不细讲了，之后应该会学到。</p>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Buffer Overflow</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>结构体变量作为函数参数调用</title>
+    <url>/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>  在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
+<p>  我们先来声明一些变量：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> my_struct
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">double</span> j<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span id="more"></span>
+<h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
+<p>  如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span>my_struct struct1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    my_struct struct2<span class="token punctuation">;</span>
+    struct2<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
+    <span class="token function">func1</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token comment">/*result is 17*/</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变实参结构体的成员值怎么办</strong>？</p>
+<h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
+<h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
+<p>  将结构体数组作为函数的参数进行传参，修改后的元素的成员值是可以返回到主调函数的。</p>
+<p>  详细的就不写了，不是本文讨论重点，以后遇到不会的话再补。</p>
+<h3 id="结构体指针变量"><a class="markdownIt-Anchor" href="#结构体指针变量"></a> 结构体指针变量</h3>
+<p>  函数的参数传递类似于赋值，直接赋变量的值却不返回，肯定不会改变实参的值；但是，我们把指针作为参数呢？那就不一样了。</p>
+<p>  我目前的理解是，用指针作为参数的确还是赋值，只不过赋的是指针的值（也就是地址）。（个人理解，未确定过正确与否）</p>
+<p>  于是我们可以这么写：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/*注意两种引用的书写方式*/</span>
+    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>    <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
+    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
+my_struct <span class="token operator">*</span>struct2<span class="token punctuation">,</span>struct1<span class="token punctuation">;</span>
+    struct2 <span class="token operator">=</span> <span class="token operator">&amp;</span>struct1<span class="token punctuation">;</span>            <span class="token comment">//一定要让指针有个归处(doge)</span>
+struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
+    <span class="token function">func2</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token operator">-></span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="总结结构体变量作为函数参数传递的3种方法"><a class="markdownIt-Anchor" href="#总结结构体变量作为函数参数传递的3种方法"></a> 总结：结构体变量作为函数参数传递的3种方法</h2>
+<p>  我们来做一个小总结，其实将一个结构体变量中的数据传递给另一个函数就3种方法：</p>
+<h3 id="1-用结构体变量名直接作为参数值传递"><a class="markdownIt-Anchor" href="#1-用结构体变量名直接作为参数值传递"></a> 1、用结构体变量名直接作为参数（值传递）</h3>
+<p>  这种用法我们一般比较少，代码看值传递那一段。</p>
+<h3 id="2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"><a class="markdownIt-Anchor" href="#2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"></a> 2、用指向结构体变量的指针作为实参，将结构体变量的地址传给形参</h3>
+<p>  这就是上面说的结构体指针变量那一段，这种方法效率很高，但程序不够直接。<strong>我们还有第三种写法，能够兼顾上面两者的优点</strong>。</p>
+<h3 id="3-将结构体变量的地址作为实参"><a class="markdownIt-Anchor" href="#3-将结构体变量的地址作为实参"></a> 3、将结构体变量的地址作为实参</h3>
+<p>  实际上思想和第二种一样，<strong>不同的地方在于传递地址的方式</strong>。这种方法是直接使用取地址符&amp;来获取结构体变量的地址，而不是第二种的做法：创建一个指针，指向结构体，然后传指针。</p>
+<p>  下面是代码的具体实现：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/*注意两种引用的书写方式*/</span>
+    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>        <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
+    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
+    my_struct struct1<span class="token punctuation">;</span>
+    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
+    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>struct1<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">//这里是重点，注意与第二钟方法这里的对比</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct1<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>无符号数和有符号数的类型转换问题</title>
     <url>/2022/01/17/C_C++/%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0%E4%B8%8E%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
     <content><![CDATA[<h1 id="有符号数转为无符号数"><a class="markdownIt-Anchor" href="#有符号数转为无符号数"></a> 有符号数转为无符号数</h1>
@@ -402,120 +523,6 @@ x <span class="token operator">=</span> temp<span class="token operator">/</span
       </tags>
   </entry>
   <entry>
-    <title>结构体变量作为函数参数调用</title>
-    <url>/2021/08/06/C_C++/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>  在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
-<p>  我们先来声明一些变量：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> my_struct
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">double</span> j<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<span id="more"></span>
-<h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
-<p>  如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span>my_struct struct1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    my_struct struct2<span class="token punctuation">;</span>
-    struct2<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
-    <span class="token function">func1</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    
-    <span class="token comment">/*result is 17*/</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变实参结构体的成员值怎么办</strong>？</p>
-<h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
-<h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
-<p>  将结构体数组作为函数的参数进行传参，修改后的元素的成员值是可以返回到主调函数的。</p>
-<p>  详细的就不写了，不是本文讨论重点，以后遇到不会的话再补。</p>
-<h3 id="结构体指针变量"><a class="markdownIt-Anchor" href="#结构体指针变量"></a> 结构体指针变量</h3>
-<p>  函数的参数传递类似于赋值，直接赋变量的值却不返回，肯定不会改变实参的值；但是，我们把指针作为参数呢？那就不一样了。</p>
-<p>  我目前的理解是，用指针作为参数的确还是赋值，只不过赋的是指针的值（也就是地址）。（个人理解，未确定过正确与否）</p>
-<p>  于是我们可以这么写：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token comment">/*注意两种引用的书写方式*/</span>
-    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>    <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
-    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
-my_struct <span class="token operator">*</span>struct2<span class="token punctuation">,</span>struct1<span class="token punctuation">;</span>
-    struct2 <span class="token operator">=</span> <span class="token operator">&amp;</span>struct1<span class="token punctuation">;</span>            <span class="token comment">//一定要让指针有个归处(doge)</span>
-struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
-    <span class="token function">func2</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token operator">-></span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="总结结构体变量作为函数参数传递的3种方法"><a class="markdownIt-Anchor" href="#总结结构体变量作为函数参数传递的3种方法"></a> 总结：结构体变量作为函数参数传递的3种方法</h2>
-<p>  我们来做一个小总结，其实将一个结构体变量中的数据传递给另一个函数就3种方法：</p>
-<h3 id="1-用结构体变量名直接作为参数值传递"><a class="markdownIt-Anchor" href="#1-用结构体变量名直接作为参数值传递"></a> 1、用结构体变量名直接作为参数（值传递）</h3>
-<p>  这种用法我们一般比较少，代码看值传递那一段。</p>
-<h3 id="2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"><a class="markdownIt-Anchor" href="#2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"></a> 2、用指向结构体变量的指针作为实参，将结构体变量的地址传给形参</h3>
-<p>  这就是上面说的结构体指针变量那一段，这种方法效率很高，但程序不够直接。<strong>我们还有第三种写法，能够兼顾上面两者的优点</strong>。</p>
-<h3 id="3-将结构体变量的地址作为实参"><a class="markdownIt-Anchor" href="#3-将结构体变量的地址作为实参"></a> 3、将结构体变量的地址作为实参</h3>
-<p>  实际上思想和第二种一样，<strong>不同的地方在于传递地址的方式</strong>。这种方法是直接使用取地址符&amp;来获取结构体变量的地址，而不是第二种的做法：创建一个指针，指向结构体，然后传指针。</p>
-<p>  下面是代码的具体实现：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token comment">/*注意两种引用的书写方式*/</span>
-    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>        <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
-    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
-    my_struct struct1<span class="token punctuation">;</span>
-    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
-    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>struct1<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">//这里是重点，注意与第二钟方法这里的对比</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct1<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ubuntu解决apt-get报错问题</title>
-    <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>  最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
-<p>  下面这个是报错的情况：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
-<p>  貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
-<span id="more"></span>
-<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
-<p>  我使用的是这个方法，就一条命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>  其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock
-sudo rm &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F;lock
-sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend
-sudo dpkg --configure -a
-sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
-<p>  这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
-<p>  我们直接执行下面这个命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo killall apt apt-get<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-        <tag>指令</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Masters of Doom</title>
     <url>/2022/01/21/Talk/Masters%20of%20Doom/</url>
     <content><![CDATA[<p>  今天看完了一本传记——<a href="https://book.douban.com/subject/1152971/">Doom启世录（Masters of Doom）</a>，这本书主要讲述了两个约翰（<a href="https://www.zhihu.com/topic/19633003/hot">约翰·卡马克</a>和<a href="https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E7%BD%97%E6%A2%85%E6%B4%9B/317162">约翰·罗梅洛</a>）及其伙伴们一起制作游戏的故事，包括他们的少时经历、创办<code>id Software</code>公司以及制作无数重量级游戏的故事。</p>
@@ -551,101 +558,6 @@ sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><
       </categories>
       <tags>
         <tag>传记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux的ctrl+快捷键的功能</title>
-    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  最近在看《C++primer》，遇到一个很简单的循环输入：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">while</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span>cin <span class="token operator">>></span> value<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    sum <span class="token operator">+=</span> value 
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都一遍，来这做个总结。</p>
-<span id="more"></span>
-<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" title="" alt="image-20211002125045305" data-align="center">
-<p>  关于stty的详细内容，下面会说。</p>
-<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
-<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
-<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" data-align="center">
-<p>  我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" title="" alt="image-20211002131411566" data-align="center">
-<p>  等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851" data-align="center">
-<p>  其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" title="" alt="image-20211002131920966" data-align="center">
-<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" data-align="center">
-<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
-<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
-<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
-<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
-<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" title="" alt="image-20211002132722906" data-align="center">
-<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" title="" alt="image-20211002133025989" data-align="center">
-<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" title="" alt="image-20211002133243103" data-align="center">
-<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" title="" alt="image-20211002133452812" data-align="center">
-<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">快捷键(ctrl用^表示)</th>
-<th style="text-align:center">功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">^l</td>
-<td style="text-align:center">相当于clear,清空终端</td>
-</tr>
-<tr>
-<td style="text-align:center">^s</td>
-<td style="text-align:center">中断输出</td>
-</tr>
-<tr>
-<td style="text-align:center">^q</td>
-<td style="text-align:center">继续输出</td>
-</tr>
-<tr>
-<td style="text-align:center">^a/^e</td>
-<td style="text-align:center">光标移到行首/行尾巴</td>
-</tr>
-<tr>
-<td style="text-align:center">^p</td>
-<td style="text-align:center">重复上次命令</td>
-</tr>
-<tr>
-<td style="text-align:center">^y</td>
-<td style="text-align:center">粘贴或者恢复上次删除</td>
-</tr>
-<tr>
-<td style="text-align:center">^s/^q</td>
-<td style="text-align:center">冻结shell/解冻</td>
-</tr>
-</tbody>
-</table>
-<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
-<blockquote>
-<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
-</blockquote>
-<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" data-align="center">
-<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -690,49 +602,330 @@ sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><
       </tags>
   </entry>
   <entry>
-    <title>MIPS中一种低开销的边界检查方法</title>
-    <url>/2022/01/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS%E4%B8%AD%E4%B8%80%E7%A7%8D%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E7%9A%84%E4%BD%8E%E5%BC%80%E9%94%80%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>  今天在看计组的时候，在书上看到了一个巧妙的方法，所以想把它记录下来。（在<a href="https://book.douban.com/subject/2110638/">这本书</a>的2.7.1节）</p>
-<p>  如果寄存器$s0中的数为:<code>1111 1111 1111 1111 1111 1111 1111 1111</code>，而寄存器$s2中的数为:<code>0000 0000 0000 0000 0000 0000 0000 0001</code>。现在想一下这两个数哪个比较大？</p>
+    <title>如何提一个技术问题？</title>
+    <url>/2021/10/15/Talk/%E6%8F%90%E9%97%AE%E7%9A%84%E8%89%BA%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  在学习计算机技术时肯定会遇到各种各样的问题，而为了找到问题的答案，我们往往需要准确地描述出问题是什么，这样才能找到好的答案。而提问题也是有方法的，有一篇文章写得很好，我阅读后学到了很多，下面就是对这篇文章内容的整理。</p>
+<blockquote>
+<p><a href="http://www.catb.org/~esr/faqs/smart-questions.html">文章原文地址</a><br />
+<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md">简体中文版</a></p>
+</blockquote>
 <span id="more"></span>
+<h1 id="回答者的角度"><a class="markdownIt-Anchor" href="#回答者的角度"></a> 回答者的角度</h1>
+<p>  作者首先从回答者的角度来看问题。对于回答者来说（特别是作者这种黑客😅），喜欢<strong>有挑战性</strong>的问题，因为<u>这些问题能激发他们思考，提高他们的理解力并且查漏补缺</u>。但回答者也不是不愿意回答一些简单的问题，他们所不愿意回答的，<strong><u>是那些不愿思考、或者在发问前不做他们该做的事的人的问题</u></strong>。</p>
+<p>  作者在这一节最后说了两段话，可以很好地表明他的态度：</p>
 <blockquote>
-<p>  显然我们要分别从无符号数和有符号数的角度去比较：</p>
-<ul>
+<p>  你不必在技术上很在行才能吸引我们的注意，但你必须表现出能引导你变得在行的特质 —— <strong>机敏、有想法、善于观察、乐于主动参与解决问题</strong>。如果你做不到这些，我们建议你花点钱找家商业公司签个技术支持服务合同，而不是要求黑客个人无偿地帮助你。</p>
+<p>  如果你决定向我们求助，能立刻得到快速并有效答案的最好方法，就是像赢家（winner）那样提问 —— <strong>聪明、自信、有解决问题的思路</strong>，只是偶尔在特定的问题上需要获得一点帮助。</p>
+</blockquote>
+<hr />
+<h1 id="提问之前"><a class="markdownIt-Anchor" href="#提问之前"></a> 提问之前</h1>
+<p>  在我们提问之前，哪些事是要做的呢？</p>
+<blockquote>
+<ol>
 <li>
-<p>如果说两个都是无符号数，显然最高有效位是1的要大于最高有效位是0的，也就是说($s0) &gt; ($s2)。</p>
+<p>尝试自己调试和检查以解决问题。</p>
 </li>
 <li>
-<p>如果说两个都是有符号数，显然最高有效位是1的（负数）要小于最高有效位是0的（正数），也就是说($s0) &gt; ($s2)。</p>
+<p>在常用论坛社区的旧文章里搜索解决方法。（推荐：<a href="https://www.csdn.net/">CSDN</a>（中文综合），<a href="https://stackoverflow.com/">StackOverflow</a>（程序相关），<a href="https://superuser.com/">Super User</a>(通用电脑问题)、<a href="https://serverfault.com/">Server Fault</a>（服务器和网管））</p>
+</li>
+<li>
+<p>在Google中搜索，比如各种错误信息等，即使没找到，<u>在提问时也可以注明你在Google下搜索过哪些问题并且没有答案</u>。</p>
+</li>
+<li>
+<p>阅读手册或者FAQ（常见问题文件）</p>
+</li>
+<li>
+<p>若是程序开发，可以阅读源码来解决问题。</p>
+</li>
+<li>
+<p>向身边的大佬请教。</p>
+</li>
+</ol>
+</blockquote>
+<hr />
+<h1 id="开始提问"><a class="markdownIt-Anchor" href="#开始提问"></a> 开始提问</h1>
+<h2 id="目标差异式标题"><a class="markdownIt-Anchor" href="#目标差异式标题"></a> 目标—差异式标题</h2>
+<p>  取一个有意义且目的明确的标题是十分重要的。一个好标题范例是<strong>目标 — 差异</strong>式的描述，许多技术支持组织就是这样做的。</p>
+<p>  <u>在<code>目标</code>部分指出是哪一个或哪一组东西有问题，在<code>差异</code>部分则描述与期望的行为不一致的地方</u>。下面，来看一个比较：</p>
+<blockquote>
+<ul>
+<li>救命啊！我的笔记本电脑不能显示了！（蠢得一批）</li>
+<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标会变形，某牌显卡MV1005芯片组。（比较聪明的问法）</li>
+<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标，在某牌显卡MV1005芯片组环境下—会变形。（最聪明的问法）</li>
+</ul>
+</blockquote>
+<h2 id="使用清晰-正确-精准且合乎语法的语句"><a class="markdownIt-Anchor" href="#使用清晰-正确-精准且合乎语法的语句"></a> 使用清晰、正确、精准且合乎语法的语句</h2>
+<p>  正确的拼写、标点符号和大小写是很重要的。一般来说，如果你觉得这样做很麻烦，不想在乎这些，那我们也觉得麻烦，不想在乎你的提问。花点额外的精力斟酌一下字句，用不着太僵硬与正式 —— 事实上，黑客文化很看重能准确地使用非正式、俚语和幽默的语句。但它<strong>必须很</strong>准确，而且有迹象表明你是在思考和关注问题。</p>
+<p>  像我这种母语不是英语的提问者，可以在问题描述中附加下面几句：</p>
+<blockquote>
+<p>English is not my native language；please excuse typing errors.</p>
+<p>I am familiar with the technical terms, but some slang expressions and idioms are difficult for me.（熟悉名词，但是不熟悉俚语）</p>
+</blockquote>
+<hr />
+<p>  下面就是重点了，<strong>我们该如何精准描述问题</strong>？</p>
+<blockquote>
+<ol>
+<li>仔细、清楚地描述你的问题或 Bug 的症状。（推荐文章：<a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html">如何有效地报告Bug</a>）</li>
+<li>描述问题发生的环境（机器配置、操作系统、应用程序、以及相关的信息），提供经销商的发行版和版本号</li>
+<li>描述在提问前你是怎样去研究和理解这个问题的。</li>
+<li>描述在提问前为确定问题而采取的诊断步骤。</li>
+<li>描述最近做过什么可能相关的硬件或软件变更。</li>
+<li>尽可能的提供一个可以<code>重现这个问题的可控环境</code>的方法。</li>
+</ol>
+</blockquote>
+<hr />
+<p>  除了上面这些之外，还要注意下面几点（md,黑客事这么多吗😅）：</p>
+<ul>
+<li>
+<p>不要用什么word,excel这些封闭格式编写的文档发送数据，这些黑客们这些嗤之以鼻。</p>
+</li>
+<li>
+<p>不要使用花哨的彩色文本和表情。</p>
+</li>
+</ul>
+<h1 id="收到回答后"><a class="markdownIt-Anchor" href="#收到回答后"></a> 收到回答后</h1>
+<h2 id="如何知道自己的问题是否很愚蠢"><a class="markdownIt-Anchor" href="#如何知道自己的问题是否很愚蠢"></a> 如何知道自己的问题是否很愚蠢</h2>
+<p>  如果你收到下面两种回应，说明你搞砸了：</p>
+<blockquote>
+<ul>
+<li>
+<p>RTFM：Read the Fucking Manual(读手册)</p>
+</li>
+<li>
+<p>STFW：Search the Fucking Web(查网页)</p>
+<p>通常，用这两句之一回答你的人会给你一份包含你需要内容的手册或者一个网址，而且他们打这些字的时候也正在读着。这些答复意味着回答者认为：</p>
+<ul>
+<li><strong>你需要的信息非常容易获得</strong>。</li>
+<li><strong>你自己去搜索这些信息比灌给你，能让你学到更多</strong>。</li>
+</ul>
 </li>
 </ul>
 </blockquote>
-<p>  对应于这两种情况，MIPS提供了两个版本的<code>小于则置位</code>指令:</p>
-<ul>
-<li>
-<p><code>slt</code>和<code>slti</code>：用于处理有符号数。</p>
-</li>
-<li>
-<p><code>sltu</code>和<code>sltiu</code>：用于处理无符号数。</p>
-</li>
-</ul>
-<hr />
-<p>  下面思考一个问题，<strong>如果用一个小于置位指令实现<code>0≤x&lt;y</code>的检验？</strong></p>
+<h2 id="如果还是搞不懂"><a class="markdownIt-Anchor" href="#如果还是搞不懂"></a> 如果还是搞不懂</h2>
+<p>  如果看不懂回应，别立刻要求对方解释。像你以前试着自己解决问题时那样（利用手册，FAQ，网络，身边的高手），先试着去搞懂他的回应。如果你真的需要对方解释，记得<strong>表现出你已经从中学到了点什么</strong>。</p>
+<p>  比方说，如果我回答你：</p>
 <blockquote>
-<p>  x &lt; y很好检验，关键是这个≥0 怎么搞。负数的补码表示在无符号数的表示中看起来像是个很大的是（比如说什么那一串1就是-1）。那么<strong>我们只要使用无符号比较x&lt;y，在比较x是否小于y的同时，也检验了x是否为一个负数</strong>。因为如果x为负数，那么肯定x会大于y。</p>
+<p>看来似乎是 zentry 卡住了；你应该先清除它。</p>
 </blockquote>
-<p>  假设现在有一个数组<code>Array[i]</code>，它定义的时候是有9个单元，现在要检验<code>Array[i]</code>有没有越界。其实这就是我们上面这段说的问题——<code>0≤x&lt;y</code>的检验(也叫边界检查)。</p>
-<hr />
-<p>  MIPS中写法如下：</p>
-<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">sltu <span class="token operator">$</span>t0,<span class="token operator">$</span>s1,<span class="token operator">$</span>t2                 # t0<span class="token operator">=</span><span class="token number">0</span> if <span class="token operator">$</span>s1 <span class="token operator">></span><span class="token operator">=</span>length or <span class="token operator">$</span>s1 <span class="token operator">&lt;</span> <span class="token number">0</span>
-beq <span class="token operator">$</span>t0,<span class="token operator">$</span>zero,IndexOutOfBounds   # if bad,goto Error<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>  像下面这种文法是很糟糕的：</p>
+<blockquote>
+<p>zentry 是什么？</p>
+</blockquote>
+<p>  好的问法应该是这样的：</p>
+<blockquote>
+<p>哦~~~我看过说明了但是只有 -z 和 -p 两个参数中提到了 zentries，而且还都没有清楚的解释如何清除它。你是指这两个中的哪一个吗？还是我看漏了什么？</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>汇编语言</category>
-        <category>MIPS</category>
+        <category>Let&#39;s Talk</category>
       </categories>
       <tags>
-        <tag>MIPS</tag>
-        <tag>计算机组成原理</tag>
+        <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vscode使用指南</title>
+    <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  最近在用VScode这款编辑器，为了最大化发挥这个工具的能力，需要记住一些不同的快捷键以及方法，这些玩意需要多用才能熟练掌握，为此，我想写个简易的对照手册，这样能够在我忘记的时候可以快速地查找到想要的命令，提高效率。</p>
+<span id="more"></span>
+<h1 id="vscode杂谈"><a class="markdownIt-Anchor" href="#vscode杂谈"></a> Vscode杂谈</h1>
+<p>  Vscode全名为<u>Visual Studio Code</u>,其是微软开发的一款<strong>免费的</strong>、<strong>开源的</strong>跨平台轻量编辑器。</p>
+<p>  注意，VScode不是IDE。IDE侧重的是开箱即用的编程体验、对代码往往有很好的智能理解，同时侧重于工程项目，为代码调试、测试、工作流等都有图形化界面的支持，所以比较笨重；而像VScode这种编辑器，<strong>侧重文件夹和文件，支持的语言丰富多样，十分自由</strong>。</p>
+<p>  VScode有个很显著的特点就是它是一种开放的平台，VS Code 的源代码以 MIT 协议开源。这不仅意味着大家能够免费获取到 VS Code 的核心代码，更意味着<u>社区能够基于 VS Code 的代码，开发自己的产品</u>，这一点十分重要。就是因为这个特点，我们才会看到vscode上的各种各样的插件，可以实现高度的定制化，打造专属于自己的编辑器。</p>
+<h1 id="写代码时"><a class="markdownIt-Anchor" href="#写代码时"></a> 写代码时</h1>
+<p>  我们首先来讲讲写代码时最常用的操作，熟记这些操作能帮助我们提高编写代码的效率。</p>
+<h2 id="光标移动"><a class="markdownIt-Anchor" href="#光标移动"></a> 光标移动</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">光标移动到一行（文档）的开头/结尾</td>
+<td style="text-align:center">home/end（Ctrl+home/Ctrl+end）</td>
+</tr>
+<tr>
+<td style="text-align:center">光标移动到当前单词的首和尾</td>
+<td style="text-align:center">ctrl+←(ctrl+→)</td>
+</tr>
+<tr>
+<td style="text-align:center">回到上一个光标的位置</td>
+<td style="text-align:center">Ctrl+U</td>
+</tr>
+<tr>
+<td style="text-align:center">代码块的移动（在一对花括号之间跳转）</td>
+<td style="text-align:center">Ctrl + Shift + \</td>
+</tr>
+<tr>
+<td style="text-align:center">文本选择</td>
+<td style="text-align:center">一直按着shift键，然后按方向键</td>
+</tr>
+</tbody>
+</table>
+<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">删除整行</td>
+<td style="text-align:center">Ctrl+Shift+K</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之前的一个英文单词</td>
+<td style="text-align:center">Ctrl+backspace</td>
+</tr>
+<tr>
+<td style="text-align:center">删除光标之后的一个英文单词</td>
+<td style="text-align:center">Ctrl+delete</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码行编辑"><a class="markdownIt-Anchor" href="#代码行编辑"></a> 代码行编辑</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">在当前行上（下）快速插入一空行</td>
+<td style="text-align:center">Ctrl+Enter(Ctrl+Shift+Enter)</td>
+</tr>
+<tr>
+<td style="text-align:center">交换上下行的位置</td>
+<td style="text-align:center">按着alt键，然后按方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">复制本行代码到插入到下（上）一行</td>
+<td style="text-align:center">按着alt和shift键，然后按方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">快速注释一行（整段代码注释）</td>
+<td style="text-align:center">Ctrl+/（Alt+Ctrl+/）</td>
+</tr>
+<tr>
+<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
+<td style="text-align:center">Ctrl+G+行号</td>
+</tr>
+<tr>
+<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
+<td style="text-align:center">F12/Ctrl+F12</td>
+</tr>
+<tr>
+<td style="text-align:center">展现谁引用了函数或类</td>
+<td style="text-align:center">Shift+F12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码跳转和查看引用"><a class="markdownIt-Anchor" href="#代码跳转和查看引用"></a> 代码跳转和查看引用</h2>
+<p>  有时候我们需要查看一个函数的定义是什么样的或者查看一个函数在哪些地方被引用，这个时候我们就需要一些快捷操作：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">查看当前函数定义</td>
+<td style="text-align:center">(按住ctrl键，然后鼠标左键) 或者 (移动光标到待查看函数，然后按F12)</td>
+</tr>
+<tr>
+<td style="text-align:center">查看当前函数被引用情况</td>
+<td style="text-align:center">shift+F12</td>
+</tr>
+</tbody>
+</table>
+<h1 id="文件之间"><a class="markdownIt-Anchor" href="#文件之间"></a> 文件之间</h1>
+<p>  有时候我们需要在不同的文件之间切换以及进行一些操作，下面讲讲关于这些的操作。</p>
+<h2 id="文件级操作"><a class="markdownIt-Anchor" href="#文件级操作"></a> 文件级操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">快速打开文件</td>
+<td style="text-align:center">Ctrl+P进入文件查找列表（<strong>如果按下ctrl+Enter会在新的编辑器打开</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开最近文件</td>
+<td style="text-align:center">Ctrl+R</td>
+</tr>
+<tr>
+<td style="text-align:center">快速打开文件第n行</td>
+<td style="text-align:center">Ctrl+g，输入行号</td>
+</tr>
+</tbody>
+</table>
+<h2 id="全局快捷键"><a class="markdownIt-Anchor" href="#全局快捷键"></a> 全局快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">打开/关闭侧边栏</td>
+<td style="text-align:center">Ctrl+B</td>
+</tr>
+<tr>
+<td style="text-align:center">打开多个编辑器</td>
+<td style="text-align:center">Ctrl+\</td>
+</tr>
+<tr>
+<td style="text-align:center">聚焦到第n个编辑器</td>
+<td style="text-align:center">Ctrl+n(数字)</td>
+</tr>
+<tr>
+<td style="text-align:center">放大/缩小</td>
+<td style="text-align:center">Ctrl + +/-</td>
+</tr>
+<tr>
+<td style="text-align:center">进入专注模式</td>
+<td style="text-align:center">进：Ctrl+K再按M,退：Esc twice</td>
+</tr>
+</tbody>
+</table>
+<h2 id="自定义快捷键"><a class="markdownIt-Anchor" href="#自定义快捷键"></a> 自定义快捷键</h2>
+<p>  vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" title="" alt="image-20210903152109373" data-align="center">
+<h1 id="vscode配置云同步"><a class="markdownIt-Anchor" href="#vscode配置云同步"></a> VScode配置云同步</h1>
+<p>  我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。</p>
+<p>  我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。</p>
+<p><strong>将自己本地的配置云同步到 GitHub</strong>：</p>
+<p>（1）安装插件 <code>settings-sync</code>。</p>
+<p>（2）安装完插件后，在插件里使用 GitHub 账号登录。</p>
+<p>（3）登录后在 vscode 的界面中，可以选择一个别人的 gist；也可以忽略掉，然后创建一个属于自己的 gist。</p>
+<p>（4）使用快捷键 「Command + Shift + P」，在弹出的命令框中输入 sync，并选择「更新/上传配置」，这样就可以把最新的配置上传到 GitHub。</p>
+<p><strong>我们如何将Gist中保存的配置同步到本地呢？</strong></p>
+<p>  首先将gist ID更改为你想要的ID：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903155215.png" alt="image-20210903155208689" /></p>
+<p>  打开命令面板，输入sync，选择高级选线，里面就可以更改你想要的gist ID，然后进行下载配置(shift + ALt + D)</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>vscode</tag>
       </tags>
   </entry>
   <entry>
@@ -845,9 +1038,55 @@ beq <span class="token operator">$</span>t0,<span class="token operator">$</span
         <category>工具</category>
       </categories>
       <tags>
-        <tag>教程</tag>
         <tag>正则表达式</tag>
         <tag>文本处理</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIPS中一种低开销的边界检查方法</title>
+    <url>/2022/01/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS%E4%B8%AD%E4%B8%80%E7%A7%8D%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E7%9A%84%E4%BD%8E%E5%BC%80%E9%94%80%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>  今天在看计组的时候，在书上看到了一个巧妙的方法，所以想把它记录下来。（在<a href="https://book.douban.com/subject/2110638/">这本书</a>的2.7.1节）</p>
+<p>  如果寄存器$s0中的数为:<code>1111 1111 1111 1111 1111 1111 1111 1111</code>，而寄存器$s2中的数为:<code>0000 0000 0000 0000 0000 0000 0000 0001</code>。现在想一下这两个数哪个比较大？</p>
+<span id="more"></span>
+<blockquote>
+<p>  显然我们要分别从无符号数和有符号数的角度去比较：</p>
+<ul>
+<li>
+<p>如果说两个都是无符号数，显然最高有效位是1的要大于最高有效位是0的，也就是说($s0) &gt; ($s2)。</p>
+</li>
+<li>
+<p>如果说两个都是有符号数，显然最高有效位是1的（负数）要小于最高有效位是0的（正数），也就是说($s0) &gt; ($s2)。</p>
+</li>
+</ul>
+</blockquote>
+<p>  对应于这两种情况，MIPS提供了两个版本的<code>小于则置位</code>指令:</p>
+<ul>
+<li>
+<p><code>slt</code>和<code>slti</code>：用于处理有符号数。</p>
+</li>
+<li>
+<p><code>sltu</code>和<code>sltiu</code>：用于处理无符号数。</p>
+</li>
+</ul>
+<hr />
+<p>  下面思考一个问题，<strong>如果用一个小于置位指令实现<code>0≤x&lt;y</code>的检验？</strong></p>
+<blockquote>
+<p>  x &lt; y很好检验，关键是这个≥0 怎么搞。负数的补码表示在无符号数的表示中看起来像是个很大的是（比如说什么那一串1就是-1）。那么<strong>我们只要使用无符号比较x&lt;y，在比较x是否小于y的同时，也检验了x是否为一个负数</strong>。因为如果x为负数，那么肯定x会大于y。</p>
+</blockquote>
+<p>  假设现在有一个数组<code>Array[i]</code>，它定义的时候是有9个单元，现在要检验<code>Array[i]</code>有没有越界。其实这就是我们上面这段说的问题——<code>0≤x&lt;y</code>的检验(也叫边界检查)。</p>
+<hr />
+<p>  MIPS中写法如下：</p>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">sltu <span class="token operator">$</span>t0,<span class="token operator">$</span>s1,<span class="token operator">$</span>t2                 # t0<span class="token operator">=</span><span class="token number">0</span> if <span class="token operator">$</span>s1 <span class="token operator">></span><span class="token operator">=</span>length or <span class="token operator">$</span>s1 <span class="token operator">&lt;</span> <span class="token number">0</span>
+beq <span class="token operator">$</span>t0,<span class="token operator">$</span>zero,IndexOutOfBounds   # if bad,goto Error<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+        <category>MIPS</category>
+      </categories>
+      <tags>
+        <tag>MIPS</tag>
+        <tag>计算机组成原理</tag>
       </tags>
   </entry>
   <entry>
@@ -1229,210 +1468,6 @@ end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
       </tags>
   </entry>
   <entry>
-    <title>vscode使用指南</title>
-    <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  最近在用VScode这款编辑器，为了最大化发挥这个工具的能力，需要记住一些不同的快捷键以及方法，这些玩意需要多用才能熟练掌握，为此，我想写个简易的对照手册，这样能够在我忘记的时候可以快速地查找到想要的命令，提高效率。</p>
-<span id="more"></span>
-<h1 id="vscode杂谈"><a class="markdownIt-Anchor" href="#vscode杂谈"></a> Vscode杂谈</h1>
-<p>  Vscode全名为<u>Visual Studio Code</u>,其是微软开发的一款<strong>免费的</strong>、<strong>开源的</strong>跨平台轻量编辑器。</p>
-<p>  注意，VScode不是IDE。IDE侧重的是开箱即用的编程体验、对代码往往有很好的智能理解，同时侧重于工程项目，为代码调试、测试、工作流等都有图形化界面的支持，所以比较笨重；而像VScode这种编辑器，<strong>侧重文件夹和文件，支持的语言丰富多样，十分自由</strong>。</p>
-<p>  VScode有个很显著的特点就是它是一种开放的平台，VS Code 的源代码以 MIT 协议开源。这不仅意味着大家能够免费获取到 VS Code 的核心代码，更意味着<u>社区能够基于 VS Code 的代码，开发自己的产品</u>，这一点十分重要。就是因为这个特点，我们才会看到vscode上的各种各样的插件，可以实现高度的定制化，打造专属于自己的编辑器。</p>
-<h1 id="写代码时"><a class="markdownIt-Anchor" href="#写代码时"></a> 写代码时</h1>
-<p>  我们首先来讲讲写代码时最常用的操作，熟记这些操作能帮助我们提高编写代码的效率。</p>
-<h2 id="光标移动"><a class="markdownIt-Anchor" href="#光标移动"></a> 光标移动</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">光标移动到一行（文档）的开头/结尾</td>
-<td style="text-align:center">home/end（Ctrl+home/Ctrl+end）</td>
-</tr>
-<tr>
-<td style="text-align:center">光标移动到当前单词的首和尾</td>
-<td style="text-align:center">ctrl+←(ctrl+→)</td>
-</tr>
-<tr>
-<td style="text-align:center">回到上一个光标的位置</td>
-<td style="text-align:center">Ctrl+U</td>
-</tr>
-<tr>
-<td style="text-align:center">代码块的移动（在一对花括号之间跳转）</td>
-<td style="text-align:center">Ctrl + Shift + \</td>
-</tr>
-<tr>
-<td style="text-align:center">文本选择</td>
-<td style="text-align:center">一直按着shift键，然后按方向键</td>
-</tr>
-</tbody>
-</table>
-<h2 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">删除整行</td>
-<td style="text-align:center">Ctrl+Shift+K</td>
-</tr>
-<tr>
-<td style="text-align:center">删除光标之前的一个英文单词</td>
-<td style="text-align:center">Ctrl+backspace</td>
-</tr>
-<tr>
-<td style="text-align:center">删除光标之后的一个英文单词</td>
-<td style="text-align:center">Ctrl+delete</td>
-</tr>
-</tbody>
-</table>
-<h2 id="代码行编辑"><a class="markdownIt-Anchor" href="#代码行编辑"></a> 代码行编辑</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">在当前行上（下）快速插入一空行</td>
-<td style="text-align:center">Ctrl+Enter(Ctrl+Shift+Enter)</td>
-</tr>
-<tr>
-<td style="text-align:center">交换上下行的位置</td>
-<td style="text-align:center">按着alt键，然后按方向键</td>
-</tr>
-<tr>
-<td style="text-align:center">复制本行代码到插入到下（上）一行</td>
-<td style="text-align:center">按着alt和shift键，然后按方向键</td>
-</tr>
-<tr>
-<td style="text-align:center">快速注释一行（整段代码注释）</td>
-<td style="text-align:center">Ctrl+/（Alt+Ctrl+/）</td>
-</tr>
-<tr>
-<td style="text-align:center">快速跳转到行（比如报错在第n行）</td>
-<td style="text-align:center">Ctrl+G+行号</td>
-</tr>
-<tr>
-<td style="text-align:center">跳转到函数定义处/跳转到函数实现处</td>
-<td style="text-align:center">F12/Ctrl+F12</td>
-</tr>
-<tr>
-<td style="text-align:center">展现谁引用了函数或类</td>
-<td style="text-align:center">Shift+F12</td>
-</tr>
-</tbody>
-</table>
-<h2 id="代码跳转和查看引用"><a class="markdownIt-Anchor" href="#代码跳转和查看引用"></a> 代码跳转和查看引用</h2>
-<p>  有时候我们需要查看一个函数的定义是什么样的或者查看一个函数在哪些地方被引用，这个时候我们就需要一些快捷操作：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">查看当前函数定义</td>
-<td style="text-align:center">(按住ctrl键，然后鼠标左键) 或者 (移动光标到待查看函数，然后按F12)</td>
-</tr>
-<tr>
-<td style="text-align:center">查看当前函数被引用情况</td>
-<td style="text-align:center">shift+F12</td>
-</tr>
-</tbody>
-</table>
-<h1 id="文件之间"><a class="markdownIt-Anchor" href="#文件之间"></a> 文件之间</h1>
-<p>  有时候我们需要在不同的文件之间切换以及进行一些操作，下面讲讲关于这些的操作。</p>
-<h2 id="文件级操作"><a class="markdownIt-Anchor" href="#文件级操作"></a> 文件级操作</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">快速打开文件</td>
-<td style="text-align:center">Ctrl+P进入文件查找列表（<strong>如果按下ctrl+Enter会在新的编辑器打开</strong>）</td>
-</tr>
-<tr>
-<td style="text-align:center">快速打开最近文件</td>
-<td style="text-align:center">Ctrl+R</td>
-</tr>
-<tr>
-<td style="text-align:center">快速打开文件第n行</td>
-<td style="text-align:center">Ctrl+g，输入行号</td>
-</tr>
-</tbody>
-</table>
-<h2 id="全局快捷键"><a class="markdownIt-Anchor" href="#全局快捷键"></a> 全局快捷键</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">作用</th>
-<th style="text-align:center">快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">打开/关闭侧边栏</td>
-<td style="text-align:center">Ctrl+B</td>
-</tr>
-<tr>
-<td style="text-align:center">打开多个编辑器</td>
-<td style="text-align:center">Ctrl+\</td>
-</tr>
-<tr>
-<td style="text-align:center">聚焦到第n个编辑器</td>
-<td style="text-align:center">Ctrl+n(数字)</td>
-</tr>
-<tr>
-<td style="text-align:center">放大/缩小</td>
-<td style="text-align:center">Ctrl + +/-</td>
-</tr>
-<tr>
-<td style="text-align:center">进入专注模式</td>
-<td style="text-align:center">进：Ctrl+K再按M,退：Esc twice</td>
-</tr>
-</tbody>
-</table>
-<h2 id="自定义快捷键"><a class="markdownIt-Anchor" href="#自定义快捷键"></a> 自定义快捷键</h2>
-<p>  vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" title="" alt="image-20210903152109373" data-align="center">
-<h1 id="vscode配置云同步"><a class="markdownIt-Anchor" href="#vscode配置云同步"></a> VScode配置云同步</h1>
-<p>  我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。</p>
-<p>  我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。</p>
-<p><strong>将自己本地的配置云同步到 GitHub</strong>：</p>
-<p>（1）安装插件 <code>settings-sync</code>。</p>
-<p>（2）安装完插件后，在插件里使用 GitHub 账号登录。</p>
-<p>（3）登录后在 vscode 的界面中，可以选择一个别人的 gist；也可以忽略掉，然后创建一个属于自己的 gist。</p>
-<p>（4）使用快捷键 「Command + Shift + P」，在弹出的命令框中输入 sync，并选择「更新/上传配置」，这样就可以把最新的配置上传到 GitHub。</p>
-<p><strong>我们如何将Gist中保存的配置同步到本地呢？</strong></p>
-<p>  首先将gist ID更改为你想要的ID：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903155215.png" alt="image-20210903155208689" /></p>
-<p>  打开命令面板，输入sync，选择高级选线，里面就可以更改你想要的gist ID，然后进行下载配置(shift + ALt + D)</p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>vscode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>王爽《汇编语言》实验环境搭建</title>
     <url>/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
@@ -1478,184 +1513,6 @@ c:                             \\转到c盘<span aria-hidden="true" class="line-
       </categories>
       <tags>
         <tag>8086</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>王爽《汇编语言》实验八、九</title>
-    <url>/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%85%AB%E3%80%81%E4%B9%9D/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  实验八、九是一起放在<mark>第九章：转移指令的原理</mark>这一章里面的，所以放在一块说。这一章主要讲了jmp指令的不同形式，但也涉及导论其他的一些跳转指令：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114145114.png" alt="本章主要内容" /></p>
-<span id="more"></span>
-<h1 id="实验八"><a class="markdownIt-Anchor" href="#实验八"></a> 实验八</h1>
-<h2 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h2>
-<p>  分析下面的程序，在运行前思考：这个程序可以正确返回吗？</p>
-<p>  运行后思考：为什么是这种结果？</p>
-<p>  通过这个程序加深对相关内容的理解。</p>
-<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:codesg
-codesg segment
-        mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
-        int <span class="token number">21h</span>
-
-<span class="token label function">start:</span>    mov <span class="token register variable">ax</span>,<span class="token number">0</span>
-    <span class="token label function">s:</span>    nop
-        nop
-
-        mov <span class="token register variable">di</span>,offset s
-        mov <span class="token register variable">si</span>,offset s2
-        mov <span class="token register variable">ax</span>,<span class="token register variable">cx</span>:<span class="token operator">[</span><span class="token register variable">si</span><span class="token operator">]</span>
-        mov <span class="token register variable">cs</span>:<span class="token operator">[</span><span class="token register variable">di</span><span class="token operator">]</span>,<span class="token register variable">ax</span>
-
-   <span class="token label function">s0:</span>    jmp short s
-   <span class="token label function">s1:</span>    mov <span class="token register variable">ax</span>,<span class="token number">0</span>
-           int <span class="token number">21h</span>
-           mov <span class="token register variable">ax</span>,<span class="token number">0</span>
-
-   <span class="token label function">s2:</span>    jmp short s1
-           nop
-codesg ends
-end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="分析"><a class="markdownIt-Anchor" href="#分析"></a> 分析</h2>
-<p>  这个程序究竟干了啥？<br />
-  从<code>di,offset s</code>到<code>mov cs:[di],ax</code>这一段干的事就是把s2标号处的代码复制到s标号处，然后下面就是一系列跳转。</p>
-<p>  在实际操作之前，我们先简单复习一下：上面这个程序所使用的jmp指令都是短转移<code>jmp short 标号</code>，意味着<strong>这些jmp指令不会实际给出要转移到的目的地址，而是给出要转移的位移量</strong>。那么这个位移量是怎么算的呢？如下图所示：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114150252.png" alt="" /></p>
-<p>  如果不是很懂，就先去把书上第九章先看一下吧。下面我们来实际操作一下：</p>
-<h2 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h2>
-<p>  我们首先用debug的<code>-u</code>命令查看反汇编格式：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%961.png" title="" alt="" data-align="center">
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%962.png" title="" alt="" data-align="center">
-<p>  观察一下<code>076A:0016</code>和<code>076A:0020</code>的两处jmp短转移指令，分别对应了<code>s0: jmp short s</code>和<code>s2: jmp short s1</code>,它们两的机器码分别是<code>EBF0</code>和<code>EBF6</code>。我们来验证一下短转移指令是不是上面所说的原理：</p>
-<blockquote>
-<p><code>s0: jmp short s</code>这条指令是要跳转到s处，s标号处所在的地址是<code>076A:0008</code>，而<code>s0:jmp short s</code>这条指令所在的地址是<code>076A:0016</code>,根据上面所说的转移位移的计算方法：<u><code>s0:jmp short s</code>下一条指令的地址是<code>076A:0018</code>,而目标地址是s标号处所在的<code>076A:0008</code>，两点的距离为08H-18H = -10H （十进制为-16）,其补码表示为F0</u>。<code>s0: jmp short s</code>这条指令显示的机器码是<code>EBF0</code>，可以看到和我们刚刚算出来的F0是一样的。</p>
-<p><code>s2: jmp short s1</code>也是一个道理，就不细说了。</p>
-</blockquote>
-<p>  现在我们开始执行程序，<strong>注意由于start标号是在<code>076A:0005</code>,所以程序执行是从这个地址开始，而不是在<code>076A:0000</code></strong>。在s0之前的这段代码做的事情就是把s2标号处的代码复制到s处，我们可以看看执行到s0标号这一步的反汇编格式：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%963.png" title="" alt="" data-align="center">
-<p>  我们可以看到<strong>s标号处（<code>076A:0008</code>）原本的nop指令被s2标号处的<code>EBF6</code>给取代了</strong>。这里就是<u>问题的关键</u>，<font color=purple>注意短转移指令只提供要转移的位移，而不是目的地址，<strong>EBF6的含义是：转移到与当前这个jmp指令的下一条指令距离为<code>F6</code>,也就是-A</strong>。</font></p>
-<p>  现在我们继续执行代码，现在<code>CS:IP</code>应该指向s0处，执行后，跳转到标号s处，这个时候就开始执行<code>EBF6</code>了,首先IP+=2，IP = 001A，然后指令缓冲器开始执行<code>EBF6</code>，向前跳转-A,到<code>076A：0000</code>,也就是<code>mov ax,4c00</code>处，下面程序就可以正常返回了。我们来验证一下：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp1.png" title="" alt="image-20211114155423057" data-align="center">
-<p>  可以看到现在已经跳转到s标号处了，指令已经显示为<code>JMP 0000</code>。我们再执行一次:</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp2.png" title="" alt="image-20211114155558123" data-align="center">
-<p>  程序已经开始返回了，说明我们之前说的是对的。实验8到这也就结束了。</p>
-<h1 id="实验九"><a class="markdownIt-Anchor" href="#实验九"></a> 实验九</h1>
-<h2 id="分析-2"><a class="markdownIt-Anchor" href="#分析-2"></a> 分析</h2>
-<p>  额，这个实验好像是给我们一段材料，然后写出一个程序来，目标是实现：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114155857.png" alt="" /></p>
-<p>  作者说了要根据材料，材料上已经讲得很好了，我这就贴上我的拙作，仅供参考：</p>
-<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:codesg,<span class="token register variable">ds</span>:data
-data segment
-        dw <span class="token number">0277H</span>,<span class="token number">0265H</span>,<span class="token number">026cH</span>,<span class="token number">0263H</span>,<span class="token number">026fH</span>,<span class="token number">026dH</span>,<span class="token number">0265H</span>,<span class="token number">0220H</span>,<span class="token number">0274H</span>,<span class="token number">026fH</span>,<span class="token number">0220H</span>,<span class="token number">026dH</span>,<span class="token number">0261H</span>,<span class="token number">0273H</span>,<span class="token number">026dh</span>,<span class="token number">0221H</span>
-        dw <span class="token number">2477h</span>,<span class="token number">2465h</span>,<span class="token number">246ch</span>,<span class="token number">2463h</span>,<span class="token number">246fh</span>,<span class="token number">246dh</span>,<span class="token number">2465h</span>,<span class="token number">2420h</span>,<span class="token number">2474h</span>,<span class="token number">246fh</span>,<span class="token number">2420h</span>,<span class="token number">246dh</span>,<span class="token number">2461h</span>,<span class="token number">2473h</span>,<span class="token number">246dh</span>,<span class="token number">2421h</span>
-        dw <span class="token number">7177h</span>,<span class="token number">7165h</span>,<span class="token number">716ch</span>,<span class="token number">7163h</span>,<span class="token number">716fh</span>,<span class="token number">716dh</span>,<span class="token number">7165h</span>,<span class="token number">7120h</span>,<span class="token number">7174h</span>,<span class="token number">716fh</span>,<span class="token number">7120h</span>,<span class="token number">716dh</span>,<span class="token number">7161h</span>,<span class="token number">7173h</span>,<span class="token number">716dh</span>,<span class="token number">7121h</span>
-data ends
-
-codesg segment
- <span class="token label function">start:</span> mov <span class="token register variable">ax</span>,data
-        mov <span class="token register variable">ds</span>,<span class="token register variable">ax</span>
-        mov <span class="token register variable">ax</span>,<span class="token number">0B800h</span>
-        mov <span class="token register variable">es</span>,<span class="token register variable">ax</span>
-        mov <span class="token register variable">bx</span>,<span class="token number">0640h</span>
-        mov <span class="token register variable">dx</span>,<span class="token number">4</span>
-        mov <span class="token register variable">di</span>,<span class="token number">0</span>
-
-    <span class="token label function">s0:</span> dec <span class="token register variable">dx</span>
-        mov <span class="token register variable">cx</span>,<span class="token register variable">dx</span>
-        jcxz stop
-        add <span class="token register variable">bx</span>,<span class="token number">0a0h</span>
-        mov <span class="token register variable">si</span>,<span class="token number">0</span>
-        mov <span class="token register variable">cx</span>,<span class="token number">16</span>
-
-     <span class="token label function">s:</span> mov <span class="token register variable">ax</span>,<span class="token operator">[</span><span class="token register variable">di</span><span class="token operator">]</span>
-        add <span class="token register variable">di</span>,<span class="token number">2</span>
-        mov <span class="token register variable">es</span>:<span class="token operator">[</span><span class="token register variable">bx</span><span class="token operator">+</span><span class="token number">3eh</span><span class="token operator">+</span><span class="token register variable">si</span><span class="token operator">]</span>,<span class="token register variable">ax</span>
-        add <span class="token register variable">si</span>,<span class="token number">2</span>
-        loop s
-        jcxz s0
-
-  <span class="token label function">stop:</span> mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
-        int <span class="token number">21h</span>
-
-codesg ends
-end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114200916.png" alt="RESULT" /></p>
-]]></content>
-      <categories>
-        <category>汇编语言</category>
-        <category>8086实验</category>
-      </categories>
-      <tags>
-        <tag>8086</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>上海之行</title>
-    <url>/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
-    <content><![CDATA[<p>  8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
-<span id="more"></span>
-<p>  我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711121722.png" title="" alt="image-20210711121714205" data-align="center">
-<p>  😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122613.jpg" alt="waic展1" style="zoom: 67%;" data-align="center" width="500">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122641.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
-<p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123403.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="510">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123438.png" alt="image-20210711123438317" style="zoom: 67%;" data-align="center" width="513">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123509.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="494">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123544.png" alt="image-20210711123544385" style="zoom: 67%;" data-align="center" width="514">
-<p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082011.png" alt="image-20210714082002960" data-align="center" width="536">
-<p>  虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
-<h4 id="上海历史博物馆"><a class="markdownIt-Anchor" href="#上海历史博物馆"></a> 上海历史博物馆</h4>
-<p>  这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125429.png" alt="image-20210711125428826" style="zoom:67%;" data-align="center">
-<p>  《中国共产党宣言》，这个是真迹。这是中国共产党的源头了。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125816.png" alt="image-20210711125815779" style="zoom:67%;" data-align="center">
-<p>  好家伙，还有这个。</p>
-<h4 id="武康路愚园路"><a class="markdownIt-Anchor" href="#武康路愚园路"></a> 武康路，愚园路</h4>
-<p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
-<h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
-<p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082110.png" title="" alt="image-20210714082110471" data-align="center">
-<p>  这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711233913.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="341">
-<p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234050.png" alt="image-20210711234049822" style="zoom:50%;" data-align="center" width="366">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234132.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="379">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234152.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="367">
-<p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234304.png" alt="image-20210711234303508" style="zoom:50%;" data-align="center" width="373">
-<p>  这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234349.png" alt="image-20210711234348837" style="zoom:67%;" data-align="center" width="373">
-<p>  这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234537.png" alt="image-20210711234536757" style="zoom:50%;" data-align="center" width="386">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234552.png" alt="image-20210711234551826" style="zoom:67%;" data-align="center" width="410">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234618.png" alt="image-20210711234617641" style="zoom:67%;" data-align="center" width="431">
-<p>  这个馆里有很多精美的陶瓷制品，我最喜欢的花纹就是最后一张这种裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234753.png" alt="image-20210711234752559" style="zoom:50%;" data-align="center" width="435">
-<p>  这种颜色也是我很喜欢的。</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234826.png" alt="image-20210711234825706" style="zoom:67%;" data-align="center" width="446">
-<p>  这个简直神了。。。</p>
-<p>  剩下的就不贴上来了，总的来说上博之旅还是很满意的。</p>
-<h4 id="外滩南京东路"><a class="markdownIt-Anchor" href="#外滩南京东路"></a> 外滩，南京东路</h4>
-<p>  来上海，除了老洋房，当然要看看其繁华的一面，当仁不让的当然是外滩，陆家嘴这一带。刚出地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235248.png" alt="image-20210711235248113" style="zoom:67%;" data-align="center">
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235314.png" alt="image-20210711235314082" style="zoom:67%;" data-align="center">
-<p>  再来看看黄浦江对面的陆家嘴，浦东最繁华的地方：</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235457.png" title="" alt="image-20210711235457234" data-align="center">
-<h4 id="waic论坛"><a class="markdownIt-Anchor" href="#waic论坛"></a> WAIC论坛</h4>
-<p>  额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
-<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000357.png" alt="image-20210712000357612" /></p>
-<p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000558.png" alt="image-20210712000558320" style="zoom:67%;" />
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000617.png" alt="image-20210712000617839" style="zoom:67%;" />
-<p>  就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
-]]></content>
-      <categories>
-        <category>生活记录</category>
-      </categories>
-      <tags>
-        <tag>游记</tag>
       </tags>
   </entry>
   <entry>
@@ -1932,6 +1789,114 @@ end main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
       </tags>
   </entry>
   <entry>
+    <title>王爽《汇编语言》实验八、九</title>
+    <url>/2021/11/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%85%AB%E3%80%81%E4%B9%9D/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  实验八、九是一起放在<mark>第九章：转移指令的原理</mark>这一章里面的，所以放在一块说。这一章主要讲了jmp指令的不同形式，但也涉及导论其他的一些跳转指令：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114145114.png" alt="本章主要内容" /></p>
+<span id="more"></span>
+<h1 id="实验八"><a class="markdownIt-Anchor" href="#实验八"></a> 实验八</h1>
+<h2 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h2>
+<p>  分析下面的程序，在运行前思考：这个程序可以正确返回吗？</p>
+<p>  运行后思考：为什么是这种结果？</p>
+<p>  通过这个程序加深对相关内容的理解。</p>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:codesg
+codesg segment
+        mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
+        int <span class="token number">21h</span>
+
+<span class="token label function">start:</span>    mov <span class="token register variable">ax</span>,<span class="token number">0</span>
+    <span class="token label function">s:</span>    nop
+        nop
+
+        mov <span class="token register variable">di</span>,offset s
+        mov <span class="token register variable">si</span>,offset s2
+        mov <span class="token register variable">ax</span>,<span class="token register variable">cx</span>:<span class="token operator">[</span><span class="token register variable">si</span><span class="token operator">]</span>
+        mov <span class="token register variable">cs</span>:<span class="token operator">[</span><span class="token register variable">di</span><span class="token operator">]</span>,<span class="token register variable">ax</span>
+
+   <span class="token label function">s0:</span>    jmp short s
+   <span class="token label function">s1:</span>    mov <span class="token register variable">ax</span>,<span class="token number">0</span>
+           int <span class="token number">21h</span>
+           mov <span class="token register variable">ax</span>,<span class="token number">0</span>
+
+   <span class="token label function">s2:</span>    jmp short s1
+           nop
+codesg ends
+end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="分析"><a class="markdownIt-Anchor" href="#分析"></a> 分析</h2>
+<p>  这个程序究竟干了啥？<br />
+  从<code>di,offset s</code>到<code>mov cs:[di],ax</code>这一段干的事就是把s2标号处的代码复制到s标号处，然后下面就是一系列跳转。</p>
+<p>  在实际操作之前，我们先简单复习一下：上面这个程序所使用的jmp指令都是短转移<code>jmp short 标号</code>，意味着<strong>这些jmp指令不会实际给出要转移到的目的地址，而是给出要转移的位移量</strong>。那么这个位移量是怎么算的呢？如下图所示：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114150252.png" alt="" /></p>
+<p>  如果不是很懂，就先去把书上第九章先看一下吧。下面我们来实际操作一下：</p>
+<h2 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h2>
+<p>  我们首先用debug的<code>-u</code>命令查看反汇编格式：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%961.png" title="" alt="" data-align="center">
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%962.png" title="" alt="" data-align="center">
+<p>  观察一下<code>076A:0016</code>和<code>076A:0020</code>的两处jmp短转移指令，分别对应了<code>s0: jmp short s</code>和<code>s2: jmp short s1</code>,它们两的机器码分别是<code>EBF0</code>和<code>EBF6</code>。我们来验证一下短转移指令是不是上面所说的原理：</p>
+<blockquote>
+<p><code>s0: jmp short s</code>这条指令是要跳转到s处，s标号处所在的地址是<code>076A:0008</code>，而<code>s0:jmp short s</code>这条指令所在的地址是<code>076A:0016</code>,根据上面所说的转移位移的计算方法：<u><code>s0:jmp short s</code>下一条指令的地址是<code>076A:0018</code>,而目标地址是s标号处所在的<code>076A:0008</code>，两点的距离为08H-18H = -10H （十进制为-16）,其补码表示为F0</u>。<code>s0: jmp short s</code>这条指令显示的机器码是<code>EBF0</code>，可以看到和我们刚刚算出来的F0是一样的。</p>
+<p><code>s2: jmp short s1</code>也是一个道理，就不细说了。</p>
+</blockquote>
+<p>  现在我们开始执行程序，<strong>注意由于start标号是在<code>076A:0005</code>,所以程序执行是从这个地址开始，而不是在<code>076A:0000</code></strong>。在s0之前的这段代码做的事情就是把s2标号处的代码复制到s处，我们可以看看执行到s0标号这一步的反汇编格式：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/%E5%8F%8D%E6%B1%87%E7%BC%963.png" title="" alt="" data-align="center">
+<p>  我们可以看到<strong>s标号处（<code>076A:0008</code>）原本的nop指令被s2标号处的<code>EBF6</code>给取代了</strong>。这里就是<u>问题的关键</u>，<font color=purple>注意短转移指令只提供要转移的位移，而不是目的地址，<strong>EBF6的含义是：转移到与当前这个jmp指令的下一条指令距离为<code>F6</code>,也就是-A</strong>。</font></p>
+<p>  现在我们继续执行代码，现在<code>CS:IP</code>应该指向s0处，执行后，跳转到标号s处，这个时候就开始执行<code>EBF6</code>了,首先IP+=2，IP = 001A，然后指令缓冲器开始执行<code>EBF6</code>，向前跳转-A,到<code>076A：0000</code>,也就是<code>mov ax,4c00</code>处，下面程序就可以正常返回了。我们来验证一下：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp1.png" title="" alt="image-20211114155423057" data-align="center">
+<p>  可以看到现在已经跳转到s标号处了，指令已经显示为<code>JMP 0000</code>。我们再执行一次:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/jmp2.png" title="" alt="image-20211114155558123" data-align="center">
+<p>  程序已经开始返回了，说明我们之前说的是对的。实验8到这也就结束了。</p>
+<h1 id="实验九"><a class="markdownIt-Anchor" href="#实验九"></a> 实验九</h1>
+<h2 id="分析-2"><a class="markdownIt-Anchor" href="#分析-2"></a> 分析</h2>
+<p>  额，这个实验好像是给我们一段材料，然后写出一个程序来，目标是实现：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114155857.png" alt="" /></p>
+<p>  作者说了要根据材料，材料上已经讲得很好了，我这就贴上我的拙作，仅供参考：</p>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:codesg,<span class="token register variable">ds</span>:data
+data segment
+        dw <span class="token number">0277H</span>,<span class="token number">0265H</span>,<span class="token number">026cH</span>,<span class="token number">0263H</span>,<span class="token number">026fH</span>,<span class="token number">026dH</span>,<span class="token number">0265H</span>,<span class="token number">0220H</span>,<span class="token number">0274H</span>,<span class="token number">026fH</span>,<span class="token number">0220H</span>,<span class="token number">026dH</span>,<span class="token number">0261H</span>,<span class="token number">0273H</span>,<span class="token number">026dh</span>,<span class="token number">0221H</span>
+        dw <span class="token number">2477h</span>,<span class="token number">2465h</span>,<span class="token number">246ch</span>,<span class="token number">2463h</span>,<span class="token number">246fh</span>,<span class="token number">246dh</span>,<span class="token number">2465h</span>,<span class="token number">2420h</span>,<span class="token number">2474h</span>,<span class="token number">246fh</span>,<span class="token number">2420h</span>,<span class="token number">246dh</span>,<span class="token number">2461h</span>,<span class="token number">2473h</span>,<span class="token number">246dh</span>,<span class="token number">2421h</span>
+        dw <span class="token number">7177h</span>,<span class="token number">7165h</span>,<span class="token number">716ch</span>,<span class="token number">7163h</span>,<span class="token number">716fh</span>,<span class="token number">716dh</span>,<span class="token number">7165h</span>,<span class="token number">7120h</span>,<span class="token number">7174h</span>,<span class="token number">716fh</span>,<span class="token number">7120h</span>,<span class="token number">716dh</span>,<span class="token number">7161h</span>,<span class="token number">7173h</span>,<span class="token number">716dh</span>,<span class="token number">7121h</span>
+data ends
+
+codesg segment
+ <span class="token label function">start:</span> mov <span class="token register variable">ax</span>,data
+        mov <span class="token register variable">ds</span>,<span class="token register variable">ax</span>
+        mov <span class="token register variable">ax</span>,<span class="token number">0B800h</span>
+        mov <span class="token register variable">es</span>,<span class="token register variable">ax</span>
+        mov <span class="token register variable">bx</span>,<span class="token number">0640h</span>
+        mov <span class="token register variable">dx</span>,<span class="token number">4</span>
+        mov <span class="token register variable">di</span>,<span class="token number">0</span>
+
+    <span class="token label function">s0:</span> dec <span class="token register variable">dx</span>
+        mov <span class="token register variable">cx</span>,<span class="token register variable">dx</span>
+        jcxz stop
+        add <span class="token register variable">bx</span>,<span class="token number">0a0h</span>
+        mov <span class="token register variable">si</span>,<span class="token number">0</span>
+        mov <span class="token register variable">cx</span>,<span class="token number">16</span>
+
+     <span class="token label function">s:</span> mov <span class="token register variable">ax</span>,<span class="token operator">[</span><span class="token register variable">di</span><span class="token operator">]</span>
+        add <span class="token register variable">di</span>,<span class="token number">2</span>
+        mov <span class="token register variable">es</span>:<span class="token operator">[</span><span class="token register variable">bx</span><span class="token operator">+</span><span class="token number">3eh</span><span class="token operator">+</span><span class="token register variable">si</span><span class="token operator">]</span>,<span class="token register variable">ax</span>
+        add <span class="token register variable">si</span>,<span class="token number">2</span>
+        loop s
+        jcxz s0
+
+  <span class="token label function">stop:</span> mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
+        int <span class="token number">21h</span>
+
+codesg ends
+end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211114200916.png" alt="RESULT" /></p>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+        <category>8086实验</category>
+      </categories>
+      <tags>
+        <tag>8086</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>王爽《汇编语言》实验四</title>
     <url>/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/</url>
     <content><![CDATA[<h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
@@ -1964,126 +1929,200 @@ end<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span>
       </tags>
   </entry>
   <entry>
-    <title>如何提一个技术问题？</title>
-    <url>/2021/10/15/Talk/%E6%8F%90%E9%97%AE%E7%9A%84%E8%89%BA%E6%9C%AF/</url>
+    <title>Linux的ctrl+快捷键的功能</title>
+    <url>/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  在学习计算机技术时肯定会遇到各种各样的问题，而为了找到问题的答案，我们往往需要准确地描述出问题是什么，这样才能找到好的答案。而提问题也是有方法的，有一篇文章写得很好，我阅读后学到了很多，下面就是对这篇文章内容的整理。</p>
-<blockquote>
-<p><a href="http://www.catb.org/~esr/faqs/smart-questions.html">文章原文地址</a><br />
-<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md">简体中文版</a></p>
-</blockquote>
+<p>  最近在看《C++primer》，遇到一个很简单的循环输入：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">while</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span>cin <span class="token operator">>></span> value<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    sum <span class="token operator">+=</span> value 
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  在ubuntu上执行时，结束输入的条件是无效输入或者是文件中止符EOF。Windows的文件中终止符是<code>Ctrl + Z</code>,那么Linux系统中是啥呢？这就是这篇总结的源头。于是我顺藤摸瓜，把Ctrl+快捷键都一遍，来这做个总结。</p>
 <span id="more"></span>
-<h1 id="回答者的角度"><a class="markdownIt-Anchor" href="#回答者的角度"></a> 回答者的角度</h1>
-<p>  作者首先从回答者的角度来看问题。对于回答者来说（特别是作者这种黑客😅），喜欢<strong>有挑战性</strong>的问题，因为<u>这些问题能激发他们思考，提高他们的理解力并且查漏补缺</u>。但回答者也不是不愿意回答一些简单的问题，他们所不愿意回答的，<strong><u>是那些不愿思考、或者在发问前不做他们该做的事的人的问题</u></strong>。</p>
-<p>  作者在这一节最后说了两段话，可以很好地表明他的态度：</p>
+<p>  首先说明一下，在Linux中可以用<code>stty -a</code>命令查看终端的快捷键配置，效果如下：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002125053.png" title="" alt="image-20211002125045305" data-align="center">
+<p>  关于stty的详细内容，下面会说。</p>
+<h1 id="默认的ctrl快捷键"><a class="markdownIt-Anchor" href="#默认的ctrl快捷键"></a> 默认的ctrl快捷键</h1>
+<h2 id="ctrl-z"><a class="markdownIt-Anchor" href="#ctrl-z"></a> Ctrl +Z</h2>
+<p>  这玩意干什么用的呢？举个例子，我现在运行上面说到的那个小片段，输入一些数后：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131113.png" alt="image-20211002131113071" style="zoom:80%;" data-align="center">
+<p>  我现在想去做别的事，不想输入了，就是玩儿，怎么办呢？我可以用<code>Ctrl+Z</code>，功能是susp，即suspension，停止当前运行的程序，挂起这个程序：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131411.png" title="" alt="image-20211002131411566" data-align="center">
+<p>  等我想继续执行这个程序的时候呢，输入<code>fg</code>，就可以回到这个程序：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131551.png" alt="image-20211002131551851" data-align="center">
+<p>  其实<code>Ctrl Z</code>就是把当前这个进程挂到后台，我们可以用<code>fg %编号</code>来把这个进程重新召回到前台来，比如说我们输入<code>fg %2</code>就是把编号为2的进程召回到前台：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002131921.png" title="" alt="image-20211002131920966" data-align="center">
+<p><code>fg</code>既然是召回前台，那么有没有后台命令呢？当然有，后台就是<code>bg</code>，我们可以用<code>bg</code>命令查看后台的情况：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132225.png" alt="image-20211002132225146" style="zoom:80%;" data-align="center">
+<h2 id="ctrl-c"><a class="markdownIt-Anchor" href="#ctrl-c"></a> Ctrl + C</h2>
+<p>  <code>Ctrl Z</code>是挂起进程，这<code>Ctrl c</code>其实就是强制终止正在进成的进程，这没什么好说的，就跟强行关机是一个意思。</p>
+<h2 id="ctrld"><a class="markdownIt-Anchor" href="#ctrld"></a> Ctrl+D</h2>
+<p>  这个就是我之前要的EOF，文件终止符，我们在写程序的时候也会用到这玩意。</p>
+<p>  我们来看一个演示，我现在要计算1~10的和，已经把数字输好了：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002132723.png" title="" alt="image-20211002132722906" data-align="center">
+<p>  请问我现在如何<font color=purple><strong>优雅地结束输入？</strong></font>按下<code>ctrl D</code>就行了。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133026.png" title="" alt="image-20211002133025989" data-align="center">
+<p>  其实<code>ctrl D</code>就发送了一个<code>exit</code>信号，我们可以用它来退出root权限。比如我现在登入root:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133243.png" title="" alt="image-20211002133243103" data-align="center">
+<p>  按下<code>ctrl D</code>，就会发送exit，然后退出root，我们可以把这个当作退出快捷键:</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002133452.png" title="" alt="image-20211002133452812" data-align="center">
+<h2 id="其它的ctrl快捷键"><a class="markdownIt-Anchor" href="#其它的ctrl快捷键"></a> 其它的ctrl快捷键</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">快捷键(ctrl用^表示)</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">^l</td>
+<td style="text-align:center">相当于clear,清空终端</td>
+</tr>
+<tr>
+<td style="text-align:center">^s</td>
+<td style="text-align:center">中断输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^q</td>
+<td style="text-align:center">继续输出</td>
+</tr>
+<tr>
+<td style="text-align:center">^a/^e</td>
+<td style="text-align:center">光标移到行首/行尾巴</td>
+</tr>
+<tr>
+<td style="text-align:center">^p</td>
+<td style="text-align:center">重复上次命令</td>
+</tr>
+<tr>
+<td style="text-align:center">^y</td>
+<td style="text-align:center">粘贴或者恢复上次删除</td>
+</tr>
+<tr>
+<td style="text-align:center">^s/^q</td>
+<td style="text-align:center">冻结shell/解冻</td>
+</tr>
+</tbody>
+</table>
+<h1 id="stty"><a class="markdownIt-Anchor" href="#stty"></a> stty</h1>
 <blockquote>
-<p>  你不必在技术上很在行才能吸引我们的注意，但你必须表现出能引导你变得在行的特质 —— <strong>机敏、有想法、善于观察、乐于主动参与解决问题</strong>。如果你做不到这些，我们建议你花点钱找家商业公司签个技术支持服务合同，而不是要求黑客个人无偿地帮助你。</p>
-<p>  如果你决定向我们求助，能立刻得到快速并有效答案的最好方法，就是像赢家（winner）那样提问 —— <strong>聪明、自信、有解决问题的思路</strong>，只是偶尔在特定的问题上需要获得一点帮助。</p>
+<p><code>stty</code>命令主要用于查看或修改终端快捷键。</p>
 </blockquote>
-<hr />
-<h1 id="提问之前"><a class="markdownIt-Anchor" href="#提问之前"></a> 提问之前</h1>
-<p>  在我们提问之前，哪些事是要做的呢？</p>
-<blockquote>
-<ol>
-<li>
-<p>尝试自己调试和检查以解决问题。</p>
-</li>
-<li>
-<p>在常用论坛社区的旧文章里搜索解决方法。（推荐：<a href="https://www.csdn.net/">CSDN</a>（中文综合），<a href="https://stackoverflow.com/">StackOverflow</a>（程序相关），<a href="https://superuser.com/">Super User</a>(通用电脑问题)、<a href="https://serverfault.com/">Server Fault</a>（服务器和网管））</p>
-</li>
-<li>
-<p>在Google中搜索，比如各种错误信息等，即使没找到，<u>在提问时也可以注明你在Google下搜索过哪些问题并且没有答案</u>。</p>
-</li>
-<li>
-<p>阅读手册或者FAQ（常见问题文件）</p>
-</li>
-<li>
-<p>若是程序开发，可以阅读源码来解决问题。</p>
-</li>
-<li>
-<p>向身边的大佬请教。</p>
-</li>
-</ol>
-</blockquote>
-<hr />
-<h1 id="开始提问"><a class="markdownIt-Anchor" href="#开始提问"></a> 开始提问</h1>
-<h2 id="目标差异式标题"><a class="markdownIt-Anchor" href="#目标差异式标题"></a> 目标—差异式标题</h2>
-<p>  取一个有意义且目的明确的标题是十分重要的。一个好标题范例是<strong>目标 — 差异</strong>式的描述，许多技术支持组织就是这样做的。</p>
-<p>  <u>在<code>目标</code>部分指出是哪一个或哪一组东西有问题，在<code>差异</code>部分则描述与期望的行为不一致的地方</u>。下面，来看一个比较：</p>
-<blockquote>
-<ul>
-<li>救命啊！我的笔记本电脑不能显示了！（蠢得一批）</li>
-<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标会变形，某牌显卡MV1005芯片组。（比较聪明的问法）</li>
-<li><a href="http://X.org">X.org</a> 6.8.1的鼠标光标，在某牌显卡MV1005芯片组环境下—会变形。（最聪明的问法）</li>
-</ul>
-</blockquote>
-<h2 id="使用清晰-正确-精准且合乎语法的语句"><a class="markdownIt-Anchor" href="#使用清晰-正确-精准且合乎语法的语句"></a> 使用清晰、正确、精准且合乎语法的语句</h2>
-<p>  正确的拼写、标点符号和大小写是很重要的。一般来说，如果你觉得这样做很麻烦，不想在乎这些，那我们也觉得麻烦，不想在乎你的提问。花点额外的精力斟酌一下字句，用不着太僵硬与正式 —— 事实上，黑客文化很看重能准确地使用非正式、俚语和幽默的语句。但它<strong>必须很</strong>准确，而且有迹象表明你是在思考和关注问题。</p>
-<p>  像我这种母语不是英语的提问者，可以在问题描述中附加下面几句：</p>
-<blockquote>
-<p>English is not my native language；please excuse typing errors.</p>
-<p>I am familiar with the technical terms, but some slang expressions and idioms are difficult for me.（熟悉名词，但是不熟悉俚语）</p>
-</blockquote>
-<hr />
-<p>  下面就是重点了，<strong>我们该如何精准描述问题</strong>？</p>
-<blockquote>
-<ol>
-<li>仔细、清楚地描述你的问题或 Bug 的症状。（推荐文章：<a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html">如何有效地报告Bug</a>）</li>
-<li>描述问题发生的环境（机器配置、操作系统、应用程序、以及相关的信息），提供经销商的发行版和版本号</li>
-<li>描述在提问前你是怎样去研究和理解这个问题的。</li>
-<li>描述在提问前为确定问题而采取的诊断步骤。</li>
-<li>描述最近做过什么可能相关的硬件或软件变更。</li>
-<li>尽可能的提供一个可以<code>重现这个问题的可控环境</code>的方法。</li>
-</ol>
-</blockquote>
-<hr />
-<p>  除了上面这些之外，还要注意下面几点（md,黑客事这么多吗😅）：</p>
-<ul>
-<li>
-<p>不要用什么word,excel这些封闭格式编写的文档发送数据，这些黑客们这些嗤之以鼻。</p>
-</li>
-<li>
-<p>不要使用花哨的彩色文本和表情。</p>
-</li>
-</ul>
-<h1 id="收到回答后"><a class="markdownIt-Anchor" href="#收到回答后"></a> 收到回答后</h1>
-<h2 id="如何知道自己的问题是否很愚蠢"><a class="markdownIt-Anchor" href="#如何知道自己的问题是否很愚蠢"></a> 如何知道自己的问题是否很愚蠢</h2>
-<p>  如果你收到下面两种回应，说明你搞砸了：</p>
-<blockquote>
-<ul>
-<li>
-<p>RTFM：Read the Fucking Manual(读手册)</p>
-</li>
-<li>
-<p>STFW：Search the Fucking Web(查网页)</p>
-<p>通常，用这两句之一回答你的人会给你一份包含你需要内容的手册或者一个网址，而且他们打这些字的时候也正在读着。这些答复意味着回答者认为：</p>
-<ul>
-<li><strong>你需要的信息非常容易获得</strong>。</li>
-<li><strong>你自己去搜索这些信息比灌给你，能让你学到更多</strong>。</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<h2 id="如果还是搞不懂"><a class="markdownIt-Anchor" href="#如果还是搞不懂"></a> 如果还是搞不懂</h2>
-<p>  如果看不懂回应，别立刻要求对方解释。像你以前试着自己解决问题时那样（利用手册，FAQ，网络，身边的高手），先试着去搞懂他的回应。如果你真的需要对方解释，记得<strong>表现出你已经从中学到了点什么</strong>。</p>
-<p>  比方说，如果我回答你：</p>
-<blockquote>
-<p>看来似乎是 zentry 卡住了；你应该先清除它。</p>
-</blockquote>
-<p>  像下面这种文法是很糟糕的：</p>
-<blockquote>
-<p>zentry 是什么？</p>
-</blockquote>
-<p>  好的问法应该是这样的：</p>
-<blockquote>
-<p>哦~~~我看过说明了但是只有 -z 和 -p 两个参数中提到了 zentries，而且还都没有清楚的解释如何清除它。你是指这两个中的哪一个吗？还是我看漏了什么？</p>
-</blockquote>
+<p>  如果想查看目前终端快捷键的配置，可以使用<code>stty -a</code>：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211002134835.png" alt="image-20211002134835492" style="zoom:80%;" data-align="center">
+<p>  一个表达式等号左边是快捷键对应的命令，等号右边是快捷键，举个例子：<code>eof = ^D</code>的意思就是<code>ctrl D</code>会执行<code>eof</code>命令。那么，我们怎么修改命令呢？可以使用 <code>stty 命令名 快捷键</code>来更改。</p>
 ]]></content>
       <categories>
-        <category>Let&#39;s Talk</category>
+        <category>操作系统</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>talk</tag>
+        <tag>教程</tag>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu解决apt-get报错问题</title>
+    <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>  最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
+<p>  下面这个是报错的情况：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210821213547.png" alt="image-20210821213538984" /></p>
+<p>  貌似是找不到什么文件，不能获得什么锁的，还有就是其他的线程在使用apt-get?。上网搜了一下，就是<strong>因为还有一个线程在使用apt-get进行下载的操作。</strong></p>
+<span id="more"></span>
+<h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
+<p>  我使用的是这个方法，就一条命令：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>  其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock
+sudo rm &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F;lock
+sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend
+sudo dpkg --configure -a
+sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
+<p>  这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
+<p>  我们直接执行下面这个命令：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo killall apt apt-get<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+        <tag>指令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>上海之行</title>
+    <url>/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
+    <content><![CDATA[<p>  8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
+<span id="more"></span>
+<p>  我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711121722.png" title="" alt="image-20210711121714205" data-align="center">
+<p>  😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122613.jpg" alt="waic展1" style="zoom: 67%;" data-align="center" width="500">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711122641.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
+<p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123403.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="510">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123438.png" alt="image-20210711123438317" style="zoom: 67%;" data-align="center" width="513">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123509.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="494">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711123544.png" alt="image-20210711123544385" style="zoom: 67%;" data-align="center" width="514">
+<p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082011.png" alt="image-20210714082002960" data-align="center" width="536">
+<p>  虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
+<h4 id="上海历史博物馆"><a class="markdownIt-Anchor" href="#上海历史博物馆"></a> 上海历史博物馆</h4>
+<p>  这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125429.png" alt="image-20210711125428826" style="zoom:67%;" data-align="center">
+<p>  《中国共产党宣言》，这个是真迹。这是中国共产党的源头了。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711125816.png" alt="image-20210711125815779" style="zoom:67%;" data-align="center">
+<p>  好家伙，还有这个。</p>
+<h4 id="武康路愚园路"><a class="markdownIt-Anchor" href="#武康路愚园路"></a> 武康路，愚园路</h4>
+<p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
+<h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
+<p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210714082110.png" title="" alt="image-20210714082110471" data-align="center">
+<p>  这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711233913.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="341">
+<p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234050.png" alt="image-20210711234049822" style="zoom:50%;" data-align="center" width="366">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234132.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="379">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234152.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="367">
+<p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234304.png" alt="image-20210711234303508" style="zoom:50%;" data-align="center" width="373">
+<p>  这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234349.png" alt="image-20210711234348837" style="zoom:67%;" data-align="center" width="373">
+<p>  这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234537.png" alt="image-20210711234536757" style="zoom:50%;" data-align="center" width="386">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234552.png" alt="image-20210711234551826" style="zoom:67%;" data-align="center" width="410">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234618.png" alt="image-20210711234617641" style="zoom:67%;" data-align="center" width="431">
+<p>  这个馆里有很多精美的陶瓷制品，我最喜欢的花纹就是最后一张这种裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234753.png" alt="image-20210711234752559" style="zoom:50%;" data-align="center" width="435">
+<p>  这种颜色也是我很喜欢的。</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711234826.png" alt="image-20210711234825706" style="zoom:67%;" data-align="center" width="446">
+<p>  这个简直神了。。。</p>
+<p>  剩下的就不贴上来了，总的来说上博之旅还是很满意的。</p>
+<h4 id="外滩南京东路"><a class="markdownIt-Anchor" href="#外滩南京东路"></a> 外滩，南京东路</h4>
+<p>  来上海，除了老洋房，当然要看看其繁华的一面，当仁不让的当然是外滩，陆家嘴这一带。刚出地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235248.png" alt="image-20210711235248113" style="zoom:67%;" data-align="center">
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235314.png" alt="image-20210711235314082" style="zoom:67%;" data-align="center">
+<p>  再来看看黄浦江对面的陆家嘴，浦东最繁华的地方：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210711235457.png" title="" alt="image-20210711235457234" data-align="center">
+<h4 id="waic论坛"><a class="markdownIt-Anchor" href="#waic论坛"></a> WAIC论坛</h4>
+<p>  额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000357.png" alt="image-20210712000357612" /></p>
+<p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000558.png" alt="image-20210712000558320" style="zoom:67%;" />
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210712000617.png" alt="image-20210712000617839" style="zoom:67%;" />
+<p>  就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
+]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>游记</tag>
       </tags>
   </entry>
 </search>
