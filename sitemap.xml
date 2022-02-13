@@ -2,7 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://progsail.com/2021/12/24/Talk/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3/</loc>
+    
+    <lastmod>2022-02-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</loc>
+    
+    <lastmod>2022-02-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://progsail.com/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</loc>
+    
+    <lastmod>2022-02-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/2022/01/21/Talk/Masters%20of%20Doom/</loc>
+    
+    <lastmod>2022-02-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/2021/10/15/Talk/%E6%8F%90%E9%97%AE%E7%9A%84%E8%89%BA%E6%9C%AF/</loc>
+    
+    <lastmod>2022-02-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/2022/01/22/Talk/%E5%AF%B9%E4%B9%A6%E5%90%8E%E4%B9%A0%E9%A2%98%E7%9A%84%E6%80%81%E5%BA%A6/</loc>
     
     <lastmod>2022-02-13</lastmod>
     
@@ -31,13 +66,6 @@
   
   <url>
     <loc>https://progsail.com/2021/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E7%9A%84ctrl-%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%9A%84%E5%8A%9F%E8%83%BD/</loc>
-    
-    <lastmod>2022-01-16</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://progsail.com/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2022-01-16</lastmod>
     
@@ -206,6 +234,34 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://progsail.com/tags/%E4%BC%A0%E8%AE%B0/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/tags/%E6%96%87%E5%AD%A6/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/tags/%E5%B0%8F%E8%AF%B4/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/tags/talk/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -252,6 +308,13 @@
   
   <url>
     <loc>https://progsail.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/categories/Talk/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
