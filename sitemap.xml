@@ -130,13 +130,6 @@
 
   
   <url>
-    <loc>https://progsail.com/tags/%E6%B8%B8%E8%AE%B0/</loc>
-    <lastmod>2022-02-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://progsail.com/tags/MIPS/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
@@ -186,7 +179,7 @@
   </url>
   
   <url>
-    <loc>https://progsail.com/tags/vscode/</loc>
+    <loc>https://progsail.com/tags/%E6%B8%B8%E8%AE%B0/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -206,24 +199,17 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://progsail.com/tags/vscode/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
-    <loc>https://progsail.com/categories/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/</loc>
-    <lastmod>2022-02-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://progsail.com/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</loc>
-    <lastmod>2022-02-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://progsail.com/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -237,6 +223,13 @@
   </url>
   
   <url>
+    <loc>https://progsail.com/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://progsail.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
@@ -244,7 +237,7 @@
   </url>
   
   <url>
-    <loc>https://progsail.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux/</loc>
+    <loc>https://progsail.com/categories/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -252,6 +245,13 @@
   
   <url>
     <loc>https://progsail.com/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2022-02-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://progsail.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux/</loc>
     <lastmod>2022-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
