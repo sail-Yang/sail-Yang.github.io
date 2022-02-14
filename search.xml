@@ -2095,8 +2095,8 @@ x <span class="token operator">=</span> temp<span class="token operator">/</span
   <entry>
     <title>C++中指针和引用的区别</title>
     <url>/2022/02/13/PL/Cpp/Cpp%E4%B8%AD%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<p>  C和C<ins>都有指针，不过C</ins>比C多了一个引用(reference)，一般书里都会说<strong>引用是变量的别名（alias）</strong>，但这种定义太过模糊。</p>
-<p>  下面就来说说C++中的引用到底是什么，以及它和指针有什么区别。</p>
+    <content><![CDATA[<p>  C和Cpp都有指针，不过Cpp比C多了一个引用(reference)，一般书里都会说<strong>引用是变量的别名（alias）</strong>，但这种定义太过模糊。</p>
+<p>  下面就来说说Cpp中的引用到底是什么，以及它和指针有什么区别。</p>
 <h1 id="引用是什么"><a class="markdownIt-Anchor" href="#引用是什么"></a> 引用是什么</h1>
 <p>引用的确是已经存在的变量的别名，但别名这种说法太过笼统。<strong>事实上，引用就是一个常量指针</strong>。为了证明这一点，我们进行一个小实验：</p>
 <p>  现在有一段代码：</p>
