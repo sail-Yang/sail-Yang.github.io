@@ -8,7 +8,7 @@ tags:
 categories:
 - 操作系统
 - Linux
-
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220116200808.png
 ---
 
 &emsp;&emsp;最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。

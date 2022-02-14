@@ -1,6 +1,8 @@
 ---
 title: About me
 date: 2021-07-20 14:55:29
+top_img: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213214033.jpg
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213214033.jpg
 comments: false
 ---
 

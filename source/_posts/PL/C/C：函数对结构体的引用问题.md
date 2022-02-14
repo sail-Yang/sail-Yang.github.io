@@ -4,7 +4,9 @@ date: 2021-08-06 15:39:41
 tags: 
 - C
 categories: 
-- C/C++
+- PL
+- C
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214122332.jpg
 ---
 
 &emsp;&emsp;在学DS的时候，编写函数遇到点小问题，就是关于**结构体变量作为函数参数调用**的，所以我想写一篇来总结一下。

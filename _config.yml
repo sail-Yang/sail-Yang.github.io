@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: sail Yang's Blog
+title: Sail Yang's Blog
 subtitle: ''
 description: 为者常成，行者常至
 keywords:
-author: sail Yang
+author: Sail Yang
 language: zh-CN
 timezone: ''
 
@@ -97,7 +97,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: diaspora
+theme: butterfly
 
 # live2d
 live2d:
@@ -129,7 +129,6 @@ deploy:
   type: 'git'
   repo: 
       github: git@github.com:sail-Yang/sail-Yang.github.io.git,main
-      gitee: git@gitee.com:sail-Yang/sail-Yang.git,master
 # Search
 search:
 path: search.xml

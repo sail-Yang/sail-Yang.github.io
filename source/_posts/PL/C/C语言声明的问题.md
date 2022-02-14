@@ -1,10 +1,12 @@
 ---
 title: C语言声明的问题
 date: 2021-08-10 09:03:58
-tags:
-    - C
+tags: 
+- C
 categories: 
-  - C/C++
+- PL
+- C
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214122332.jpg
 ---
 
 &emsp;&emsp;这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。
