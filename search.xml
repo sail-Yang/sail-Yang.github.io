@@ -330,7 +330,7 @@
     <title>MIPS中一种低开销的边界检查方法</title>
     <url>/2022/01/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS%E4%B8%AD%E4%B8%80%E7%A7%8D%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E7%9A%84%E4%BD%8E%E5%BC%80%E9%94%80%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>  今天在看计组的时候，在书上看到了一个巧妙的方法，所以想把它记录下来。（在<a href="https://book.douban.com/subject/2110638/">这本书</a>的2.7.1节）</p>
-<p>  如果寄存器$s0中的数为:<code>1111 1111 1111 1111 1111 1111 1111 1111</code>，而寄存器$s2中的数为:<code>0000 0000 0000 0000 0000 0000 0000 0001</code>。现在想一下这两个数哪个比较大？</p>
+<p>  如果寄存器$s0中的数为:<code>1111 1111 1111 1111 1111 1111 1111 1111</code>，而寄存器$s2中的数为:<code>0000 0000 0000 0000 0000 0000 0000 0001</code>。那么这两个数哪个比较大？</p>
 <span id="more"></span>
 <blockquote>
 <p>  显然我们要分别从无符号数和有符号数的角度去比较：</p>
@@ -339,7 +339,7 @@
 <p>如果说两个都是无符号数，显然最高有效位是1的要大于最高有效位是0的，也就是说($s0) &gt; ($s2)。</p>
 </li>
 <li>
-<p>如果说两个都是有符号数，显然最高有效位是1的（负数）要小于最高有效位是0的（正数），也就是说($s0) &gt; ($s2)。</p>
+<p>如果说两个都是有符号数，显然最高有效位是1的（负数）要小于最高有效位是0的（正数），也就是说($s0) &lt; ($s2)。</p>
 </li>
 </ul>
 </blockquote>
@@ -1693,9 +1693,9 @@ sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
 <p>  今天在看CSAPP 3.10节的时候看到了一个熟悉的问题:</p>
 <blockquote>
-<p>如果gets()函数读入的字符数超过了字符数组的界的时候，会发生什么呢？</p>
+<p>如果gets()函数读入的字符数超过了字符数组的界的时候，会发生什么？</p>
 </blockquote>
-<p>  我在昨天整理以前的C语言笔记的时候刚刚好试验了一下，试验的过程如下：</p>
+<p>  昨天我在整理以前的C语言笔记时刚好试验了一下，试验的过程如下：</p>
 <blockquote>
 <p>假如我执行下面这段代码:</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -1712,8 +1712,7 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <p>  <code>puts</code>输出的都是全的，说明C的gets()和puts()根本就没有检查机制，<code>gets()</code><strong>写入的字符串肯定覆盖了str后面的内容</strong>。</p>
 </blockquote>
 <p>  昨天也就调试了一下，并没有细想，比如gets()的实现是什么，覆盖的内容会是什么？会不会造成什么严重的后果？</p>
-<p>  今天看CSAPP的时候刚好看到差不多的内容，并且作者指出这种越界问题会导致缓冲区溢出，有许多病毒就是利用缓冲区溢出进行攻击的。</p>
-<p>  所以今天想好好思考思考这个问题。</p>
+<p>  今天看CSAPP的时候看到了差不多的内容，并且作者指出这种越界问题会导致缓冲区溢出，有许多病毒就是利用缓冲区溢出进行攻击的。所以今天就想好好思考思考这个问题。</p>
 <hr />
 <blockquote>
 <p>  在这里插一句，最好不要使用<code>gets()</code>，而是使用<code>fgets()</code>,其函数原型为：<code>char * fgets(char *_Buffer, int _MaxCount, FILE *_Stream)</code>。</p>
@@ -1742,7 +1741,7 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122123.png" alt="" /></p>
 <p>  <code>sub $0x10,%rsp</code>告诉我们，分配了<strong>16个字节的空间</strong>。用CSAPP中的方式，我们可以列出安全区域和危险区域：</p>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124122641.png" alt="" /></p>
-<p>  也就是说，只要输入15个字符以内，不会有严重后果，但是<strong>如果超过了，没有保护机制的话，存储的返回地址就会被破坏。返回的时候就会跳转到一个莫名其妙的地方。</strong></p>
+<p>  也就是说，只要输入15个字符以内，不会有严重后果。但是<strong>如果超过了，没有保护机制的话，存储的返回地址就会被破坏。返回的时候就会跳转到一个莫名其妙的地方。</strong></p>
 <hr />
 <h1 id="缓冲区溢出的攻击与对抗全部来自csapp"><a class="markdownIt-Anchor" href="#缓冲区溢出的攻击与对抗全部来自csapp"></a> 缓冲区溢出的攻击与对抗（全部来自CSAPP）</h1>
 <blockquote>
@@ -1766,10 +1765,10 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220124125125.png" alt="" /></p>
 <blockquote>
-<p>这种方法属于更大的一类技术，这类技术叫ASLR（地址空间布局随机化）。但是也有办法对付ASLR，比如一种操作叫<a href="https://en.wikipedia.org/wiki/NOP_slide">nop sled</a>.</p>
+<p>  这种方法属于更大的一类技术，这类技术叫ASLR（地址空间布局随机化）。但是也有办法对付ASLR，比如一种操作叫<a href="https://en.wikipedia.org/wiki/NOP_slide">nop sled</a>.</p>
 </blockquote>
 <h2 id="栈破坏检测"><a class="markdownIt-Anchor" href="#栈破坏检测"></a> 栈破坏检测</h2>
-<p>  GCC在产生的代码中加入了一种机制来检测缓冲区越界，其思想也很简单，就是在局部缓冲区和状态区之间放一个哨兵值（不知道为什么叫<code>canary</code>,金丝雀😅），这个是随机产生的。</p>
+<p>  GCC在产生的代码中加入了一种机制来检测缓冲区越界，其思想也很简单，就是在局部缓冲区和状态区之间放一个随机产生的哨兵值（不知道为什么叫<code>canary</code>,金丝雀😅）。</p>
 <p>  在恢复寄存器状态和返回之前，程序会检查这个值是否被改变了，如果是，就直接中止。如果我们想取消这种检测，可以加参数<code>-fno-stack-protector</code>。</p>
 <blockquote>
 <p>  我们选三组不同长度的字符串进行测试，看看结果如何:</p>
@@ -1777,8 +1776,6 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <p><code>stack smashing detected</code>:在程序函数中，数组越界访问，在程序运行时没出现问题，但当函数return的时候就会出现上面的错误。</p>
 <p>我感觉这个就是那个&quot;金丝雀&quot;检测。</p>
 </blockquote>
-<h2 id="限制可执行代码的区域"><a class="markdownIt-Anchor" href="#限制可执行代码的区域"></a> 限制可执行代码的区域</h2>
-<p>  就不细讲了，之后应该会学到。</p>
 ]]></content>
       <categories>
         <category>计算机系统</category>
