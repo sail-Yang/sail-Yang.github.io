@@ -2275,4 +2275,132 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
         <tag>homework</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode刷题日记1:无重复字符的最长子串</title>
+    <url>/2022/02/22/%E7%AE%97%E6%B3%95/leetcode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B01-%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</url>
+    <content><![CDATA[<p>  作为算法的初学者，为了更好地学习算法，我准备每天都刷一道算法题，然后用日记的方式记录下来，每个周末总结一下这周的日记，提炼出这周题目的算法。</p>
+<p>  希望我能坚持下去🤪</p>
+<hr />
+<p>  这个是第三题，题目如下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220223081753.png" alt="" /></p>
+<hr />
+<p>  这道题显然关键在于两个方面：</p>
+<ol>
+<li>
+<p>每次怎么切子串。</p>
+</li>
+<li>
+<p>怎么判断子串是否重复。</p>
+</li>
+</ol>
+<h1 id="怎么切子串"><a class="markdownIt-Anchor" href="#怎么切子串"></a> 怎么切子串</h1>
+<h2 id="自己的思路"><a class="markdownIt-Anchor" href="#自己的思路"></a> 自己的思路</h2>
+<p>  对于切子串这个方面，我的想法是用x,y来标识子串的左端和右端，然后对y循环:</p>
+<ul>
+<li>
+<p>每次循环开始用<code>s.substr(x,y)</code>切一个子串。</p>
+</li>
+<li>
+<p>如果这个子串没有重复字符，记录下长度与目前最大长度比较，如果大于就修改最大长度，然后循环结束，递增y。（右端往右移动）</p>
+</li>
+<li>
+<p>如果这个子串有重复字符，那么x往右移，y不动。</p>
+</li>
+</ul>
+<p>  上述方法是我一开始做这道题的思路，后来我看了一下题解，发现和<strong>双指针滑动窗口算法</strong>类似。所以下面说一下双指针滑动窗口算法的思路。</p>
+<h2 id="滑动窗口算法"><a class="markdownIt-Anchor" href="#滑动窗口算法"></a> 滑动窗口算法</h2>
+<p>  所谓的窗口就是用一个<strong>左指针和右指针来从序列中切出一个子序列</strong>，我们就聚焦于这个子序列，就像从一个窗口里看一样，这就是窗口的意思。简单地画个图表示一下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220223084427.png" alt="" /></p>
+<p>  那所谓<strong>滑动</strong>是什么意思呢？</p>
+<p>  无非就是左指针往右移动或者右指针往右移动。至于移动哪个就需要结合题目，在移动时我们要思考几个问题:</p>
+<ol>
+<li>
+<p>满足什么条件时，我们移动right来扩大窗口？又满足什么条件时，我们移动left来缩小窗口呢？</p>
+</li>
+<li>
+<p>窗口变动的时候，我们要更新什么数据呢？</p>
+</li>
+<li>
+<p>数据是在窗口变动前更新还是在变动后更新呢？</p>
+</li>
+</ol>
+<p>  就比如这个leetcode这道题目，我们会做下面的回答：</p>
+<blockquote>
+<ol>
+<li>
+<p>当窗口中无重复子串时，我们移动right；反之移动left。</p>
+</li>
+<li>
+<p>在窗口中无重复子串时，我们需要更新最大无重复子串的长度。</p>
+</li>
+<li>
+<p>在窗口变动前更新。</p>
+</li>
+</ol>
+</blockquote>
+<p>  下面是滑动窗口算法的模板：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//窗口初始化</span>
+<span class="token keyword">int</span> left <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> right <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment">//窗口滑动循环,len一般是数组长度或者字符串长度</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span>right <span class="token operator">&lt;</span> s<span class="token punctuation">.</span>len<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isValid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        right<span class="token operator">++</span><span class="token punctuation">;</span><span class="token comment">//窗口扩张</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        left<span class="token operator">++</span><span class="token punctuation">;</span><span class="token comment">//窗口收缩</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="判断子串是否重复"><a class="markdownIt-Anchor" href="#判断子串是否重复"></a> 判断子串是否重复</h1>
+<p>  实现的方法很多，但我想了一种效率很低的方法…我总结一下我犯的错:</p>
+<ol>
+<li>
+<p>专门定义了一个函数来判断，这会造成资源的浪费；我看到现在，还没看到专门定义一个函数的。算法题讲究效率，专门定义一个函数讲究的是复用性和可维护性。</p>
+</li>
+<li>
+<p>我的主要想法是用map记录子串各字符的个数，如果有&gt;1的就说明重复了。第一个问题是由于原因1，对于每个子串都要重新变量来初始化map，可是明明可以复用这个map的（去掉left指向的字符就行了）；第二个问题是用map的效率真的很高吗？</p>
+</li>
+</ol>
+<p>  由于刚学C++，也只知道map和set😅,自然而然想到了用map来判断的方法。经过学习后，我发现了许多效率更高的方法，下面列举一个。</p>
+<h2 id="哈希表"><a class="markdownIt-Anchor" href="#哈希表"></a> 哈希表</h2>
+<p>  我们可以用数组来实现一个简单的哈希表<code>int index[128]</code>，映射就是字符的ASCII值。</p>
+<ul>
+<li>
+<p>每次窗口扩大的时候，哈希表中相对应位置+1即可,比如index[s[right]]++。</p>
+</li>
+<li>
+<p>窗口缩小的时候，哈希表中相对应位置-1即可，比如index[s[left]]–。</p>
+</li>
+<li>
+<p>如果当前字符在哈希表中的映射位置值不为0，那么就说明重复了。</p>
+</li>
+</ul>
+<p>  差不多就是上面这种思路，下面我们来看看解法：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Solution</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">int</span> <span class="token function">lengthOfLongestSubstring</span><span class="token punctuation">(</span>string s<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> res <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> len <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> freq<span class="token punctuation">[</span><span class="token number">128</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> r <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>l <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>r <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">&lt;</span> len <span class="token operator">&amp;&amp;</span> freq<span class="token punctuation">[</span>s<span class="token punctuation">[</span>r <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                freq<span class="token punctuation">[</span>s<span class="token punctuation">[</span><span class="token operator">++</span>r<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                freq<span class="token punctuation">[</span>s<span class="token punctuation">[</span>l<span class="token operator">++</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token operator">--</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            res <span class="token operator">=</span> <span class="token function">max</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> r <span class="token operator">-</span> l <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>刷题日记</category>
+      </categories>
+      <tags>
+        <tag>滑动窗口算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
 </search>

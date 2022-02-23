@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>leetcode刷题日记1:无重复字符的最长子串 | Sail Yang's Blog</title><meta name="keywords" content="滑动窗口算法,leetcode"><meta name="author" content="Sail Yang"><meta name="copyright" content="Sail Yang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="作为算法的初学者，为了更好地学习算法，我准备每天都刷一道算法题，然后用日记的方式记录下来，每个周末总结一下这周的日记，提炼出这周题目的算法。   希望我能坚持下去🤪    这个是第三题，题目如下：     这道题显然关键在于两个方面：   每次怎么切子串。   怎么判断子串是否重复。    怎么切子串  自己的思路   对于切子串这个方面，我的想法是用x,y来标识子串的左端和右端，然后对y循">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode刷题日记1:无重复字符的最长子串">
+<meta property="og:url" content="https://progsail.com/2022/02/22/%E7%AE%97%E6%B3%95/leetcode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B01-%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/index.html">
+<meta property="og:site_name" content="Sail Yang&#39;s Blog">
+<meta property="og:description" content="作为算法的初学者，为了更好地学习算法，我准备每天都刷一道算法题，然后用日记的方式记录下来，每个周末总结一下这周的日记，提炼出这周题目的算法。   希望我能坚持下去🤪    这个是第三题，题目如下：     这道题显然关键在于两个方面：   每次怎么切子串。   怎么判断子串是否重复。    怎么切子串  自己的思路   对于切子串这个方面，我的想法是用x,y来标识子串的左端和右端，然后对y循">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222212816.png">
+<meta property="article:published_time" content="2022-02-22T13:22:42.000Z">
+<meta property="article:modified_time" content="2022-02-23T06:12:42.442Z">
+<meta property="article:author" content="Sail Yang">
+<meta property="article:tag" content="滑动窗口算法">
+<meta property="article:tag" content="leetcode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222212816.png"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://progsail.com/2022/02/22/%E7%AE%97%E6%B3%95/leetcode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B01-%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'leetcode刷题日记1:无重复字符的最长子串',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-23 14:12:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213203655.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa fa-comments"></i><span> Talk</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-solid fa-user"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222212816.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Sail Yang's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa fa-comments"></i><span> Talk</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-solid fa-user"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">leetcode刷题日记1:无重复字符的最长子串</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-02-22T13:22:42.000Z" title="发表于 2022-02-22 21:22:42">2022-02-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-02-23T06:12:42.442Z" title="更新于 2022-02-23 14:12:42">2022-02-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.1k</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="leetcode刷题日记1:无重复字符的最长子串"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>  作为算法的初学者，为了更好地学习算法，我准备每天都刷一道算法题，然后用日记的方式记录下来，每个周末总结一下这周的日记，提炼出这周题目的算法。</p>
+<p>  希望我能坚持下去🤪</p>
+<hr />
+<p>  这个是第三题，题目如下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220223081753.png" alt="" /></p>
+<hr />
+<p>  这道题显然关键在于两个方面：</p>
+<ol>
+<li>
+<p>每次怎么切子串。</p>
+</li>
+<li>
+<p>怎么判断子串是否重复。</p>
+</li>
+</ol>
+<h1 id="怎么切子串"><a class="markdownIt-Anchor" href="#怎么切子串"></a> 怎么切子串</h1>
+<h2 id="自己的思路"><a class="markdownIt-Anchor" href="#自己的思路"></a> 自己的思路</h2>
+<p>  对于切子串这个方面，我的想法是用x,y来标识子串的左端和右端，然后对y循环:</p>
+<ul>
+<li>
+<p>每次循环开始用<code>s.substr(x,y)</code>切一个子串。</p>
+</li>
+<li>
+<p>如果这个子串没有重复字符，记录下长度与目前最大长度比较，如果大于就修改最大长度，然后循环结束，递增y。（右端往右移动）</p>
+</li>
+<li>
+<p>如果这个子串有重复字符，那么x往右移，y不动。</p>
+</li>
+</ul>
+<p>  上述方法是我一开始做这道题的思路，后来我看了一下题解，发现和<strong>双指针滑动窗口算法</strong>类似。所以下面说一下双指针滑动窗口算法的思路。</p>
+<h2 id="滑动窗口算法"><a class="markdownIt-Anchor" href="#滑动窗口算法"></a> 滑动窗口算法</h2>
+<p>  所谓的窗口就是用一个<strong>左指针和右指针来从序列中切出一个子序列</strong>，我们就聚焦于这个子序列，就像从一个窗口里看一样，这就是窗口的意思。简单地画个图表示一下：</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220223084427.png" alt="" /></p>
+<p>  那所谓<strong>滑动</strong>是什么意思呢？</p>
+<p>  无非就是左指针往右移动或者右指针往右移动。至于移动哪个就需要结合题目，在移动时我们要思考几个问题:</p>
+<ol>
+<li>
+<p>满足什么条件时，我们移动right来扩大窗口？又满足什么条件时，我们移动left来缩小窗口呢？</p>
+</li>
+<li>
+<p>窗口变动的时候，我们要更新什么数据呢？</p>
+</li>
+<li>
+<p>数据是在窗口变动前更新还是在变动后更新呢？</p>
+</li>
+</ol>
+<p>  就比如这个leetcode这道题目，我们会做下面的回答：</p>
+<blockquote>
+<ol>
+<li>
+<p>当窗口中无重复子串时，我们移动right；反之移动left。</p>
+</li>
+<li>
+<p>在窗口中无重复子串时，我们需要更新最大无重复子串的长度。</p>
+</li>
+<li>
+<p>在窗口变动前更新。</p>
+</li>
+</ol>
+</blockquote>
+<p>  下面是滑动窗口算法的模板：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//窗口初始化</span>
+<span class="token keyword">int</span> left <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> right <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment">//窗口滑动循环,len一般是数组长度或者字符串长度</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span>right <span class="token operator">&lt;</span> s<span class="token punctuation">.</span>len<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isValid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        right<span class="token operator">++</span><span class="token punctuation">;</span><span class="token comment">//窗口扩张</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        left<span class="token operator">++</span><span class="token punctuation">;</span><span class="token comment">//窗口收缩</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="判断子串是否重复"><a class="markdownIt-Anchor" href="#判断子串是否重复"></a> 判断子串是否重复</h1>
+<p>  实现的方法很多，但我想了一种效率很低的方法…我总结一下我犯的错:</p>
+<ol>
+<li>
+<p>专门定义了一个函数来判断，这会造成资源的浪费；我看到现在，还没看到专门定义一个函数的。算法题讲究效率，专门定义一个函数讲究的是复用性和可维护性。</p>
+</li>
+<li>
+<p>我的主要想法是用map记录子串各字符的个数，如果有&gt;1的就说明重复了。第一个问题是由于原因1，对于每个子串都要重新变量来初始化map，可是明明可以复用这个map的（去掉left指向的字符就行了）；第二个问题是用map的效率真的很高吗？</p>
+</li>
+</ol>
+<p>  由于刚学C++，也只知道map和set😅,自然而然想到了用map来判断的方法。经过学习后，我发现了许多效率更高的方法，下面列举一个。</p>
+<h2 id="哈希表"><a class="markdownIt-Anchor" href="#哈希表"></a> 哈希表</h2>
+<p>  我们可以用数组来实现一个简单的哈希表<code>int index[128]</code>，映射就是字符的ASCII值。</p>
+<ul>
+<li>
+<p>每次窗口扩大的时候，哈希表中相对应位置+1即可,比如index[s[right]]++。</p>
+</li>
+<li>
+<p>窗口缩小的时候，哈希表中相对应位置-1即可，比如index[s[left]]–。</p>
+</li>
+<li>
+<p>如果当前字符在哈希表中的映射位置值不为0，那么就说明重复了。</p>
+</li>
+</ul>
+<p>  差不多就是上面这种思路，下面我们来看看解法：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Solution</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">int</span> <span class="token function">lengthOfLongestSubstring</span><span class="token punctuation">(</span>string s<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> res <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> len <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> freq<span class="token punctuation">[</span><span class="token number">128</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> r <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>l <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>r <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">&lt;</span> len <span class="token operator">&amp;&amp;</span> freq<span class="token punctuation">[</span>s<span class="token punctuation">[</span>r <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                freq<span class="token punctuation">[</span>s<span class="token punctuation">[</span><span class="token operator">++</span>r<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                freq<span class="token punctuation">[</span>s<span class="token punctuation">[</span>l<span class="token operator">++</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token operator">--</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            res <span class="token operator">=</span> <span class="token function">max</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> r <span class="token operator">-</span> l <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95/">滑动窗口算法</a><a class="post-meta__tags" href="/tags/leetcode/">leetcode</a></div><div class="post_share"><div class="social-share" data-image="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222212816.png" data-sites="twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/02/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA%E4%BD%9C%E4%B8%9A1%E2%80%94%E8%99%9A%E6%8B%9F%E5%8C%96%E9%83%A8%E5%88%86/"><img class="next-cover" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222183536.png" onerror="onerror=null;src='/img/cover_default.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">《操作系统导论》作业1—虚拟化部分</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213203655.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sail Yang</div><div class="author-info__description">为者常成，行者常至</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sail-Yang" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%88%87%E5%AD%90%E4%B8%B2"><span class="toc-number">1.</span> <span class="toc-text"> 怎么切子串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="toc-number">1.1.</span> <span class="toc-text"> 自己的思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text"> 滑动窗口算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%AD%90%E4%B8%B2%E6%98%AF%E5%90%A6%E9%87%8D%E5%A4%8D"><span class="toc-number">2.</span> <span class="toc-text"> 判断子串是否重复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="toc-number">2.1.</span> <span class="toc-text"> 哈希表</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/02/22/%E7%AE%97%E6%B3%95/leetcode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B01-%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/" title="leetcode刷题日记1:无重复字符的最长子串"><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222212816.png" onerror="this.onerror=null;this.src='/img/cover_default.jpg'" alt="leetcode刷题日记1:无重复字符的最长子串"/></a><div class="content"><a class="title" href="/2022/02/22/%E7%AE%97%E6%B3%95/leetcode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B01-%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/" title="leetcode刷题日记1:无重复字符的最长子串">leetcode刷题日记1:无重复字符的最长子串</a><time datetime="2022-02-22T13:22:42.000Z" title="发表于 2022-02-22 21:22:42">2022-02-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA%E4%BD%9C%E4%B8%9A1%E2%80%94%E8%99%9A%E6%8B%9F%E5%8C%96%E9%83%A8%E5%88%86/" title="《操作系统导论》作业1—虚拟化部分"><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222183536.png" onerror="this.onerror=null;this.src='/img/cover_default.jpg'" alt="《操作系统导论》作业1—虚拟化部分"/></a><div class="content"><a class="title" href="/2022/02/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA%E4%BD%9C%E4%B8%9A1%E2%80%94%E8%99%9A%E6%8B%9F%E5%8C%96%E9%83%A8%E5%88%86/" title="《操作系统导论》作业1—虚拟化部分">《操作系统导论》作业1—虚拟化部分</a><time datetime="2022-02-22T09:55:53.000Z" title="发表于 2022-02-22 17:55:53">2022-02-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/14/Talk/Zima-Blue/" title="ZIMA BLUE"><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214114936.png" onerror="this.onerror=null;this.src='/img/cover_default.jpg'" alt="ZIMA BLUE"/></a><div class="content"><a class="title" href="/2022/02/14/Talk/Zima-Blue/" title="ZIMA BLUE">ZIMA BLUE</a><time datetime="2022-02-14T02:55:05.000Z" title="发表于 2022-02-14 10:55:05">2022-02-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222212816.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Sail Yang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>
