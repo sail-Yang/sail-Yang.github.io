@@ -2602,6 +2602,44 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
 <p>假设量子长度为T，任务数是N，那么平均响应时间就是: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>T</mi><mo>+</mo><mn>2</mn><mi>T</mi><mo>+</mo><mn>3</mn><mi>T</mi><mo>+</mo><mn>4</mn><mi>T</mi><mo>+</mo><mo>…</mo><mo>…</mo><mo>+</mo><mo stretchy="false">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mi>T</mi></mrow><mi>N</mi></mfrac><mo>=</mo><mfrac><mrow><mi>T</mi><mo stretchy="false">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{T+2T+3T+4T+……+(N-1)T}{N} = \frac{T(N-1)}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span><span class="mbin mtight">+</span><span class="mord mtight">2</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span><span class="mbin mtight">+</span><span class="mord mtight">3</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span><span class="mbin mtight">+</span><span class="mord mtight">4</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span><span class="mbin mtight">+</span><span class="minner mtight">…</span><span class="minner mtight">…</span><span class="mbin mtight">+</span><span class="mopen mtight">(</span><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span><span class="mopen mtight">(</span><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
 </li>
 </ol>
+<hr />
+<h1 id="第八章mlfq调度算法"><a class="markdownIt-Anchor" href="#第八章mlfq调度算法"></a> 第八章：MLFQ调度算法</h1>
+<p>  本章主要讲述了MLFQ这种调度算法，题目如下：</p>
+<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220314102034.png" alt="" width="615" data-align="center">
+<ol>
+<li>
+<p><code>python mlfq.py -j 2 -n 2 -M 0 -s 100 -c</code>,参数的意义请看README</p>
+</li>
+<li>
+<p>如下所示：</p>
+<ol>
+<li>
+<p>图8.2：<code>python mlfq.py -l 0,200,0</code></p>
+</li>
+<li>
+<p>图8.3：<code>python mlfq.py -l 0,200,0:100,20,0</code></p>
+</li>
+<li>
+<p>图8.4：<code>python mlfq.py -l 0,200,0:0,20,1 -i 10 -S</code></p>
+</li>
+<li>
+<p>图8.5：<code>-B 50</code></p>
+</li>
+<li>
+<p>图8.6：<code>python mlfq.py -l 0,120,0:20,100,9 -S -i 1</code>，另外一个去掉<code>-S</code></p>
+</li>
+<li>
+<p>图8.7：<code>python mlfq.py -l 0,100,0:0,100,0 -Q 10,20,40</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p>只有一个队列就可以变成调度程序</p>
+</li>
+<li>
+<p><code>mlfq.py -S -i 1 -l 0,297,99:0,60,0 -q 100 -n 3 -I -c</code></p>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>操作系统</category>
@@ -2686,6 +2724,57 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
       <tags>
         <tag>talk</tag>
         <tag>反思</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>拷贝构造函数与类封装问题</title>
+    <url>/2022/03/16/PL/Cpp/%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%8E%E7%B1%BB%E5%B0%81%E8%A3%85%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>  最近在看拷贝构造函数时想到一个与类封装的小问题。假设我现在写了下面这样一个类：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token comment">//初始化构造函数</span>
+    <span class="token function">Student</span><span class="token punctuation">(</span>string Name<span class="token punctuation">,</span><span class="token keyword">int</span> Id<span class="token punctuation">)</span> <span class="token operator">:</span><span class="token function">name</span><span class="token punctuation">(</span>Name<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token function">id</span><span class="token punctuation">(</span>Id<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token comment">//拷贝构造函数</span>
+    <span class="token function">Student</span><span class="token punctuation">(</span><span class="token keyword">const</span> Student <span class="token operator">&amp;</span>Stu<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        name <span class="token operator">=</span> Stu<span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+        id <span class="token operator">=</span> Stu<span class="token punctuation">.</span>id<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">//成员函数示例</span>
+    string <span class="token function">GetName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token keyword">return</span> name<span class="token punctuation">;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">private</span><span class="token operator">:</span>
+    string name<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  注意拷贝构造函数是依靠<strong>同类的其它对象</strong>Stu来初始化的，比如说下面这样，Stu2通过拷贝构造函数使用Stu1的值来初始化：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    Student <span class="token function">Stu1</span><span class="token punctuation">(</span><span class="token string">"SailYang"</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Student <span class="token function">Stu2</span><span class="token punctuation">(</span>Stu1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> Stu2<span class="token punctuation">.</span><span class="token function">GetName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  那么就有一个问题：<font color=purple>Student类的成员<code>name</code>和<code>id</code>不是private吗？为什么能用拷贝构造函数访问这些私有变量呢？</font></p>
+<p>  一般来说，私有变量只有通过public函数才能访问到，而在类内部是可以自由访问的。<strong>这种保护其实是针对其它类的，而不是同类的不同对象，即同类的不同对象是可以直接访问各自的私有变量的</strong>。</p>
+<p>  举个例子,我们在<code>Student类</code>中加个成员函数<code>Func()</code>:</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">Func</span><span class="token punctuation">(</span><span class="token keyword">const</span> Student <span class="token operator">&amp;</span>Stu<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    cout <span class="token operator">&lt;&lt;</span> Stu<span class="token punctuation">.</span><span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  然后我们调用一下：</p>
+<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220316124953.png" title="" alt="" data-align="center">
+<p>  可以看到Stu2是能访问同属于一个类的Stu1的私有成员。我们假如把<code>Func</code>这个函数定义在Student类外面，再去调用一下，结果如何呢？</p>
+<p><img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220316125417.png" alt="" /></p>
+<p>  通过对比，就能得出我们之前的结论。其实想想看，<strong>既然咱们都属于一个类，那肯定都知根知底，有必要藏着掖着吗😅</strong></p>
+]]></content>
+      <categories>
+        <category>PL</category>
+        <category>Cpp</category>
+      </categories>
+      <tags>
+        <tag>Cpp</tag>
+        <tag>封装</tag>
       </tags>
   </entry>
 </search>
