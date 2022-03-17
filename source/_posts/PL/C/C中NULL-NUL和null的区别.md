@@ -6,7 +6,7 @@ tags:
 categories: 
 - PL
 - C
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214122332.jpg
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214125832.png
 ---
 
 &emsp;&emsp;之前在看别人代码时，看到别人用了个NUL，我心里纳闷：C语言中空指针不是用NULL表示吗？NUL是什么鬼西东？我把他的代码运行一下，发现根本运行不了……心里在想这家伙是不是少打了一个L🤣，看到他后面都这么写，我心里就产生了疑惑……

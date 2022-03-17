@@ -10,9 +10,9 @@ categories:
 cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214122554.png
 ---
 
-&emsp;&emsp;C和C++都有指针，不过C++比C多了一个引用(reference)，一般书里都会说**引用是变量的别名（alias）**，但这种定义太过模糊。
+&emsp;&emsp;C和Cpp都有指针，不过Cpp比C多了一个引用(reference)，一般书里都会说**引用是变量的别名（alias）**，但这种定义太过模糊。
 
-&emsp;&emsp;下面就来说说C++中的引用到底是什么，以及它和指针有什么区别。
+&emsp;&emsp;下面就来说说Cpp中的引用到底是什么，以及它和指针有什么区别。
 
 # 引用是什么
 

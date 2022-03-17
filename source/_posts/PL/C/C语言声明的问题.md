@@ -6,7 +6,7 @@ tags:
 categories: 
 - PL
 - C
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214122332.jpg
+cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211015111602.jpg
 ---
 
 &emsp;&emsp;这一篇主要是对《C专家编程》中关于C语言声明这一问题的总结笔记。
