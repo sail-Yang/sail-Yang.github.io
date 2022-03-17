@@ -2778,7 +2778,7 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
       </tags>
   </entry>
   <entry>
-    <title>python内open()函数的编码问题</title>
+    <title>python读写文件时的编码问题</title>
     <url>/2022/03/17/PL/Python/python%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>  最近在学爬虫，用python把爬到的html代码写到文件中出现了问题。</p>
 <p>  首先来看看代码:</p>
