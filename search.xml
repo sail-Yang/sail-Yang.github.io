@@ -2220,10 +2220,9 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
       </tags>
   </entry>
   <entry>
-    <title>《操作系统导论》作业1—虚拟化部分</title>
+    <title>《操作系统导论》作业1—CPU虚拟化部分</title>
     <url>/2022/02/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA%E4%BD%9C%E4%B8%9A1%E2%80%94%E8%99%9A%E6%8B%9F%E5%8C%96%E9%83%A8%E5%88%86/</url>
-    <content><![CDATA[<p>  最近开始系统地学习操作系统原理了，我选择的主要教材是《<a href="https://book.douban.com/subject/33463930/">操作系统导论</a>》（<a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">英文版在线地址</a>）。为了方便回顾以及督促自己完成每章的作业，我准备记录下每次完成的作业。由于这本书的组织结构是根据操作系统<u>虚拟化</u>、<u>并发</u>和<u>持久化</u>这三个特性来组织的，所以作业也分成这三个部分来记录。</p>
-<p>  这一篇是对虚拟化部分作业的记录，会随着学习进度不断更新。</p>
+    <content><![CDATA[<p>  最近开始系统地学习操作系统原理了，我选择的主要教材是《<a href="https://book.douban.com/subject/33463930/">操作系统导论</a>》（<a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">英文版在线地址</a>）。为了方便回顾以及督促自己完成每章的作业，我准备记录下每次完成的作业。由于这本书的组织结构是根据操作系统<u>虚拟化</u>、<u>并发</u>和<u>持久化</u>这三个特性来组织的，而每一种特性又分成几部分来说。这一篇是对CPU虚拟化部分作业的记录，会随着学习进度不断更新。</p>
 <blockquote>
 <p>  作业的网络资源：<a href="https://pages.cs.wisc.edu/~remzi/OSTEP/Homework/homework.html">Homework</a></p>
 </blockquote>
