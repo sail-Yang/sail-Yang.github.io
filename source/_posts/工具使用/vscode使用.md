@@ -5,7 +5,7 @@ tags:
 - vscode
 categories:
 - 工具
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211107172718.png
+cover: https://s2.loli.net/2022/03/26/y5tgnGl7pXUCOzD.png
 ---
 
 # 前言
@@ -86,33 +86,3 @@ cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20211107172718.png
 | 聚焦到第n个编辑器 | Ctrl+n(数字)              |
 | 放大/缩小     | Ctrl + +/-              |
 | 进入专注模式    | 进：Ctrl+K再按M,退：Esc twice |
-
-## 自定义快捷键
-
-&emsp;&emsp;vscode可以自己修改快捷键，如何打开呢？点击设置，选择下面这个：
-
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903152116.png" title="" alt="image-20210903152109373" data-align="center">
-
-# VScode配置云同步
-
-&emsp;&emsp;我们可以将配置云同步，这样的话，当我们换个电脑时，即可将配置一键同步到本地，就不需要重新安装插件了，也不需要重新配置软件。
-
-&emsp;&emsp;我们还可以把配置分享其他用户，也可以把其他用户的配置给自己用。
-
-**将自己本地的配置云同步到 GitHub**：
-
-（1）安装插件 `settings-sync`。
-
-（2）安装完插件后，在插件里使用 GitHub 账号登录。
-
-（3）登录后在 vscode 的界面中，可以选择一个别人的 gist；也可以忽略掉，然后创建一个属于自己的 gist。
-
-（4）使用快捷键 「Command + Shift + P」，在弹出的命令框中输入 sync，并选择「更新/上传配置」，这样就可以把最新的配置上传到 GitHub。
-
-**我们如何将Gist中保存的配置同步到本地呢？**
-
-&emsp;&emsp;首先将gist ID更改为你想要的ID：
-
-![image-20210903155208689](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20210903155215.png)
-
-&emsp;&emsp;打开命令面板，输入sync，选择高级选线，里面就可以更改你想要的gist ID，然后进行下载配置(shift + ALt + D)

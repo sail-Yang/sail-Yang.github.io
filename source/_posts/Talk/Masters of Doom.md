@@ -5,7 +5,7 @@ tags:
 - 传记
 categories:
 - Talk
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220121145622.png
+cover: https://s2.loli.net/2022/03/26/sC736bJq2fxgPFu.png
 ---
 
 &emsp;&emsp;今天看完了一本传记——[Doom启世录（Masters of Doom）](https://book.douban.com/subject/1152971/)，这本书主要讲述了两个约翰（[约翰·卡马克](https://www.zhihu.com/topic/19633003/hot)和[约翰·罗梅洛](https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E7%BD%97%E6%A2%85%E6%B4%9B/317162)）及其伙伴们一起制作游戏的故事，包括他们的少时经历、创办`id Software`公司以及制作无数重量级游戏的故事。

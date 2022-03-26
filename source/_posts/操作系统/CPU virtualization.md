@@ -1,18 +1,16 @@
 ---
-title: 《操作系统导论》作业1—虚拟化部分
+title: OSTEP Homework1 - CPU virtualization
 date: 2022-02-22 17:55:53
 tags:
 - OS
 - homework
 categories:
 - 操作系统
-- 《操作系统导论》
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222183536.png
+- OSTEP
+cover: https://s2.loli.net/2022/03/26/LRJQDmcyX9vZe1E.png
 ---
 
-&emsp;&emsp;最近开始系统地学习操作系统原理了，我选择的主要教材是《[操作系统导论](https://book.douban.com/subject/33463930/)》（[英文版在线地址](https://pages.cs.wisc.edu/~remzi/OSTEP/)）。为了方便回顾以及督促自己完成每章的作业，我准备记录下每次完成的作业。由于这本书的组织结构是根据操作系统<u>虚拟化</u>、<u>并发</u>和<u>持久化</u>这三个特性来组织的，所以作业也分成这三个部分来记录。
-
-&emsp;&emsp;这一篇是对虚拟化部分作业的记录，会随着学习进度不断更新。
+&emsp;&emsp;最近开始系统地学习操作系统原理了，我选择的主要教材是《[操作系统导论](https://book.douban.com/subject/33463930/)》（[英文版在线地址](https://pages.cs.wisc.edu/~remzi/OSTEP/)）。为了方便回顾以及督促自己完成每章的作业，我准备记录下每次完成的作业。由于这本书的组织结构是根据操作系统<u>虚拟化</u>、<u>并发</u>和<u>持久化</u>这三个特性来组织的，而每一种特性又分成几部分来说。这一篇是对CPU虚拟化部分作业的记录，会随着学习进度不断更新。
 
 > &emsp;&emsp;作业的网络资源：[Homework](https://pages.cs.wisc.edu/~remzi/OSTEP/Homework/homework.html)
 
@@ -22,7 +20,7 @@ cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222183536.png
 
 &emsp;&emsp;这一章作业的题目如下：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222184159.png)
+![](https://s2.loli.net/2022/03/26/Vmh4nIzo5yE3NXc.png)
 
 ---
 
@@ -30,41 +28,41 @@ cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222183536.png
 
 2. 我们先来看看`process list`:
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222184608.png)
+![](https://s2.loli.net/2022/03/26/JiHWfOe2IzYmdCb.png)
 
 &emsp;&emsp;进程`Process0`需要4个时间单元，`Process1`需要7个时间单元(`io`+5个时间单元用来处理+`io_done`)，由于是简单的发出I/O，然后等待完成，所以总时间就是11个时间单元。我们添加参数`-c`来看下结果:
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222185737.png" title="" alt="" width="660">
+<img title="" src="https://s2.loli.net/2022/03/26/BI9XLcYHUrSFD3z.png" alt="" width="660">
 
 3. 交换一下顺序，我们查看一下现在的process list:
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222185953.png)
+![](https://s2.loli.net/2022/03/26/56R2rHeTywYOWL3.png)
 
 &emsp;&emsp;看上去也就是顺序变了一下，貌似没什么变化，但真的是这样吗？我们看看运行情况：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222190214.png" title="" alt="" width="656">
+<img title="" src="https://s2.loli.net/2022/03/26/RMcbtrLiId7f6JG.png" alt="" width="656">
 
 &emsp;&emsp;显然这种情况节省了很多时间，关键就在于**利用了IO设备在工作时(`WAITING状态`)CPU的闲置时间**。
 
 4. 这个问题主要是帮助我们了解-S这个标志的功能，也就是**进程切换时，系统不同行为的影响**。这里我们输入题目指定的指令，查看结果：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222190838.png)
+![](https://s2.loli.net/2022/03/26/WaJZiFSRYMwQTOr.png)
 
 &emsp;&emsp;我们设置标志为`SWICH_ON_END`，也就是直到一个进程结束了才会切换到另外一个进程。从上图可以看出的确如此，IO进程执行完了才会执行原来的进程。
 
 5. 现在把标志设置为`SWITCH_ON_IO`，也就**是问题3这种情况，在等待IO操作（WAITING）时切换进程**，我们看看结果：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222191321.png)
+![20220222191321.png](https://s2.loli.net/2022/03/26/IzXLsh4bryqaOWJ.png)
 
 6. 这个问题又介绍了**与IO结束时行为相关**的参数`-I`,我们看看`IO_RUN_LATER`会造成什么结果：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222191907.png)
+![20220222191907.png](https://s2.loli.net/2022/03/26/45oVIOqyKR7HNmd.png)
 
 &emsp;&emsp;`IO_RUN_LATER`导致IO这个进程就一直挂着，然后运行原来的进程。**我们可以看到资源肯定没有高效利用，17之后CPU的资源基本上全浪费掉了**。
 
 7. 换成`IO_RUN_IMMEDIATE`后我们再来看看结果:
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222192430.png)
+![20220222192430.png](https://s2.loli.net/2022/03/26/xIQ1ShMETbnWL4A.png)
 
 &emsp;&emsp;对比一下问题6，就知道这种方式的效率之高，CPU的Busy Time都`100%`了。
 
@@ -76,9 +74,9 @@ cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220222183536.png
 
     这一章主要讲了三个创建进程的API：`fork`,`exec`和`wait`。下面是题目：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228122313.png)
+![](https://s2.loli.net/2022/03/26/SFTtoDw2PdjyhHm.png)
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228122422.png)
+![20220228122422.png](https://s2.loli.net/2022/03/26/Xb94SMqzk8ilIax.png)
 
 ---
 
@@ -113,7 +111,7 @@ int main()
 
 &emsp;&emsp;结果是显而易见的,**子进程修改变x，并不会影响主进程中的x**：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228122712.png" title="" alt="" data-align="center">
+<img src="https://s2.loli.net/2022/03/26/yk7cjRqGIelmFXD.png" title="" alt="20220228122712.png" data-align="center">
 
 2. 为了查看子父进程是否都能读取成功以及写入成功，我设计了下面这个程序:
 
@@ -168,15 +166,15 @@ int main()
 
 &emsp;&emsp;首先来看看程序的运行结果:
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228133844.png)
+![](https://s2.loli.net/2022/03/26/tTGHrD8vm4J2OcB.png)
 
 &emsp;&emsp;虽然子父进程都能访问文件描述符`fd`,但是只有父进程成功读取了文件中的内容。
 
 &emsp;&emsp;我们再来对比一下程序执行前后**的`data.txt`文件**:
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228134800.png)
+![](https://s2.loli.net/2022/03/26/UGjyb2RFxgLMPzA.png)
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228134827.png)
+![](https://s2.loli.net/2022/03/26/fENk5KDX3cxluGJ.png)
 
 &emsp;&emsp;由此可见，子父进程都成功进行了写入操作。
 
@@ -210,21 +208,21 @@ int main()
 
 &emsp;&emsp;在这里我先不提vfork和fork的区别，我们直接看`man`里的简短说明：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228141215.png" title="" alt="" data-align="center">
+<img title="" src="https://s2.loli.net/2022/03/26/9rMXDu3szxjEiY4.png" alt="" data-align="center">
 
 &emsp;&emsp;还有根据下面这条知道要在`printf("hello\n")`后面加个`exit(1)`来退出子进程：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228141543.png)
+![](https://s2.loli.net/2022/03/26/xfokLH8Dm7lzJTC.png)
 
 4. 看[这篇博客](https://www.cnblogs.com/Vivian517/p/7707480.html#2)就知道了，我认为讲的很详细了。如果想原汁原味点的，直接去看`man`
 
 5. 我们先来看看在父进程中使用`wait(NULL)`,`wait(NULL)`会返回什么：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228142748.png" title="" alt="" data-align="center">
+<img title="" src="https://s2.loli.net/2022/03/26/kwdqvsU1Cc7RYSb.png" alt="" data-align="center">
 
 &emsp;&emsp;显然，`wait(NULL)`返回了子进程的PID，如果我们把`wait(NULL)`放入子进程中：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228143153.png" title="" alt="" data-align="center">
+<img title="" src="https://s2.loli.net/2022/03/26/mlQ25A93jVXUBdy.png" alt="" data-align="center">
 
 &emsp;&emsp;wait()返回了-1，之所以会这样是因为11568这个进程没有子进程。
 
@@ -286,7 +284,7 @@ int main()
 }
 ```
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228145125.png)
+![](https://s2.loli.net/2022/03/26/f4Y35dGzs1JnD8o.png)
 
 &emsp;&emsp;并没有什么影响。
 
@@ -342,7 +340,7 @@ int main()
    }
 ```
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220228160034.png)
+![](https://s2.loli.net/2022/03/26/w8gMNeZ6yk9poGt.png)
 
 ---
 
@@ -397,7 +395,7 @@ int main(int argc,char *argv[])
 }
 ```
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220302171752.png)
+![](https://s2.loli.net/2022/03/26/Frxjt7U9oVY5I2g.png)
 
 2. 首先咱要确保第二个实验是在单CPU单核下运行的，这点在虚拟机上很容易实现，如果不是虚拟机，也可以用书中提到的`sched_setaffinity()调用`.
 
@@ -413,17 +411,17 @@ int main(int argc,char *argv[])
 
 &emsp;&emsp;本章题目如下：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220308151926.png)
+![](https://s2.loli.net/2022/03/26/Frxjt7U9oVY5I2g.png)
 
 1. 第一题很简单，照着做就行了：
 
 &emsp;&emsp;首先是FIFO的模拟：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220308152230.png" title="" alt="" width="628">
+<img title="" src="https://s2.loli.net/2022/03/26/aTY4lj3szvFJCAu.png" alt="" width="628">
 
 &emsp;&emsp;我们自己最好先算一下，然后再用-c参数进行运行，最后结果如下：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220308152430.png" title="" alt="" width="629">
+<img title="" src="https://s2.loli.net/2022/03/26/EY3urRJAkbfPGql.png" alt="" width="629">
 
 &emsp;&emsp;由于这里的工作时间长度是一样的，所以SJF和FIFO的结果是一样的。
 
@@ -431,9 +429,9 @@ int main(int argc,char *argv[])
 
 &emsp;&emsp;如果是100，200，300的顺序，那么SJF和FIFO是相同的；下图是300，200，100的顺序，可以看出差别：
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220308153031.png" title="" alt="" width="632">
+<img title="" src="https://s2.loli.net/2022/03/26/3UgNaHsrMn1P5oj.png" alt="" width="632">
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220308153120.png" title="" alt="" width="631">
+<img title="" src="https://s2.loli.net/2022/03/26/tG3b1EMoyXRVOUu.png" alt="" width="631">
 
 3. `python scheduler.py -p RR -q 1 -j 3 -l 300,200,100 -c`
 
@@ -451,7 +449,7 @@ int main(int argc,char *argv[])
 
 &emsp;&emsp;本章主要讲述了MLFQ这种调度算法，题目如下：
 
-<img title="" src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220314102034.png" alt="" width="615" data-align="center">
+<img title="" src="https://s2.loli.net/2022/03/26/2qnXiDFjohcmft6.png" alt="" width="615" data-align="center">
 
 1. `python mlfq.py -j 2 -n 2 -M 0 -s 100 -c`,参数的意义请看README
 

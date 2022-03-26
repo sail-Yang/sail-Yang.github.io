@@ -7,7 +7,7 @@ tags:
 categories: 
 - PL
 - Cpp
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220214122554.png
+cover: https://s2.loli.net/2022/03/26/ePZdNrnHMEXoStb.png
 ---
 
 &emsp;&emsp;C和Cpp都有指针，不过Cpp比C多了一个引用(reference)，一般书里都会说**引用是变量的别名（alias）**，但这种定义太过模糊。
@@ -33,7 +33,7 @@ int main()
 
 > 我们会使用[godbolt.org](https://godbolt.org/)这个网站来查看C++代码的x86-64汇编代码，这个网站还能查看每句对应的汇编，十分方便。
 
-<img src="https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213132527.png" title="" alt="" width="670">
+<img title="" src="https://s2.loli.net/2022/03/26/bfXWp7DyNCvMIAt.png" alt="" width="670">
 
 &emsp;&emsp;我已经把对应的代码用不同颜色的笔标出来了，可以很清楚地看到指针和引用的行为是一模一样的，这充分说明了指针和引用的基本原理是一样的。
 
@@ -51,4 +51,4 @@ int main()
 
 &emsp;&emsp;上面只是对引用这个概念底层的一点探索，日常使用肯定还是注重引用的特性和使用。下面就对引用和普通指针行为上做一个对比：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220213135045.png)
+![](https://s2.loli.net/2022/03/26/xT2OBfCMhdqAryv.png)

@@ -8,7 +8,7 @@ tags:
 categories: 
 - PL
 - Python
-cover: https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220317115258.png
+cover: https://s2.loli.net/2022/03/26/NGAnLf4tjTdxPrh.png
 ---
 
 &emsp;&emsp;最近在学爬虫，用python把爬到的html代码写到文件中出现了问题。
@@ -31,11 +31,11 @@ file1.close()
 
 &emsp;&emsp;代码很简单，就是把豆瓣主页的html保存下来，可是却出现了下列问题：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220317115730.png)
+![](https://s2.loli.net/2022/03/26/rzhAvLcKn5TXpbI.png)
 
 &emsp;&emsp;看到这个错误后，我先检查了`html.text`的**type**是str，而python3的默认编码方式是`utf-8`，说明要写入文件的字节流是没问题的；那就说明**要写入的文件的编码方式有问题**。一开始，我将`file1.write(html.text)`替换为`file1.write("abcdefg")`，发现没什么问题；但是当我把`abcdefg`替换为中文+英文或者全中文时，就出问题了——douban.txt文件里出现了乱码，并且编码方式莫名其妙：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220317200109.png)
+![](https://s2.loli.net/2022/03/26/KSFhyb3Hi12OG46.png)
 
 &emsp;&emsp;我在看了下我爬取的html代码，由于是豆瓣，里面有很多的中文，才会导致错误。具体的原因就是：新建的文件是utf-8，但是一旦读取的内容中有中文，就会是GBK编码（当系统默认编码方式是GBK时），这样自然就会导致`UnicodeEncodeError`。
 
@@ -45,7 +45,7 @@ file1.close()
 
 &emsp;&emsp;再举个例子，假如我在一个空的txt文件夹里写入"我爱中国"四个汉字，然后调用open()和read()，看看结果如何：
 
-![](https://gitee.com/sail-Yang/blogiamge/raw/master/img/20220317202407.png)
+![](https://s2.loli.net/2022/03/26/bEKreTcqPBZlHk5.png)
 
 &emsp;&emsp;可以看到和一开始几乎一模一样的错误，只不过这里是读取时的解码错误，已经可以看到这里是用GBK解码的。
 
