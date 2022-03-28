@@ -11,6 +11,8 @@ comments: false
 <script>
 new Artitalk({
     appId: 'BODhyGOcGPAs6zGjVhbrKeLD-MdYXbMMI', // Your LeanCloud appId
-    appKey: 'HcvMl7O0aWw7v7akTcDNVwIp' // Your LeanCloud appKey
+    appKey: 'HcvMl7O0aWw7v7akTcDNVwIp', // Your LeanCloud appKey
+    avatarPla: 'https://s2.loli.net/2022/03/27/aqh1QGDEMRH8NS4.jpg'
 })
+
 </script>
