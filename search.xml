@@ -365,8 +365,7 @@
 <blockquote>
 <p>众目睽睽之下，齐马·蓝跳进了他所制造的泳池，他在水里肆意的划水，最后他仰卧在水中，仰卧在那温柔的床上。慢慢地，沉入水底，慢慢地，肢解他的身体。</p>
 </blockquote>
-<p>  没错，齐马·蓝放弃了他那金刚不坏的身体和拥有着高等智慧的电子大脑，只留下那最初的部件——那个只会打扫泳池的机器人:</p>
-<img title="" src="https://s2.loli.net/2022/03/26/RdUg1PGAJb57saE.png" alt="" data-align="center" width="598">
+<p>  没错，齐马·蓝放弃了他那金刚不坏的身体和拥有着高等智慧的电子大脑，只留下那最初的部件——那个只会打扫泳池的机器人</p>
 <hr />
 <p>  返璞归真的感觉还是值得好好体会一下的。</p>
 ]]></content>
@@ -645,7 +644,7 @@
 <p>我们先来看看<code>process list</code>:</p>
 </li>
 </ol>
-<p><img src="https://s2.loli.net/2022/03/26/JiHWfOe2IzYmdCb.png" alt="" /></p>
+<p><img src="https://s2.loli.net/2022/03/28/6jpOEwgbBMhD87A.png" alt="" /></p>
 <p>  进程<code>Process0</code>需要4个时间单元，<code>Process1</code>需要7个时间单元(<code>io</code>+5个时间单元用来处理+<code>io_done</code>)，由于是简单的发出I/O，然后等待完成，所以总时间就是11个时间单元。我们添加参数<code>-c</code>来看下结果:</p>
 <img title="" src="https://s2.loli.net/2022/03/26/BI9XLcYHUrSFD3z.png" alt="" width="660">
 <ol start="3">
@@ -1298,9 +1297,6 @@ end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
 </li>
 <li>
 <p>cs = 076C,ss = 076B,ds = 076A</p>
-<p><img src="https://s2.loli.net/2022/03/26/SHm4wuKqGNDCILR.png" alt="" /></p>
-</li>
-<li>
 <p>从第二问我们就可以看出来，如果code段的段地址为X ，则data段的段地址为X - 2,stack段的段地址为X - 1</p>
 </li>
 </ol>
@@ -1715,7 +1711,6 @@ codesg segment
 
 codesg ends
 end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://s2.loli.net/2022/03/26/rlsOtBYkdpuoVXe.png" alt="RESULT" /></p>
 ]]></content>
       <categories>
         <category>汇编语言</category>
@@ -1844,8 +1839,6 @@ code segment
 code ends
 end main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>  其实主体的思想和实验九是一样的，所以这里也就不多说了。值得说的是，这种子程序的写法的确要比实验九里我写的程序要灵活的多，实验九里的程序调用三次这个子程序就能实现那个效果。我们写完这两个程序可以进行一个对比。</p>
-<p>  下面这个是输出的结果：</p>
-<p><img src="https://s2.loli.net/2022/03/26/Tx4HufJPlmsFke5.png" alt="image-20211115214420776" /></p>
 <h2 id="子程序2解决除法溢出的问题-2"><a class="markdownIt-Anchor" href="#子程序2解决除法溢出的问题-2"></a> 子程序2：解决除法溢出的问题</h2>
 <pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:code,<span class="token register variable">ss</span>:stack
 
@@ -2140,7 +2133,6 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <img title="" src="https://s2.loli.net/2022/03/26/a2AJ3GY8Vg6Qtuo.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
 <p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
 <img title="" src="https://s2.loli.net/2022/03/26/Zve1bNrcomaSQdt.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="411">
-<img title="" src="https://s2.loli.net/2022/03/26/4vyFpTkV5Mn63Ou.png" alt="image-20210711123438317" style="zoom: 67%;" data-align="center" width="414">
 <img title="" src="https://s2.loli.net/2022/03/26/EKqGV9CXbHI5vp6.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="412">
 <p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
 <img title="" src="https://s2.loli.net/2022/03/26/XwPFhRK3xieA9Cd.png" alt="image-20210714082002960" data-align="center" width="420">
@@ -2155,11 +2147,8 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
 <h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
 <p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/Ye7SzFamwMolfn8.png" alt="image-20210714082110471" data-align="center" width="307">
-<p>  这是门口仿的哪朝的石狮子，我觉得挺喜感就给它拍下来了。</p>
 <img title="" src="https://s2.loli.net/2022/03/26/5y24Sjf71aNgHrb.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="207">
 <p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/5y24Sjf71aNgHrb.png" alt="image-20210711234049822" style="zoom:50%;" data-align="center" width="269">
 <img title="" src="https://s2.loli.net/2022/03/26/8RBpUWPicFewaDg.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="277">
 <img title="" src="https://s2.loli.net/2022/03/26/pgriONkwqWI19lP.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="278">
 <p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
@@ -2181,7 +2170,7 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
 <img title="" src="https://s2.loli.net/2022/03/26/e2GMBtoOzECalTn.png" alt="image-20210712000357612" width="191" data-align="center">
 <p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
 <img title="" src="https://s2.loli.net/2022/03/26/yCsZxtGOfSkimNd.png" alt="image-20210712000558320" style="zoom:67%;" width="182" data-align="center">
-<img title="" src="https://s2.loli.net/2022/03/26/xIyEkf4CXaTZ9uv.png" alt="image-20210712000617839" style="zoom:67%;" width="168" data-align="center">
+<img title="" src="https://s2.loli.net/2022/03/26/xIyEkf4CXaTZ9uv.png" alt="image-20210712000617839" style="zoom:67%;" width="208" data-align="center">
 <p>  就写到这吧，每天还要转专业考试。此次上海之旅感觉还行，就是消费太贵了。。。不愧是魔都，以后应该还会再来吧</p>
 ]]></content>
       <categories>
@@ -2251,8 +2240,8 @@ file1<span class="token punctuation">.</span>close<span class="token punctuation
 <blockquote>
 <p>我们会使用<a href="https://godbolt.org/">godbolt.org</a>这个网站来查看C++代码的x86-64汇编代码，这个网站还能查看每句对应的汇编，十分方便。</p>
 </blockquote>
-<img title="" src="https://s2.loli.net/2022/03/26/bfXWp7DyNCvMIAt.png" alt="" width="670">
-<p>  我已经把对应的代码用不同颜色的笔标出来了，可以很清楚地看到指针和引用的行为是一模一样的，这充分说明了指针和引用的基本原理是一样的。</p>
+<img title="" src="https://s2.loli.net/2022/03/28/2pXvMQrBegSzHh8.png" alt="" width="676">
+<p>  可以很清楚地看到指针和引用的行为是一模一样的，这充分说明了指针和引用的基本原理是一样的。</p>
 <p>  既然引用和指针一样，那么怎么体现是const指针呢，这汇编代码里也看不出来啊。</p>
 <p>  首先要说明，像const这种存取的控制是实现在编译器这一层的，也就是C++底层的机制，在汇编代码这一层是不存在什么const的（我们可以用内存级工具修改任何一个变量）。</p>
 <p>  在C++中，<strong>引用一旦绑定初始化对象之后，是不能修改其绑定对象的，这和const指针的行为是一模一样的</strong>。</p>
