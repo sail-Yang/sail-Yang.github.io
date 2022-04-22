@@ -2737,4 +2737,63 @@ x <span class="token operator">=</span> temp<span class="token operator">/</span
         <tag>C</tag>
       </tags>
   </entry>
+  <entry>
+    <title>创建简单的静态库</title>
+    <url>/2022/04/22/Linux%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E9%9D%99%E6%80%81%E5%BA%93/</url>
+    <content><![CDATA[<p>  记录一个很简单的实验——创建一个简单的静态库，首先来简单介绍一下Linux中的库的概念。</p>
+<h1 id="对库的简单介绍"><a class="markdownIt-Anchor" href="#对库的简单介绍"></a> 对库的简单介绍</h1>
+<p>  库是一组已经编译好的函数集合，通常由一组相互关联的函数组成以执行某种特定的任务。系统的标准系统库文件一般存储在/lib和/usr/lib目录中:</p>
+<p><img src="https://s2.loli.net/2022/04/22/c5UuLVORtF8spNn.png" alt="" /></p>
+<p>  函数库一般有静态库（.a）和动态库(.so)两种格式。<strong>C语言在编译过程中，预处理阶段会用到头文件，链接阶段就会用到库文件</strong>。其中头文件的作用是提供函数的声明（接口），而这些函数的具体实现都在库文件中。</p>
+<p>  静态库本身就包含了实际执行代码、符号表等等，程序运行的时候不再需要其它的库文件；动态链接把调用的函数所在文件模块（.so）和调用函数在文件中的位置等信息链接进目标程序，程序运行的时候再从DLL中寻找相应函数代码，因此需要相应DLL文件的支持。</p>
+<h1 id="创建简单的静态库"><a class="markdownIt-Anchor" href="#创建简单的静态库"></a> 创建简单的静态库</h1>
+<p>我们首先创建两个源文件：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//func1.c</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The output of func1 is %d\n"</span><span class="token punctuation">,</span>arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//func2.c</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>arg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The output of func2 is %s\n"</span><span class="token punctuation">,</span>arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  然后用gcc编译生成对应的两个obj文件(.o):</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -c func1.c func2.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>  然后就是创建一个头文件，来声明我们要创建的库文件中的函数:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/*This is lib.h which declares func1 and func2*/</span>
+<span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>  我们还需要一个调用程序main.c，我们将其包含头文件以及一个库中的函数func2：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token string">"Sail Yang"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  编写完上述文件之后，我们就可以进行创建库文件以及测试了。首先，如果我们不创建库文件，直接链接，那么就是下面这种方式:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -c main.c
+gcc -o main main.o func2.o<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>  其实能感受到很不方便，如果调用的函数一多，这种方法简直就是自讨苦吃，这因为如此，我们才需要库文件，下面我们就用<code>ar</code>命令(archive)创建一个库文件:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ar crv libfoo.a func1.o func2.o
+<span class="token comment"># 下面这一步用于生成内容表，当使用GNU tool时，这一步骤非必须</span>
+ranlib libfoo.a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>  创建完库文件后，我们就可以使用了:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -o main main.o libfoo.a
+./main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>  结果为：</p>
+<p><img src="https://s2.loli.net/2022/04/22/EbtRnsKZW2ic1PG.png" alt="" /></p>
+<blockquote>
+<p>本次实验选自《Beginning Linux Programming, 4/e》</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux Programming</category>
+      </categories>
+      <tags>
+        <tag>Linux Programming</tag>
+        <tag>lib</tag>
+      </tags>
+  </entry>
 </search>
