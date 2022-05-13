@@ -1,6 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>创建简单的静态库</title>
+    <url>/2022/04/22/Linux%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E9%9D%99%E6%80%81%E5%BA%93/</url>
+    <content><![CDATA[<p>  记录一个很简单的实验——创建一个简单的静态库，首先来简单介绍一下Linux中的库的概念。</p>
+<h1 id="对库的简单介绍"><a class="markdownIt-Anchor" href="#对库的简单介绍"></a> 对库的简单介绍</h1>
+<p>  库是一组已经编译好的函数集合，通常由一组相互关联的函数组成以执行某种特定的任务。系统的标准系统库文件一般存储在/lib和/usr/lib目录中:</p>
+<p><img src="https://s2.loli.net/2022/04/22/c5UuLVORtF8spNn.png" alt="" /></p>
+<p>  函数库一般有静态库（.a）和动态库(.so)两种格式。<strong>C语言在编译过程中，预处理阶段会用到头文件，链接阶段就会用到库文件</strong>。其中头文件的作用是提供函数的声明（接口），而这些函数的具体实现都在库文件中。</p>
+<p>  静态库本身就包含了实际执行代码、符号表等等，程序运行的时候不再需要其它的库文件；动态链接把调用的函数所在文件模块（.so）和调用函数在文件中的位置等信息链接进目标程序，程序运行的时候再从DLL中寻找相应函数代码，因此需要相应DLL文件的支持。</p>
+<h1 id="创建简单的静态库"><a class="markdownIt-Anchor" href="#创建简单的静态库"></a> 创建简单的静态库</h1>
+<p>我们首先创建两个源文件：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//func1.c</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The output of func1 is %d\n"</span><span class="token punctuation">,</span>arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//func2.c</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>arg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The output of func2 is %s\n"</span><span class="token punctuation">,</span>arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  然后用gcc编译生成对应的两个obj文件(.o):</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -c func1.c func2.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>  然后就是创建一个头文件，来声明我们要创建的库文件中的函数:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/*This is lib.h which declares func1 and func2*/</span>
+<span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>  我们还需要一个调用程序main.c，我们将其包含头文件以及一个库中的函数func2：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token string">"Sail Yang"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  编写完上述文件之后，我们就可以进行创建库文件以及测试了。首先，如果我们不创建库文件，直接链接，那么就是下面这种方式:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -c main.c
+gcc -o main main.o func2.o<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>  其实能感受到很不方便，如果调用的函数一多，这种方法简直就是自讨苦吃，这因为如此，我们才需要库文件，下面我们就用<code>ar</code>命令(archive)创建一个库文件:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ar crv libfoo.a func1.o func2.o
+<span class="token comment"># 下面这一步用于生成内容表，当使用GNU tool时，这一步骤非必须</span>
+ranlib libfoo.a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>  创建完库文件后，我们就可以使用了:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -o main main.o libfoo.a
+./main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>  结果为：</p>
+<p><img src="https://s2.loli.net/2022/04/22/EbtRnsKZW2ic1PG.png" alt="" /></p>
+<blockquote>
+<p>本次实验选自《Beginning Linux Programming, 4/e》</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux Programming</category>
+      </categories>
+      <tags>
+        <tag>Linux Programming</tag>
+        <tag>lib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Masters of Doom</title>
+    <url>/2022/01/21/Talk/Masters%20of%20Doom/</url>
+    <content><![CDATA[<p>  今天看完了一本传记——<a href="https://book.douban.com/subject/1152971/">Doom启世录（Masters of Doom）</a>，这本书主要讲述了两个约翰（<a href="https://www.zhihu.com/topic/19633003/hot">约翰·卡马克</a>和<a href="https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E7%BD%97%E6%A2%85%E6%B4%9B/317162">约翰·罗梅洛</a>）及其伙伴们一起制作游戏的故事，包括他们的少时经历、创办<code>id Software</code>公司以及制作无数重量级游戏的故事。</p>
+<hr />
+<h1 id="two-johns"><a class="markdownIt-Anchor" href="#two-johns"></a> Two Johns</h1>
+<p>  这本书重点围绕卡马克和罗梅洛展开，他们是id Software公司的核心人物，也是截然不同的两个人。</p>
+<p>  卡神是技术大神，id Software公司一系列引起游戏文化浪潮的重量级游戏，比如一开始的危险的戴夫、指挥官基恩、德军总部3D，还有经典的<strong>Doom、Quake</strong>等这些游戏都是依托于卡神的<strong>游戏引擎</strong>，正是卡神那犹入无人之境的<strong>图像编程技术</strong>，创造出了一个个领先于行业水平的引擎，甚至带动了显卡的发展。<br />
+  为什么卡神能这么🐂🍺呢？我稍微总结了一下：</p>
+<ul>
+<li>
+<p>第一点，毫无疑问是对图像编程的热爱，正是这一点驱动他不断地深入学习编程技术。</p>
+</li>
+<li>
+<p>卡神极度自律和专注，他的生活可以说和机器人差不多，十分的规律。在写引擎的时候，卡神的注意力十分集中，比如说一次有人故意在旁边放🐱片，卡神都没什么反应……还有就是他新婚度蜜月都要带上电脑，因为还要工作……</p>
+</li>
+<li>
+<p>活在当下，卡神从来不回去怀念过去的作品和成就，而是勇攀高峰，不断超越自己。一开始，当他做出了平滑卷轴效果，这已经是行业领先的了，他却没有满足，而是继续研发2.5D，3D的游戏引擎，以及逼真的光影效果，纵观全书，可以看见他的这么一个过程，真的是不断超越自己，把过去的成就看得一文不值。在觉得自己已经达到图形编程的禅宗境界时（已经没有什么好创新的了，只剩下不断的优化），他又跑去造火箭了，最近好像在搞VR。</p>
+</li>
+</ul>
+<p>  卡神还真是让人敬仰的偶像啊😆😆😆😆😆</p>
+<hr />
+<p>  那个时期，id Software公司之所以那么成功是因为创造出了许多重量级的游戏，而游戏光靠一个游戏引擎是不够的，还需要设计师、画师等一系列人去创作，而另一位约翰——罗梅洛就是一个顶尖的游戏设计师和游戏玩家，他也是一个程序员，因此经常和卡神讨论引擎。  罗梅洛也是id Software的灵魂人物，他与卡神是一种两者不能缺其一的关系，罗梅洛能够让卡马克的游戏引擎发挥最大的性能和特点，而卡马克的游戏引擎能让罗梅洛实现那些天才的游戏设计。除此之外，两人的性格也是互补的，卡神低调，对成就视若不见；罗梅洛喜欢造势，喜欢在媒体面前大肆宣扬，吹牛皮。</p>
+<p>  当罗梅洛因为过于投入在玩游戏和当明星而被其公司的兄弟们解雇后，id SoftWare公司也渐渐走了下坡路。</p>
+<hr />
+<h1 id="id之梦"><a class="markdownIt-Anchor" href="#id之梦"></a> id之梦</h1>
+<p>  id Software 就如许多创业神话一样已然是过眼烟云，我也不想去论这个公司的是非成败，比如什么公司管理问题，为什么走下坡路等等。</p>
+<p>  这本书之所以打动我，是因为这群年轻人，为了自己的游戏梦想，奉献自己的青春。一个公司里，大家有着共同的兴趣和爱好，大家一同工作与玩游戏，每个人都知道自己要什么，要干什么。在书里能充分感受到这种氛围。</p>
+<p>  我们不如问问自己，我们知道自己最喜欢什么吗？知道什么是值得我们去努力奋斗的吗？<strong>如今世上又有多少人所做的工作或者所学习的知识&quot;不是自己选&quot;的</strong>。</p>
+<p>  我觉得这是值得思考的。</p>
+]]></content>
+      <categories>
+        <category>Talk</category>
+      </categories>
+      <tags>
+        <tag>传记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ZIMA BLUE</title>
+    <url>/2022/02/14/Talk/Zima-Blue/</url>
+    <content><![CDATA[<p>  最近看了一个动画短片集叫《Love,Death&amp;Robots》(<a href="https://movie.douban.com/subject/30424374/">《爱，死亡和机器人》</a>)，每集都是一个小故事。其中让我印象最深刻的是第14集——《ZIMA BLUE》(《齐马的作品》)。这一集是改编自阿拉斯泰尔•雷诺兹的同名小说，原著我没看过，也不知道表达的东西有没有出入，所以单就这个小短片谈谈我的感想。</p>
+<p>  齐马蓝是一个享誉全宇宙的艺术家，他最初的作品只是肖像画，不过他逐渐不满足于此，他的内心对宇宙的真理有着执着的追求，于是他的作品变成了下面这样：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/Ql9tURwBi8p4yYS.png" alt="" data-align="center">
+<p>  他的作品变成了巨大的壁画，并且画中间出现了越来越大的蓝色图形，这个蓝色就是齐马蓝（还注册成商标了😅）。随着蓝色越来越多，最终作品变成了一整面的齐马蓝:<img title="" src="https://s2.loli.net/2022/03/26/eszd48MF1UVmN6l.png" alt="" data-align="center">  这还不是最离谱的，他还用机器人在宇宙中造他的齐马蓝作品:</p>
+<img title="" src="https://s2.loli.net/2022/03/26/Bs7uW1JNpV3ICT5.png" alt="" data-align="center">
+<p>  那么这种蓝色到底意味着什么呢？是这家伙在故弄玄虚吗？等我们知道齐马·蓝到底是什么就知道怎么回事了。</p>
+<hr />
+<p>  齐马·蓝告诉外界的是：他原本是人类，然后做手术变成了机器人，如今的身体能让他自由探索宇宙（能够忍受极端环境）：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/stkyKJcBRUYPT2b.png" alt="" data-align="center" width="552">
+<p>  但实际上他还是“婴儿”的时候长这样：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/MqoPXwKjZm6Vpdz.png" alt="" width="589" data-align="center">
+<p>  没错，他原本是一个没有脑子的刷泳池机器人，这就是<strong>他原本的样子和工作</strong>。随后，经过不同主人对他的迭代升级，他拥有了自主意识，变得和人一样。前面说了他对宇宙的真理有着执着的追求，其实我觉得这是对自我的一种探索，也就是那老生常谈的问题：</p>
+<blockquote>
+<p><strong>Who am I</strong> ?</p>
+</blockquote>
+<p>  那所谓的<strong>齐马蓝其实就是泳池瓷砖的颜色</strong>😄。这种蓝色之所以会在他的作品中占比越来越大，最后甚至占据了其整个世界，是因为他正在逐渐想起其本来的自我就是这种颜色，他，齐马·蓝，不是什么大艺术家，他的本质就是那个当初日夜不停打扫着那有着齐马蓝颜色的泳池的小机器人，这就是他苦苦探寻的宇宙真理的答案。</p>
+<p>  在人们都以为齐马·蓝的创作已经枯竭的时候（内心OS：反正就是搞蓝色呗，还能搞出什么花样），他创作了其最后一部作品：</p>
+<blockquote>
+<p>众目睽睽之下，齐马·蓝跳进了他所制造的泳池，他在水里肆意的划水，最后他仰卧在水中，仰卧在那温柔的床上。慢慢地，沉入水底，慢慢地，肢解他的身体。</p>
+</blockquote>
+<p>  没错，齐马·蓝放弃了他那金刚不坏的身体和拥有着高等智慧的电子大脑，只留下那最初的部件——那个只会打扫泳池的机器人</p>
+<hr />
+<p>  返璞归真的感觉还是值得好好体会一下的。</p>
+]]></content>
+      <categories>
+        <category>Talk</category>
+      </categories>
+      <tags>
+        <tag>tv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>夏目漱石《心》</title>
+    <url>/2021/12/24/Talk/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3/</url>
+    <content><![CDATA[<p>  近日买了个Kindle，读书很方便，于是时隔一年，我又拾起了高中时的一点小爱好—看点杂书。这不今天看了一本小说，就想着随便写写。</p>
+<p>  这本小说就是<strong>夏目漱石的《心》</strong>，核心人物就两个：先生和K（先生的已故朋友）。作者通过这两昔日好友的关系和矛盾说出了这本小说的心声。</p>
+<hr />
+<span id="more"></span>
+<h1 id="故事背景"><a class="markdownIt-Anchor" href="#故事背景"></a> 故事背景</h1>
+<p>  先生，一个乡间富庶家庭的子弟，少时活得顺风顺水，直到父母接连因为风寒病逝，先生的母亲临终前把家里的财产交给先生的叔父（与先生家关系亲密），一开始先生觉得这位叔父和蔼可亲，十分可靠；可是后来<strong>他发现了叔父竟然妄图霸占财产，背叛了他</strong>。这件事就给了先生第一次思想上的冲击：<strong>他发现了世界上的恶，开始憎恶像他叔父这样的恶人，并且变得不愿意相信别人</strong>。在这之后，先生拿到了原本属于他的财产的一小部分，住进了一个新的房子，和一位军官的遗孀和其女儿（下面称小姐）住在一起。住在同一屋檐下，少男自然容易爱上少女，并且这位小姐又是如此的天真烂漫，美丽动人，所以先生渐渐爱上了小姐。到这里先暂停，接下来说一说K的背景和经历。</p>
+<p>  K是先生的同学，是乡下一僧人家里的次子，过继给了一个有钱人家当儿子。养父母把他送到东京学医，可是实际上K并没有学医，而是迷上了古人那种苦行僧般修行的哲学，也就是他自己总说的“<strong>精进</strong>”(我想是他少时受到的冷落太多，而以此寻求从痛苦中解脱)，养父母知道后就和他撇清关系，断绝了K的经济来源。K没办法，只能自己去打工，日子过得很辛苦。</p>
+<p>  在先生看来K是像苦行僧般的人，不食人间烟火。看到自己的朋友现在这般处境，他于心不忍，就说服房东（那个军人的遗孀）让K也住进来（注意，这个时候先生对自己的朋友是一片好心，<strong>是善</strong>）。</p>
+<hr />
+<h1 id="所言之物"><a class="markdownIt-Anchor" href="#所言之物"></a> 所言之物</h1>
+<p>  等K也住进来之后，两人的主要矛盾就开始崭露头角了，这也是导致<font color=purple><strong>这两人会自杀的源头</strong></font>。没错，就是狗血的三角恋，<u>先生和K都爱上了美丽的小姐</u>。先生在K入住一段时间后，渐渐看到小姐和K走得越来越近，心中自然是五味杂陈（人是我领进来的，怎么泡起我的马子了呢😅）。此时的K内心十分矛盾，前面说了他是一个立志要做一个苦行僧一样的人，脱离世俗的欲望，当然包括爱情，可是眼前他无可救药地爱上了美丽的小姐，这让<u>他自相矛盾，无数次内心的斗争中，K已经在渐渐世俗化了，他体内一个正常人的情感正在觉醒</u>。在数次挣扎之后，要强的他最后还是把这一告白告诉了自己目前唯一的朋友——先生。</p>
+<p>  先生听了自己的朋友对自己马子的爱意之后，又想到之前的种种，<strong>心中是怒火中烧</strong>。正如先生自己在给“我”（小说的叙述者）的信中说到的那样：他当时想的是如何去击溃眼前的这位情敌，先生想出了一句足以击溃这位情敌的话：</p>
+<blockquote>
+<p>  我首先斩钉截铁地说:‘一个在精神上没有进取心的人，就是混蛋！’这是我俩在房州时他对我说过的话。我用与他完全相同的语气，把他所说过的话语原封不动地返还了他。</p>
+</blockquote>
+<p>  就是这句话把<strong>原本刚刚觉醒了一点人之常情的K又抛回了自我矛盾的深渊，他的意志被击垮了，并且得出了一个殉道的想法</strong>。而事后先生心里也是有点惭愧，但是先生认为K是一个意志坚定的人，不知道他之前的一些话击溃了K。虽然K此时有殉道的想法，但还没有真正殉道，导致他自杀的<u>直接原因</u>是：<strong>先生把自己对小姐的心意告诉了小姐的母亲，之后先生和小姐就订婚了</strong>。就在他们订婚之后的几天，K结束了自己的生命，并且留下了一封信，从这封信中我们可以看出一些K自杀前的想法：</p>
+<blockquote>
+<ul>
+<li>自杀是因为自己懦弱。</li>
+<li>由于信中只字未提小姐，可能是无法放下这份感情。</li>
+<li>自己的朋友帮助自己可是自己却对朋友的意中人感兴趣，觉得羞愧难当，无颜面对。从他委托先生照料自己的后事而不是像先生想的那样破口大骂，可以看出K还是把先生当成朋友的。</li>
+</ul>
+</blockquote>
+<p>  先生把K带入小姐家，让K感受到了前所未有的归属感，这里有自己的铁哥们又有自己爱的姑娘，可是当他发现原来自己是自己哥们和心上人的插入者，内心羞愧难当，又因为道义精神和爱情的矛盾，如此种种最终让他不堪重负，选择逃避，这里我们可以看出<font color=red><strong>人心的矛盾</strong></font>。以上就是K的故事的全部。下面来说说最核心的人物—先生。</p>
+<hr />
+<p>  当先生看到自己的好友K生活贫困，知道他脾气倔，不肯接受施舍，于是让他住到自己的住所，<strong>这是善</strong>；当K的利益与他的利益冲突时，他又用先告白这一手段击溃自己的朋友，<strong>这是恶</strong>。此时的先生，<strong>发觉自己已然成了像叔父那样的恶人</strong>！这就是作者想要表达的一个观点，也是先生之后与我的对话中体现过的观点：</p>
+<blockquote>
+<p>​    <strong>社会上并没有天生的坏人，很多人都是关键时刻突然变成坏人，因此不可不提防。</strong></p>
+</blockquote>
+<p>  这就体现了小说的标题《心》，人心的复杂性与自我的矛盾。K自杀后，先生惭愧至极，有一种强烈的负罪感。这罪恶感的枷锁此后束缚了先生数十年，让先生始终陷在孤寂与罪恶的泥潭之中，之所以没有早早自杀，也全是因为需要给小姐（也就是妻）依靠的臂膀。（因为小姐的母亲临终前将妻托付给了他）</p>
+<h1 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h1>
+<p>  我觉得先生和K这两人有许多地方相似，比如把自己封闭起来，K很少像他人吐露心声，即使是先生；先生自从被叔父背叛的事之后，也对别人不信任，一直把自己封闭起来（全文都有体现），即使是自己的妻子也是只字未露。这两人的死又都是因为负罪感和自我矛盾，而又因为“自闭”，不断折磨自己，最终走向自杀的路，可见两人多么地相似！！！两人的遗书结尾都是一句话：</p>
+<blockquote>
+<p>本应该早些死的，却不知为何活到今天。</p>
+</blockquote>
+<p>  以上只是随便写写，可能比较乱。总的来说，我感觉这本小说主要体现了人心的各种自我矛盾，由于作者写得很&quot;明显&quot;，所以我们可以直观感受到，还是值得一看的。</p>
+<p>  最后我很想说一句，为什么我看的每本日本小说里，都有人自杀？😅</p>
+]]></content>
+      <categories>
+        <category>Talk</category>
+      </categories>
+      <tags>
+        <tag>文学</tag>
+        <tag>小说</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vscode使用指南</title>
     <url>/2021/09/03/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/vscode%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
@@ -190,6 +370,82 @@
       </tags>
   </entry>
   <entry>
+    <title>我的生活可以更有意思</title>
+    <url>/2022/03/13/Talk/%E6%88%91%E7%9A%84%E7%94%9F%E6%B4%BB%E5%8F%AF%E4%BB%A5%E6%9B%B4%E6%9C%89%E6%84%8F%E6%80%9D/</url>
+    <content><![CDATA[<p>  最近过得很无聊，于是我想着反思一下自己的生活，然后改变一下👺。</p>
+<p>  我反思的第一个方面当然是占据我生活半壁江山的S T U D Y，我想我现在之所以如此缺乏干劲😫，主要是因为学习的方法太过枯燥无聊了。那么到底怎么个枯燥无聊法呢？</p>
+<p>  我过去一年的学习方法可以用三个词概括：<strong>看书+摘抄+写demo</strong>（我要是不说我是学计算机的，可能都以为这是在学文科）。说详细点，我的一天就是像下面这样度过的：</p>
+<blockquote>
+<ul>
+<li>
+<p>用Notion计划好一天要做的事，主要是要读的章节，比如CSAPP6.3~6.5节</p>
+</li>
+<li>
+<p>分屏，左边放pdf阅读器，右边放语雀（笔记软件），一边看一边做笔记（实际上大部分是摘抄，但不是全抄），如果需要自己敲代码的，我就自己敲一遍</p>
+</li>
+<li>
+<p>每章的习题基本上是不写的，因为安排的任务太多而我又老摸鱼，所以为了赶时间总是跳过😅。</p>
+</li>
+<li>
+<p>做完的笔记我是很少重新看的，就是放在那。（可能觉得自己写得太无聊了）</p>
+</li>
+</ul>
+</blockquote>
+<p>  可以发现我的学习基本上是偏理论的，有时候可能连续几天都不会打开vscode。我想我之所以如此缺乏干劲主要就是<strong>我的学习方式不太对，或者说缺乏乐趣</strong>，原因如下：</p>
+<blockquote>
+<ol>
+<li>
+<p><strong>计算机理论的学习是必要的，但是如果缺乏实践的部分，而是单纯的摘抄理论不是有效的学习理论的方式</strong>。</p>
+</li>
+<li>
+<p><strong>由于理论的水平 &gt;&gt; 编写代码的水平，导致理论只是空中楼阁，会对学习理论的必要性产生怀疑</strong>。说白了就是用不到，平常就只写写算法题，小demo，又怎么会切身体会到学习OS，数据库的必要性呢？</p>
+</li>
+</ol>
+</blockquote>
+<hr />
+<p>  我觉得自己之所以转到计算机专业，除了待遇比原来的专业好，更多的还是因为我好奇计算机的工作原理以及可以用计算机实现自己的idea。如今我对计算机整个一套工作原理有了一个较为清晰的框架性认识（这可能也是长期看理论书籍的好处吧），对计算机工作原理的好奇程度有了一定的下滑，但是<strong>用代码实现想法以及解决问题的快感还在</strong>。所以<font color=purple>我觉得应该在自己的学习模式中增加实践的部分，降低摘抄部分所占的比重</font>。</p>
+<p>  我目前想把自己的学习模式改造成下面这样：</p>
+<blockquote>
+<ul>
+<li>
+<p>还是要用Notion计划好一天要干的事，但是减少任务量，增加一些弹性时间。</p>
+</li>
+<li>
+<p>学习完一段理论之后，花一定的时间去验证或者实现它，比如学习完OS的某个调度算法，可以自己编写代码来实现它；如果要比较各调度算法的优缺点，想想如何去量化比较。<font color=purple>总之，发挥自己的主观能动性，我想这样会有趣很多。</font></p>
+</li>
+<li>
+<p>至于做笔记嘛，如果是工具类书籍（比如各种语言教学），多实践，总结一些易错点就行，没啥要记的；如果是理论类书籍，if(读完这一章&amp;&amp;理解了) {再开始记笔记}else{重新读}，记笔记的话也不要摘抄，要像下面这样记：</p>
+<ul>
+<li>
+<p>如果是原文的话，加引用。</p>
+</li>
+<li>
+<p>尽量用图和代码表示，实在没办法，也要言简意赅地总结出来</p>
+</li>
+<li>
+<p>加上前面说的实践部分，会让笔记更有趣</p>
+</li>
+<li>
+<p>定期维护笔记（已经懂了的就直接删掉，有啥要补充的补充上去）</p>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>  以上是针对之前学习模式的改进，总的来说就是<u>在学习理论的时候增加了实践的比重</u>。但是这还不够，我还需要<strong>纯实践的部分</strong>。上面的实践部分也只是写一点demo，而我的目标是成为一个software engineer,而不是一个scientist，<strong>我的学习应该包括写一点成系统的代码</strong>。这一部分是我需要去思考的，这里就不多说了。</p>
+<p>  我之所以缺乏干劲，可能也是因为我有点太焦虑了，完全没有去享受人生这段最悠闲的时光。我总觉得自己太菜了😅，所以学得很功利，怕自己学得忘记了所以才不停地记笔记；怕自己学得太慢了，所以才跳过课后习题，不注重实践，我觉得自己忘记了<strong>我学习的初衷</strong>。所以，之后的学习要带着兴趣学，没兴趣的就应付应付得了。</p>
+<hr />
+<p>  还有就是，我的社交范围自从转专业后就大幅度减少，以前靠着踢足球认识了很多朋友（好像我高中也是😃），现在转专业后就没什么接触了，也许我得尝试增加一些社交活动😥。</p>
+]]></content>
+      <categories>
+        <category>Talk</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
+        <tag>反思</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>正则表达式入门</title>
     <url>/2021/12/26/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="正则表达式的简单介绍"><a class="markdownIt-Anchor" href="#正则表达式的简单介绍"></a> 正则表达式的简单介绍</h2>
@@ -302,203 +558,6 @@
         <tag>正则表达式</tag>
         <tag>文本处理</tag>
         <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Masters of Doom</title>
-    <url>/2022/01/21/Talk/Masters%20of%20Doom/</url>
-    <content><![CDATA[<p>  今天看完了一本传记——<a href="https://book.douban.com/subject/1152971/">Doom启世录（Masters of Doom）</a>，这本书主要讲述了两个约翰（<a href="https://www.zhihu.com/topic/19633003/hot">约翰·卡马克</a>和<a href="https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E7%BD%97%E6%A2%85%E6%B4%9B/317162">约翰·罗梅洛</a>）及其伙伴们一起制作游戏的故事，包括他们的少时经历、创办<code>id Software</code>公司以及制作无数重量级游戏的故事。</p>
-<hr />
-<h1 id="two-johns"><a class="markdownIt-Anchor" href="#two-johns"></a> Two Johns</h1>
-<p>  这本书重点围绕卡马克和罗梅洛展开，他们是id Software公司的核心人物，也是截然不同的两个人。</p>
-<p>  卡神是技术大神，id Software公司一系列引起游戏文化浪潮的重量级游戏，比如一开始的危险的戴夫、指挥官基恩、德军总部3D，还有经典的<strong>Doom、Quake</strong>等这些游戏都是依托于卡神的<strong>游戏引擎</strong>，正是卡神那犹入无人之境的<strong>图像编程技术</strong>，创造出了一个个领先于行业水平的引擎，甚至带动了显卡的发展。<br />
-  为什么卡神能这么🐂🍺呢？我稍微总结了一下：</p>
-<ul>
-<li>
-<p>第一点，毫无疑问是对图像编程的热爱，正是这一点驱动他不断地深入学习编程技术。</p>
-</li>
-<li>
-<p>卡神极度自律和专注，他的生活可以说和机器人差不多，十分的规律。在写引擎的时候，卡神的注意力十分集中，比如说一次有人故意在旁边放🐱片，卡神都没什么反应……还有就是他新婚度蜜月都要带上电脑，因为还要工作……</p>
-</li>
-<li>
-<p>活在当下，卡神从来不回去怀念过去的作品和成就，而是勇攀高峰，不断超越自己。一开始，当他做出了平滑卷轴效果，这已经是行业领先的了，他却没有满足，而是继续研发2.5D，3D的游戏引擎，以及逼真的光影效果，纵观全书，可以看见他的这么一个过程，真的是不断超越自己，把过去的成就看得一文不值。在觉得自己已经达到图形编程的禅宗境界时（已经没有什么好创新的了，只剩下不断的优化），他又跑去造火箭了，最近好像在搞VR。</p>
-</li>
-</ul>
-<p>  卡神还真是让人敬仰的偶像啊😆😆😆😆😆</p>
-<hr />
-<p>  那个时期，id Software公司之所以那么成功是因为创造出了许多重量级的游戏，而游戏光靠一个游戏引擎是不够的，还需要设计师、画师等一系列人去创作，而另一位约翰——罗梅洛就是一个顶尖的游戏设计师和游戏玩家，他也是一个程序员，因此经常和卡神讨论引擎。  罗梅洛也是id Software的灵魂人物，他与卡神是一种两者不能缺其一的关系，罗梅洛能够让卡马克的游戏引擎发挥最大的性能和特点，而卡马克的游戏引擎能让罗梅洛实现那些天才的游戏设计。除此之外，两人的性格也是互补的，卡神低调，对成就视若不见；罗梅洛喜欢造势，喜欢在媒体面前大肆宣扬，吹牛皮。</p>
-<p>  当罗梅洛因为过于投入在玩游戏和当明星而被其公司的兄弟们解雇后，id SoftWare公司也渐渐走了下坡路。</p>
-<hr />
-<h1 id="id之梦"><a class="markdownIt-Anchor" href="#id之梦"></a> id之梦</h1>
-<p>  id Software 就如许多创业神话一样已然是过眼烟云，我也不想去论这个公司的是非成败，比如什么公司管理问题，为什么走下坡路等等。</p>
-<p>  这本书之所以打动我，是因为这群年轻人，为了自己的游戏梦想，奉献自己的青春。一个公司里，大家有着共同的兴趣和爱好，大家一同工作与玩游戏，每个人都知道自己要什么，要干什么。在书里能充分感受到这种氛围。</p>
-<p>  我们不如问问自己，我们知道自己最喜欢什么吗？知道什么是值得我们去努力奋斗的吗？<strong>如今世上又有多少人所做的工作或者所学习的知识&quot;不是自己选&quot;的</strong>。</p>
-<p>  我觉得这是值得思考的。</p>
-]]></content>
-      <categories>
-        <category>Talk</category>
-      </categories>
-      <tags>
-        <tag>传记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ZIMA BLUE</title>
-    <url>/2022/02/14/Talk/Zima-Blue/</url>
-    <content><![CDATA[<p>  最近看了一个动画短片集叫《Love,Death&amp;Robots》(<a href="https://movie.douban.com/subject/30424374/">《爱，死亡和机器人》</a>)，每集都是一个小故事。其中让我印象最深刻的是第14集——《ZIMA BLUE》(《齐马的作品》)。这一集是改编自阿拉斯泰尔•雷诺兹的同名小说，原著我没看过，也不知道表达的东西有没有出入，所以单就这个小短片谈谈我的感想。</p>
-<p>  齐马蓝是一个享誉全宇宙的艺术家，他最初的作品只是肖像画，不过他逐渐不满足于此，他的内心对宇宙的真理有着执着的追求，于是他的作品变成了下面这样：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/Ql9tURwBi8p4yYS.png" alt="" data-align="center">
-<p>  他的作品变成了巨大的壁画，并且画中间出现了越来越大的蓝色图形，这个蓝色就是齐马蓝（还注册成商标了😅）。随着蓝色越来越多，最终作品变成了一整面的齐马蓝:<img title="" src="https://s2.loli.net/2022/03/26/eszd48MF1UVmN6l.png" alt="" data-align="center">  这还不是最离谱的，他还用机器人在宇宙中造他的齐马蓝作品:</p>
-<img title="" src="https://s2.loli.net/2022/03/26/Bs7uW1JNpV3ICT5.png" alt="" data-align="center">
-<p>  那么这种蓝色到底意味着什么呢？是这家伙在故弄玄虚吗？等我们知道齐马·蓝到底是什么就知道怎么回事了。</p>
-<hr />
-<p>  齐马·蓝告诉外界的是：他原本是人类，然后做手术变成了机器人，如今的身体能让他自由探索宇宙（能够忍受极端环境）：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/stkyKJcBRUYPT2b.png" alt="" data-align="center" width="552">
-<p>  但实际上他还是“婴儿”的时候长这样：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/MqoPXwKjZm6Vpdz.png" alt="" width="589" data-align="center">
-<p>  没错，他原本是一个没有脑子的刷泳池机器人，这就是<strong>他原本的样子和工作</strong>。随后，经过不同主人对他的迭代升级，他拥有了自主意识，变得和人一样。前面说了他对宇宙的真理有着执着的追求，其实我觉得这是对自我的一种探索，也就是那老生常谈的问题：</p>
-<blockquote>
-<p><strong>Who am I</strong> ?</p>
-</blockquote>
-<p>  那所谓的<strong>齐马蓝其实就是泳池瓷砖的颜色</strong>😄。这种蓝色之所以会在他的作品中占比越来越大，最后甚至占据了其整个世界，是因为他正在逐渐想起其本来的自我就是这种颜色，他，齐马·蓝，不是什么大艺术家，他的本质就是那个当初日夜不停打扫着那有着齐马蓝颜色的泳池的小机器人，这就是他苦苦探寻的宇宙真理的答案。</p>
-<p>  在人们都以为齐马·蓝的创作已经枯竭的时候（内心OS：反正就是搞蓝色呗，还能搞出什么花样），他创作了其最后一部作品：</p>
-<blockquote>
-<p>众目睽睽之下，齐马·蓝跳进了他所制造的泳池，他在水里肆意的划水，最后他仰卧在水中，仰卧在那温柔的床上。慢慢地，沉入水底，慢慢地，肢解他的身体。</p>
-</blockquote>
-<p>  没错，齐马·蓝放弃了他那金刚不坏的身体和拥有着高等智慧的电子大脑，只留下那最初的部件——那个只会打扫泳池的机器人</p>
-<hr />
-<p>  返璞归真的感觉还是值得好好体会一下的。</p>
-]]></content>
-      <categories>
-        <category>Talk</category>
-      </categories>
-      <tags>
-        <tag>tv</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>夏目漱石《心》</title>
-    <url>/2021/12/24/Talk/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3/</url>
-    <content><![CDATA[<p>  近日买了个Kindle，读书很方便，于是时隔一年，我又拾起了高中时的一点小爱好—看点杂书。这不今天看了一本小说，就想着随便写写。</p>
-<p>  这本小说就是<strong>夏目漱石的《心》</strong>，核心人物就两个：先生和K（先生的已故朋友）。作者通过这两昔日好友的关系和矛盾说出了这本小说的心声。</p>
-<hr />
-<span id="more"></span>
-<h1 id="故事背景"><a class="markdownIt-Anchor" href="#故事背景"></a> 故事背景</h1>
-<p>  先生，一个乡间富庶家庭的子弟，少时活得顺风顺水，直到父母接连因为风寒病逝，先生的母亲临终前把家里的财产交给先生的叔父（与先生家关系亲密），一开始先生觉得这位叔父和蔼可亲，十分可靠；可是后来<strong>他发现了叔父竟然妄图霸占财产，背叛了他</strong>。这件事就给了先生第一次思想上的冲击：<strong>他发现了世界上的恶，开始憎恶像他叔父这样的恶人，并且变得不愿意相信别人</strong>。在这之后，先生拿到了原本属于他的财产的一小部分，住进了一个新的房子，和一位军官的遗孀和其女儿（下面称小姐）住在一起。住在同一屋檐下，少男自然容易爱上少女，并且这位小姐又是如此的天真烂漫，美丽动人，所以先生渐渐爱上了小姐。到这里先暂停，接下来说一说K的背景和经历。</p>
-<p>  K是先生的同学，是乡下一僧人家里的次子，过继给了一个有钱人家当儿子。养父母把他送到东京学医，可是实际上K并没有学医，而是迷上了古人那种苦行僧般修行的哲学，也就是他自己总说的“<strong>精进</strong>”(我想是他少时受到的冷落太多，而以此寻求从痛苦中解脱)，养父母知道后就和他撇清关系，断绝了K的经济来源。K没办法，只能自己去打工，日子过得很辛苦。</p>
-<p>  在先生看来K是像苦行僧般的人，不食人间烟火。看到自己的朋友现在这般处境，他于心不忍，就说服房东（那个军人的遗孀）让K也住进来（注意，这个时候先生对自己的朋友是一片好心，<strong>是善</strong>）。</p>
-<hr />
-<h1 id="所言之物"><a class="markdownIt-Anchor" href="#所言之物"></a> 所言之物</h1>
-<p>  等K也住进来之后，两人的主要矛盾就开始崭露头角了，这也是导致<font color=purple><strong>这两人会自杀的源头</strong></font>。没错，就是狗血的三角恋，<u>先生和K都爱上了美丽的小姐</u>。先生在K入住一段时间后，渐渐看到小姐和K走得越来越近，心中自然是五味杂陈（人是我领进来的，怎么泡起我的马子了呢😅）。此时的K内心十分矛盾，前面说了他是一个立志要做一个苦行僧一样的人，脱离世俗的欲望，当然包括爱情，可是眼前他无可救药地爱上了美丽的小姐，这让<u>他自相矛盾，无数次内心的斗争中，K已经在渐渐世俗化了，他体内一个正常人的情感正在觉醒</u>。在数次挣扎之后，要强的他最后还是把这一告白告诉了自己目前唯一的朋友——先生。</p>
-<p>  先生听了自己的朋友对自己马子的爱意之后，又想到之前的种种，<strong>心中是怒火中烧</strong>。正如先生自己在给“我”（小说的叙述者）的信中说到的那样：他当时想的是如何去击溃眼前的这位情敌，先生想出了一句足以击溃这位情敌的话：</p>
-<blockquote>
-<p>  我首先斩钉截铁地说:‘一个在精神上没有进取心的人，就是混蛋！’这是我俩在房州时他对我说过的话。我用与他完全相同的语气，把他所说过的话语原封不动地返还了他。</p>
-</blockquote>
-<p>  就是这句话把<strong>原本刚刚觉醒了一点人之常情的K又抛回了自我矛盾的深渊，他的意志被击垮了，并且得出了一个殉道的想法</strong>。而事后先生心里也是有点惭愧，但是先生认为K是一个意志坚定的人，不知道他之前的一些话击溃了K。虽然K此时有殉道的想法，但还没有真正殉道，导致他自杀的<u>直接原因</u>是：<strong>先生把自己对小姐的心意告诉了小姐的母亲，之后先生和小姐就订婚了</strong>。就在他们订婚之后的几天，K结束了自己的生命，并且留下了一封信，从这封信中我们可以看出一些K自杀前的想法：</p>
-<blockquote>
-<ul>
-<li>自杀是因为自己懦弱。</li>
-<li>由于信中只字未提小姐，可能是无法放下这份感情。</li>
-<li>自己的朋友帮助自己可是自己却对朋友的意中人感兴趣，觉得羞愧难当，无颜面对。从他委托先生照料自己的后事而不是像先生想的那样破口大骂，可以看出K还是把先生当成朋友的。</li>
-</ul>
-</blockquote>
-<p>  先生把K带入小姐家，让K感受到了前所未有的归属感，这里有自己的铁哥们又有自己爱的姑娘，可是当他发现原来自己是自己哥们和心上人的插入者，内心羞愧难当，又因为道义精神和爱情的矛盾，如此种种最终让他不堪重负，选择逃避，这里我们可以看出<font color=red><strong>人心的矛盾</strong></font>。以上就是K的故事的全部。下面来说说最核心的人物—先生。</p>
-<hr />
-<p>  当先生看到自己的好友K生活贫困，知道他脾气倔，不肯接受施舍，于是让他住到自己的住所，<strong>这是善</strong>；当K的利益与他的利益冲突时，他又用先告白这一手段击溃自己的朋友，<strong>这是恶</strong>。此时的先生，<strong>发觉自己已然成了像叔父那样的恶人</strong>！这就是作者想要表达的一个观点，也是先生之后与我的对话中体现过的观点：</p>
-<blockquote>
-<p>​    <strong>社会上并没有天生的坏人，很多人都是关键时刻突然变成坏人，因此不可不提防。</strong></p>
-</blockquote>
-<p>  这就体现了小说的标题《心》，人心的复杂性与自我的矛盾。K自杀后，先生惭愧至极，有一种强烈的负罪感。这罪恶感的枷锁此后束缚了先生数十年，让先生始终陷在孤寂与罪恶的泥潭之中，之所以没有早早自杀，也全是因为需要给小姐（也就是妻）依靠的臂膀。（因为小姐的母亲临终前将妻托付给了他）</p>
-<h1 id="结"><a class="markdownIt-Anchor" href="#结"></a> 结</h1>
-<p>  我觉得先生和K这两人有许多地方相似，比如把自己封闭起来，K很少像他人吐露心声，即使是先生；先生自从被叔父背叛的事之后，也对别人不信任，一直把自己封闭起来（全文都有体现），即使是自己的妻子也是只字未露。这两人的死又都是因为负罪感和自我矛盾，而又因为“自闭”，不断折磨自己，最终走向自杀的路，可见两人多么地相似！！！两人的遗书结尾都是一句话：</p>
-<blockquote>
-<p>本应该早些死的，却不知为何活到今天。</p>
-</blockquote>
-<p>  以上只是随便写写，可能比较乱。总的来说，我感觉这本小说主要体现了人心的各种自我矛盾，由于作者写得很&quot;明显&quot;，所以我们可以直观感受到，还是值得一看的。</p>
-<p>  最后我很想说一句，为什么我看的每本日本小说里，都有人自杀？😅</p>
-]]></content>
-      <categories>
-        <category>Talk</category>
-      </categories>
-      <tags>
-        <tag>文学</tag>
-        <tag>小说</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>我的生活可以更有意思</title>
-    <url>/2022/03/13/Talk/%E6%88%91%E7%9A%84%E7%94%9F%E6%B4%BB%E5%8F%AF%E4%BB%A5%E6%9B%B4%E6%9C%89%E6%84%8F%E6%80%9D/</url>
-    <content><![CDATA[<p>  最近过得很无聊，于是我想着反思一下自己的生活，然后改变一下👺。</p>
-<p>  我反思的第一个方面当然是占据我生活半壁江山的S T U D Y，我想我现在之所以如此缺乏干劲😫，主要是因为学习的方法太过枯燥无聊了。那么到底怎么个枯燥无聊法呢？</p>
-<p>  我过去一年的学习方法可以用三个词概括：<strong>看书+摘抄+写demo</strong>（我要是不说我是学计算机的，可能都以为这是在学文科）。说详细点，我的一天就是像下面这样度过的：</p>
-<blockquote>
-<ul>
-<li>
-<p>用Notion计划好一天要做的事，主要是要读的章节，比如CSAPP6.3~6.5节</p>
-</li>
-<li>
-<p>分屏，左边放pdf阅读器，右边放语雀（笔记软件），一边看一边做笔记（实际上大部分是摘抄，但不是全抄），如果需要自己敲代码的，我就自己敲一遍</p>
-</li>
-<li>
-<p>每章的习题基本上是不写的，因为安排的任务太多而我又老摸鱼，所以为了赶时间总是跳过😅。</p>
-</li>
-<li>
-<p>做完的笔记我是很少重新看的，就是放在那。（可能觉得自己写得太无聊了）</p>
-</li>
-</ul>
-</blockquote>
-<p>  可以发现我的学习基本上是偏理论的，有时候可能连续几天都不会打开vscode。我想我之所以如此缺乏干劲主要就是<strong>我的学习方式不太对，或者说缺乏乐趣</strong>，原因如下：</p>
-<blockquote>
-<ol>
-<li>
-<p><strong>计算机理论的学习是必要的，但是如果缺乏实践的部分，而是单纯的摘抄理论不是有效的学习理论的方式</strong>。</p>
-</li>
-<li>
-<p><strong>由于理论的水平 &gt;&gt; 编写代码的水平，导致理论只是空中楼阁，会对学习理论的必要性产生怀疑</strong>。说白了就是用不到，平常就只写写算法题，小demo，又怎么会切身体会到学习OS，数据库的必要性呢？</p>
-</li>
-</ol>
-</blockquote>
-<hr />
-<p>  我觉得自己之所以转到计算机专业，除了待遇比原来的专业好，更多的还是因为我好奇计算机的工作原理以及可以用计算机实现自己的idea。如今我对计算机整个一套工作原理有了一个较为清晰的框架性认识（这可能也是长期看理论书籍的好处吧），对计算机工作原理的好奇程度有了一定的下滑，但是<strong>用代码实现想法以及解决问题的快感还在</strong>。所以<font color=purple>我觉得应该在自己的学习模式中增加实践的部分，降低摘抄部分所占的比重</font>。</p>
-<p>  我目前想把自己的学习模式改造成下面这样：</p>
-<blockquote>
-<ul>
-<li>
-<p>还是要用Notion计划好一天要干的事，但是减少任务量，增加一些弹性时间。</p>
-</li>
-<li>
-<p>学习完一段理论之后，花一定的时间去验证或者实现它，比如学习完OS的某个调度算法，可以自己编写代码来实现它；如果要比较各调度算法的优缺点，想想如何去量化比较。<font color=purple>总之，发挥自己的主观能动性，我想这样会有趣很多。</font></p>
-</li>
-<li>
-<p>至于做笔记嘛，如果是工具类书籍（比如各种语言教学），多实践，总结一些易错点就行，没啥要记的；如果是理论类书籍，if(读完这一章&amp;&amp;理解了) {再开始记笔记}else{重新读}，记笔记的话也不要摘抄，要像下面这样记：</p>
-<ul>
-<li>
-<p>如果是原文的话，加引用。</p>
-</li>
-<li>
-<p>尽量用图和代码表示，实在没办法，也要言简意赅地总结出来</p>
-</li>
-<li>
-<p>加上前面说的实践部分，会让笔记更有趣</p>
-</li>
-<li>
-<p>定期维护笔记（已经懂了的就直接删掉，有啥要补充的补充上去）</p>
-</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<p>  以上是针对之前学习模式的改进，总的来说就是<u>在学习理论的时候增加了实践的比重</u>。但是这还不够，我还需要<strong>纯实践的部分</strong>。上面的实践部分也只是写一点demo，而我的目标是成为一个software engineer,而不是一个scientist，<strong>我的学习应该包括写一点成系统的代码</strong>。这一部分是我需要去思考的，这里就不多说了。</p>
-<p>  我之所以缺乏干劲，可能也是因为我有点太焦虑了，完全没有去享受人生这段最悠闲的时光。我总觉得自己太菜了😅，所以学得很功利，怕自己学得忘记了所以才不停地记笔记；怕自己学得太慢了，所以才跳过课后习题，不注重实践，我觉得自己忘记了<strong>我学习的初衷</strong>。所以，之后的学习要带着兴趣学，没兴趣的就应付应付得了。</p>
-<hr />
-<p>  还有就是，我的社交范围自从转专业后就大幅度减少，以前靠着踢足球认识了很多朋友（好像我高中也是😃），现在转专业后就没什么接触了，也许我得尝试增加一些社交活动😥。</p>
-]]></content>
-      <categories>
-        <category>Talk</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-        <tag>反思</tag>
       </tags>
   </entry>
   <entry>
@@ -622,6 +681,209 @@
       </categories>
       <tags>
         <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>足球与我</title>
+    <url>/2022/04/26/Talk/%E8%B6%B3%E7%90%83%E4%B8%8E%E6%88%91/</url>
+    <content><![CDATA[<p>  跑圈，运球，对抗，急促的喘息，教练的叫喊，以及绷紧的全身，这便是十年前我刚接触⚽时的印象。站在时空的这一端，回顾这过去的十年，⚽于我绝非仅仅是一项普普通通的体育运动，它一定程度上还塑造了我的性格以及改变了我的生活。正因为如此，我想聊聊我与⚽的故事以及⚽于我的意义。</p>
+<h1 id="小学时代的初次邂逅"><a class="markdownIt-Anchor" href="#小学时代的初次邂逅"></a> 小学时代的初次邂逅</h1>
+<p>  十年前，还在上小学四年级的我对运动无感，只喜欢打游戏，爸妈看不惯我总是打电脑游戏，总想着多让我出去运动运动。正好这时，班主任说学校的足球队正在招新，爸妈知道后，就撵着我去报名试训，当时的我哪是我爸妈的对手，我也只能不情不愿的报了名，等着选拔的开始😣。</p>
+<p>  虽然我爸常常吹嘘他的体育天赋，但是我是完全没有继承他的体育天赋，那时的我并不认为自己能够被足球队选上，和我一起去参加选拔的同学有很多，我想的也就是去和同学们一起去玩玩，可结果让我大跌眼镜，我竟然被选上了😲。第二天，好多男同学都抛来羡慕的目光，我也洋洋得意起来，那时我第一次觉得，<strong>我好厉害</strong>😁。</p>
+<p>  我已记不起第一次参加训练是什么情景了，我对当时训练的记忆只残留着对整体的印象，大体就是别的小朋友都放学回家了，我们还要在操场训练两小时才能回去😅。一开始最痛苦的就是跑圈，4圈跑下来，我人都要瘫了，可这只是开始，之后还有运球，传球以及各种专项的练习，偶尔还要队内进行对抗比赛，周一到周五只要不下雨，就得马不停蹄地训练。现在想想，这种刻苦的训练对一个小学生来说，还真是一种历练啊，好多人都没坚持下来。</p>
+<p>  不过幸运的是，我坚持了下来，而且还十分认真地完成了每天的训练，别人偷懒时（比如垂直跑圈😅），我还不停地练习，正因为如此，身体素质平平无奇的我能够迅速提高球技，并最终被教练选为我们那一届的队长，<strong>我到现在还记得那种感觉，真是太美妙了</strong>！队长意味着，在每周五发零食时能够多拿一点，每次训练时会和老师一起给其它队员示范动作，可以得到更多的来自同学和老师的称赞。不得不说，踢足球真的棒极了。</p>
+<p>  当时我们学校为了评上国家级足球特色学校，需要我们这些足球队员去争取荣誉，因此，在两年的校队生涯里，我参加了数不清的市级联赛，区级联赛，在其它小朋友在学校上课的时候，我们则在外面征战，一去就是三天起步。参加比赛的时光既是美好的，也是苦涩的，美好是因为不用上课，可以住在高级的酒店；苦涩的是比赛时面对的巨大压力，身体的疲惫，失败时的不甘心。我到现在还认为，<strong>这段比赛的时光对于我来说很重要，特别是对我性格的塑造</strong>。</p>
+<p>  我到现在还记得我们成绩最好的那次联赛的最后一场比赛，那是一场暴风雨中的比赛，经过了90分钟的厮杀，比分定格在2-3，终场哨吹响后，我哆嗦着身体，任凭暴雨敲打我的面庞，心中满是不服与无奈。我也不知道为什么，我到现在还能感受到那种冰冷的雨水与燥热的身体碰撞的感觉。</p>
+<p>  就这样，两年很快就过去了，我也迎来了升学，我直升到了初中部，为小学时的校队生涯画上了句号。</p>
+<h1 id="初中时代的苦涩记忆"><a class="markdownIt-Anchor" href="#初中时代的苦涩记忆"></a> 初中时代的苦涩记忆</h1>
+<p>  小学时，为了足球，成绩还不错的我放弃了奥林匹克竞赛，本来作为外地人就没有优势的我，最后也没进入四大名校，只能直升本校的初中部。升上初中后，父母对我踢足球的态度也发生了变化，他们更希望我能好好学习，争取考上那所离我们学校不远的全省闻名的高中，不过，我最终还是参加了我们初中的足球队，而且被选为队长。正当我以为我的初中足球生涯也能和小学时一样璀璨时，现实给了我重重一棒。</p>
+<p>  初中学业繁重，再像小学那样每天放学都去训练是不现实的，训练被缩减到了每周五放学后。由于我当时还是想把重心放在学习上，所以很少会主动去训练，缺少训练的我体能逐渐开始下降，也没有主动去适应初中比赛的变化，这为之后的挫折埋下了隐患。</p>
+<p>  初二时我迎来了初中的第一个联赛，可是我的表现简直是灾难级别的，初中联赛场地的扩大导致我体能与速度缺陷的暴露无遗，场地的扩大会导致球员的分工更加明确，而我无法适应新的角色。教练对我越来越不满，队友也对我充满了质疑，甚至有一次我偶然听到教练在和其它队友交谈时，说我是没啥用的书呆子（当时我的成绩很好）。我的心中很是愤怒，但又为自己的表现感到羞愧。</p>
+<p>  在这之后的训练中，我能感受到一些队友很想取代我的位置，我也是在这个时候明白，<strong>有实力才能赢得他人的尊重</strong>。我开始对足球更加上心了，训练也更加认真，但是由于学业的限制，我能投入到足球的时间还是有限度的，不过我的改变也的确赢得了教练的些许赞扬，正当我以为我会做得越来越好的时候，现实又给了我一拳。</p>
+<p>  我们学校来了一位转校生，他很特殊，他是从广州恒大俱乐部的足球青训学校来的，类似于特长生，他的水平远在我们之上，并且，他的位置和我一样是中场。很快，他就完全取代了我，之后的一个联赛，我虽然是名义上的队长，但我出场的次数寥寥无几，完全成为了替补，就算我再怎么争强好胜，也无法弥补和那位同学的实力差距。也就在这个时候，我的爸妈得知：今年，作为外地学生，不能参加那所名校高中的提前批考试，而我为此已准备了一年，这个时候的我不得不面临一个二选一：要么中考冲击那所名校，如果没考上，只能上很差的学校；要么回老家，面对不同的教材和模式，冲击一年，考我们那的一中。</p>
+<p>  我选择了后者，就这样，我结束了足球校队的生涯，回到了老家的一所初中，一个人为中考做准备，在初三那一年，我再也没接触过足球。</p>
+<h1 id="高中时代的快乐足球"><a class="markdownIt-Anchor" href="#高中时代的快乐足球"></a> 高中时代的快乐足球</h1>
+<p>  中考后，我虽然没有考上一中的强化班，但是还是顺利进入了一中。很久没有踢球的我早已把足球抛在脑后。不过，也许是偶然又或者是必然，⚽它又进入了我的生活，契机就是体育课。</p>
+<p>  我们高中的体育课可以自己选项目，选项目时我看到了足球，那时初中的苦涩又涌上心头，我一度想选择篮球，可是最后我还是选择了足球。我很庆幸自己当时的选择，上完几次足球课后，我回家发了条说说：<br />
+<img src="https://s2.loli.net/2022/04/26/pNoDtEVBUJsTWv1.jpg" alt="" /></p>
+<p>  高中时的我，因为足球认识了很多好朋友，大家经常在周末一起踢球，我家附近也有很多小球场，因此我们也经常和大叔们，初中生们一起踢球，现在想想那段时光是真的快乐。此时的足球，除了其本身带给我的快乐，也给我带来了很多好朋友，我的高中生活也因为足球变得更加充实。</p>
+<p>  在高二时，我受到朋友们的邀请，和学校的足球队参加了市级联赛，由于是临时参加的，一开始几场比赛我踢一会就下场了，踢得也不怎么好。不过随后的一次比赛我们的主力中后卫扭伤了脚，还在当替补的我迫不得已地被选上场，不过，这一次，我的表现让队友和老师们都折服了，甚至觉得我比受伤的那位同学踢得还要好。</p>
+<p>  随后的几场比赛我的表现还算可以，踢起来也越来越得心应手，我到现在还记得其中一位老师对我说的话&quot;踢得这么好，怎么高一没见到你&quot;，那一刻，我可开心了。</p>
+<h1 id="足球于我"><a class="markdownIt-Anchor" href="#足球于我"></a> 足球于我</h1>
+<p>  现在的我踢足球的频率已经不像以前那么高了，不过我对⚽的感情更深厚了，以前很少看球赛的我，现在也会经常看一些球赛。特别在知道一些世界巨星过往经历之后，再去看他们比赛，我心里会五味杂陈。拥有无数荣耀的C罗，内马尔，萨拉赫，莱万等足球巨星，年轻时都经历过比我艰难如一百倍，一千倍的挫折与痛苦，诸如贫穷，伤病，坐冷板凳，质疑种种，我想对他们来说都是家常便饭，他们之所以能获得今天的成就与赞扬，也正是因为他们经历过这些，战胜了这些。我对他们能够有一点感同身受，因此，心里对他们充满了尊敬。</p>
+<p>  最后我想说，⚽于我最大的启示便是：<strong>人生总有低谷和高潮，在低谷时，能够不自暴自弃，勇于向前，持续不断地提升自己，那就是值得尊敬的英雄</strong>。</p>
+]]></content>
+      <categories>
+        <category>Talk</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
+        <tag>足球</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIPS中一种低开销的边界检查方法</title>
+    <url>/2022/01/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS%E4%B8%AD%E4%B8%80%E7%A7%8D%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E7%9A%84%E4%BD%8E%E5%BC%80%E9%94%80%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>  今天在看计组的时候，在书上看到了一个巧妙的方法，所以想把它记录下来。（在<a href="https://book.douban.com/subject/2110638/">这本书</a>的2.7.1节）</p>
+<p>  如果寄存器$s0中的数为:<code>1111 1111 1111 1111 1111 1111 1111 1111</code>，而寄存器$s2中的数为:<code>0000 0000 0000 0000 0000 0000 0000 0001</code>。那么这两个数哪个比较大？</p>
+<span id="more"></span>
+<blockquote>
+<p>  显然我们要分别从无符号数和有符号数的角度去比较：</p>
+<ul>
+<li>
+<p>如果说两个都是无符号数，显然最高有效位是1的要大于最高有效位是0的，也就是说($s0) &gt; ($s2)。</p>
+</li>
+<li>
+<p>如果说两个都是有符号数，显然最高有效位是1的（负数）要小于最高有效位是0的（正数），也就是说($s0) &lt; ($s2)。</p>
+</li>
+</ul>
+</blockquote>
+<p>  对应于这两种情况，MIPS提供了两个版本的<code>小于则置位</code>指令:</p>
+<ul>
+<li>
+<p><code>slt</code>和<code>slti</code>：用于处理有符号数。</p>
+</li>
+<li>
+<p><code>sltu</code>和<code>sltiu</code>：用于处理无符号数。</p>
+</li>
+</ul>
+<hr />
+<p>  下面思考一个问题，<strong>如果用一个小于置位指令实现<code>0≤x&lt;y</code>的检验？</strong></p>
+<blockquote>
+<p>  x &lt; y很好检验，关键是这个≥0 怎么搞。负数的补码表示在无符号数的表示中看起来像是个很大的是（比如说什么那一串1就是-1）。那么<strong>我们只要使用无符号比较x&lt;y，在比较x是否小于y的同时，也检验了x是否为一个负数</strong>。因为如果x为负数，那么肯定x会大于y。</p>
+</blockquote>
+<p>  假设现在有一个数组<code>Array[i]</code>，它定义的时候是有9个单元，现在要检验<code>Array[i]</code>有没有越界。其实这就是我们上面这段说的问题——<code>0≤x&lt;y</code>的检验(也叫边界检查)。</p>
+<hr />
+<p>  MIPS中写法如下：</p>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">sltu <span class="token operator">$</span>t0,<span class="token operator">$</span>s1,<span class="token operator">$</span>t2                 # t0<span class="token operator">=</span><span class="token number">0</span> if <span class="token operator">$</span>s1 <span class="token operator">></span><span class="token operator">=</span>length or <span class="token operator">$</span>s1 <span class="token operator">&lt;</span> <span class="token number">0</span>
+beq <span class="token operator">$</span>t0,<span class="token operator">$</span>zero,IndexOutOfBounds   # if bad,goto Error<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+        <category>MIPS</category>
+      </categories>
+      <tags>
+        <tag>MIPS</tag>
+        <tag>计算机组成原理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OSTEP Homework2 - memory virtualization</title>
+    <url>/2022/03/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/memory%20virtualization/</url>
+    <content><![CDATA[<p>  这是内存虚拟化部分的作业。</p>
+<h1 id="第14章"><a class="markdownIt-Anchor" href="#第14章"></a> 第14章</h1>
+<p><img src="https://s2.loli.net/2022/03/26/FMp1uoaZzOXKrG4.png" alt="" /></p>
+<p>  首先程序如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>ptr <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token function">free</span><span class="token punctuation">(</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  编译后什么事情都没发生。</p>
+<p><img src="https://s2.loli.net/2022/03/26/ZMAfNo4mYHLePJn.png" alt="" /></p>
+<img src="https://s2.loli.net/2022/03/26/l6Nf5F3qLToZPxD.png" title="" alt="" data-align="center">
+<p><img src="https://s2.loli.net/2022/03/26/p9vZK1DqFgm34WV.png" alt="" /></p>
+<p><img src="https://s2.loli.net/2022/03/26/WyZ8dYQ9HFx1KAp.png" alt="" /></p>
+<p>  额，还是什么都没发生，看来系统很好地解决了内存泄漏的问题。</p>
+<p><img src="https://s2.loli.net/2022/03/26/o6Cdlf7rnMczv3i.png" alt="" /></p>
+<p>首先我写的简单程序如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>ptr <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  GDB还是什么都看不出来：</p>
+<p><img src="https://s2.loli.net/2022/03/26/OAv2xKpQNglUJSG.png" alt="" /></p>
+<p>  再来看看valgrind怎么样：</p>
+<p><img src="https://s2.loli.net/2022/03/26/bHWR9FDaerUQjh7.png" alt="" /></p>
+<p>  芜湖，真的检测出来了，我故意泄漏了3个int大小的数据，也就是12 bytes，valgrind检测出来了，并且指出了行号8。</p>
+<p><img src="https://s2.loli.net/2022/03/26/cwVJMblt2YjHQKo.png" alt="" /></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>Arr <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Arr<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">free</span><span class="token punctuation">(</span>Arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  运行时Nothing happened，用GDB运行时：</p>
+<p><img src="https://s2.loli.net/2022/03/26/5oAqiG7r1NxLSJB.png" alt="" /></p>
+<p>  GDB还是什么都看不出来，我们再拿valgrind看看:</p>
+<p><img src="https://s2.loli.net/2022/03/26/nkZltcQXCI1Eu69.png" alt="" /></p>
+<p>  可以看到检测出了错误。</p>
+<p><img src="https://s2.loli.net/2022/03/26/oWB3VfQL6xsZqzc.png" alt="" /></p>
+<p>GDB还是什么都没检测出来，直接看valgrind：</p>
+<p><img src="https://s2.loli.net/2022/03/26/S9JCOyhHNQ7uxPB.png" alt="" /></p>
+<p>  检测出了读取错误。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>OSTEP</category>
+      </categories>
+      <tags>
+        <tag>OS</tag>
+        <tag>homework</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>王爽《汇编语言》实验一</title>
+    <url>/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E4%B8%80/</url>
+    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>  <strong>实验一：查看CPU和内存，用机器指令和汇编指令编程</strong></p>
+<p>  实验一来自第二章：寄存器，这个实验的主要内容是用debug程序来进行上述的操作，在这个实验里我们会接触到一些常用的debug指令。整体比较轻松，主要是熟悉debug的使用，不过虽然轻松还是挺有意思的，给人一种操控CPU的快感（虽然是假的😅）。</p>
+<p>  值得注意的是王爽老师在实验中也遵循了用到什么讲什么的原则，所以学起来会比较舒服和流畅，但在做实验前，一定要把物理地址的概念搞懂了。</p>
+<blockquote>
+<p>  除此之外，还要说一下，<strong>下面的截图中在结束的时候会有一个S，请忽略这个S</strong>。之所以会产生是因为我用快捷键截图的时候会把S输入到DosBox中。</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="预备知识debug"><a class="markdownIt-Anchor" href="#预备知识debug"></a> 预备知识：debug</h1>
+<h2 id="查看-改变寄存器的内容r"><a class="markdownIt-Anchor" href="#查看-改变寄存器的内容r"></a> 查看、改变寄存器的内容（r）</h2>
+<p>  我们使用r命令，查看寄存器的状态：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/NHmZLG3a7hWUudj.png" alt="image-20210923220817330" style="zoom:80%;" data-align="center" width="489">
+<p>  我们目前知道的是通用寄存器AX~DX，代码段寄存器CS，指令指针寄存器IP，其他的寄存器我们先不管。这里要介绍的是最后一行的073F：0100是当前指向的指令地址，即CS：IP。它的右边是其指向的指令的汇编格式，即汇编代码，汇编代码的右边我们先不解释。</p>
+<p>  如果我们想改变某个寄存器的值，可以像下面这么做：</p>
+<p><img src="https://s2.loli.net/2022/03/26/N4oQWisuncJ7DH9.png" alt="image-20211022204633178" /></p>
+<p>  r后面跟想要修改的寄存器，然后回车，在&quot;:&quot;后面出入值，这样就修改成功了。我们再查看一个寄存器内容，就会发现寄存器的值改变了。</p>
+<h2 id="查看内存内容d"><a class="markdownIt-Anchor" href="#查看内存内容d"></a> 查看内存内容（D）</h2>
+<p>  D的参数很多，这里我们只介绍一点现在用的到的。如果我们想查看1000:00的内容，我们可以输入<code>d 1000:00</code>：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/gciHPUwVlJI9KAr.png" alt="image-20210923221821488" data-align="center">
+<p>  我们来介绍一下D命令展示了什么：</p>
+<ul>
+<li>最左边很明显是每行的起始地址，从1000：0000~1000:0070。</li>
+<li>中间是从指定地址开始的128个内存单元，可以发现每个内存单元都是一个字节，中间的“-”是为了方便查看，意思是左边有8个单元，右边也有8个单元。</li>
+<li>最右边是每个内存单元可显示的ASCII码字符。</li>
+</ul>
+<p>  值得注意的是，我们看到的内存的内容在不同计算机中是不一样的，甚至每次使用debug也是不一样的，因为<strong>我们用debug看到的都是原来就在内存中的内容，这些内容随时都可能因为受环境的影响而改变</strong>。</p>
+<p>  如果我们想查看指定范围的内存，可以使用下面的命令：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/OQA8sSBZT6xtW3l.png" alt="image-20210923222840630" data-align="center">
+<h2 id="改写内存中的内容e-or-a-查看内存的汇编格式u"><a class="markdownIt-Anchor" href="#改写内存中的内容e-or-a-查看内存的汇编格式u"></a> 改写内存中的内容（E or A）、查看内存的汇编格式（U）</h2>
+<p>  既然我们可以改变寄存器的值，当然也可以改变内存的值。改变内存中的值有两种方式（已知）：E 和 A。我们先来介绍E。</p>
+<p>  我们一般只要指定一个起始地址，然后就可以依次输入要修改的内存单元的值（输完一个按一次空格），比如说我要把一些字母的ASCII码输入到1100:00往后的几个单元：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/ompXaUdnvA7jKVw.png" alt="image-20210923223749216" data-align="center">
+<p>  除了机器码，我们还可以输入字符，字符串：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/4uzW7mDVSbCsfO2.png" alt="image-20210923224007316" data-align="center">
+<p>  现在我们来讲讲另外一个改写内存的命令：A，这个其实很方便、很直接，a命令能让我们不用通过写机器码来写指令而是直接用汇编指令写：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/gBYHtdnANDsrRUZ.png" alt="image-20210923224546235" data-align="center">
+<p>  看内存的机器码格式可能看不出指令，我们可以用U命令，查看指定地址的汇编格式，其使用方法和d是一样的：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/qVlwkeHQ951htD2.png" alt="image-20210923224737640" data-align="center">
+<h2 id="执行指令t"><a class="markdownIt-Anchor" href="#执行指令t"></a> 执行指令（T）</h2>
+<p>  那么，我们如何执行指令呢？假设我们现在要执行上面这张图的命令。我们该怎么做呢？</p>
+<p>  第一步，将CS：IP改成1200：00</p>
+<img title="" src="https://s2.loli.net/2022/03/26/IsZayOPq9UY5KbA.png" alt="image-20210923224946533" data-align="center">
+<p>  可以看到现在CS:IP指向我们要执行的指令了，现在直接输入命令t，就可以执行，执行完CS：IP会自动跳到下一个指令开始的位置：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/eYqyt15FAomRknK.png" alt="image-20210923225102930" data-align="center">
+<p>  以上就是实验一讲到的debug命令，下面的实验任务环节就是为了练习上面讲到的这些指令。</p>
+<h2 id="退出debugq"><a class="markdownIt-Anchor" href="#退出debugq"></a> 退出debug(q)</h2>
+<p>  退出debug用q</p>
+<h1 id="实验任务"><a class="markdownIt-Anchor" href="#实验任务"></a> 实验任务</h1>
+<p>  没什么好讲的，不会看上面就行，实验一就这样愉快搞定了，去看CSAPP了😣</p>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+        <category>8086实验</category>
+      </categories>
+      <tags>
+        <tag>8086</tag>
       </tags>
   </entry>
   <entry>
@@ -1055,64 +1317,6 @@
       </tags>
   </entry>
   <entry>
-    <title>OSTEP Homework2 - memory virtualization</title>
-    <url>/2022/03/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/memory%20virtualization/</url>
-    <content><![CDATA[<p>  这是内存虚拟化部分的作业。</p>
-<h1 id="第14章"><a class="markdownIt-Anchor" href="#第14章"></a> 第14章</h1>
-<p><img src="https://s2.loli.net/2022/03/26/FMp1uoaZzOXKrG4.png" alt="" /></p>
-<p>  首先程序如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> <span class="token operator">*</span>ptr <span class="token operator">=</span> null<span class="token punctuation">;</span>
-    <span class="token function">free</span><span class="token punctuation">(</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  编译后什么事情都没发生。</p>
-<p><img src="https://s2.loli.net/2022/03/26/ZMAfNo4mYHLePJn.png" alt="" /></p>
-<img src="https://s2.loli.net/2022/03/26/l6Nf5F3qLToZPxD.png" title="" alt="" data-align="center">
-<p><img src="https://s2.loli.net/2022/03/26/p9vZK1DqFgm34WV.png" alt="" /></p>
-<p><img src="https://s2.loli.net/2022/03/26/WyZ8dYQ9HFx1KAp.png" alt="" /></p>
-<p>  额，还是什么都没发生，看来系统很好地解决了内存泄漏的问题。</p>
-<p><img src="https://s2.loli.net/2022/03/26/o6Cdlf7rnMczv3i.png" alt="" /></p>
-<p>首先我写的简单程序如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> <span class="token operator">*</span>ptr <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  GDB还是什么都看不出来：</p>
-<p><img src="https://s2.loli.net/2022/03/26/OAv2xKpQNglUJSG.png" alt="" /></p>
-<p>  再来看看valgrind怎么样：</p>
-<p><img src="https://s2.loli.net/2022/03/26/bHWR9FDaerUQjh7.png" alt="" /></p>
-<p>  芜湖，真的检测出来了，我故意泄漏了3个int大小的数据，也就是12 bytes，valgrind检测出来了，并且指出了行号8。</p>
-<p><img src="https://s2.loli.net/2022/03/26/cwVJMblt2YjHQKo.png" alt="" /></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> <span class="token operator">*</span>Arr <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Arr<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token function">free</span><span class="token punctuation">(</span>Arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  运行时Nothing happened，用GDB运行时：</p>
-<p><img src="https://s2.loli.net/2022/03/26/5oAqiG7r1NxLSJB.png" alt="" /></p>
-<p>  GDB还是什么都看不出来，我们再拿valgrind看看:</p>
-<p><img src="https://s2.loli.net/2022/03/26/nkZltcQXCI1Eu69.png" alt="" /></p>
-<p>  可以看到检测出了错误。</p>
-<p><img src="https://s2.loli.net/2022/03/26/oWB3VfQL6xsZqzc.png" alt="" /></p>
-<p>GDB还是什么都没检测出来，直接看valgrind：</p>
-<p><img src="https://s2.loli.net/2022/03/26/S9JCOyhHNQ7uxPB.png" alt="" /></p>
-<p>  检测出了读取错误。</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>OSTEP</category>
-      </categories>
-      <tags>
-        <tag>OS</tag>
-        <tag>homework</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ubuntu解决apt-get报错问题</title>
     <url>/2021/08/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ubuntu%E8%A7%A3%E5%86%B3apt-get%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>  最近刚学Linux,在Ubuntu上运行apt-get命令时遇到了点问题，目前我也不知道为什么，所以先把解决方法贴出来。</p>
@@ -1122,17 +1326,17 @@
 <span id="more"></span>
 <h2 id="解决方法1"><a class="markdownIt-Anchor" href="#解决方法1"></a> 解决方法1</h2>
 <p>  我使用的是这个方法，就一条命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">rm</span> /var/lib/dpkg/lock<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>  其实就是删除这个lock就行了，我试了一下是有用的。如果还不行，下面这些一个一个试：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock
-sudo rm &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F;lock
-sudo rm &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend
-sudo dpkg --configure -a
-sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">rm</span> /var/lib/apt/lists/lock
+<span class="token function">sudo</span> <span class="token function">rm</span> /var/cache/apt/archives/lock
+<span class="token function">sudo</span> <span class="token function">rm</span> /var/lib/dpkg/lock-frontend
+<span class="token function">sudo</span> dpkg --configure -a
+<span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="解决方法2未亲测"><a class="markdownIt-Anchor" href="#解决方法2未亲测"></a> 解决方法2(未亲测)</h2>
 <p>  这个方法是后来我看到的，但不知道有没有用。上面说了，报错是因为还有一个线程在使用apt-get,那么我们把这个线程关了不就行了吗？</p>
 <p>  我们直接执行下面这个命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sudo killall apt apt-get<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">killall</span> <span class="token function">apt</span> <span class="token function">apt-get</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 ]]></content>
       <categories>
         <category>操作系统</category>
@@ -1142,113 +1346,6 @@ sudo apt update<span aria-hidden="true" class="line-numbers-rows"><span></span><
         <tag>Linux</tag>
         <tag>Ubuntu</tag>
         <tag>指令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MIPS中一种低开销的边界检查方法</title>
-    <url>/2022/01/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/MIPS%E4%B8%AD%E4%B8%80%E7%A7%8D%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E7%9A%84%E4%BD%8E%E5%BC%80%E9%94%80%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>  今天在看计组的时候，在书上看到了一个巧妙的方法，所以想把它记录下来。（在<a href="https://book.douban.com/subject/2110638/">这本书</a>的2.7.1节）</p>
-<p>  如果寄存器$s0中的数为:<code>1111 1111 1111 1111 1111 1111 1111 1111</code>，而寄存器$s2中的数为:<code>0000 0000 0000 0000 0000 0000 0000 0001</code>。那么这两个数哪个比较大？</p>
-<span id="more"></span>
-<blockquote>
-<p>  显然我们要分别从无符号数和有符号数的角度去比较：</p>
-<ul>
-<li>
-<p>如果说两个都是无符号数，显然最高有效位是1的要大于最高有效位是0的，也就是说($s0) &gt; ($s2)。</p>
-</li>
-<li>
-<p>如果说两个都是有符号数，显然最高有效位是1的（负数）要小于最高有效位是0的（正数），也就是说($s0) &lt; ($s2)。</p>
-</li>
-</ul>
-</blockquote>
-<p>  对应于这两种情况，MIPS提供了两个版本的<code>小于则置位</code>指令:</p>
-<ul>
-<li>
-<p><code>slt</code>和<code>slti</code>：用于处理有符号数。</p>
-</li>
-<li>
-<p><code>sltu</code>和<code>sltiu</code>：用于处理无符号数。</p>
-</li>
-</ul>
-<hr />
-<p>  下面思考一个问题，<strong>如果用一个小于置位指令实现<code>0≤x&lt;y</code>的检验？</strong></p>
-<blockquote>
-<p>  x &lt; y很好检验，关键是这个≥0 怎么搞。负数的补码表示在无符号数的表示中看起来像是个很大的是（比如说什么那一串1就是-1）。那么<strong>我们只要使用无符号比较x&lt;y，在比较x是否小于y的同时，也检验了x是否为一个负数</strong>。因为如果x为负数，那么肯定x会大于y。</p>
-</blockquote>
-<p>  假设现在有一个数组<code>Array[i]</code>，它定义的时候是有9个单元，现在要检验<code>Array[i]</code>有没有越界。其实这就是我们上面这段说的问题——<code>0≤x&lt;y</code>的检验(也叫边界检查)。</p>
-<hr />
-<p>  MIPS中写法如下：</p>
-<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">sltu <span class="token operator">$</span>t0,<span class="token operator">$</span>s1,<span class="token operator">$</span>t2                 # t0<span class="token operator">=</span><span class="token number">0</span> if <span class="token operator">$</span>s1 <span class="token operator">></span><span class="token operator">=</span>length or <span class="token operator">$</span>s1 <span class="token operator">&lt;</span> <span class="token number">0</span>
-beq <span class="token operator">$</span>t0,<span class="token operator">$</span>zero,IndexOutOfBounds   # if bad,goto Error<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>汇编语言</category>
-        <category>MIPS</category>
-      </categories>
-      <tags>
-        <tag>MIPS</tag>
-        <tag>计算机组成原理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>王爽《汇编语言》实验一</title>
-    <url>/2021/09/23/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E3%80%8A%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E3%80%8B%E5%AE%9E%E9%AA%8C%E4%B8%80/</url>
-    <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>  <strong>实验一：查看CPU和内存，用机器指令和汇编指令编程</strong></p>
-<p>  实验一来自第二章：寄存器，这个实验的主要内容是用debug程序来进行上述的操作，在这个实验里我们会接触到一些常用的debug指令。整体比较轻松，主要是熟悉debug的使用，不过虽然轻松还是挺有意思的，给人一种操控CPU的快感（虽然是假的😅）。</p>
-<p>  值得注意的是王爽老师在实验中也遵循了用到什么讲什么的原则，所以学起来会比较舒服和流畅，但在做实验前，一定要把物理地址的概念搞懂了。</p>
-<blockquote>
-<p>  除此之外，还要说一下，<strong>下面的截图中在结束的时候会有一个S，请忽略这个S</strong>。之所以会产生是因为我用快捷键截图的时候会把S输入到DosBox中。</p>
-</blockquote>
-<span id="more"></span>
-<h1 id="预备知识debug"><a class="markdownIt-Anchor" href="#预备知识debug"></a> 预备知识：debug</h1>
-<h2 id="查看-改变寄存器的内容r"><a class="markdownIt-Anchor" href="#查看-改变寄存器的内容r"></a> 查看、改变寄存器的内容（r）</h2>
-<p>  我们使用r命令，查看寄存器的状态：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/NHmZLG3a7hWUudj.png" alt="image-20210923220817330" style="zoom:80%;" data-align="center" width="489">
-<p>  我们目前知道的是通用寄存器AX~DX，代码段寄存器CS，指令指针寄存器IP，其他的寄存器我们先不管。这里要介绍的是最后一行的073F：0100是当前指向的指令地址，即CS：IP。它的右边是其指向的指令的汇编格式，即汇编代码，汇编代码的右边我们先不解释。</p>
-<p>  如果我们想改变某个寄存器的值，可以像下面这么做：</p>
-<p><img src="https://s2.loli.net/2022/03/26/N4oQWisuncJ7DH9.png" alt="image-20211022204633178" /></p>
-<p>  r后面跟想要修改的寄存器，然后回车，在&quot;:&quot;后面出入值，这样就修改成功了。我们再查看一个寄存器内容，就会发现寄存器的值改变了。</p>
-<h2 id="查看内存内容d"><a class="markdownIt-Anchor" href="#查看内存内容d"></a> 查看内存内容（D）</h2>
-<p>  D的参数很多，这里我们只介绍一点现在用的到的。如果我们想查看1000:00的内容，我们可以输入<code>d 1000:00</code>：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/gciHPUwVlJI9KAr.png" alt="image-20210923221821488" data-align="center">
-<p>  我们来介绍一下D命令展示了什么：</p>
-<ul>
-<li>最左边很明显是每行的起始地址，从1000：0000~1000:0070。</li>
-<li>中间是从指定地址开始的128个内存单元，可以发现每个内存单元都是一个字节，中间的“-”是为了方便查看，意思是左边有8个单元，右边也有8个单元。</li>
-<li>最右边是每个内存单元可显示的ASCII码字符。</li>
-</ul>
-<p>  值得注意的是，我们看到的内存的内容在不同计算机中是不一样的，甚至每次使用debug也是不一样的，因为<strong>我们用debug看到的都是原来就在内存中的内容，这些内容随时都可能因为受环境的影响而改变</strong>。</p>
-<p>  如果我们想查看指定范围的内存，可以使用下面的命令：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/OQA8sSBZT6xtW3l.png" alt="image-20210923222840630" data-align="center">
-<h2 id="改写内存中的内容e-or-a-查看内存的汇编格式u"><a class="markdownIt-Anchor" href="#改写内存中的内容e-or-a-查看内存的汇编格式u"></a> 改写内存中的内容（E or A）、查看内存的汇编格式（U）</h2>
-<p>  既然我们可以改变寄存器的值，当然也可以改变内存的值。改变内存中的值有两种方式（已知）：E 和 A。我们先来介绍E。</p>
-<p>  我们一般只要指定一个起始地址，然后就可以依次输入要修改的内存单元的值（输完一个按一次空格），比如说我要把一些字母的ASCII码输入到1100:00往后的几个单元：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/ompXaUdnvA7jKVw.png" alt="image-20210923223749216" data-align="center">
-<p>  除了机器码，我们还可以输入字符，字符串：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/4uzW7mDVSbCsfO2.png" alt="image-20210923224007316" data-align="center">
-<p>  现在我们来讲讲另外一个改写内存的命令：A，这个其实很方便、很直接，a命令能让我们不用通过写机器码来写指令而是直接用汇编指令写：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/gBYHtdnANDsrRUZ.png" alt="image-20210923224546235" data-align="center">
-<p>  看内存的机器码格式可能看不出指令，我们可以用U命令，查看指定地址的汇编格式，其使用方法和d是一样的：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/qVlwkeHQ951htD2.png" alt="image-20210923224737640" data-align="center">
-<h2 id="执行指令t"><a class="markdownIt-Anchor" href="#执行指令t"></a> 执行指令（T）</h2>
-<p>  那么，我们如何执行指令呢？假设我们现在要执行上面这张图的命令。我们该怎么做呢？</p>
-<p>  第一步，将CS：IP改成1200：00</p>
-<img title="" src="https://s2.loli.net/2022/03/26/IsZayOPq9UY5KbA.png" alt="image-20210923224946533" data-align="center">
-<p>  可以看到现在CS:IP指向我们要执行的指令了，现在直接输入命令t，就可以执行，执行完CS：IP会自动跳到下一个指令开始的位置：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/eYqyt15FAomRknK.png" alt="image-20210923225102930" data-align="center">
-<p>  以上就是实验一讲到的debug命令，下面的实验任务环节就是为了练习上面讲到的这些指令。</p>
-<h2 id="退出debugq"><a class="markdownIt-Anchor" href="#退出debugq"></a> 退出debug(q)</h2>
-<p>  退出debug用q</p>
-<h1 id="实验任务"><a class="markdownIt-Anchor" href="#实验任务"></a> 实验任务</h1>
-<p>  没什么好讲的，不会看上面就行，实验一就这样愉快搞定了，去看CSAPP了😣</p>
-]]></content>
-      <categories>
-        <category>汇编语言</category>
-        <category>8086实验</category>
-      </categories>
-      <tags>
-        <tag>8086</tag>
       </tags>
   </entry>
   <entry>
@@ -1588,8 +1685,8 @@ push <span class="token register variable">ax</span>        <span class="token o
 <p>  我们打开DosBox的exe文件，会看到下面这个画面：</p>
 <img title="" src="https://s2.loli.net/2022/03/26/fncLK8VThpy1SYN.png" alt="image-20210923202515597" style="zoom:80%;" data-align="center">
 <p>  这个时候我们需要做的工作是<strong>虚拟C盘</strong>，我们使用命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">mount c e:\DosBox\my_c        \\虚拟C盘,my_c是我指定的文件夹，作为虚拟C盘
-c:                             \\转到c盘<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">mount</span> c e:<span class="token punctuation">\</span>DosBox<span class="token punctuation">\</span>my_c        <span class="token punctuation">\</span><span class="token punctuation">\</span>虚拟C盘,my_c是我指定的文件夹，作为虚拟C盘
+c:                             <span class="token punctuation">\</span><span class="token punctuation">\</span>转到c盘<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>  在这个虚拟C盘里我们可以存放我们的汇编语言程序和之前的MASM工具包,当出现下图这种情况时，说明我们的虚拟化成功了：</p>
 <img title="" src="https://s2.loli.net/2022/03/26/znLX8OJud6pDUqW.png" alt="image-20210923203130144" style="zoom:80%;" data-align="center">
 <p>  但是，当我们第二次登入时，就会发现我们每次登入DosBox都要重新虚拟化，这显得很麻烦，因此我们需要改一个脚本文件：</p>
@@ -1611,6 +1708,65 @@ c:                             \\转到c盘<span aria-hidden="true" class="line-
       </categories>
       <tags>
         <tag>8086</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>上海WAIC</title>
+    <url>/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
+    <content><![CDATA[<p>  8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
+<span id="more"></span>
+<p>  我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/ap3NJgmezx6Ydrc.png" alt="image-20210711121714205" data-align="center">
+<p>  😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/w9jMaXvZJK1OA2u.jpg" alt="waic展1" style="zoom: 67%;" data-align="center" width="500">
+<img title="" src="https://s2.loli.net/2022/03/26/a2AJ3GY8Vg6Qtuo.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
+<p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/Zve1bNrcomaSQdt.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="411">
+<img title="" src="https://s2.loli.net/2022/03/26/EKqGV9CXbHI5vp6.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="412">
+<p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/XwPFhRK3xieA9Cd.png" alt="image-20210714082002960" data-align="center" width="420">
+<p>  虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
+<h4 id="上海历史博物馆"><a class="markdownIt-Anchor" href="#上海历史博物馆"></a> 上海历史博物馆</h4>
+<p>  这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/DJXUa6SLPqTn4sh.png" alt="image-20210711125428826" style="zoom:67%;" data-align="center" width="304">
+<p>  《中国共产党宣言》</p>
+<img title="" src="https://s2.loli.net/2022/03/26/GOT3zVakB4gCrqS.png" alt="image-20210711125815779" style="zoom:67%;" data-align="center" width="295">
+<p>  好家伙，还有这个。</p>
+<h4 id="武康路愚园路"><a class="markdownIt-Anchor" href="#武康路愚园路"></a> 武康路，愚园路</h4>
+<p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
+<h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
+<p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/5y24Sjf71aNgHrb.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="207">
+<p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/8RBpUWPicFewaDg.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="277">
+<img title="" src="https://s2.loli.net/2022/03/26/pgriONkwqWI19lP.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="278">
+<p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/hQOqrAF6jVXbNcK.png" alt="image-20210711234303508" style="zoom:50%;" data-align="center" width="312">
+<p>  这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
+<img title="" src="https://s2.loli.net/2022/03/26/ohaVYbzs3UINTQL.png" alt="image-20210711234348837" style="zoom:67%;" data-align="center" width="309">
+<p>  这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣。除了上面这些，我还很喜欢下面这些陶瓷制品：</p>
+<p><img title="" src="https://s2.loli.net/2022/03/26/pQ4gT1PNCMyivbE.png" alt="image-20210711234536757" style="zoom:50%;" data-align="center" width="204"><img title="" src="https://s2.loli.net/2022/03/26/hBIztknylrfawK2.png" alt="image-20210711234551826" style="zoom:67%;" data-align="center" width="217"></p>
+<p>  下面这个碗上的裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
+<img title="" src="https://s2.loli.net/2022/03/26/KBxqmVSwf68sapr.png" alt="image-20210711234752559" style="zoom:50%;" data-align="center" width="239">
+<p>  这种颜色也是我很喜欢的。</p>
+<img title="" src="https://s2.loli.net/2022/03/26/Zpez9ATVr8YdqSi.png" alt="image-20210711234825706" style="zoom:67%;" data-align="center" width="263">
+<h4 id="外滩南京东路"><a class="markdownIt-Anchor" href="#外滩南京东路"></a> 外滩，南京东路</h4>
+<p>  刚出外滩这边的地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/UhDP5Zd2tBis4bC.png" alt="image-20210711235248113" style="zoom:67%;" data-align="center" width="455">
+<img title="" src="https://s2.loli.net/2022/03/26/rD4EBlSchTyA9Zi.png" alt="image-20210711235314082" style="zoom:67%;" data-align="center" width="466">
+<h4 id="waic论坛"><a class="markdownIt-Anchor" href="#waic论坛"></a> WAIC论坛</h4>
+<p>  额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
+<img title="" src="https://s2.loli.net/2022/03/26/e2GMBtoOzECalTn.png" alt="image-20210712000357612" width="191" data-align="center">
+<p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
+<img title="" src="https://s2.loli.net/2022/03/26/yCsZxtGOfSkimNd.png" alt="image-20210712000558320" style="zoom:67%;" width="182" data-align="center">
+<img title="" src="https://s2.loli.net/2022/03/26/xIyEkf4CXaTZ9uv.png" alt="image-20210712000617839" style="zoom:67%;" width="208" data-align="center">
+<p>  就写到这吧，明天还要转专业考试。此次上海之旅感觉还行，以后应该还会再来吧。</p>
+]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>游记</tag>
       </tags>
   </entry>
   <entry>
@@ -1711,6 +1867,38 @@ codesg segment
 
 codesg ends
 end start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+        <category>8086实验</category>
+      </categories>
+      <tags>
+        <tag>8086</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>王爽《汇编语言》实验四</title>
+    <url>/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/</url>
+    <content><![CDATA[<h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
+<p><img src="https://s2.loli.net/2022/03/26/ph3tiB5sRjTQ8lW.png" alt="image-20211014154806883" /></p>
+<p>  这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。</p>
+<h1 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h1>
+<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:code
+code segment
+    mov <span class="token register variable">ax</span>,<span class="token number">0020h</span>
+    mov <span class="token register variable">ds</span>,<span class="token register variable">ax</span>
+    mov <span class="token register variable">cx</span>,<span class="token number">64</span>
+    mov <span class="token register variable">bx</span>,<span class="token number">0</span>
+
+  <span class="token label function">s:</span>mov <span class="token register variable">ds</span>:<span class="token operator">[</span><span class="token register variable">bx</span><span class="token operator">]</span>,<span class="token register variable">bx</span>
+      inc <span class="token register variable">bx</span>
+      loop s
+
+      mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
+      int <span class="token number">21h</span>
+code ends
+end<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    值得注意的一个问题是，0:200~0:23F等同于0200:0~0200:3f,推荐使用后面这种写法，<strong>后面这种写法使得我们用一个bx就能搞定偏移地址和数字的递增</strong>。</p>
 ]]></content>
       <categories>
         <category>汇编语言</category>
@@ -1992,38 +2180,6 @@ end main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
       </tags>
   </entry>
   <entry>
-    <title>王爽《汇编语言》实验四</title>
-    <url>/2021/10/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/%E7%8E%8B%E7%88%BD%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E9%AA%8C%E5%9B%9B/</url>
-    <content><![CDATA[<h1 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h1>
-<p><img src="https://s2.loli.net/2022/03/26/ph3tiB5sRjTQ8lW.png" alt="image-20211014154806883" /></p>
-<p>  这第二问就是第一问的优化版，所以我们直接写第二问了，第一问就不写了，第三问没啥好讲的的，跟着调试就行了，所以第三问也不写了。</p>
-<h1 id="解答"><a class="markdownIt-Anchor" href="#解答"></a> 解答</h1>
-<pre class="line-numbers language-nasm" data-language="nasm"><code class="language-nasm">assume <span class="token register variable">cs</span>:code
-code segment
-    mov <span class="token register variable">ax</span>,<span class="token number">0020h</span>
-    mov <span class="token register variable">ds</span>,<span class="token register variable">ax</span>
-    mov <span class="token register variable">cx</span>,<span class="token number">64</span>
-    mov <span class="token register variable">bx</span>,<span class="token number">0</span>
-
-  <span class="token label function">s:</span>mov <span class="token register variable">ds</span>:<span class="token operator">[</span><span class="token register variable">bx</span><span class="token operator">]</span>,<span class="token register variable">bx</span>
-      inc <span class="token register variable">bx</span>
-      loop s
-
-      mov <span class="token register variable">ax</span>,<span class="token number">4c00h</span>
-      int <span class="token number">21h</span>
-code ends
-end<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>​    值得注意的一个问题是，0:200~0:23F等同于0200:0~0200:3f,推荐使用后面这种写法，<strong>后面这种写法使得我们用一个bx就能搞定偏移地址和数字的递增</strong>。</p>
-]]></content>
-      <categories>
-        <category>汇编语言</category>
-        <category>8086实验</category>
-      </categories>
-      <tags>
-        <tag>8086</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>内存越界引用和缓冲区溢出问题</title>
     <url>/2022/01/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/%E5%86%85%E5%AD%98%E8%B6%8A%E7%95%8C%E5%BC%95%E7%94%A8%E5%92%8C%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
@@ -2122,62 +2278,171 @@ abcdefghijklmnopq<span aria-hidden="true" class="line-numbers-rows"><span></span
       </tags>
   </entry>
   <entry>
-    <title>上海WAIC</title>
-    <url>/2021/07/11/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/%E4%B8%8A%E6%B5%B7%E4%B9%8B%E8%A1%8C/</url>
-    <content><![CDATA[<p>  8号~10号WAIC在上海举办，一周前偶然看到这么有逼格的展览和论坛，我怎么能错过😏，咬咬牙订了票，8号上午就到了上海，开始了我为期三天的魔都之行，没错这是我第一次来上海。。。我想把这次出行记录下来，也来谈谈我的收获。</p>
-<span id="more"></span>
-<p>  我这次到上海可不是来玩的，我是来学习的。一到上海，我就乘地铁跑去世博中心了，心想今天下午就用来看展览了，我要好好吸收知识。经过一番流程我终于到了馆内，那种震撼的感觉让我终身难忘，这种感觉就是热成狗的我终于可以吹会空调了。。。（bushi）咳咳，说正事，早已做好完全准备的我立马就跑去了下面这个位置：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/ap3NJgmezx6Ydrc.png" alt="image-20210711121714205" data-align="center">
-<p>  😏，你以为我是奔着王者荣耀去的吗，肤浅！我当然是去学习的，学习人机高超的技术🐶。好吧，最后我P都没看到，因为人家还没开始。我只能去其他地方转转，事先我已经圈出了要重点看的展位：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/w9jMaXvZJK1OA2u.jpg" alt="waic展1" style="zoom: 67%;" data-align="center" width="500">
-<img title="" src="https://s2.loli.net/2022/03/26/a2AJ3GY8Vg6Qtuo.jpg" alt="waic展2" style="zoom: 50%;" data-align="center" width="502">
-<p>  额，我觉得他们所展示的东西大多就那么几样，无非是AI大平台（百度，腾讯，华为，阿里），无人驾驶、无人车（autox,<a href="http://poni.ai">poni.ai</a>，上汽……），AI算力芯片（寒武纪，华为……），协作机器人、四足机器人（JAKA，ABB，unitree……），其实展会让我眼前一亮的就是各种体验以及实物的展示，的确还是很好玩的，比较常见的比如AI写诗，交互之类的（详情可以去公众号上看），下面附上一些照片，我拍的不是很多：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/Zve1bNrcomaSQdt.png" alt="image-20210711123402389" style="zoom:50%;" data-align="center" width="411">
-<img title="" src="https://s2.loli.net/2022/03/26/EKqGV9CXbHI5vp6.png" alt="image-20210711123509184" style="zoom:67%;" data-align="center" width="412">
-<p>  这些都挺不错的，但我觉得最好玩的还是unitree的小机器狗：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/XwPFhRK3xieA9Cd.png" alt="image-20210714082002960" data-align="center" width="420">
-<p>  虽然都是一些商业应用，不过确实有点意思，这次看展增强了我对技术的热情。但看展并不是我此行的主要目的，此行的主要目的是听论坛，我成功预约了两场：分别是9号下午的腾讯论坛和10号上午的“后深度学习时代”论坛，可以看到这些论坛之间是由空挡期的😎，我心想不能浪费时间，立马制度了详细的“学习”计划。</p>
-<h4 id="上海历史博物馆"><a class="markdownIt-Anchor" href="#上海历史博物馆"></a> 上海历史博物馆</h4>
-<p>  这个博物馆一定不是来上海旅游的首选，我之所以选择它是有我自己的理由的：我刚好走到这个博物馆附近，正想找个地方避避太阳。。。既来之，则安之，这个博物馆还不用预约，我就走进去瞧了瞧，了解了解上海的历史。你别说，还真挺有意思的，刚好有个特展是讲述上海自新中国成立以来的发展历程的，展示了老上海生活的方方面面，具体我就不说了，下面贴点图：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/DJXUa6SLPqTn4sh.png" alt="image-20210711125428826" style="zoom:67%;" data-align="center" width="304">
-<p>  《中国共产党宣言》</p>
-<img title="" src="https://s2.loli.net/2022/03/26/GOT3zVakB4gCrqS.png" alt="image-20210711125815779" style="zoom:67%;" data-align="center" width="295">
-<p>  好家伙，还有这个。</p>
-<h4 id="武康路愚园路"><a class="markdownIt-Anchor" href="#武康路愚园路"></a> 武康路，愚园路</h4>
-<p>  我还花了好多时间在上海的一些老洋房的街道上闲逛，因为是边骑车边看的，没拍照片，不过老洋房的感觉是真不错。这里才让我感受到上海的味道。</p>
-<h4 id="上海博物馆"><a class="markdownIt-Anchor" href="#上海博物馆"></a> 上海博物馆</h4>
-<p>  额，这个可以说是我去上海最想去的地方了。。。可是我10号下午才预约到，进馆前因为来早了还等了好久。进去后，我看到很多有意思的展品，上博不愧是中国文物的半壁江山，藏品真的丰富，扬州博物馆是不能及的。它的特色就是青铜器和印章，还有一些特展，我基本上把能逛的馆都逛了一遍，到最后实在太累了，也就不逛了，休息会就走了。（背着全部行李。。。）下面放一些有意思的展品：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/5y24Sjf71aNgHrb.png" alt="image-20210711233912475" style="zoom:50%;" data-align="center" width="207">
-<p>  这是商朝中期的青铜器，可以看到上面的花纹十分精美，而且这个人面给人一种很威严的感觉，我觉得很震撼，下面还有一些早期的青铜器：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/8RBpUWPicFewaDg.png" alt="image-20210711234131764" style="zoom:50%;" data-align="center" width="277">
-<img title="" src="https://s2.loli.net/2022/03/26/pgriONkwqWI19lP.png" alt="image-20210711234151949" style="zoom:50%;" data-align="center" width="278">
-<p>  还有好多，就不放了。除了青铜器还有陶瓷馆，藏品也琳琅满目，十分精彩：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/hQOqrAF6jVXbNcK.png" alt="image-20210711234303508" style="zoom:50%;" data-align="center" width="312">
-<p>  这好像是半坡文化的，我觉得这个花纹很有神秘感hhh。</p>
-<img title="" src="https://s2.loli.net/2022/03/26/ohaVYbzs3UINTQL.png" alt="image-20210711234348837" style="zoom:67%;" data-align="center" width="309">
-<p>  这个就栩栩如生了，这是唐三彩，这个做得十分生动，特别是下面那个被踩的小人儿，真的有意思🤣。除了上面这些，我还很喜欢下面这些陶瓷制品：</p>
-<p><img title="" src="https://s2.loli.net/2022/03/26/pQ4gT1PNCMyivbE.png" alt="image-20210711234536757" style="zoom:50%;" data-align="center" width="204"><img title="" src="https://s2.loli.net/2022/03/26/hBIztknylrfawK2.png" alt="image-20210711234551826" style="zoom:67%;" data-align="center" width="217"></p>
-<p>  下面这个碗上的裂纹，我在扬州博物馆也看到过类似的，当时就很喜欢，这次也让我遇到了，这种错乱的感觉让我印象深刻。</p>
-<img title="" src="https://s2.loli.net/2022/03/26/KBxqmVSwf68sapr.png" alt="image-20210711234752559" style="zoom:50%;" data-align="center" width="239">
-<p>  这种颜色也是我很喜欢的。</p>
-<img title="" src="https://s2.loli.net/2022/03/26/Zpez9ATVr8YdqSi.png" alt="image-20210711234825706" style="zoom:67%;" data-align="center" width="263">
-<h4 id="外滩南京东路"><a class="markdownIt-Anchor" href="#外滩南京东路"></a> 外滩，南京东路</h4>
-<p>  刚出外滩这边的地铁站，这里给我的第一印象就是热闹，西洋建筑，人真的超级多。。。这里的西洋建筑比较高一点，也十分精致，和对面的现代摩天大楼形成了有意思的对比，比如下面这两个：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/UhDP5Zd2tBis4bC.png" alt="image-20210711235248113" style="zoom:67%;" data-align="center" width="455">
-<img title="" src="https://s2.loli.net/2022/03/26/rD4EBlSchTyA9Zi.png" alt="image-20210711235314082" style="zoom:67%;" data-align="center" width="466">
-<h4 id="waic论坛"><a class="markdownIt-Anchor" href="#waic论坛"></a> WAIC论坛</h4>
-<p>  额，虽然听论坛是我这次来魔都的主要目的，但最后我只听了两三场场论坛，其实也就只预约到了两场。一场是腾讯的“产品发布会”还有是“后深度学习时代”开发者论坛。先来讲讲第一个，一开始我就憋了一肚子火，说的是2：30开始，人都坐满了，结果开场视频放了一遍又一遍，3：20才开始!!!白白浪费了50分钟。。。等到开始了，还以为会讲什么有趣的东西。。.结果我觉得就是产品发布会,总结我都懒得写，就拿下面的备忘录凑合一下吧：</p>
-<img title="" src="https://s2.loli.net/2022/03/26/e2GMBtoOzECalTn.png" alt="image-20210712000357612" width="191" data-align="center">
-<p>  还有一个是“后深度学习时代”，原本想着听点深度学习前沿的东西，找找兴趣点的，额，原来所谓的“后深度学习时代”==提高算力的芯片，大部分都是芯片。。。</p>
-<img title="" src="https://s2.loli.net/2022/03/26/yCsZxtGOfSkimNd.png" alt="image-20210712000558320" style="zoom:67%;" width="182" data-align="center">
-<img title="" src="https://s2.loli.net/2022/03/26/xIyEkf4CXaTZ9uv.png" alt="image-20210712000617839" style="zoom:67%;" width="208" data-align="center">
-<p>  就写到这吧，明天还要转专业考试。此次上海之旅感觉还行，以后应该还会再来吧。</p>
+    <title>BitTorrent协议</title>
+    <url>/2022/05/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/BitTorrent%E5%8D%8F%E8%AE%AE%E4%B8%8EMagNet%E5%8D%8F%E8%AE%AE/</url>
+    <content><![CDATA[<p>  最近经常会下载一些电影，都是通过一个torrent文件+迅雷下载的，这个torrent文件被称为BT种子，说实话这个名字非常熟悉，中学时经常会听到朋友说起，比如有没有种子什么的😅，但是我一直不太了解这种下载方式。这几天使用这种方式下载的时候，发现和一般通过http协议下载的方式有很大不同，于是我就不禁好奇起来，这种下载方式是如何工作的呢？</p>
+<h1 id="概念介绍"><a class="markdownIt-Anchor" href="#概念介绍"></a> 概念介绍</h1>
+<p>  这种下载方式依托于<a href="https://en.wikipedia.org/wiki/BitTorrent">BitTorrent</a>协议，BitTorrent是一种internet transfer protocol，同样作为一种transfer protocol，BitTorrent与http,ftp(file transfer protocol)这些协议最大的不同在于<strong>BitTorrent是一种<code>distributed transfer protocol</code>（分布式传输协议），什么意思呢</strong>？</p>
+<p>  http/FTP protocol都是让用户从一个目标站点的服务器上下载文件，而当用户过多时，就会超出服务器的带宽限制，导致下载出现问题；而BitTorrent将文件分片，每个用户都会下载文件的分片，在下载时也会将自己的文件分片发给其他正在下载的用户，这就形成了一种<strong>图结构</strong>，<strong>点对点式</strong>（<a href="https://en.wikipedia.org/wiki/Peer-to-peer">Peer-to-peer </a>）的分发文件分片：<br />
+<img title="" src="https://s2.loli.net/2022/05/03/6yz4IxfrDWgOEbK.png" alt="" data-align="center" width="384"></p>
+<p>  正是由于这一特性，BitTorrent在大文件下载和多人同时下载时有非常好的表现。</p>
+<h1 id="torrent文件"><a class="markdownIt-Anchor" href="#torrent文件"></a> Torrent文件</h1>
+<p>  torrent文件，也就是所谓的BT种子，是我们了解这种下载方式的关键，所以下面就来简单介绍一下这种文件的格式与结构。</p>
+<h2 id="编码方式bencoding"><a class="markdownIt-Anchor" href="#编码方式bencoding"></a> 编码方式：bencoding</h2>
+<p>  torrent文件的编码格式是bencoding,这种编码由ASCII码进行编码，包含以下数据结构：</p>
+<ul>
+<li>string</li>
+</ul>
+<p>  字符串&quot;hello&quot;在bencoding中就是5:hello，即长度标识+:+字符串</p>
+<ul>
+<li>
+<p>integer</p>
+<p>i开头,e结尾，比如123就可以用<code>i123e</code>表示，456用<code>i456e</code>表示。</p>
+</li>
+<li>
+<p>List</p>
+<p>l开头,e结尾，比如<code>[132,&quot;hello&quot;]</code>就表示为<code>li123e5:helloe</code></p>
+</li>
+<li>
+<p>Dictionary</p>
+<p>d开头,e结尾，key必须是string,value可以是四种数据结构的任意一种，比如<code>&#123;'fruit':5,'meat':8&#125;</code>就可表示为<code>d5:fruiti5e4:meati8ee</code>。除此之外，还要注意，Dictionary必须是有序字典，所有key必须按<a href="https://zh.m.wikipedia.org/wiki/%E5%AD%97%E5%85%B8%E5%BA%8F">字典序</a>升序排列。</p>
+<hr />
+</li>
+</ul>
+<p>  虽然Bencoding比用纯二进制编码效率低，但由于结构简单而且不受字节存储顺序影响（所有数字以十进制编码，不存在<a href="http://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F">大端小端的问题</a>），因此具有很好的跨平台性，而且具有较好的灵活性，即使存在故障的字典键，只要将其忽略并更换新的就能兼容补充。</p>
+<h2 id="文件格式"><a class="markdownIt-Anchor" href="#文件格式"></a> 文件格式</h2>
+<p>  torrent文件本身是一个字典，类似于Json,里面包含了一些key，那么具体包含哪些key呢？首先我们直接打开一个torrent文件:</p>
+<img src="https://s2.loli.net/2022/05/03/sPnymiNEfo5IhUx.png" title="" alt="" data-align="center">
+<p>  可以看到除了第一行以外，全都是乱码，说明这是一个二进制文件。我们现在已经知道了torrent文件是用Bencoding方式编码的，通过解析器(留个坑)，就可以将其转化为可读的格式:</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"announce"</span><span class="token operator">:</span> <span class="token string">"udp://engplus.ru:6969/announce"</span><span class="token punctuation">,</span>
+    <span class="token property">"announce-list"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">[</span>
+            <span class="token string">"udp://engplus.ru:6969/announce"</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>
+            <span class="token string">"udp://cutiegirl.ru:6969/announce"</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>
+            <span class="token string">"udp://bubu.mapfactor.com:6969/announce"</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>
+            <span class="token string">"udp://bt2.archive.org:6969/announce"</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"created by"</span><span class="token operator">:</span> <span class="token string">"qBittorrent v4.3.91"</span><span class="token punctuation">,</span>
+    <span class="token property">"creation date"</span><span class="token operator">:</span> <span class="token string">"2021-02-12 03:02:32"</span><span class="token punctuation">,</span>
+    <span class="token property">"info_hash"</span><span class="token operator">:</span> <span class="token string">"7cda8188321724d1ce7a0ab0b4f9208023dd1521"</span><span class="token punctuation">,</span>
+    <span class="token property">"info"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"length"</span><span class="token operator">:</span> <span class="token number">4936930690</span><span class="token punctuation">,</span>
+        <span class="token property">"path"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"BT\u4e16\u754c\u7f51(btsj5.com).txt"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"\u91dc\u5c71\u884c.\u7279\u6548\u5b57\u5e55.2016.BD1080P.AAC.x264.CHS.BTSJ5"</span><span class="token punctuation">,</span>
+        <span class="token property">"piece length"</span><span class="token operator">:</span> <span class="token number">1048576</span><span class="token punctuation">,</span>
+        <span class="token property">"pieces"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token string">"10e72eba2cbdc9d9b9791706fcbfb84e51093c86"</span><span class="token punctuation">,</span>
+            <span class="token string">"d91472ddd5e943caa54f8520fcb35fb106033cf2"</span><span class="token punctuation">,</span>
+            <span class="token string">"214e6470e412215c9cf462ea752adc6a7c90e92f"</span><span class="token punctuation">,</span>
+            <span class="token string">"214e6470e412215c9cf462ea752adc6a7c90e92f"</span><span class="token punctuation">,</span>
+            <span class="token string">"903012943eab4ed903f1bc35079f6075f01da4ff"</span><span class="token punctuation">,</span>
+            <span class="token string">"d118c6af14e0f3e06f8008e712322d06088d9c05"</span><span class="token punctuation">,</span>
+            <span class="token string">"500813dd3b29e0c88e0127a2fdf7851be2472a58"</span><span class="token punctuation">,</span>
+            <span class="token string">"…………"</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  从上面我们可以看出一些torrent的字段，下面进行一个汇总：</p>
+<p><img src="https://s2.loli.net/2022/05/03/7Xlxjt3kYFmcavH.png" alt="" /></p>
+<h1 id="bt下载流程"><a class="markdownIt-Anchor" href="#bt下载流程"></a> BT下载流程</h1>
+<h2 id="简单概述"><a class="markdownIt-Anchor" href="#简单概述"></a> 简单概述</h2>
+<p>  整个的一个BT下载流程是怎样的呢？</p>
+<ol>
+<li>
+<p>制作Torrent种子文件，制作的过程中要指定发布的文件or文件夹、Tracker URL（即announce字段）、是否启用DHT等等。除此之外，还要将要发布的文件切成块（一般是256KB），用SHA1哈希算法计算每块的哈希值，最后上传到Tracker服务器。</p>
+</li>
+<li>
+<p>BT客户端（如迅雷）得到.torrent文件后，就会根据文件中的announce字段找到Tracker服务器地址（连接方式有UDP也有HTTP），然后客户端就会通过Tracker GET请求得到服务，发送哈希值给Tracker，让其查找。</p>
+</li>
+<li>
+<p>在找到哈希信息后，Tracker服务器就会反连客户端的IP地址和Port（如果是公网），然后返回正在下载这个文件的所有公网用户的IP地址和Port List,之后会将这个客户端的IP地址和Port保存下来，供其他人使用。</p>
+</li>
+<li>
+<p>BT客户端得到这些其他用户IP后，就可以直接连接到这些IP和端口下载资料了。BT客户端会到所有的用户去寻找自己要下载的东西。BT客户端每找到一个用户就建立一个Socket来下载，所以下载的人越多，速度就越快。</p>
+</li>
+</ol>
+<h2 id="peer之间的通信"><a class="markdownIt-Anchor" href="#peer之间的通信"></a> peer之间的通信</h2>
+<p>  下面来看一下点与点之间是如何建立连接的。在使用BT协议下载时，所有正在下载同一资源的peer都是对等的，两个peer之间相互建立的连接也是对等的，对等节点建立的连接的数据传输方向也是双向的，数据可由任何一端发送到另一端。</p>
+<p>  首先是TCP层的连接，当一个客户端向其他peer发送一个TCP连接请求，这个请求由以下字段组成：</p>
+<ol>
+<li>
+<p>pstrlen,固定值为19B</p>
+</li>
+<li>
+<p>pstr,值为&quot;BitTorrent protocol&quot;</p>
+</li>
+<li>
+<p>reserved，保留8字节字段，一般全设置为0、</p>
+</li>
+<li>
+<p>info_hash，必须与请求Tracker时发送的info_hash相同</p>
+</li>
+<li>
+<p>peer_id，必须与请求Tracker时发送的peer_id相同</p>
+</li>
+</ol>
+<p>  在发送上述握手后，应该会受到相同格式的握手，然后我们就将返回的info_hash和发送的进行匹配，以此来确定是否是同一文件，若没问题，那么就握手成功。握手成功后，就会进行<strong>数据的传输</strong>：</p>
+<ol>
+<li>
+<p>提供数据的peer会对下载者发送Bitfield，告诉自己拥有的这个文件的哪些块，这些信息就用Bitfield存储（一个二进制bit数组，数组值为1就表示有这个块）。</p>
+</li>
+<li>
+<p>初始化状态下，BT客户端对其他的peer都是<strong>choked状态</strong>（阻断）。当下载者准备好了，就会发送<strong>Unchoked消息</strong>，可以进行消息传输。</p>
+</li>
+<li>
+<p>下载者发送Interested消息，告诉提供数据的peer自己要开始下载了。</p>
+</li>
+<li>
+<p>下载者发送Request消息，其中Payload包含具体的某个块的信息（序号，begin,length）。</p>
+</li>
+<li>
+<p>提供数据的peer向下载者发送Piece，即真正的块数据。</p>
+</li>
+</ol>
+<h1 id="dht网络和磁力链接"><a class="markdownIt-Anchor" href="#dht网络和磁力链接"></a> DHT网络和磁力链接</h1>
+<h2 id="dht网络"><a class="markdownIt-Anchor" href="#dht网络"></a> DHT网络</h2>
+<p>  通过上面对BitTorrent的简单介绍，我们发现BT十分依赖于Tracker服务器，如果Tracker服务器全挂彩了，那么BT也就没用了，也没有办法解决这个问题呢？</p>
+<p>  DHT，即<strong>全称分布式哈希表</strong>(Distributed Hash Table)可以有效地解决这个问题，其示意图如下：</p>
+<img src="https://s2.loli.net/2022/05/03/AmgLaI5xKyEjWbP.png" title="" alt="" data-align="center">
+<p>  DHT是一种分布式存储方法，在不需要服务器的情况下，每个节点负责一个小范围的路由，并负责存储一小部分数据，从而实现整个DHT网络的寻址和存储。在DHT网络中，每一个peer都是一个Node，有自己的哈希值。每个Node即是上传和下载piece的BT下载节点；也是<strong>一个小型Tracker，其会保留自己附近的一部分节点信息</strong>。</p>
+<blockquote>
+<p>实现DHT的一种算法：<a href="https://www.tribler.org/Khashmir/">Khashmir</a>，简单介绍一下：</p>
+<p>DHT的每个节点都保存了一张表，上面记录着自己周围节点的ID，当我们向节点A查询B的信息时，就会检索A的表看看有没有B，有就返回B的信息；<strong>没有就返回距离B最近（用XOR计算）的k个节点，然后继续向着k个节点寻找B</strong>。</p>
+</blockquote>
+<h2 id="磁力链接"><a class="markdownIt-Anchor" href="#磁力链接"></a> 磁力链接</h2>
+<p>  2009年，作为世界第一Tracker服务商海盗湾，关闭了Tracker服务器，因为涉及侵权问题，随后基于DHT网络的<strong>磁力链接</strong>（Magnet URI scheme）就走上了主流舞台，目前已经成为最流行的下载方式。</p>
+<p>  例如有这样一串链接：<code>magnet:?xt=urn:btih:53SWOUDWKG6ORSKTJHHE3QXTIBOGU5WU</code></p>
+<ul>
+<li>
+<p>magnet是协议名，xt是资源定位点，urn:btih是Hash方法</p>
+</li>
+<li>
+<p>后面的一串40位16进制数是本文件内容的Hash值，BT下载客户端就是根据这个Hash值在DHT中定位下载文件。</p>
+</li>
+</ul>
+<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<p>[1] <a href="https://blog.csdn.net/riba2534/article/details/115602512?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522165154457716781685369761%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=165154457716781685369761&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-115602512.142%5Ev9%5Epc_search_result_control_group,157%5Ev4%5Econtrol&amp;utm_term=BitTorrent&amp;spm=1018.2226.3001.4187">BitTorrent 简介</a></p>
+<p>[2] <a href="https://en.wikipedia.org/wiki/BitTorrent#Design">https://en.wikipedia.org/wiki/BitTorrent#Design</a></p>
+<p>[3] <a href="https://zh.m.wikipedia.org/wiki/%E7%A3%81%E5%8A%9B%E9%93%BE%E6%8E%A5">磁力链接 - 维基百科，自由的百科全书</a></p>
+<p>[4] <a href="https://trackerslist.com/#/zh">XIU2/TrackersListCollection</a></p>
+<h1 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h1>
+<p>  本章内容主要用于总结一些BitTorrent协议和DHT协议的相关知识，由于还未深入学习计算机网络，一些细节的了解还不是很到位，等我到时候学了计算机网络再来深入学习一下😄，这里先留个坑。</p>
 ]]></content>
       <categories>
-        <category>生活记录</category>
+        <category>计算机网络</category>
       </categories>
       <tags>
-        <tag>游记</tag>
+        <tag>BT</tag>
+        <tag>磁力链接</tag>
+        <tag>DHT</tag>
       </tags>
   </entry>
   <entry>
@@ -2434,6 +2699,84 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
       </tags>
   </entry>
   <entry>
+    <title>C++虚函数功能及其实现(vptr和vtable)</title>
+    <url>/2022/05/13/PL/Cpp/Cpp%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="虚函数的功能与使用"><a class="markdownIt-Anchor" href="#虚函数的功能与使用"></a> 虚函数的功能与使用</h1>
+<p>  C<ins>与C的最大区别就在于C</ins>是面向对象的，而说到面向对象，就绕不开<strong>继承、封装和多态</strong>。而C++实现多态，靠的就是虚函数。</p>
+<p>  首先来看一段来自《C++primer》的话，通过这段话可以对虚函数和多态做一个简单了解:</p>
+<blockquote>
+<p>  当我们使用基类的引用或指针调用基类中定义的一个函数时，我们并不知道该函数的真正作用是什么类型，因为它可能是一个基类的对象也可能是一个派生类的对象。</p>
+<p>  <strong>如果该函数是虚函数</strong>，则直到运行时才会决定执行哪个版本，依据是引用或指针绑定的对象的真正类型。</p>
+</blockquote>
+<p>  也就是说，<strong>指向派生类的基类指针可以调用派生类的虚函数</strong>。我们来看个例子，假设现在声明了下面这两个类:</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">Base</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Base 's func1"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Base 's func2"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token operator">~</span><span class="token function">Base</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Child</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Base</span></span><span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">Child</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Child's func1"</span> <span class="token operator">&lt;&lt;</span>endl<span class="token punctuation">;</span><span class="token punctuation">&#125;</span> 
+    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Child's func2"</span> <span class="token operator">&lt;&lt;</span>endl<span class="token punctuation">;</span><span class="token punctuation">&#125;</span>
+    <span class="token operator">~</span><span class="token function">Chunc2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  这里Base的派生类Child的func2函数故意改了函数签名，这是为了说明一件事，至于是什么，之后会说。我们现在再编写下面这样的main函数测试一下:</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    Base <span class="token operator">*</span>Base_Ptr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Child</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Base_Ptr<span class="token operator">-></span><span class="token function">func1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Base_Ptr<span class="token operator">-></span><span class="token function">func2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Base_Ptr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Base</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Base_Ptr<span class="token operator">-></span><span class="token function">func2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  函数的输出如下:</p>
+<img src="https://s2.loli.net/2022/05/13/A39GXCyqNvVjRtl.png" title="" alt="" data-align="center">
+<p>  第一行输出就验证了之前的说法：<strong>指向派生类的基类指针可以调用派生类的虚函数</strong>，Base_Ptr是指向基类Base的指针，而其指向了Base派生类Child，当调用虚函数func1()时，就会调用派生类Child的版本。我们可以将第一行输出和第三行输出进行一个对比。</p>
+<p>  那么按照这个道理来说，<strong>第二行输出不应该是调用派生类Child的func2的结果吗？为什么调用了基类Base的func2</strong>？</p>
+<p>  因为<u>派生类的func2和基类的func2函数签名不一样，前者并不是后者的重写，而是新的虚函数，所以此时只能调用基类的func2</u>。因此，<strong>建议在要重写的虚函数处加overrride，这样如果签名不一样，就会报错</strong>：</p>
+<p><img src="https://s2.loli.net/2022/05/13/ARlqMjYELagp935.png" alt="" /></p>
+<p>  有了对虚函数基础的印象之后，接下来，我们就来看看虚函数这种机制是如何实现的。</p>
+<h1 id="虚函数的实现vptr-和-vtable"><a class="markdownIt-Anchor" href="#虚函数的实现vptr-和-vtable"></a> 虚函数的实现:vptr 和 vtable</h1>
+<p>  上面说过我们直到运行时才会决定执行哪个类的虚函数，这种技术就叫作晚捆绑技术（late binding）。它是通过一种叫<strong>虚拟表</strong>(vtable)的特殊形式来实现的，<strong>每个有虚函数的类，都有自己的vtable</strong>。</p>
+<p>  vtable实际上是一个静态数组，里面包含了该类每个虚函数的地址。编译器还会生成一个隐藏的指向基类的指针<code>VPTR</code>，其<strong>在创建类实例（对象）时自动设置</strong>，然后指向该类的vtable，<strong>所以我们只要一个VPTR就好了，不管这个类有多少个虚函数</strong>。示意图如下：</p>
+<img title="" src="https://s2.loli.net/2022/05/13/QfcgAPHzROlwT81.png" alt="" data-align="center" width="511">
+<p>  当我们执行<code>Base Base2 = new Child()</code>时，编译器首先会调用基类的构造函数，这个时候Base2对象的VPTR会首先指向基类Base的Vtable，然后调用派生类的构造函数，这个时候VPTR才会指向派生类Child的基表。</p>
+<p>  还有一点需要注意的是虚<strong>表可以继承，如果子类没有重写虚函数，那么子类虚表中仍然会有该函数的地址，只不过这个地址指向的是基类的虚函数实现</strong>。如果基类有3个虚函数，那么基类的虚表中就有三项（虚函数地址），派生类虚表也会至少有三项，如果重写了相应的虚函数，那么虚表中的地址就会改变，指向自身的虚函数实现。</p>
+<p>  如果派生类有自己的虚函数，那么虚表中就会添加该项。就比如我们上面在派生类Child里编写的func2，就是派生类自己的虚函数，其就会被添加进Child的Vtable。</p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ol>
+<li>
+<p><a href="https://github.com/Light-City/CPlusPlusThings/tree/master/basic_content/vptr_vtable">https://github.com/Light-City/CPlusPlusThings/tree/master/basic_content/vptr_vtable</a></p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/Li_Ning_/article/details/51872201?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-0-51872201-blog-77506763.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=1">C++多态的实现及原理详细解析</a></p>
+</li>
+</ol>
+<h1 id="汇编级拓展知识"><a class="markdownIt-Anchor" href="#汇编级拓展知识"></a> 汇编级拓展知识</h1>
+<ol>
+<li>
+<p><a href="https://blog.csdn.net/fcsfcsfcs/article/details/116406860?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522165243589716782388091200%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=165243589716782388091200&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-116406860-null-null.142%5Ev9%5Epc_search_result_control_group,157%5Ev4%5Econtrol&amp;utm_term=vtable&amp;spm=1018.2226.3001.4187">c++ vtable 深入解析</a></p>
+</li>
+<li>
+<p><a href="https://shaharmike.com/cpp/vtable-part1/">clang implements - C++ vtable</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>PL</category>
+        <category>Cpp</category>
+      </categories>
+      <tags>
+        <tag>Cpp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C中NULL,NUL和null的区别</title>
     <url>/2021/08/07/PL/C/C%E4%B8%ADNULL-NUL%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<p>  之前在看别人代码时，看到别人用了个NUL，我心里纳闷：C语言中空指针不是用NULL表示吗？NUL是什么鬼西东？我把他的代码运行一下，发现根本运行不了……心里在想这家伙是不是少打了一个L🤣，看到他后面都这么写，我心里就产生了疑惑……</p>
@@ -2450,89 +2793,6 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
 <p><font color=purple><strong>当有人给你发null是什么意思呢？</strong></font></p>
 <p>  我们知道，万物皆可对象，null在有些语言里就<font color=red><strong>表示对象还未赋值，对象为空，可以理解为&quot;没有对象&quot;</strong></font>。</p>
 <p>Do you understand?😲</p>
-]]></content>
-      <categories>
-        <category>PL</category>
-        <category>C</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>结构体变量作为函数参数调用</title>
-    <url>/2021/08/06/PL/C/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>  在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
-<p>  我们先来声明一些变量：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> my_struct
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">double</span> j<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<span id="more"></span>
-<h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
-<p>  如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span>my_struct struct1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    my_struct struct2<span class="token punctuation">;</span>
-    struct2<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
-    <span class="token function">func1</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    
-    <span class="token comment">/*result is 17*/</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变实参结构体的成员值怎么办</strong>？</p>
-<h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
-<h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
-<p>  将结构体数组作为函数的参数进行传参，修改后的元素的成员值是可以返回到主调函数的。</p>
-<p>  详细的就不写了，不是本文讨论重点，以后遇到不会的话再补。</p>
-<h3 id="结构体指针变量"><a class="markdownIt-Anchor" href="#结构体指针变量"></a> 结构体指针变量</h3>
-<p>  函数的参数传递类似于赋值，直接赋变量的值却不返回，肯定不会改变实参的值；但是，我们把指针作为参数呢？那就不一样了。</p>
-<p>  我目前的理解是，用指针作为参数的确还是赋值，只不过赋的是指针的值（也就是地址）。（个人理解，未确定过正确与否）</p>
-<p>  于是我们可以这么写：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token comment">/*注意两种引用的书写方式*/</span>
-    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>    <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
-    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
-my_struct <span class="token operator">*</span>struct2<span class="token punctuation">,</span>struct1<span class="token punctuation">;</span>
-    struct2 <span class="token operator">=</span> <span class="token operator">&amp;</span>struct1<span class="token punctuation">;</span>            <span class="token comment">//一定要让指针有个归处(doge)</span>
-struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
-    <span class="token function">func2</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token operator">-></span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="总结结构体变量作为函数参数传递的3种方法"><a class="markdownIt-Anchor" href="#总结结构体变量作为函数参数传递的3种方法"></a> 总结：结构体变量作为函数参数传递的3种方法</h2>
-<p>  我们来做一个小总结，其实将一个结构体变量中的数据传递给另一个函数就3种方法：</p>
-<h3 id="1-用结构体变量名直接作为参数值传递"><a class="markdownIt-Anchor" href="#1-用结构体变量名直接作为参数值传递"></a> 1、用结构体变量名直接作为参数（值传递）</h3>
-<p>  这种用法我们一般比较少，代码看值传递那一段。</p>
-<h3 id="2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"><a class="markdownIt-Anchor" href="#2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"></a> 2、用指向结构体变量的指针作为实参，将结构体变量的地址传给形参</h3>
-<p>  这就是上面说的结构体指针变量那一段，这种方法效率很高，但程序不够直接。<strong>我们还有第三种写法，能够兼顾上面两者的优点</strong>。</p>
-<h3 id="3-将结构体变量的地址作为实参"><a class="markdownIt-Anchor" href="#3-将结构体变量的地址作为实参"></a> 3、将结构体变量的地址作为实参</h3>
-<p>  实际上思想和第二种一样，<strong>不同的地方在于传递地址的方式</strong>。这种方法是直接使用取地址符&amp;来获取结构体变量的地址，而不是第二种的做法：创建一个指针，指向结构体，然后传指针。</p>
-<p>  下面是代码的具体实现：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token comment">/*注意两种引用的书写方式*/</span>
-    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>        <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
-    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
-    my_struct struct1<span class="token punctuation">;</span>
-    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
-    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>struct1<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">//这里是重点，注意与第二钟方法这里的对比</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct1<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 ]]></content>
       <categories>
         <category>PL</category>
@@ -2688,6 +2948,89 @@ int_ptr a<span class="token punctuation">,</span>b            <span class="token
       </tags>
   </entry>
   <entry>
+    <title>结构体变量作为函数参数调用</title>
+    <url>/2021/08/06/PL/C/C%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>  在学DS的时候，编写函数遇到点小问题，就是关于<strong>结构体变量作为函数参数调用</strong>的，所以我想写一篇来总结一下。</p>
+<p>  我们先来声明一些变量：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> my_struct
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">double</span> j<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span id="more"></span>
+<h2 id="值传递"><a class="markdownIt-Anchor" href="#值传递"></a> 值传递</h2>
+<p>  如果直接把结构体变量作为函数参数（形参和实参）时，<strong>形参结构体成员值的改变是不会影响实参结构体的</strong>，我们看一下下面这个这个例子：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span>my_struct struct1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    my_struct struct2<span class="token punctuation">;</span>
+    struct2<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
+    <span class="token function">func1</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token comment">/*result is 17*/</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  可以看到作为实参的结构体struct2的成员i的值并没有改变，那么<strong>如果我们想改变实参结构体的成员值怎么办</strong>？</p>
+<h2 id="结构体指针变量和结构体数组"><a class="markdownIt-Anchor" href="#结构体指针变量和结构体数组"></a> 结构体指针变量和结构体数组</h2>
+<h3 id="结构体数组"><a class="markdownIt-Anchor" href="#结构体数组"></a> 结构体数组</h3>
+<p>  将结构体数组作为函数的参数进行传参，修改后的元素的成员值是可以返回到主调函数的。</p>
+<p>  详细的就不写了，不是本文讨论重点，以后遇到不会的话再补。</p>
+<h3 id="结构体指针变量"><a class="markdownIt-Anchor" href="#结构体指针变量"></a> 结构体指针变量</h3>
+<p>  函数的参数传递类似于赋值，直接赋变量的值却不返回，肯定不会改变实参的值；但是，我们把指针作为参数呢？那就不一样了。</p>
+<p>  我目前的理解是，用指针作为参数的确还是赋值，只不过赋的是指针的值（也就是地址）。（个人理解，未确定过正确与否）</p>
+<p>  于是我们可以这么写：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/*注意两种引用的书写方式*/</span>
+    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>    <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
+    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
+my_struct <span class="token operator">*</span>struct2<span class="token punctuation">,</span>struct1<span class="token punctuation">;</span>
+    struct2 <span class="token operator">=</span> <span class="token operator">&amp;</span>struct1<span class="token punctuation">;</span>            <span class="token comment">//一定要让指针有个归处(doge)</span>
+struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
+    <span class="token function">func2</span><span class="token punctuation">(</span>struct2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct2<span class="token operator">-></span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="总结结构体变量作为函数参数传递的3种方法"><a class="markdownIt-Anchor" href="#总结结构体变量作为函数参数传递的3种方法"></a> 总结：结构体变量作为函数参数传递的3种方法</h2>
+<p>  我们来做一个小总结，其实将一个结构体变量中的数据传递给另一个函数就3种方法：</p>
+<h3 id="1-用结构体变量名直接作为参数值传递"><a class="markdownIt-Anchor" href="#1-用结构体变量名直接作为参数值传递"></a> 1、用结构体变量名直接作为参数（值传递）</h3>
+<p>  这种用法我们一般比较少，代码看值传递那一段。</p>
+<h3 id="2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"><a class="markdownIt-Anchor" href="#2-用指向结构体变量的指针作为实参将结构体变量的地址传给形参"></a> 2、用指向结构体变量的指针作为实参，将结构体变量的地址传给形参</h3>
+<p>  这就是上面说的结构体指针变量那一段，这种方法效率很高，但程序不够直接。<strong>我们还有第三种写法，能够兼顾上面两者的优点</strong>。</p>
+<h3 id="3-将结构体变量的地址作为实参"><a class="markdownIt-Anchor" href="#3-将结构体变量的地址作为实参"></a> 3、将结构体变量的地址作为实参</h3>
+<p>  实际上思想和第二种一样，<strong>不同的地方在于传递地址的方式</strong>。这种方法是直接使用取地址符&amp;来获取结构体变量的地址，而不是第二种的做法：创建一个指针，指向结构体，然后传指针。</p>
+<p>  下面是代码的具体实现：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span>my_struct <span class="token operator">*</span>struct1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/*注意两种引用的书写方式*/</span>
+    struct1<span class="token operator">-></span>i <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>        <span class="token comment">//可解释为指向某一结构体struct2的结构体指针struct1引用struct2的成员i</span>
+    <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">struct</span><span class="token punctuation">)</span><span class="token punctuation">.</span>i<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> num<span class="token punctuation">;</span>
+    my_struct struct1<span class="token punctuation">;</span>
+    struct1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">17</span><span class="token punctuation">;</span>
+    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>struct1<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">//这里是重点，注意与第二钟方法这里的对比</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span>struct1<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">/*result is 6*/</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>PL</category>
+        <category>C</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>浮点数取指定精度</title>
     <url>/2021/12/11/PL/C/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%8F%96%E6%8C%87%E5%AE%9A%E7%B2%BE%E5%BA%A6/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
@@ -2735,271 +3078,6 @@ x <span class="token operator">=</span> temp<span class="token operator">/</span
       </categories>
       <tags>
         <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>创建简单的静态库</title>
-    <url>/2022/04/22/Linux%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E9%9D%99%E6%80%81%E5%BA%93/</url>
-    <content><![CDATA[<p>  记录一个很简单的实验——创建一个简单的静态库，首先来简单介绍一下Linux中的库的概念。</p>
-<h1 id="对库的简单介绍"><a class="markdownIt-Anchor" href="#对库的简单介绍"></a> 对库的简单介绍</h1>
-<p>  库是一组已经编译好的函数集合，通常由一组相互关联的函数组成以执行某种特定的任务。系统的标准系统库文件一般存储在/lib和/usr/lib目录中:</p>
-<p><img src="https://s2.loli.net/2022/04/22/c5UuLVORtF8spNn.png" alt="" /></p>
-<p>  函数库一般有静态库（.a）和动态库(.so)两种格式。<strong>C语言在编译过程中，预处理阶段会用到头文件，链接阶段就会用到库文件</strong>。其中头文件的作用是提供函数的声明（接口），而这些函数的具体实现都在库文件中。</p>
-<p>  静态库本身就包含了实际执行代码、符号表等等，程序运行的时候不再需要其它的库文件；动态链接把调用的函数所在文件模块（.so）和调用函数在文件中的位置等信息链接进目标程序，程序运行的时候再从DLL中寻找相应函数代码，因此需要相应DLL文件的支持。</p>
-<h1 id="创建简单的静态库"><a class="markdownIt-Anchor" href="#创建简单的静态库"></a> 创建简单的静态库</h1>
-<p>我们首先创建两个源文件：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//func1.c</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
-<span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The output of func1 is %d\n"</span><span class="token punctuation">,</span>arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//func2.c</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
-<span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>arg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The output of func2 is %s\n"</span><span class="token punctuation">,</span>arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  然后用gcc编译生成对应的两个obj文件(.o):</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -c func1.c func2.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>  然后就是创建一个头文件，来声明我们要创建的库文件中的函数:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/*This is lib.h which declares func1 and func2*/</span>
-<span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>  我们还需要一个调用程序main.c，我们将其包含头文件以及一个库中的函数func2：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token function">func2</span><span class="token punctuation">(</span><span class="token string">"Sail Yang"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  编写完上述文件之后，我们就可以进行创建库文件以及测试了。首先，如果我们不创建库文件，直接链接，那么就是下面这种方式:</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -c main.c
-gcc -o main main.o func2.o<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>  其实能感受到很不方便，如果调用的函数一多，这种方法简直就是自讨苦吃，这因为如此，我们才需要库文件，下面我们就用<code>ar</code>命令(archive)创建一个库文件:</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ar crv libfoo.a func1.o func2.o
-<span class="token comment"># 下面这一步用于生成内容表，当使用GNU tool时，这一步骤非必须</span>
-ranlib libfoo.a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>  创建完库文件后，我们就可以使用了:</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc -o main main.o libfoo.a
-./main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>  结果为：</p>
-<p><img src="https://s2.loli.net/2022/04/22/EbtRnsKZW2ic1PG.png" alt="" /></p>
-<blockquote>
-<p>本次实验选自《Beginning Linux Programming, 4/e》</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux Programming</category>
-      </categories>
-      <tags>
-        <tag>Linux Programming</tag>
-        <tag>lib</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>足球与我</title>
-    <url>/2022/04/26/Talk/%E8%B6%B3%E7%90%83%E4%B8%8E%E6%88%91/</url>
-    <content><![CDATA[<p>  跑圈，运球，对抗，急促的喘息，教练的叫喊，以及绷紧的全身，这便是十年前我刚接触⚽时的印象。站在时空的这一端，回顾这过去的十年，⚽于我绝非仅仅是一项普普通通的体育运动，它一定程度上还塑造了我的性格以及改变了我的生活。正因为如此，我想聊聊我与⚽的故事以及⚽于我的意义。</p>
-<h1 id="小学时代的初次邂逅"><a class="markdownIt-Anchor" href="#小学时代的初次邂逅"></a> 小学时代的初次邂逅</h1>
-<p>  十年前，还在上小学四年级的我对运动无感，只喜欢打游戏，爸妈看不惯我总是打电脑游戏，总想着多让我出去运动运动。正好这时，班主任说学校的足球队正在招新，爸妈知道后，就撵着我去报名试训，当时的我哪是我爸妈的对手，我也只能不情不愿的报了名，等着选拔的开始😣。</p>
-<p>  虽然我爸常常吹嘘他的体育天赋，但是我是完全没有继承他的体育天赋，那时的我并不认为自己能够被足球队选上，和我一起去参加选拔的同学有很多，我想的也就是去和同学们一起去玩玩，可结果让我大跌眼镜，我竟然被选上了😲。第二天，好多男同学都抛来羡慕的目光，我也洋洋得意起来，那时我第一次觉得，<strong>我好厉害</strong>😁。</p>
-<p>  我已记不起第一次参加训练是什么情景了，我对当时训练的记忆只残留着对整体的印象，大体就是别的小朋友都放学回家了，我们还要在操场训练两小时才能回去😅。一开始最痛苦的就是跑圈，4圈跑下来，我人都要瘫了，可这只是开始，之后还有运球，传球以及各种专项的练习，偶尔还要队内进行对抗比赛，周一到周五只要不下雨，就得马不停蹄地训练。现在想想，这种刻苦的训练对一个小学生来说，还真是一种历练啊，好多人都没坚持下来。</p>
-<p>  不过幸运的是，我坚持了下来，而且还十分认真地完成了每天的训练，别人偷懒时（比如垂直跑圈😅），我还不停地练习，正因为如此，身体素质平平无奇的我能够迅速提高球技，并最终被教练选为我们那一届的队长，<strong>我到现在还记得那种感觉，真是太美妙了</strong>！队长意味着，在每周五发零食时能够多拿一点，每次训练时会和老师一起给其它队员示范动作，可以得到更多的来自同学和老师的称赞。不得不说，踢足球真的棒极了。</p>
-<p>  当时我们学校为了评上国家级足球特色学校，需要我们这些足球队员去争取荣誉，因此，在两年的校队生涯里，我参加了数不清的市级联赛，区级联赛，在其它小朋友在学校上课的时候，我们则在外面征战，一去就是三天起步。参加比赛的时光既是美好的，也是苦涩的，美好是因为不用上课，可以住在高级的酒店；苦涩的是比赛时面对的巨大压力，身体的疲惫，失败时的不甘心。我到现在还认为，<strong>这段比赛的时光对于我来说很重要，特别是对我性格的塑造</strong>。</p>
-<p>  我到现在还记得我们成绩最好的那次联赛的最后一场比赛，那是一场暴风雨中的比赛，经过了90分钟的厮杀，比分定格在2-3，终场哨吹响后，我哆嗦着身体，任凭暴雨敲打我的面庞，心中满是不服与无奈。我也不知道为什么，我到现在还能感受到那种冰冷的雨水与燥热的身体碰撞的感觉。</p>
-<p>  就这样，两年很快就过去了，我也迎来了升学，我直升到了初中部，为小学时的校队生涯画上了句号。</p>
-<h1 id="初中时代的苦涩记忆"><a class="markdownIt-Anchor" href="#初中时代的苦涩记忆"></a> 初中时代的苦涩记忆</h1>
-<p>  小学时，为了足球，成绩还不错的我放弃了奥林匹克竞赛，本来作为外地人就没有优势的我，最后也没进入四大名校，只能直升本校的初中部。升上初中后，父母对我踢足球的态度也发生了变化，他们更希望我能好好学习，争取考上那所离我们学校不远的全省闻名的高中，不过，我最终还是参加了我们初中的足球队，而且被选为队长。正当我以为我的初中足球生涯也能和小学时一样璀璨时，现实给了我重重一棒。</p>
-<p>  初中学业繁重，再像小学那样每天放学都去训练是不现实的，训练被缩减到了每周五放学后。由于我当时还是想把重心放在学习上，所以很少会主动去训练，缺少训练的我体能逐渐开始下降，也没有主动去适应初中比赛的变化，这为之后的挫折埋下了隐患。</p>
-<p>  初二时我迎来了初中的第一个联赛，可是我的表现简直是灾难级别的，初中联赛场地的扩大导致我体能与速度缺陷的暴露无遗，场地的扩大会导致球员的分工更加明确，而我无法适应新的角色。教练对我越来越不满，队友也对我充满了质疑，甚至有一次我偶然听到教练在和其它队友交谈时，说我是没啥用的书呆子（当时我的成绩很好）。我的心中很是愤怒，但又为自己的表现感到羞愧。</p>
-<p>  在这之后的训练中，我能感受到一些队友很想取代我的位置，我也是在这个时候明白，<strong>有实力才能赢得他人的尊重</strong>。我开始对足球更加上心了，训练也更加认真，但是由于学业的限制，我能投入到足球的时间还是有限度的，不过我的改变也的确赢得了教练的些许赞扬，正当我以为我会做得越来越好的时候，现实又给了我一拳。</p>
-<p>  我们学校来了一位转校生，他很特殊，他是从广州恒大俱乐部的足球青训学校来的，类似于特长生，他的水平远在我们之上，并且，他的位置和我一样是中场。很快，他就完全取代了我，之后的一个联赛，我虽然是名义上的队长，但我出场的次数寥寥无几，完全成为了替补，就算我再怎么争强好胜，也无法弥补和那位同学的实力差距。也就在这个时候，我的爸妈得知：今年，作为外地学生，不能参加那所名校高中的提前批考试，而我为此已准备了一年，这个时候的我不得不面临一个二选一：要么中考冲击那所名校，如果没考上，只能上很差的学校；要么回老家，面对不同的教材和模式，冲击一年，考我们那的一中。</p>
-<p>  我选择了后者，就这样，我结束了足球校队的生涯，回到了老家的一所初中，一个人为中考做准备，在初三那一年，我再也没接触过足球。</p>
-<h1 id="高中时代的快乐足球"><a class="markdownIt-Anchor" href="#高中时代的快乐足球"></a> 高中时代的快乐足球</h1>
-<p>  中考后，我虽然没有考上一中的强化班，但是还是顺利进入了一中。很久没有踢球的我早已把足球抛在脑后。不过，也许是偶然又或者是必然，⚽它又进入了我的生活，契机就是体育课。</p>
-<p>  我们高中的体育课可以自己选项目，选项目时我看到了足球，那时初中的苦涩又涌上心头，我一度想选择篮球，可是最后我还是选择了足球。我很庆幸自己当时的选择，上完几次足球课后，我回家发了条说说：<br />
-<img src="https://s2.loli.net/2022/04/26/pNoDtEVBUJsTWv1.jpg" alt="" /></p>
-<p>  高中时的我，因为足球认识了很多好朋友，大家经常在周末一起踢球，我家附近也有很多小球场，因此我们也经常和大叔们，初中生们一起踢球，现在想想那段时光是真的快乐。此时的足球，除了其本身带给我的快乐，也给我带来了很多好朋友，我的高中生活也因为足球变得更加充实。</p>
-<p>  在高二时，我受到朋友们的邀请，和学校的足球队参加了市级联赛，由于是临时参加的，一开始几场比赛我踢一会就下场了，踢得也不怎么好。不过随后的一次比赛我们的主力中后卫扭伤了脚，还在当替补的我迫不得已地被选上场，不过，这一次，我的表现让队友和老师们都折服了，甚至觉得我比受伤的那位同学踢得还要好。</p>
-<p>  随后的几场比赛我的表现还算可以，踢起来也越来越得心应手，我到现在还记得其中一位老师对我说的话&quot;踢得这么好，怎么高一没见到你&quot;，那一刻，我可开心了。</p>
-<h1 id="足球于我"><a class="markdownIt-Anchor" href="#足球于我"></a> 足球于我</h1>
-<p>  现在的我踢足球的频率已经不像以前那么高了，不过我对⚽的感情更深厚了，以前很少看球赛的我，现在也会经常看一些球赛。特别在知道一些世界巨星过往经历之后，再去看他们比赛，我心里会五味杂陈。拥有无数荣耀的C罗，内马尔，萨拉赫，莱万等足球巨星，年轻时都经历过比我艰难如一百倍，一千倍的挫折与痛苦，诸如贫穷，伤病，坐冷板凳，质疑种种，我想对他们来说都是家常便饭，他们之所以能获得今天的成就与赞扬，也正是因为他们经历过这些，战胜了这些。我对他们能够有一点感同身受，因此，心里对他们充满了尊敬。</p>
-<p>  最后我想说，⚽于我最大的启示便是：<strong>人生总有低谷和高潮，在低谷时，能够不自暴自弃，勇于向前，持续不断地提升自己，那就是值得尊敬的英雄</strong>。</p>
-]]></content>
-      <categories>
-        <category>Talk</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-        <tag>足球</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BitTorrent协议</title>
-    <url>/2022/05/03/BitTorrent%E5%8D%8F%E8%AE%AE%E4%B8%8EMagNet%E5%8D%8F%E8%AE%AE/</url>
-    <content><![CDATA[<p>  最近经常会下载一些电影，都是通过一个torrent文件+迅雷下载的，这个torrent文件被称为BT种子，说实话这个名字非常熟悉，中学时经常会听到朋友说起，比如有没有种子什么的😅，但是我一直不太了解这种下载方式。这几天使用这种方式下载的时候，发现和一般通过http协议下载的方式有很大不同，于是我就不禁好奇起来，这种下载方式是如何工作的呢？</p>
-<h1 id="概念介绍"><a class="markdownIt-Anchor" href="#概念介绍"></a> 概念介绍</h1>
-<p>  这种下载方式依托于<a href="https://en.wikipedia.org/wiki/BitTorrent">BitTorrent</a>协议，BitTorrent是一种internet transfer protocol，同样作为一种transfer protocol，BitTorrent与http,ftp(file transfer protocol)这些协议最大的不同在于<strong>BitTorrent是一种<code>distributed transfer protocol</code>（分布式传输协议），什么意思呢</strong>？</p>
-<p>  http/FTP protocol都是让用户从一个目标站点的服务器上下载文件，而当用户过多时，就会超出服务器的带宽限制，导致下载出现问题；而BitTorrent将文件分片，每个用户都会下载文件的分片，在下载时也会将自己的文件分片发给其他正在下载的用户，这就形成了一种<strong>图结构</strong>，<strong>点对点式</strong>（<a href="https://en.wikipedia.org/wiki/Peer-to-peer">Peer-to-peer </a>）的分发文件分片：<br />
-<img title="" src="https://s2.loli.net/2022/05/03/6yz4IxfrDWgOEbK.png" alt="" data-align="center" width="384"></p>
-<p>  正是由于这一特性，BitTorrent在大文件下载和多人同时下载时有非常好的表现。</p>
-<h1 id="torrent文件"><a class="markdownIt-Anchor" href="#torrent文件"></a> Torrent文件</h1>
-<p>  torrent文件，也就是所谓的BT种子，是我们了解这种下载方式的关键，所以下面就来简单介绍一下这种文件的格式与结构。</p>
-<h2 id="编码方式bencoding"><a class="markdownIt-Anchor" href="#编码方式bencoding"></a> 编码方式：bencoding</h2>
-<p>  torrent文件的编码格式是bencoding,这种编码由ASCII码进行编码，包含以下数据结构：</p>
-<ul>
-<li>string</li>
-</ul>
-<p>  字符串&quot;hello&quot;在bencoding中就是5:hello，即长度标识+:+字符串</p>
-<ul>
-<li>
-<p>integer</p>
-<p>i开头,e结尾，比如123就可以用<code>i123e</code>表示，456用<code>i456e</code>表示。</p>
-</li>
-<li>
-<p>List</p>
-<p>l开头,e结尾，比如<code>[132,&quot;hello&quot;]</code>就表示为<code>li123e5:helloe</code></p>
-</li>
-<li>
-<p>Dictionary</p>
-<p>d开头,e结尾，key必须是string,value可以是四种数据结构的任意一种，比如<code>&#123;'fruit':5,'meat':8&#125;</code>就可表示为<code>d5:fruiti5e4:meati8ee</code>。除此之外，还要注意，Dictionary必须是有序字典，所有key必须按<a href="https://zh.m.wikipedia.org/wiki/%E5%AD%97%E5%85%B8%E5%BA%8F">字典序</a>升序排列。</p>
-<hr />
-</li>
-</ul>
-<p>  虽然Bencoding比用纯二进制编码效率低，但由于结构简单而且不受字节存储顺序影响（所有数字以十进制编码，不存在<a href="http://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F">大端小端的问题</a>），因此具有很好的跨平台性，而且具有较好的灵活性，即使存在故障的字典键，只要将其忽略并更换新的就能兼容补充。</p>
-<h2 id="文件格式"><a class="markdownIt-Anchor" href="#文件格式"></a> 文件格式</h2>
-<p>  torrent文件本身是一个字典，类似于Json,里面包含了一些key，那么具体包含哪些key呢？首先我们直接打开一个torrent文件:</p>
-<img src="https://s2.loli.net/2022/05/03/sPnymiNEfo5IhUx.png" title="" alt="" data-align="center">
-<p>  可以看到除了第一行以外，全都是乱码，说明这是一个二进制文件。我们现在已经知道了torrent文件是用Bencoding方式编码的，通过解析器(留个坑)，就可以将其转化为可读的格式:</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-    <span class="token property">"announce"</span><span class="token operator">:</span> <span class="token string">"udp://engplus.ru:6969/announce"</span><span class="token punctuation">,</span>
-    <span class="token property">"announce-list"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">[</span>
-            <span class="token string">"udp://engplus.ru:6969/announce"</span>
-        <span class="token punctuation">]</span><span class="token punctuation">,</span>
-        <span class="token punctuation">[</span>
-            <span class="token string">"udp://cutiegirl.ru:6969/announce"</span>
-        <span class="token punctuation">]</span><span class="token punctuation">,</span>
-        <span class="token punctuation">[</span>
-            <span class="token string">"udp://bubu.mapfactor.com:6969/announce"</span>
-        <span class="token punctuation">]</span><span class="token punctuation">,</span>
-        <span class="token punctuation">[</span>
-            <span class="token string">"udp://bt2.archive.org:6969/announce"</span>
-        <span class="token punctuation">]</span>
-    <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"created by"</span><span class="token operator">:</span> <span class="token string">"qBittorrent v4.3.91"</span><span class="token punctuation">,</span>
-    <span class="token property">"creation date"</span><span class="token operator">:</span> <span class="token string">"2021-02-12 03:02:32"</span><span class="token punctuation">,</span>
-    <span class="token property">"info_hash"</span><span class="token operator">:</span> <span class="token string">"7cda8188321724d1ce7a0ab0b4f9208023dd1521"</span><span class="token punctuation">,</span>
-    <span class="token property">"info"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token property">"length"</span><span class="token operator">:</span> <span class="token number">4936930690</span><span class="token punctuation">,</span>
-        <span class="token property">"path"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"BT\u4e16\u754c\u7f51(btsj5.com).txt"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-        <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"\u91dc\u5c71\u884c.\u7279\u6548\u5b57\u5e55.2016.BD1080P.AAC.x264.CHS.BTSJ5"</span><span class="token punctuation">,</span>
-        <span class="token property">"piece length"</span><span class="token operator">:</span> <span class="token number">1048576</span><span class="token punctuation">,</span>
-        <span class="token property">"pieces"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-            <span class="token string">"10e72eba2cbdc9d9b9791706fcbfb84e51093c86"</span><span class="token punctuation">,</span>
-            <span class="token string">"d91472ddd5e943caa54f8520fcb35fb106033cf2"</span><span class="token punctuation">,</span>
-            <span class="token string">"214e6470e412215c9cf462ea752adc6a7c90e92f"</span><span class="token punctuation">,</span>
-            <span class="token string">"214e6470e412215c9cf462ea752adc6a7c90e92f"</span><span class="token punctuation">,</span>
-            <span class="token string">"903012943eab4ed903f1bc35079f6075f01da4ff"</span><span class="token punctuation">,</span>
-            <span class="token string">"d118c6af14e0f3e06f8008e712322d06088d9c05"</span><span class="token punctuation">,</span>
-            <span class="token string">"500813dd3b29e0c88e0127a2fdf7851be2472a58"</span><span class="token punctuation">,</span>
-            <span class="token string">"…………"</span>
-        <span class="token punctuation">]</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>  从上面我们可以看出一些torrent的字段，下面进行一个汇总：</p>
-<p><img src="https://s2.loli.net/2022/05/03/7Xlxjt3kYFmcavH.png" alt="" /></p>
-<h1 id="bt下载流程"><a class="markdownIt-Anchor" href="#bt下载流程"></a> BT下载流程</h1>
-<h2 id="简单概述"><a class="markdownIt-Anchor" href="#简单概述"></a> 简单概述</h2>
-<p>  整个的一个BT下载流程是怎样的呢？</p>
-<ol>
-<li>
-<p>制作Torrent种子文件，制作的过程中要指定发布的文件or文件夹、Tracker URL（即announce字段）、是否启用DHT等等。除此之外，还要将要发布的文件切成块（一般是256KB），用SHA1哈希算法计算每块的哈希值，最后上传到Tracker服务器。</p>
-</li>
-<li>
-<p>BT客户端（如迅雷）得到.torrent文件后，就会根据文件中的announce字段找到Tracker服务器地址（连接方式有UDP也有HTTP），然后客户端就会通过Tracker GET请求得到服务，发送哈希值给Tracker，让其查找。</p>
-</li>
-<li>
-<p>在找到哈希信息后，Tracker服务器就会反连客户端的IP地址和Port（如果是公网），然后返回正在下载这个文件的所有公网用户的IP地址和Port List,之后会将这个客户端的IP地址和Port保存下来，供其他人使用。</p>
-</li>
-<li>
-<p>BT客户端得到这些其他用户IP后，就可以直接连接到这些IP和端口下载资料了。BT客户端会到所有的用户去寻找自己要下载的东西。BT客户端每找到一个用户就建立一个Socket来下载，所以下载的人越多，速度就越快。</p>
-</li>
-</ol>
-<h2 id="peer之间的通信"><a class="markdownIt-Anchor" href="#peer之间的通信"></a> peer之间的通信</h2>
-<p>  下面来看一下点与点之间是如何建立连接的。在使用BT协议下载时，所有正在下载同一资源的peer都是对等的，两个peer之间相互建立的连接也是对等的，对等节点建立的连接的数据传输方向也是双向的，数据可由任何一端发送到另一端。</p>
-<p>  首先是TCP层的连接，当一个客户端向其他peer发送一个TCP连接请求，这个请求由以下字段组成：</p>
-<ol>
-<li>
-<p>pstrlen,固定值为19B</p>
-</li>
-<li>
-<p>pstr,值为&quot;BitTorrent protocol&quot;</p>
-</li>
-<li>
-<p>reserved，保留8字节字段，一般全设置为0、</p>
-</li>
-<li>
-<p>info_hash，必须与请求Tracker时发送的info_hash相同</p>
-</li>
-<li>
-<p>peer_id，必须与请求Tracker时发送的peer_id相同</p>
-</li>
-</ol>
-<p>  在发送上述握手后，应该会受到相同格式的握手，然后我们就将返回的info_hash和发送的进行匹配，以此来确定是否是同一文件，若没问题，那么就握手成功。握手成功后，就会进行<strong>数据的传输</strong>：</p>
-<ol>
-<li>
-<p>提供数据的peer会对下载者发送Bitfield，告诉自己拥有的这个文件的哪些块，这些信息就用Bitfield存储（一个二进制bit数组，数组值为1就表示有这个块）。</p>
-</li>
-<li>
-<p>初始化状态下，BT客户端对其他的peer都是<strong>choked状态</strong>（阻断）。当下载者准备好了，就会发送<strong>Unchoked消息</strong>，可以进行消息传输。</p>
-</li>
-<li>
-<p>下载者发送Interested消息，告诉提供数据的peer自己要开始下载了。</p>
-</li>
-<li>
-<p>下载者发送Request消息，其中Payload包含具体的某个块的信息（序号，begin,length）。</p>
-</li>
-<li>
-<p>提供数据的peer向下载者发送Piece，即真正的块数据。</p>
-</li>
-</ol>
-<h1 id="dht网络和磁力链接"><a class="markdownIt-Anchor" href="#dht网络和磁力链接"></a> DHT网络和磁力链接</h1>
-<h2 id="dht网络"><a class="markdownIt-Anchor" href="#dht网络"></a> DHT网络</h2>
-<p>  通过上面对BitTorrent的简单介绍，我们发现BT十分依赖于Tracker服务器，如果Tracker服务器全挂彩了，那么BT也就没用了，也没有办法解决这个问题呢？</p>
-<p>  DHT，即<strong>全称分布式哈希表</strong>(Distributed Hash Table)可以有效地解决这个问题，其示意图如下：</p>
-<img src="https://s2.loli.net/2022/05/03/AmgLaI5xKyEjWbP.png" title="" alt="" data-align="center">
-<p>  DHT是一种分布式存储方法，在不需要服务器的情况下，每个节点负责一个小范围的路由，并负责存储一小部分数据，从而实现整个DHT网络的寻址和存储。在DHT网络中，每一个peer都是一个Node，有自己的哈希值。每个Node即是上传和下载piece的BT下载节点；也是<strong>一个小型Tracker，其会保留自己附近的一部分节点信息</strong>。</p>
-<blockquote>
-<p>实现DHT的一种算法：<a href="https://www.tribler.org/Khashmir/">Khashmir</a>，简单介绍一下：</p>
-<p>DHT的每个节点都保存了一张表，上面记录着自己周围节点的ID，当我们向节点A查询B的信息时，就会检索A的表看看有没有B，有就返回B的信息；<strong>没有就返回距离B最近（用XOR计算）的k个节点，然后继续向着k个节点寻找B</strong>。</p>
-</blockquote>
-<h2 id="磁力链接"><a class="markdownIt-Anchor" href="#磁力链接"></a> 磁力链接</h2>
-<p>  2009年，作为世界第一Tracker服务商海盗湾，关闭了Tracker服务器，因为涉及侵权问题，随后基于DHT网络的<strong>磁力链接</strong>（Magnet URI scheme）就走上了主流舞台，目前已经成为最流行的下载方式。</p>
-<p>  例如有这样一串链接：<code>magnet:?xt=urn:btih:53SWOUDWKG6ORSKTJHHE3QXTIBOGU5WU</code></p>
-<ul>
-<li>
-<p>magnet是协议名，xt是资源定位点，urn:btih是Hash方法</p>
-</li>
-<li>
-<p>后面的一串40位16进制数是本文件内容的Hash值，BT下载客户端就是根据这个Hash值在DHT中定位下载文件。</p>
-</li>
-</ul>
-<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
-<p>[1] <a href="https://blog.csdn.net/riba2534/article/details/115602512?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522165154457716781685369761%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=165154457716781685369761&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-115602512.142%5Ev9%5Epc_search_result_control_group,157%5Ev4%5Econtrol&amp;utm_term=BitTorrent&amp;spm=1018.2226.3001.4187">BitTorrent 简介</a></p>
-<p>[2] <a href="https://en.wikipedia.org/wiki/BitTorrent#Design">https://en.wikipedia.org/wiki/BitTorrent#Design</a></p>
-<p>[3] <a href="https://zh.m.wikipedia.org/wiki/%E7%A3%81%E5%8A%9B%E9%93%BE%E6%8E%A5">磁力链接 - 维基百科，自由的百科全书</a></p>
-<p>[4] <a href="https://trackerslist.com/#/zh">XIU2/TrackersListCollection</a></p>
-<h1 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h1>
-<p>  本章内容主要用于总结一些BitTorrent协议和DHT协议的相关知识，由于还未深入学习计算机网络，一些细节的了解还不是很到位，等我到时候学了计算机网络再来深入学习一下😄，这里先留个坑。</p>
-]]></content>
-      <categories>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>BT</tag>
-        <tag>磁力链接</tag>
-        <tag>DHT</tag>
       </tags>
   </entry>
 </search>
