@@ -2702,7 +2702,7 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
     <title>C++虚函数功能及其实现(vptr和vtable)</title>
     <url>/2022/05/13/PL/Cpp/Cpp%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="虚函数的功能与使用"><a class="markdownIt-Anchor" href="#虚函数的功能与使用"></a> 虚函数的功能与使用</h1>
-<p>  C<ins>与C的最大区别就在于C</ins>是面向对象的，而说到面向对象，就绕不开<strong>继承、封装和多态</strong>。而C++实现多态，靠的就是虚函数。</p>
+<p>  C++与C的最大区别就在于C++是面向对象的，而说到面向对象，就绕不开<strong>继承、封装和多态</strong>。而C++实现多态，靠的就是虚函数。</p>
 <p>  首先来看一段来自《C++primer》的话，通过这段话可以对虚函数和多态做一个简单了解:</p>
 <blockquote>
 <p>  当我们使用基类的引用或指针调用基类中定义的一个函数时，我们并不知道该函数的真正作用是什么类型，因为它可能是一个基类的对象也可能是一个派生类的对象。</p>
@@ -2722,7 +2722,7 @@ cout <span class="token operator">&lt;&lt;</span> dec <span class="token operato
     <span class="token function">Child</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
     <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">func1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Child's func1"</span> <span class="token operator">&lt;&lt;</span>endl<span class="token punctuation">;</span><span class="token punctuation">&#125;</span> 
     <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">func2</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Child's func2"</span> <span class="token operator">&lt;&lt;</span>endl<span class="token punctuation">;</span><span class="token punctuation">&#125;</span>
-    <span class="token operator">~</span><span class="token function">Chunc2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">~</span><span class="token function">Child</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>  这里Base的派生类Child的func2函数故意改了函数签名，这是为了说明一件事，至于是什么，之后会说。我们现在再编写下面这样的main函数测试一下:</p>
