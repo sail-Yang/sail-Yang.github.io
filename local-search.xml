@@ -4,7 +4,7 @@
   
   
   <entry>
-    <title>About me</title>
+    <title>Markdown样式测试</title>
     <link href="./2022/09/23/BitTorrent%E5%8D%8F%E8%AE%AE/"/>
     <url>./2022/09/23/BitTorrent%E5%8D%8F%E8%AE%AE/</url>
     
@@ -13,18 +13,14 @@
     
     <categories>
       
-      <category>计算机网络</category>
+      <category>其他</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>NetWork</tag>
-      
-      <tag>BitTorrent</tag>
-      
-      <tag>Magnet</tag>
+      <tag>Test</tag>
       
     </tags>
     
