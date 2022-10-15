@@ -1,0 +1,743 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/siteicon.ico">
+  <link rel="icon" href="/img/siteicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sail Yang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对BitTorrent协议的简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BitTorrent协议简介">
+<meta property="og:url" content="https://sailyang.top/2022/10/09/BitTorrent%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="Sail Yang&#39;s Blog">
+<meta property="og:description" content="对BitTorrent协议的简介">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.2rrho9v2cfa0.webp">
+<meta property="article:published_time" content="2022-10-09T00:55:26.000Z">
+<meta property="article:modified_time" content="2022-10-11T07:41:51.505Z">
+<meta property="article:author" content="Sail Yang">
+<meta property="article:tag" content="P2P">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.2rrho9v2cfa0.webp">
+  
+  
+  
+  <title>BitTorrent协议简介 - Sail Yang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"sailyang.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":"siteId=18407318","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?siteId=18407318";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Life</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-books"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-bookmark-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-users"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.2rrho9v2cfa0.webp') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="BitTorrent协议简介"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-09 08:55" pubdate>
+          10-09-2022
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">BitTorrent协议简介</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>最近经常会下载一些电影，都是通过一个torrent文件+迅雷下载的，这个torrent文件被称为BT种子，说实话这个名字非常熟悉，中学时经常会听到朋友说起，比如有没有种子什么的😅，但是我一直不太了解这种下载方式。这几天使用这种方式下载的时候，发现和一般通过http协议下载的方式有很大不同，于是我就不禁好奇起来，这种下载方式是如何工作的呢？</p>
+<h1 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h1><p>这种下载方式依托于<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/BitTorrent">BitTorrent</a>协议，BitTorrent是一种internet transfer protocol，同样作为一种transfer protocol，BitTorrent与http,ftp(file transfer protocol)这些协议最大的不同在于<strong>BitTorrent是一种distributed transfer protocol（分布式传输协议），什么意思呢</strong>？<br>http/FTP protocol都是让用户从一个目标站点的服务器上下载文件，而当用户过多时，就会超出服务器的带宽限制，导致下载出现问题；而BitTorrent将文件分片，每个用户都会下载文件的分片，在下载时也会将自己的文件分片发给其他正在下载的用户，这就形成了一种<strong>图结构</strong>，<strong>点对点式</strong>（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Peer-to-peer">Peer-to-peer</a>）的分发文件分片： </p>
+<p><img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.5dixodre9sk0.webp" srcset="/img/loading.gif" lazyload alt="P2P结构"></p>
+<p>正是由于这一特性，BitTorrent在大文件下载和多人同时下载时有非常好的表现。</p>
+<h1 id="Torrent文件"><a href="#Torrent文件" class="headerlink" title="Torrent文件"></a>Torrent文件</h1><p>torrent文件，也就是所谓的BT种子，是我们了解这种下载方式的关键，所以下面就来简单介绍一下这种文件的格式与结构。</p>
+<h2 id="编码方式：bencoding"><a href="#编码方式：bencoding" class="headerlink" title="编码方式：bencoding"></a>编码方式：bencoding</h2><p>torrent文件的编码格式是bencoding,这种编码由ASCII码进行编码，包含以下数据结构：</p>
+<table>
+<thead>
+<tr>
+<th><strong>string</strong></th>
+<th>字符串”hello”在bencoding中就是5:hello，即长度标识+:+字符串</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>integer</strong></td>
+<td>i开头,e结尾，比如123就可以用i123e表示，456用i456e表示</td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td>l开头,e结尾，比如[132,”hello”]就表示为li123e5:helloe</td>
+</tr>
+<tr>
+<td><strong>Dictionary</strong></td>
+<td>d开头,e结尾，key必须是string,value可以是四种数据结构的任意一种，比如{‘fruit’:5,’meat’:8}就可表示为d5:fruiti5e4:meati8ee。除此之外，还要注意，Dictionary必须是有序字典，所有key必须按<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/wiki/%E5%AD%97%E5%85%B8%E5%BA%8F">字典序</a>升序排列。</td>
+</tr>
+</tbody></table>
+<p>虽然Bencoding比用纯二进制编码效率低，但由于结构简单而且不受字节存储顺序影响（所有数字以十进制编码，不存在<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F">大端小端的问题</a>），因此具有很好的跨平台性，而且具有较好的灵活性，即使存在故障的字典键，只要将其忽略并更换新的就能兼容补充。</p>
+<h2 id="文件格式"><a href="#文件格式" class="headerlink" title="文件格式"></a>文件格式</h2><p>torrent文件本身是一个字典，类似于Json,里面包含了一些key，那么具体包含哪些key呢？首先我们直接打开一个torrent文件:</p>
+<p><img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.5efiz2romt40.webp" srcset="/img/loading.gif" lazyload alt="torrent文件"></p>
+<p>可以看到除了第一行以外，全都是乱码，说明这是一个二进制文件。我们现在已经知道了torrent文件是用Bencoding方式编码的，通过解析器(留个坑)，就可以将其转化为可读的格式:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cpp">&#123;<br>    <span class="hljs-string">&quot;announce&quot;</span>: <span class="hljs-string">&quot;udp://engplus.ru:6969/announce&quot;</span>,<br>    <span class="hljs-string">&quot;announce-list&quot;</span>: [<br>        [<br>            <span class="hljs-string">&quot;udp://engplus.ru:6969/announce&quot;</span><br>        ],<br>        [<br>            <span class="hljs-string">&quot;udp://cutiegirl.ru:6969/announce&quot;</span><br>        ],<br>        [<br>            <span class="hljs-string">&quot;udp://bubu.mapfactor.com:6969/announce&quot;</span><br>        ],<br>        [<br>            <span class="hljs-string">&quot;udp://bt2.archive.org:6969/announce&quot;</span><br>        ]<br>    ],<br>    <span class="hljs-string">&quot;created by&quot;</span>: <span class="hljs-string">&quot;qBittorrent v4.3.91&quot;</span>,<br>    <span class="hljs-string">&quot;creation date&quot;</span>: <span class="hljs-string">&quot;2021-02-12 03:02:32&quot;</span>,<br>    <span class="hljs-string">&quot;info_hash&quot;</span>: <span class="hljs-string">&quot;7cda8188321724d1ce7a0ab0b4f9208023dd1521&quot;</span>,<br>    <span class="hljs-string">&quot;info&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;length&quot;</span>: <span class="hljs-number">4936930690</span>,<br>        <span class="hljs-string">&quot;path&quot;</span>: [<span class="hljs-string">&quot;BT\u4e16\u754c\u7f51(btsj5.com).txt&quot;</span>],<br>        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;\u91dc\u5c71\u884c.\u7279\u6548\u5b57\u5e55.2016.BD1080P.AAC.x264.CHS.BTSJ5&quot;</span>,<br>        <span class="hljs-string">&quot;piece length&quot;</span>: <span class="hljs-number">1048576</span>,<br>        <span class="hljs-string">&quot;pieces&quot;</span>: [<br>            <span class="hljs-string">&quot;10e72eba2cbdc9d9b9791706fcbfb84e51093c86&quot;</span>,<br>            <span class="hljs-string">&quot;d91472ddd5e943caa54f8520fcb35fb106033cf2&quot;</span>,<br>            <span class="hljs-string">&quot;214e6470e412215c9cf462ea752adc6a7c90e92f&quot;</span>,<br>            <span class="hljs-string">&quot;214e6470e412215c9cf462ea752adc6a7c90e92f&quot;</span>,<br>            <span class="hljs-string">&quot;903012943eab4ed903f1bc35079f6075f01da4ff&quot;</span>,<br>            <span class="hljs-string">&quot;d118c6af14e0f3e06f8008e712322d06088d9c05&quot;</span>,<br>            <span class="hljs-string">&quot;500813dd3b29e0c88e0127a2fdf7851be2472a58&quot;</span>,<br>            <span class="hljs-string">&quot;…………&quot;</span><br>        ]<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>从上面我们可以看出一些torrent的字段，下面进行一个汇总：</p>
+<img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.1rwj23d240ww.webp" srcset="/img/loading.gif" lazyload alt="torrent字段" style="zoom:80%;"  align="center"/>
+
+<h1 id="BT下载流程"><a href="#BT下载流程" class="headerlink" title="BT下载流程"></a>BT下载流程</h1><h2 id="简单概述"><a href="#简单概述" class="headerlink" title="简单概述"></a>简单概述</h2><p>整个的一个BT下载流程是怎样的呢？</p>
+<ol>
+<li>制作Torrent种子文件，制作的过程中要指定发布的文件or文件夹、Tracker URL（即announce字段）、是否启用DHT等等。除此之外，还要将要发布的文件切成块（一般是256KB），用SHA1哈希算法计算每块的哈希值，最后上传到Tracker服务器。</li>
+<li>BT客户端（如迅雷）得到.torrent文件后，就会根据文件中的announce字段找到Tracker服务器地址（连接方式有UDP也有HTTP），然后客户端就会通过Tracker GET请求得到服务，发送哈希值给Tracker，让其查找。</li>
+<li>在找到哈希信息后，Tracker服务器就会反连客户端的IP地址和Port（如果是公网），然后返回正在下载这个文件的所有公网用户的IP地址和Port List,之后会将这个客户端的IP地址和Port保存下来，供其他人使用。</li>
+<li>BT客户端得到这些其他用户IP后，就可以直接连接到这些IP和端口下载资料了。BT客户端会到所有的用户去寻找自己要下载的东西。BT客户端每找到一个用户就建立一个Socket来下载，所以下载的人越多，速度就越快。<h2 id="peer之间的通信"><a href="#peer之间的通信" class="headerlink" title="peer之间的通信"></a>peer之间的通信</h2>下面来看一下点与点之间是如何建立连接的。在使用BT协议下载时，所有正在下载同一资源的peer都是对等的，两个peer之间相互建立的连接也是对等的，对等节点建立的连接的数据传输方向也是双向的，数据可由任何一端发送到另一端。<br>首先是TCP层的连接，当一个客户端向其他peer发送一个TCP连接请求，这个请求由以下字段组成：<blockquote>
+<ol>
+<li>pstrlen,固定值为19B</li>
+<li>pstr,值为”BitTorrent protocol”</li>
+<li>reserved，保留8字节字段，一般全设置为0、</li>
+<li>info_hash，必须与请求Tracker时发送的info_hash相同</li>
+<li>peer_id，必须与请求Tracker时发送的peer_id相同</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p>在发送上述握手后，应该会受到相同格式的握手，然后我们就将返回的info_hash和发送的进行匹配，以此来确定是否是同一文件，若没问题，那么就握手成功。握手成功后，就会进行<strong>数据的传输</strong>：</p>
+<hr>
+<ol>
+<li>提供数据的peer会对下载者发送Bitfield，告诉自己拥有的这个文件的哪些块，这些信息就用Bitfield存储（一个二进制bit数组，数组值为1就表示有这个块）。</li>
+<li>初始化状态下，BT客户端对其他的peer都是<strong>choked状态</strong>（阻断）。当下载者准备好了，就会发送<strong>Unchoked消息</strong>，可以进行消息传输。</li>
+<li>下载者发送Interested消息，告诉提供数据的peer自己要开始下载了。</li>
+<li>下载者发送Request消息，其中Payload包含具体的某个块的信息（序号，begin,length）。</li>
+<li>提供数据的peer向下载者发送Piece，即真正的块数据。</li>
+</ol>
+<hr>
+<h1 id="DHT网络和磁力链接"><a href="#DHT网络和磁力链接" class="headerlink" title="DHT网络和磁力链接"></a>DHT网络和磁力链接</h1><h2 id="DHT网络"><a href="#DHT网络" class="headerlink" title="DHT网络"></a>DHT网络</h2><p>通过上面对BitTorrent的简单介绍，我们发现BT十分依赖于Tracker服务器，如果Tracker服务器全挂彩了，那么BT也就没用了，也没有办法解决这个问题呢？<br>DHT，即<strong>全称分布式哈希表</strong>(Distributed Hash Table)可以有效地解决这个问题，其示意图如下：</p>
+<p><img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.569wnzvy9ss0.webp" srcset="/img/loading.gif" lazyload alt="DHT"></p>
+<p>DHT是一种分布式存储方法，在不需要服务器的情况下，每个节点负责一个小范围的路由，并负责存储一小部分数据，从而实现整个DHT网络的寻址和存储。在DHT网络中，每一个peer都是一个Node，有自己的哈希值。每个Node即是上传和下载piece的BT下载节点；也是<strong>一个小型Tracker，其会保留自己附近的一部分节点信息</strong>。</p>
+<p>实现DHT的一种算法：<a target="_blank" rel="noopener" href="https://www.tribler.org/Khashmir/">Khashmir</a>，简单介绍一下：<br>DHT的每个节点都保存了一张表，上面记录着自己周围节点的ID，当我们向节点A查询B的信息时，就会检索A的表看看有没有B，有就返回B的信息；<strong>没有就返回距离B最近（用XOR计算)的k个节点，然后继续向着k个节点寻找B</strong>。</p>
+<h2 id="磁力链接"><a href="#磁力链接" class="headerlink" title="磁力链接"></a>磁力链接</h2><p>2009年，作为世界第一Tracker服务商海盗湾，关闭了Tracker服务器，因为涉及侵权问题，随后基于DHT网络的<strong>磁力链接</strong>（Magnet URI scheme）就走上了主流舞台，目前已经成为最流行的下载方式。<br>例如有这样一串链接：<code>magnet:?xt=urn:btih:53SWOUDWKG6ORSKTJHHE3QXTIBOGU5WU</code></p>
+<ul>
+<li>magnet是协议名，xt是资源定位点，urn:btih是Hash方法</li>
+<li>后面的一串40位16进制数是本文件内容的Hash值，BT下载客户端就是根据这个Hash值在DHT中定位下载文件。<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1></li>
+</ul>
+<p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/riba2534/article/details/115602512?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522165154457716781685369761%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=165154457716781685369761&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-115602512.142%5Ev9%5Epc_search_result_control_group,157%5Ev4%5Econtrol&utm_term=BitTorrent&spm=1018.2226.3001.4187">BitTorrent 简介</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/BitTorrent#Design">https://en.wikipedia.org/wiki/BitTorrent#Design</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/wiki/%E7%A3%81%E5%8A%9B%E9%93%BE%E6%8E%A5">磁力链接 - 维基百科，自由的百科全书</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://trackerslist.com/#/zh">XIU2/TrackersListCollection</a></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本章内容主要用于总结一些BitTorrent协议和DHT协议的相关知识，由于还未深入学习计算机网络，一些细节的了解还不是很到位，等我到时候学了计算机网络再来深入学习一下😄，这里先留个坑。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%88%86%E5%B8%83%E5%BC%8F/" class="category-chain-item">分布式</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/P2P/">#P2P</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/15/%E5%AF%B9JavaWeb%E7%9A%84%E6%80%9D%E8%80%831/" title="对Java Web的思考(1)—servlet和jsp">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">对Java Web的思考(1)—servlet和jsp</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/04/%E8%BF%91%E4%BB%A3%E5%B1%88%E8%BE%B1%E4%B8%8E%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E9%9D%A9%E5%91%BD/" title="近代中国知识分子的探索之路">
+                        <span class="hidden-mobile">近代中国知识分子的探索之路</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
