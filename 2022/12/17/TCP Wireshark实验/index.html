@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.272t2u67u9es.webp">
 <meta property="article:published_time" content="2022-12-17T09:09:08.000Z">
-<meta property="article:modified_time" content="2022-12-17T13:17:33.630Z">
+<meta property="article:modified_time" content="2022-12-17T13:21:08.204Z">
 <meta property="article:author" content="Sail Yang">
 <meta property="article:tag" content="TCP">
 <meta name="twitter:card" content="summary_large_image">
@@ -308,11 +308,11 @@
 <p>不自己抓包也行，作者给的wireshark抓包结果[在这里]( <a target="_blank" rel="noopener" href="http://gaia.cs.umass.edu/wireshark-">http://gaia.cs.umass.edu/wireshark-</a><br>labs/wireshark-traces.zip)（其中的<code>tcp-ethereal-trace-1</code>），可以照着这个进行分析。</p>
 <h1 id="TCP基础"><a href="#TCP基础" class="headerlink" title="TCP基础"></a>TCP基础</h1><ol>
 <li><p>启动TCP连接的包的TCP SYN区段的序列号是多少？这个SYN有什么用？</p>
-<p>&emsp;&emsp;当客户端请求建立TCP连接时，SYN字段就会**<u>置1以表示请求建立连接</u>**，序列号是232129012，这是一个随机值。</p>
+<p>&emsp;&emsp;当客户端请求建立TCP连接时，SYN字段就会<u><strong>置1以表示请求建立连接</strong></u>，序列号是232129012，这是一个随机值。</p>
 <hr>
 </li>
 <li><p><code>gaia.cs.umass.edu</code>发给主机来回复SYN的SYNACK区段的序列号是多少？Acknowledgment的值是多少？<code>gaia.cs.umass.edu</code>是如何确定Acknowledgment的值的？这个区段在建立连接中有什么用？</p>
-<p>&emsp;&emsp;SYNACK区段的序列号SEQ = 客户端发来的SEQ+1=232129013，Acknowledgment的值为1，表示**<u>服务器接受到了建立连接的请求并且发送了SYN-ACK的确认包</u>**。</p>
+<p>&emsp;&emsp;SYNACK区段的序列号SEQ = 客户端发来的SEQ+1=232129013，Acknowledgment的值为1，表示<u><strong>服务器接受到了建立连接的请求并且发送了SYN-ACK的确认包</strong></u>。</p>
 <hr>
 </li>
 <li><p>包含“HTTP POST”命令的包的序列号是多少？</p>
