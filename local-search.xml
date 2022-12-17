@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>TCP Wireshark实验</title>
+    <link href="/2022/12/17/TCP%20Wireshark%E5%AE%9E%E9%AA%8C/"/>
+    <url>/2022/12/17/TCP%20Wireshark%E5%AE%9E%E9%AA%8C/</url>
+    
+    <content type="html"><![CDATA[<p> 这是《计算机网络自顶向下》（第七版）的配套实验，实验文档在<a href="https://gaia.cs.umass.edu/kurose_ross/wireshark.php">这里</a>。</p><h1 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h1><ol><li>了解TCP的<strong>序列号（SEQ）</strong>和**确认号(ACK)**的作用。</li><li>了解TCP连接的<strong>建立</strong>和销毁。</li><li>了解TCP的拥塞控制算法</li><li>了解TCP的流量控制</li><li>TCP连接性能的计算方法</li><li>了解TCP的报文段结构</li></ol><h1 id="抓包及相关设置"><a href="#抓包及相关设置" class="headerlink" title="抓包及相关设置"></a>抓包及相关设置</h1><p>我们只要按照实验文档的指示，在把<a href="http://gaia.cs.umass.edu/wireshark-labs/alice.txt">这份txt文件</a>送到<a href="http://gaia.cs.umass.edu/wireshark-labs/TCP-wireshark-file1.html">服务器</a>之前打开wireshark并开始抓包，然后发送该文件，就可以抓到传输过程中涉及的包。</p><p>在抓包的过程中有两点需要注意：</p><ol><li><p>包的序列号在Wireshark中默认是相对序列号，可能会和抓的包中的序号对不起来，因此<strong>推荐改成绝对序列号</strong>。修改方法为<code>Edit→Preferences→Protocols→TCP→Relative sequence numbers disabled</code>：</p><p><img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.22fwszo4hnz4.webp" alt="修改默认序列号"></p></li><li><p>还有就是wireshark过滤表达式的写法，我们过滤的条件是主机和服务器之间传输的TCP包，所以<strong>过滤表达式</strong>可以这么写：<code>tcp and ((ip.dst==128.119.245.12 and ip.src==主机IP地址) || (ip.dst==ip.src==主机IP地址 and ip.src==128.119.245.12))</code></p></li></ol><p>不自己抓包也行，作者给的wireshark抓包结果[在这里]( <a href="http://gaia.cs.umass.edu/wireshark-">http://gaia.cs.umass.edu/wireshark-</a><br>labs/wireshark-traces.zip)（其中的<code>tcp-ethereal-trace-1</code>），可以照着这个进行分析。</p><h1 id="TCP基础"><a href="#TCP基础" class="headerlink" title="TCP基础"></a>TCP基础</h1><ol><li><p>启动TCP连接的包的TCP SYN区段的序列号是多少？这个SYN有什么用？</p><p>&emsp;&emsp;当客户端请求建立TCP连接时，SYN字段就会**<u>置1以表示请求建立连接</u>**，序列号是232129012，这是一个随机值。</p><hr></li><li><p><code>gaia.cs.umass.edu</code>发给主机来回复SYN的SYNACK区段的序列号是多少？Acknowledgment的值是多少？<code>gaia.cs.umass.edu</code>是如何确定Acknowledgment的值的？这个区段在建立连接中有什么用？</p><p>&emsp;&emsp;SYNACK区段的序列号SEQ = 客户端发来的SEQ+1=232129013，Acknowledgment的值为1，表示**<u>服务器接受到了建立连接的请求并且发送了SYN-ACK的确认包</u>**。</p><hr></li><li><p>包含“HTTP POST”命令的包的序列号是多少？</p><p>   &emsp;&emsp;SEQ = 232129013，<code>PSH</code>表示<strong>有数据传输</strong>。</p><hr></li><li><p>将包含POST命令的TCP包作为第一个包，那马前6个包的的TCP 序列号是多少？发送的时间和接到ACK的时间是什么时候？由此算出的RTT是多少？收到每个ACK后，EstimateRTT是多少？假设第一个EstimateRTT = 第一个包的测量RTT，然后计算后续所有相关值。</p><ul><li>第一个是带POST的包：SEQ = 232129013，ACK-SEQ=883061786，LEN=565，RTT=0.023265000 s</li><li>第二个：SEQ = 232129578，ACK-SEQ=883061786，LEN=1460</li><li>第三个：SEQ = 232136878，ACK-SEQ=883061786，LEN=1147</li><li>第四个：SEQ = 232145325，ACK-SEQ=883061786，LEN=892</li><li>第五个：SEQ = 232153517，ACK-SEQ=883061786，LEN=892</li><li>第六个：SEQ = 232161709，ACK-SEQ=883061786，LEN=892</li></ul><p>&emsp;&emsp;关于RTT就不多写了，根据公式算就行。</p><hr></li><li><p>前六个TCP包的长度是多少？</p><p>   &emsp;&emsp;略，上一个问题中有</p><hr></li><li><p>所有包中，收到的最小的可用缓冲区空间量是多少？？确实接收器缓冲区空间是否会限制发送方发送TCP包的速率？</p><p>   &emsp;&emsp;找window最小值就行，这和流量控制有关。</p><hr></li><li><p>是否有重传包？检查什么以分辨呢？</p><p>   &emsp;&emsp;没有重传，因为<strong>序号在增加</strong>：</p><div align="center"><img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.jz740k1fjz4.webp" alt="序号流图" style="zoom:50%;" /></div><hr></li><li><p>TCP连接的吞吐量怎么算？</p><div align="center"><img src="https://cdn.staticaly.com/gh/sail-Yang/myImage@main/img/image.3g6yz22ane20.webp" alt="吞吐量" style="zoom: 67%;" /><div><p>   &emsp;&emsp;$吞吐量=\frac{数据传输大小}{所用时间}=\frac{164090B}{5.297341000s}$</p><hr></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机网络</category>
+      
+      <category>运输层协议</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>TCP</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>FTP协议实验</title>
     <link href="/2022/11/21/FTP%E5%8D%8F%E8%AE%AE/"/>
     <url>/2022/11/21/FTP%E5%8D%8F%E8%AE%AE/</url>
